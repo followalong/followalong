@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+        <title>FollowAlong</title>
+    </head>
+    <body>
+        <noscript>
+            <strong>We're sorry but FollowAlong doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+        </noscript>
+        <script type="text/javascript">
+            var AWS_CONFIG = {
+                sdk: '<%= BASE_URL %>js/aws-sdk-2.444.0.min.js',
+                region: 'us-east-1',
+                accessKeyId: 'AKIAVBVR5JM6YSX5JX5Y',
+                secretAccessKey: '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'
+            };
+
+            window.logo = '/img/logo.svg';
+
+            window.servers = [{
+                name: 'FollowAlong Proxy via AWS Lambda',
+                description: 'Deploy your own: <a href="https://github.com/followalong/followalong/tree/master/server/aws-lambda-passthrough" target="_blank">followalong/aws-lambda-passthrough</a>.',
+                strategy: 'followalong',
+                accessKeyId: AWS_CONFIG.accessKeyId,
+                secretAccessKey: AWS_CONFIG.secretAccessKey,
+                region: AWS_CONFIG.region,
+                functionName: 'followalong-passthrough',
+                fetchURL: function fetchURL(app, identity, data, done) {
+                    var _ = this;
+
+                    app.cachedLoadExternal(AWS_CONFIG.sdk, function() {
+                        window.AWS.config.update({
+                            accessKeyId: _.accessKeyId,
+                            secretAccessKey: _.secretAccessKey,
+                            region: _.region
+                        });
+
+                        new window.AWS.Lambda({
+                            region: _.region,
+                            apiVersion: '2015-03-31'
+                        }).invoke({
+                            FunctionName: _.functionName,
+                            InvocationType: 'RequestResponse',
+                            LogType: 'None',
+                            Payload: JSON.stringify({
+                                url: data.url
+                            })
+                        }, function(err, data) {
+                            try {
+                                done(undefined, JSON.parse(data.Payload));
+                            } catch (e) {
+                                done(err);
+                            }
+                        });
+                    });
+                }
+            }, {
+                name: 'CORS Anywhere',
+                description: 'This is the "CORS Anywhere" demo server! Please deploy your own version to Heroku (or elsewhere) and change the URL. Deploy your own: <a href="https://github.com/Rob--W/cors-anywhere" target="_blank">Rob--W/cors-anywhere</a>.',
+                strategy: 'cors-anywhere',
+                fields: {
+                    url: {
+                        type: 'input',
+                        label: 'URL',
+                        required: true,
+                        placeholder: 'https://cors-anywhere.herokuapp.com/',
+                        default: 'https://cors-anywhere.herokuapp.com/'
+                    }
+                },
+                fetchURL: function fetchURL(app, identity, data, done) {
+                    var _ = this,
+                        url = (identity.proxy.url || '').length ? identity.proxy.url : _.fields.url.default,
+                        x = new XMLHttpRequest();
+
+                    x.open('GET', url + data.url);
+
+                    x.onload = x.onerror = function() {
+                        if (x.status === 200) {
+                            done(undefined, x.responseText);
+                        } else {
+                            done(x.responseText);
+                        }
+                    };
+
+                    x.send();
+                }
+            }, {
+                name: 'Custom AWS Lambda',
+                description: 'A simple AWS Lambda passthrough server. The defaults point to FollowAlong, but don\'t trust us! Deploy your own: <a href="#">server/aws-lambda</a>.',
+                strategy: 'aws-lambda',
+                fields: {
+                    accessKeyId: {
+                        type: 'input',
+                        label: 'Access Key ID',
+                        required: true
+                    },
+                    secretAccessKey: {
+                        type: 'input',
+                        label: 'Secret Access Key',
+                        required: true
+                    },
+                    region: {
+                        type: 'input',
+                        label: 'Region',
+                        required: true
+                    },
+                    functionName: {
+                        type: 'input',
+                        label: 'Function Name',
+                        required: true
+                    }
+                },
+                fetchURL: function fetchURL(app, identity, data, done) {
+                    var _ = this;
+
+                    app.cachedLoadExternal(AWS_CONFIG.sdk, function() {
+                        var functionName = (identity.proxy.functionName || '').length ? identity.proxy.functionName : _.fields.functionName.default,
+                            region = (identity.proxy.region || '').length ? identity.proxy.region : _.fields.region.default;
+
+                        window.AWS.config.update({
+                            accessKeyId: (identity.proxy.accessKeyId || '').length ? identity.proxy.accessKeyId : _.fields.accessKeyId.default,
+                            secretAccessKey: (identity.proxy.secretAccessKey || '').length ? identity.proxy.secretAccessKey : _.fields.secretAccessKey.default,
+                            region: region
+                        });
+
+                        new window.AWS.Lambda({
+                            region: region,
+                            apiVersion: '2015-03-31'
+                        }).invoke({
+                            FunctionName: functionName,
+                            InvocationType: 'RequestResponse',
+                            LogType: 'None',
+                            Payload: JSON.stringify({
+                                url: data.url
+                            })
+                        }, function(err, data) {
+                            try {
+                                done(undefined, JSON.parse(data.Payload));
+                            } catch (e) {
+                                done(err);
+                            }
+                        });
+                    });
+                }
+            }, {
+                name: 'None',
+                description: 'No proxy will be used.',
+                strategy: 'none',
+                fetchURL: function fetchURL(app, identity, data, done) {
+                    var x = new XMLHttpRequest();
+
+                    x.open('GET', data.url);
+
+                    x.onload = x.onerror = function() {
+                        if (x.status === 200) {
+                            done(undefined, x.responseText);
+                        } else {
+                            done(x.responseText);
+                        }
+                    };
+
+                    x.send();
+                }
+            }];
+        </script>
+        <style type="text/css">
+            .primary,
+            .link,
+            .content h1,
+            .content h3,
+            .content .items > li > h3,
+            .content .description a,
+            .related-sidebar h3,
+            .vue-tabs .tab.active a,
+            .check:hover,
+            .explanation,
+            .stars {
+                color: #005B80;
+            }
+
+            .content button,
+            .content .button,
+            .header .nav,
+            .nav .identities,
+            .sidebar a.router-link-exact-active {
+                background: #005B80;
+            }
+
+            .nav .logo a {
+                width: 65px;
+            }
+        </style>
+        <div id="app"></div>
+        <!-- built files will be auto injected -->
+    </body>
+</html>

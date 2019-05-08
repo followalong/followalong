@@ -1,0 +1,22 @@
+// $blue: #005B80;
+$green: #1BCC04;
+// $blue: #222;
+$gray: #2c3e50;
+$red: #CC3F06;
+
+@mixin clearfix() {
+ &:after {
+     display: block;
+     content: ' ';
+     clear: both;
+ }
+}
+
+@import "./css/reset.css";
+@import "./css/content.scss";
+@import "./css/nav.scss";
+@import "./css/app.scss";
+@import "./css/sidebar.scss";
+@import "./css/feed.scss";
+@import "./css/media-player.scss";
+@import "./css/columns.scss";

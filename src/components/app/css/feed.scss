@@ -1,0 +1,150 @@
+.embed {
+    position: relative;
+
+    &.video-embed {
+        padding-bottom: 56.25%; /* 16:9 */
+        height: 0;
+    }
+
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.popout {
+    position: absolute;
+    top: -2em;
+    right: 0;
+    width: 2.25em;
+    text-align: center;
+    margin: 0;
+    padding: 0 0.75em 0.5em;
+    border-radius: 7px 7px 0 0;
+    font-size: 90%;
+    color: #aaa;
+    background: #eee;
+    display: block;
+}
+
+.clickable-media {
+    position: relative;
+
+    img {
+        width: 100%;
+    }
+}
+
+.single-item {
+    .embed {
+        margin-bottom: 1em;
+    }
+
+    .feed > h1 {
+        margin-bottom: 0;
+    }
+
+    .feed > h3 {
+        margin-bottom: 2em;
+
+        a:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.feed {
+    float: left;
+    width: 62%;
+
+    &.wide-feed {
+        float: none;
+        width: 100%;
+        max-width: 40em;
+    }
+}
+
+.feeds {
+    li {
+        padding: 20px 0;
+        border-bottom: 1px solid #eee;
+
+        h2, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .remove {
+            display: inline-block;
+            font-size: 70%;
+            margin-left: 1em;
+            font-weight: normal;
+        }
+
+        button {
+            float: right;
+
+            &:nth-child(n + 1) {
+                margin-left: 10px;
+            }
+
+            &.paused {
+                background: red;
+            }
+
+            .right-icon {
+                display: inline-block;
+                margin-left: 5px;
+            }
+        }
+    }
+
+    .hint {
+        display: inline-block
+    }
+}
+
+.related-sidebar {
+    width: 33%;
+    float: right;
+    font-size: 90%;
+    line-height: 1.3;
+    border-left: 1px solid #eee;
+    padding-left: 3%;
+    background: #fff;
+
+    li {
+        padding: 1em 0 1em 2.5em;
+        border-bottom: 1px solid #eee;
+    }
+
+    h3 {
+        font-weight: bold;
+        margin-bottom: 2px;
+    }
+
+    .feed-meta {
+        font-size: 90%;
+    }
+
+    .check {
+        margin-left: -1.5em;
+        font-size: 120%;
+        float: left;
+    }
+
+    .media-link {
+        display: block;
+        margin-top: 1em;
+    }
+}
+
+@media (max-width: 640px) {
+    .feed, .related-sidebar {
+        float: none;
+        width: 100%;
+    }
+}

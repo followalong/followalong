@@ -1,0 +1,106 @@
+.table {
+  display: table;
+  width: 100%;
+}
+
+.table-row {
+  display: table-row;
+}
+
+.table-cell {
+  display: table-cell;
+  white-space: nowrap;
+}
+
+.header .nav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  color: #fff;
+  z-index: 100;
+
+  &:after {
+    content: ' ';
+    display: block;
+    clear: both;
+  }
+
+  a {
+    display: block;
+    padding: 15px;
+
+    // &.router-link-exact-active,
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  .table-cell {
+    position: relative;
+  }
+
+  .logo {
+    text-align: left;
+    white-space: normal;
+
+    a {
+      text-align: center;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
+    img {
+      width: 100%;
+      margin-top: -3px;
+      margin-bottom: -3px;
+      vertical-align: middle;
+    }
+  }
+
+  .search {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+
+    input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.75);
+      outline: none;
+      padding: 5px 8px;
+      border-radius: 4px;
+
+      &::placeholder {
+        color: inherit;
+      }
+
+      &:focus {
+        background: #fff;
+        color: $gray;
+
+        &::placeholder {
+          color: rgba(0, 0, 0, 0.3);
+        }
+      }
+    }
+  }
+
+  .identities {
+    display: none;
+    position: absolute;
+    right: 0;
+
+    .encrypted {
+      font-size: 80%;
+      font-style: oblique;
+      opacity: 0.5;
+    }
+  }
+
+  li:hover ul {
+    display: block;
+  }
+}
