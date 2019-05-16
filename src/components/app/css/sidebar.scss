@@ -9,6 +9,8 @@
     padding-top: 20px;
     text-align: left;
     border-right: 1px solid #ddd;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
 
     @media (max-width: 540px) {
         display: none;
