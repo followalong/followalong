@@ -1,10 +1,11 @@
 <template>
-  <div class="clickable-media" v-if="item.image && item.image.url">
-    <a href="javascript:;" class="popout" v-on:click="app.popout(item); app.read(item, true)">&micro;</a>
-    <EmbedMedia v-if="clicked" :item="item" :app="app" :autoplay="!item.isRead" />
-    <a href="javascript:;" v-else v-on:click="clicked = true">
-      <img :src="item.image.url">
+  <div class="clickable-media">
+    <a href="javascript:;" class="popout" v-on:click="app.popout(item, true)">&micro;</a>
+    <a href="javascript:;" v-if="!clicked" v-on:click="clicked = true">
+      <img v-if="item.image && item.image.url" :src="item.image.url">
+      <a href="javascript:;" v-else>&#9658;</a>
     </a>
+    <EmbedMedia v-else :item="item" :app="app" :autoplay="true" />
   </div>
 </template>
 

@@ -39,6 +39,7 @@ function ITEM_MAP(item) {
         isRead: item.isRead,
         isSaved: item.isSaved,
         link: item.link,
+        enclosure: item.enclosure,
         pubDate: item.pubDate,
         title: item.title,
         content: item.content,
@@ -46,17 +47,32 @@ function ITEM_MAP(item) {
     };
 }
 
-function videoSrc(item) {
-    if (item && item.guid && item.guid.slice(0, 9) === 'yt:video:') {
-        return 'https://www.youtube.com/embed/' + item.guid.slice(9);
+var VIDEO_TYPES = /\.(mp4)/,
+    AUDIO_TYPES = /\.(mp3|wav)/;
+
+function videoSrc(item, autoplay) {
+    if (!item) {
+        return undefined;
+    }
+
+    if (item.guid && item.guid.slice(0, 9) === 'yt:video:') {
+        return 'https://www.youtube.com/embed/' + item.guid.slice(9) + (autoplay ? '?&autoplay=1' : '');
+    } else if (item.enclosure && VIDEO_TYPES.test(item.enclosure.url)) {
+        return item.enclosure.url;
     }
 
     return undefined;
 }
 
 function audioSrc(item) {
-    if (item && /\.(mp3|wav)$/.test(item.link)) {
+    if (!item) {
+        return undefined;
+    }
+
+    if (item.link && AUDIO_TYPES.test(item.link)) {
         return item.link;
+    } else if (item.enclosure && AUDIO_TYPES.test(item.enclosure.url)) {
+        return item.enclosure.url;
     }
 
     return undefined;
@@ -178,16 +194,6 @@ export default {
                 done();
             }
         });
-    },
-
-    catchMeUp() {
-        var _ = this;
-
-        _.identity.items.forEach(function(item) {
-            item.isRead = true;
-        });
-
-        _.app.save();
     },
 
     save(done) {
@@ -328,6 +334,7 @@ export default {
         if (_.app.playing === item) {
             _.app.playing = undefined;
         } else {
+            _.app.read(item, true);
             _.app.playing = item;
         }
     },
@@ -338,6 +345,26 @@ export default {
 
     hasMedia(item) {
         return videoSrc(item) || audioSrc(item);
+    },
+
+    setMediaVerb(item) {
+        if (item._mediaVerb) {
+            return item._mediaVerb;
+        }
+
+        if (videoSrc(item)) {
+            item._mediaVerb = 'watch';
+        } else if (audioSrc(item)) {
+            item._mediaVerb = 'listen';
+        } else {
+            item._mediaVerb = 'read';
+        }
+
+        return item._mediaVerb;
+    },
+
+    capitalize(str) {
+        return str[0].toUpperCase() + str.slice(1, str.length);
     },
 
     isURL(q) {
@@ -663,12 +690,17 @@ export default {
 
     constructIdentities(done) {
         var _ = this,
-                identities = [],
-                keychain = {};
+            identities = [],
+            keychain = {};
 
         _.store.keys(function(err, keys) {
             async.eachParallel(keys || [], function(id, next) {
-                if (id.slice(0, 4) !== 'key-') {
+                if (id === 'hints') {
+                    _.store.getItem(id, function(err, value) {
+                        _.app.hints = value;
+                        next();
+                    });
+                } else if (id.slice(0, 4) !== 'key-') {
                     identities.push({ id: id });
                     next();
                 } else {
@@ -701,6 +733,22 @@ export default {
                 SCRIPT_CACHE[url] = true;
             });
         }
+    },
+
+    hideHint(hint) {
+        var _ = this;
+
+        _.app.hints.push(hint);
+        _.app.store.setItem(
+            'hints',
+            _.app.hints
+        );
+    },
+
+    hintIsShown(hint) {
+        var _ = this;
+
+        return _.app.hints.indexOf(hint) === -1;
     },
 
     setIdentity(identity) {

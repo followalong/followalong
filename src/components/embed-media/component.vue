@@ -8,8 +8,8 @@
 
     <div v-else>
         <div v-if="audioSrc">
-            <audio controls>
-              <source :src="audioSrc" :autoplay="autoplay">
+            <audio controls :autoplay="autoplay">
+              <source :src="audioSrc">
             </audio>
         </div>
     </div>
@@ -35,14 +35,7 @@ export default {
 
     videoSrc: {
       get() {
-        var _ = this,
-          src = methods.videoSrc(_.item);
-
-        if (src && _.autoplay) {
-          src += '?&autoplay=1';
-        }
-
-        return src;
+        return methods.videoSrc(this.item, this.autoplay);
       },
       set() {}
     },

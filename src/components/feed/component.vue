@@ -4,9 +4,9 @@
       <span v-if="feed.loading">Loading...</span>
       <span v-else>Fetch Now</span>
     </button>
-    <button v-on:click="pause()" :class="feed.paused ? '' : 'button-gray'">
-      <span v-if="feed.paused">&#9658;</span>
-      <span v-else>&#10074;&#10074;</span>
+    <button v-on:click="pause()" :class="feed.paused ? 'button-gray' : ''">
+      <span v-if="feed.paused">&#10074;&#10074;</span>
+      <span v-else>&#9658;</span>
     </button>
     <h2>
       <router-link :to="{ name: 'feed', params: { feed_url: feed.url } }">

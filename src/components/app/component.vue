@@ -16,12 +16,17 @@
                             <input type="text" name="q" v-model="q" autocomplete="off" placeholder="Enter a URL to follow...">
                         </form>
                     </li>
-                    <li v-if="identity" class="table-cell">
-                        <router-link to="/settings">
-                                <strong>{{ identity.name }}</strong>
-                        </router-link>
+                    <li v-if="identity" class="table-cell identities">
+                        <a>
+                            <strong>{{ identity.name }}</strong>
+                        </a>
 
-                        <ul class="identities">
+                        <ul>
+                            <li v-if="!nonIdentities.length">
+                                <router-link to="/settings">
+                                    Settings
+                                </router-link>
+                            </li>
                             <li v-for="i in nonIdentities" :key="i.id">
                                 <a href="javascript:;" v-on:click="app.setIdentity(i);">
                                     <span v-if="i._decrypted">{{i.name}}</span>
@@ -56,12 +61,13 @@
 </style>
 
 <script>
+import localForage   from 'localforage';
 import Sidebar       from '@/components/sidebar/component.vue';
 import MediaPlayer   from '@/components/media-player/component.vue';
 import seed          from '@/components/app/seed';
 import sorter        from '@/components/app/sorter';
 import methods       from '@/components/app/methods';
-import localForage   from 'localforage';
+import changelog     from '@/../changelog.json';
 
 function SORT_BY_NAME(a, b) {
     if (a.name < b.name) return -1;
@@ -91,6 +97,7 @@ export default {
             identities: [],
             keychain: {},
             identity: {},
+            hints: [],
             proxies: window.servers.filter(function(server) {
                 return typeof server.fetchURL === 'function';
             }),
@@ -101,6 +108,8 @@ export default {
                 return typeof server.publishItem === 'function';
             }),
             playing: undefined,
+            changelog: changelog,
+            version: Object.keys(changelog)[0]
         };
     },
     mounted() {
@@ -139,7 +148,10 @@ export default {
 
             if (!_.identity) return [];
 
-            return (_.identity.items || []).sort(sorter(_.identity));
+            return (_.identity.items || []).filter(function(item) {
+                _.setMediaVerb(item);
+                return true;
+            }).sort(sorter(_.identity));
         },
         saved() {
             var _ = this;
@@ -154,6 +166,27 @@ export default {
             return _.newsfeed.filter(function(item) {
                 return !item.isRead;
             }).sort(sorter(_.identity));
+        },
+        unreadWatches() {
+            var _ = this;
+
+            return _.unread.filter(function(item) {
+                return item._mediaVerb === 'watch';
+            });
+        },
+        unreadListens() {
+            var _ = this;
+
+            return _.unread.filter(function(item) {
+                return item._mediaVerb === 'listen';
+            });
+        },
+        unreadReads() {
+            var _ = this;
+
+            return _.unread.filter(function(item) {
+                return item._mediaVerb === 'read';
+            });
         },
         feeds() {
             var _ = this;

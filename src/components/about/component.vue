@@ -7,7 +7,7 @@
       </p>
 
       <p>
-        Because FollowAlong uses RSS, you can follow YouTube channels, Blogs, Calendars, Podcast, team activities, and much more.
+        FollowAlong uses RSS, which means you can follow YouTube channels, Blogs, Calendars, Podcast, team activities, and much more.
         We've added some content to let you see how it feels to use FollowAlong.
         <!-- <em>It's just you here</em> &mdash; nobody is listening in (check the Developer tools if you don't believe me). -->
         <!-- Eventually, you can enter an RSS/Atom feed URL in the "Search" bar above to follow others from YouTube, Twitter, etc. -->
@@ -17,7 +17,7 @@
 
       <p>
         In most social networks, everyone's data is stored in ONE central place.
-        This means that your personal information &mdash; what you like and share, who you follow &mdash; gets saved on a server somewhere that's out of your hands.
+        This means that your personal information &mdash; what you like and share, who you follow &mdash; gets saved on a server somewhere that's out of your hands (usually by a company that sells your data).
         In turn, that SINGLE company controls what you see &mdash; news, content, articles, recommendations &mdash; and how you see it.
         If you're concerned about online privacy at all, this is <em>not sustainable</em>.
       </p>
@@ -27,7 +27,7 @@
         Once you choose which feeds to follow, your own device becomes your server, storage, and internet connection.
         It regularly checks for fresh content and stores it on your device.
         If you choose, you can sync it (encrypted end-to-end) to other devices.
-        <span class="highlight">As a result, your content comes <em>directly</em> from the source with no censorship and no manipulation &mdash; just freedom.</span>
+        <span class="highlight">As a result, your content comes <em>directly</em> from the source with no virtually censorship and no manipulation &mdash; just freedom.</span>
         Check it out – there are no ads, trackers, or any other shenanigans on FollowAlong.
       </p>
 

@@ -1,7 +1,7 @@
 .content {
-    margin-top: 55px;
-    margin-left: 180px;
-    padding: 40px;
+    margin-top: $nav-height;
+    margin-left: $sidebar-width;
+    padding: 50px $content-padding;
     text-align: left;
     color: $gray;
 
@@ -29,10 +29,12 @@
     }
 
     h1 {
-        font-weight: bold;
+        font-weight: 500;
         font-size: 200%;
         margin-bottom: 20px;
+        padding-bottom: 20px;
         line-height: 1.4;
+        border-bottom: 2px solid $light-gray;
     }
 
     h2 {
@@ -91,7 +93,7 @@
         & > li {
             width: 100%;
             padding: 1.5em 1.5em 1.5em 2.75em;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid $medium-gray;
 
             & > h3 {
                 font-weight: bold;
@@ -122,7 +124,7 @@
                     img {
                         margin-bottom: -0.5em;
                         border-radius: 4px;
-                        border: 1px solid #eee;
+                        border: 1px solid $medium-gray;
                     }
                 }
 
@@ -131,19 +133,41 @@
                     margin-top: 0.5em;
                 }
 
-                & > div > .description {
-                    margin-bottom: 0;
-                    border-radius: 4px;
-                    border: 1px solid #eee;
-                    padding: 1em;
-                    margin-top: 1em;
-                    max-height: 24em;
-                    overflow: scroll;
-                    -webkit-overflow-scrolling: touch;
+                & > div > {
+                    .description {
+                        margin-bottom: 0;
+                        border-radius: 4px;
+                        border: 1px solid $medium-gray;
+                        padding: 1em;
+                        margin-top: 1em;
+                        max-height: 24em;
+                        overflow: scroll;
+                        -webkit-overflow-scrolling: touch;
 
-                    @media (max-width: 640px) {
-                        margin-left: -2.75em;
-                        margin-right: -25px;
+                        @media (max-width: 640px) {
+                            margin-left: -2.75em;
+                            margin-right: -25px;
+                        }
+                    }
+                }
+
+                & > .float-right {
+                    font-size: 120%;
+                    line-height: 1;
+                    margin-top: 10px;
+                    opacity: 1.0;
+
+                    a {
+                        margin-right: 20px;
+                        color: #aaa;
+
+                        &:hover {
+                            color: #777;
+                        }
+
+                        .selected {
+                            color: $blue;
+                        }
                     }
                 }
             }
@@ -197,7 +221,7 @@
         }
 
         &.button-gray, &[disabled] {
-            background: #999;
+            background: #aaa;
         }
 
         &.button-red {
@@ -240,7 +264,7 @@
 
 .secret-info {
     border: 1px solid #ddd;
-    background: #fcfcfc;
+    background: $light-gray;
     padding: 1em;
     border-radius: 4px;
     margin: 1em 0;
@@ -302,9 +326,9 @@
 .first-loading {
     position: fixed;
     bottom: 0;
-    left: 180px;
+    left: $sidebar-width;
     right: 0;
-    padding: 80px 40px 40px;
+    padding: 80px $content-padding 40px;
     z-index: 9999;
     background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 15%, rgba(255,255,255,1) 33%, rgba(255,255,255,1) 98%, rgba(255,255,255,1) 99%); /* FF3.6-15 */
     background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,0.5) 15%,rgba(255,255,255,1) 33%,rgba(255,255,255,1) 98%,rgba(255,255,255,1) 99%); /* Chrome10-25,Safari5.1-6 */
@@ -321,7 +345,7 @@
 .description {
     textarea, blockquote {
         display: block;
-        background: #eee;
+        background: $medium-gray;
         border-radius: 4px;
         padding: 1em;
         width: 100%;
@@ -392,7 +416,7 @@
         font-size: 90%;
 
         th, td {
-            border: 1px solid #eee;
+            border: 1px solid $medium-gray;
             padding: 5px;
         }
     }
@@ -416,10 +440,10 @@
         a {
             display: inline-block;
             padding: 0.5em 1em;
-            border: 1px solid #eee;
+            border: 1px solid $medium-gray;
             border-bottom: 0;
             border-radius: 4px 4px 0 0;
-            background: #fcfcfc;
+            background: $light-gray;
         }
 
         &.active a {
@@ -428,7 +452,7 @@
     }
 
     .tab-content {
-        border: 1px solid #eee;
+        border: 1px solid $medium-gray;
         padding: 2em;
         clear: both;
         border-radius: 0 4px 4px 4px;
@@ -437,4 +461,15 @@
             margin-bottom: 0;
         }
     }
+}
+
+hr {
+    margin: 20px 0;
+    background: $light-gray;
+    height: 1px;
+    border: 0;
+}
+
+.fa-spinner {
+    opacity: 0.5;
 }

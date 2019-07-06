@@ -5,7 +5,7 @@
         <font-awesome-icon icon="spinner" spin v-if="app.loading" /> &nbsp;
         Loading...
       </span>
-      <span v-else>About FollowAlong</span>
+      <span v-else>What is FollowAlong?</span>
     </h1>
 
     <p class="highlight">

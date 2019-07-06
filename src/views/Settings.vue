@@ -132,7 +132,7 @@
               <p>Coming Soon!</p>
             </div>
           </v-tab>
-          <v-tab title="Admin">
+          <v-tab title="Identity">
             <div class="field">
               <div class="columns">
                 <div class="half-column">

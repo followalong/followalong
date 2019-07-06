@@ -1,8 +1,27 @@
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'Avenir', Helvetica Neue, Helvetica, Arial, sans-serif;
+  // font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: $gray;
   font-size: 16px;
   line-height: 1.6;
+  font-weight: 300;
+}
+
+.primary,
+.link,
+.content .items > li > h3,
+.content .description a,
+.related-sidebar h3,
+.vue-tabs .tab.active a,
+.check:hover,
+.explanation,
+.stars {
+    color: $blue;
+}
+
+.content button,
+.content .button {
+    background: $blue;
 }

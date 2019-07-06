@@ -4,7 +4,7 @@ var generateId = uniqId.generateUUID('xxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxy',
     identities = [
         {
             id: generateId(),
-            name: 'FollowAlong',
+            name: 'My Account',
             feeds: [
                 {
                     name: 'Signal v. Noise',

@@ -26,7 +26,7 @@
     border-radius: 7px 7px 0 0;
     font-size: 90%;
     color: #aaa;
-    background: #eee;
+    background: $medium-gray;
     display: block;
 }
 
@@ -44,7 +44,7 @@
     }
 
     .feed > h1 {
-        margin-bottom: 0;
+        // margin-bottom: 0;
     }
 
     .feed > h3 {
@@ -63,14 +63,14 @@
     &.wide-feed {
         float: none;
         width: 100%;
-        max-width: 40em;
+        max-width: $content-width;
     }
 }
 
 .feeds {
     li {
         padding: 20px 0;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid $medium-gray;
 
         h2, p {
             margin: 0;
@@ -112,13 +112,13 @@
     float: right;
     font-size: 90%;
     line-height: 1.3;
-    border-left: 1px solid #eee;
+    border-left: 1px solid $medium-gray;
     padding-left: 3%;
     background: #fff;
 
     li {
         padding: 1em 0 1em 2.5em;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid $medium-gray;
     }
 
     h3 {

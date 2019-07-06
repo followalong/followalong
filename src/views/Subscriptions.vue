@@ -8,10 +8,6 @@
     <h1>Subscriptions</h1>
 
     <ul>
-      <li>
-        <p>To subscribe to more feeds, use the Search bar above!</p>
-      </li>
-
       <li
         is="feed"
         v-for="feed in app.feeds"

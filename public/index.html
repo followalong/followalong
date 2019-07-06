@@ -4,7 +4,11 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+        <link rel="icon" href="<%= BASE_URL %>img/favicon.ico">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link href="<%= BASE_URL %>img/apple-touch-icon.png"    rel="apple-touch-icon">
+        <!-- <link href="<%= BASE_URL %>img/app-loading.png" rel="apple-touch-startup-image"> -->
         <title>FollowAlong</title>
     </head>
     <body>
@@ -15,8 +19,8 @@
             var AWS_CONFIG = {
                 sdk: '<%= BASE_URL %>js/aws-sdk-2.444.0.min.js',
                 region: 'us-east-1',
-                accessKeyId: YOURKEYHERE,
-                secretAccessKey: YOURKEYHERE
+                accessKeyId: atob('QUtJQVZCVlI1Sk02U002TDVUTEU='),
+                secretAccessKey: atob('SFFOQ2RWdVQ3VXc5UUJvU0habTFSd01hdFB5Qm5oTm5iMDdwZXJsVA')
             };
 
             window.logo = '/img/logo.svg';
@@ -167,33 +171,6 @@
                 }
             }];
         </script>
-        <style type="text/css">
-            .primary,
-            .link,
-            .content h1,
-            .content h3,
-            .content .items > li > h3,
-            .content .description a,
-            .related-sidebar h3,
-            .vue-tabs .tab.active a,
-            .check:hover,
-            .explanation,
-            .stars {
-                color: #005B80;
-            }
-
-            .content button,
-            .content .button,
-            .header .nav,
-            .nav .identities,
-            .sidebar a.router-link-exact-active {
-                background: #005B80;
-            }
-
-            .nav .logo a {
-                width: 65px;
-            }
-        </style>
         <div id="app"></div>
         <!-- built files will be auto injected -->
     </body>

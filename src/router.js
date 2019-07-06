@@ -12,6 +12,7 @@ import Subscriptions  from './views/Subscriptions.vue';
 import Saved          from './views/Saved.vue';
 import Item           from './views/Item.vue';
 import NewIdentity    from './views/Identities-New.vue';
+import Updates        from './views/Updates.vue';
 
 Vue.use(Router);
 
@@ -56,12 +57,6 @@ export default new Router({
       props: true
     },
     {
-      path: '/',
-      name: 'home',
-      component: Home,
-      props: true
-    },
-    {
       path: '/subscriptions',
       name: 'subscriptions',
       component: Subscriptions,
@@ -74,21 +69,39 @@ export default new Router({
       props: true
     },
     {
+      path: '/updates',
+      name: 'updates',
+      component: Updates,
+      props: true
+    },
+    {
       path: '/identities/new',
       name: 'identities/new',
       component: NewIdentity,
       props: true
     },
     {
-      path: '/:feed_url',
+      path: '/feeds/:feed_url',
       name: 'feed',
       component: Feed,
       props: true
     },
     {
-      path: '/:feed_url/:guid',
+      path: '/feeds/:feed_url/:guid',
       name: 'item',
       component: Item,
+      props: true
+    },
+    {
+      path: '/:media_verb',
+      name: 'media_verb_home',
+      component: Home,
+      props: true
+    },
+    {
+      path: '/',
+      name: 'home',
+      component: Home,
       props: true
     }
   ]

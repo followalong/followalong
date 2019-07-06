@@ -3,55 +3,96 @@
     <ul>
         <li>
           <router-link to="/">
-              <strong>
-                What's New?
-                <!-- <span v-if="identity.unread.length">({{identity.unread.length}})</span> -->
-              </strong>
+              <font-awesome-icon icon="film" /> Watch
+              <span class="hint counter">
+                <span v-if="app.unreadWatches.length">({{app.unreadWatches.length}})</span>
+                <!-- <span v-else>&check;</span> -->
+              </span>
           </router-link>
+        </li>
+
+        <li>
+          <router-link to="/read">
+              <font-awesome-icon icon="book-open" />
+              Read
+              <span class="hint counter">
+                <span v-if="app.unreadReads.length">({{app.unreadReads.length}})</span>
+                <!-- <span v-else>&check;</span> -->
+              </span>
+          </router-link>
+        </li>
+
+        <li>
+          <router-link to="/listen">
+              <font-awesome-icon icon="headphones-alt" />
+              Listen
+              <span class="hint counter">
+                <span v-if="app.unreadListens.length">({{app.unreadListens.length}})</span>
+                <!-- <span v-else>&check;</span> -->
+              </span>
+          </router-link>
+        </li>
+
+        <li v-if="app.saved.length">
+            <router-link to="/saved">
+              <font-awesome-icon icon="save" />
+              Saved
+              <span class="hint counter">
+                ({{app.saved.length}})
+              </span>
+            </router-link>
         </li>
 
         <li v-if="app.api">
             <router-link to="/discover">
-              Discover
+              <!-- Discover -->
             </router-link>
         </li>
 
         <li>
             <router-link to="/subscriptions">
+              <font-awesome-icon icon="database" />
               Subscriptions
+              <span class="hint counter">
+                <span v-if="app.feeds.length">({{app.feeds.length}})</span>
+              </span>
             </router-link>
         </li>
 
         <li v-if="app.saved.length">
-            <router-link to="/saved">
-              Saved For Later
+            <router-link to="/settings">
+              <font-awesome-icon icon="cog" />
+              Settings
             </router-link>
-        </li>
-
-        <li v-if="app.api">
-          <router-link to="/messages">
-            Messages
-          </router-link>
-        </li>
-
-        <li>
-            <router-link to="/about">
-              About
-            </router-link>
-        </li>
-
-        <li>
-          <router-link to="/settings">
-            Setup
-          </router-link>
         </li>
     </ul>
+
+    <div class="section info-section" v-if="app.hintIsShown('sidebar-about')">
+      <h3>
+        What is FollowAlong?
+        <a href="javascript:;" class="float-right close-hint" v-on:click="app.hideHint('sidebar-about')">&times;</a>
+      </h3>
+      <p>
+        A social network where voices <em>can't</em> be censored and your data is kept safe with <em>you</em>.
+        <router-link to="/about" class="primary">
+          Read more &raquo;
+        </router-link>
+      </p>
+    </div>
+
+    <div class="section">
+      <h3>
+        <router-link to="/updates">
+          Version {{app.version}}
+        </router-link>
+      </h3>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Sidebar',
-  props: ['app']
+  props: ['app'],
 }
 </script>

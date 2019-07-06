@@ -22,6 +22,8 @@
     </div>
 
     <div v-if="showContent">
+      <ClickableMedia :item="item" :app="app" v-if="app.hasMedia(item)" />
+
       <div v-if="item.content && item.content.length">
         <div class="description">
           <div v-if="!isExpanded && item.content.length > characterLimit">
@@ -37,11 +39,13 @@
         </div>
       </div>
 
-      <ClickableMedia :item="item" :app="app" v-else />
-
       <p class="hint float-right">
+        <a href="javascript:;" v-on:click="app.saveForLater(item)">
+          <font-awesome-icon icon="save" :class="item.isSaved ? 'selected' : ''" />
+        </a>
+
         <a :href="item.link" target="_blank" v-on:click="app.read(item, true)">
-          View Source
+          <font-awesome-icon icon="link" />
         </a>
       </p>
 

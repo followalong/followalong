@@ -30,7 +30,7 @@
         &nbsp;
 
         <a href="javascript:;" :class="'button' + (item.isSaved ? '' : ' button-gray')" v-on:click="app.saveForLater(item)">
-          Save<span v-if="item.isSaved">d</span> For Later
+          Save<span v-if="item.isSaved">d</span>
         </a>
 
         &nbsp;

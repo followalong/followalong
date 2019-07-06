@@ -13,10 +13,6 @@ function getFeed(proxy, items, feed, updatedAt, callback, forEachCallback) {
 
     var lastUpdate = feed._updatedAt || new Date(0);
 
-    if (updatedAt) {
-        feed._updatedAt = updatedAt;
-    }
-
     feed.id = feed.id || proxy.app.generateId();
 
     proxy.fetchURL(proxy.app, proxy.app.identity, {
@@ -44,6 +40,10 @@ function getFeed(proxy, items, feed, updatedAt, callback, forEachCallback) {
             feed.lastFetchCount = data.items.length;
             feed.name = feed.name || data.name || data.title;
             feed.description = feed.description || data.description;
+
+            if (updatedAt) {
+                feed._updatedAt = updatedAt;
+            }
 
             data.items.forEach(function(newItem) {
                 if (new Date(newItem.pubDate) < lastUpdate) {

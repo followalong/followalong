@@ -1,19 +1,13 @@
 <template>
     <div class="feed home-feed wide-feed">
-        <button v-if="app.unread && app.unread.length" v-on:click="app.catchMeUp()" class="button-gray button-small float-right">Catch Me Up!</button>
-        <h1>What's New?</h1>
+        <button v-if="app.unread && app.unread.length" v-on:click="catchMeUp()" class="button-gray button-small float-right">Catch Me Up!</button>
+        <h1>{{app.capitalize(mediaVerb)}}</h1>
 
-        <p v-if="items && !items.length">
-            <span v-if="app.loading">
-                <font-awesome-icon icon="spinner" spin /> &nbsp;
-                Loading...
-            </span>
-            <span v-else>
-                You're all caught up!
-            </span>
+        <p v-if="items.length && !unreadItems.length" class="highlight">
+            You're all caught up!
         </p>
 
-        <ul class="items" v-else>
+        <ul class="items" v-if="items.length">
             <li
                 is="item"
                 v-for="item in items"
@@ -29,6 +23,8 @@
 <script>
 import Item  from '@/components/item/component.vue';
 
+var VERBS = ['watch', 'read', 'listen'];
+
 export default {
     name: 'home',
     props: ['app'],
@@ -37,7 +33,38 @@ export default {
     },
     computed: {
         items() {
-            return this.app.newsfeed.slice(0, 10);
+            var _ = this;
+
+            return _.app.newsfeed.filter(function(item) {
+                return item._mediaVerb === _.mediaVerb;
+            }).slice(0, 10);
+        },
+        unreadItems() {
+            return this.items.filter(function(item) {
+                return !item.isRead;
+            });
+        },
+        mediaVerb() {
+            var verb = this.$route.params.media_verb;
+
+            if (VERBS.indexOf(verb) === -1) {
+                verb = 'watch';
+            }
+
+            return verb;
+        }
+    },
+    methods: {
+        catchMeUp() {
+            var _ = this;
+
+            _.app.newsfeed.filter(function(item) {
+                return item._mediaVerb === _.mediaVerb;
+            }).forEach(function(item) {
+                item.isRead = true;
+            });
+
+            _.app.save();
         }
     }
 }

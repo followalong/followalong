@@ -39,7 +39,7 @@ export default {
     },
     methods: {
         previewFiles() {
-            console.log(this.$refs.upload.files[0]);
+            // console.log(this.$refs.upload.files[0]);
             this.files = this.$refs.upload.files
         },
 
@@ -112,7 +112,7 @@ export default {
                     _.app.setIdentity(existingIdentity);
                     _.$router.push('/');
                 } catch (e) {
-                    console.log(e);
+                    // console.log(e);
                     alert('Invalid Configuration.');
                 }
             }

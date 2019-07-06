@@ -1,8 +1,15 @@
 // $blue: #005B80;
 $green: #1BCC04;
-// $blue: #222;
+$blue: #1b8cd8;
 $gray: #2c3e50;
+$light-gray: #EDF2F7;
+$medium-gray: #F2F2F2;
 $red: #CC3F06;
+$sidebar-width: 230px;
+$nav-height: 66px;
+$content-padding: 80px;
+$content-width: 46em;
+$media-player-width: 350px;
 
 @mixin clearfix() {
  &:after {
