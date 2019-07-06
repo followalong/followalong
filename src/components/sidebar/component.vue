@@ -59,7 +59,7 @@
             </router-link>
         </li>
 
-        <li v-if="app.saved.length">
+        <li>
             <router-link to="/settings">
               <font-awesome-icon icon="cog" />
               Settings

@@ -23,13 +23,26 @@
 <script>
 import Item  from '@/components/item/component.vue';
 
-var VERBS = ['watch', 'read', 'listen'];
+var VERBS = ['watch', 'read', 'listen'],
+    DISTANCE_FROM_BOTTOM = 1000,
+    LOADING;
 
 export default {
     name: 'home',
     props: ['app'],
+    data() {
+        return {
+            limit: 10
+        };
+    },
     components: {
         Item
+    },
+    watch: {
+        $route () {
+            this.limit = 10;
+            console.log(this.limit)
+        }
     },
     computed: {
         items() {
@@ -37,7 +50,7 @@ export default {
 
             return _.app.newsfeed.filter(function(item) {
                 return item._mediaVerb === _.mediaVerb;
-            }).slice(0, 10);
+            }).slice(0, _.limit);
         },
         unreadItems() {
             return this.items.filter(function(item) {
@@ -66,6 +79,29 @@ export default {
 
             _.app.save();
         }
+    },
+    mounted() {
+        var _ = this;
+
+        window.onscroll = function() {
+            if (LOADING) {
+                return;
+            }
+
+            var documentHeight = document.body.scrollHeight,
+                windowScrolled = Math.max(window.pageYOffset || 0, document.documentElement.scrollTop);
+
+            if (documentHeight - windowScrolled < DISTANCE_FROM_BOTTOM) {
+                _.limit += 10;
+
+                setTimeout(function() {
+                    LOADING = false;
+                }, 100);
+            }
+        };
+    },
+    destroyed() {
+        window.onscroll = function() {};
     }
 }
 </script>
