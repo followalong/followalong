@@ -41,7 +41,6 @@ export default {
     watch: {
         $route () {
             this.limit = 10;
-            console.log(this.limit)
         }
     },
     computed: {

@@ -17,7 +17,7 @@
 
         &mdash;
 
-        <span :title="item.pubDate" v-if="item.pubDate" class="feed-name">{{app.dateFormat(item.pubDate)}}</span>
+        <span :title="item.pubDate" v-if="item.pubDate" class="feed-name">{{app.dateFormat(item.pubDate, app.now)}}</span>
       </h3>
 
       <div v-html="item.content" class="description"></div>

@@ -9,15 +9,17 @@
                         <a href="javascript:;" v-on:click="$router.push('/'); fetchAllFeeds(identity, true)">
                             <font-awesome-icon icon="spinner" spin v-if="loading" />
                             <img :src="logo" v-if="!loading">
+                            <img :src="mobileLogo" v-if="!loading">
                         </a>
                     </li>
                     <li class="table-cell search">
                         <form method="GET" action="/search" v-on:submit="search">
-                            <input type="text" name="q" v-model="q" autocomplete="off" placeholder="Enter a URL to follow...">
+                            <input type="text" name="q" v-model="q" autocomplete="off" placeholder="Search...">
                         </form>
                     </li>
                     <li v-if="identity" class="table-cell identities">
                         <a>
+                            <font-awesome-icon icon="bars" />
                             <strong>{{ identity.name }}</strong>
                         </a>
 
@@ -88,6 +90,7 @@ export default {
         return {
             app: _,
             logo: window.logo || '/img/logo.svg',
+            mobileLogo: window.mobileLogo || '/img/favicon.svg',
             q: _.$route.query.q || '',
             api: false,
             store: localForage.createInstance({
@@ -98,13 +101,14 @@ export default {
             keychain: {},
             identity: {},
             hints: [],
-            proxies: window.servers.filter(function(server) {
+            now: new Date(),
+            proxies: window.proxies.filter(function(server) {
                 return typeof server.fetchURL === 'function';
             }),
-            remotes: window.servers.filter(function(server) {
+            remotes: window.proxies.filter(function(server) {
                 return typeof server.getIdentity === 'function' && typeof server.setIdentity === 'function';
             }),
-            publishers: window.servers.filter(function(server) {
+            publishers: window.proxies.filter(function(server) {
                 return typeof server.publishItem === 'function';
             }),
             playing: undefined,
@@ -114,6 +118,10 @@ export default {
     },
     mounted() {
         var _ = this;
+
+        setInterval(function() {
+            _.now = new Date();
+        }, 60000);
 
         _.$on('loading', function(bool) {
             _.loading = bool;

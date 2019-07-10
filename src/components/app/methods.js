@@ -1,6 +1,6 @@
 import Vue          from 'vue';
 import sorter       from '@/components/app/sorter';
-import fetcher      from '@/components/app/fetcher';
+import { getFeed }  from '@/components/app/fetcher';
 import aes256       from 'aes256';
 import uniqId       from 'uniq-id';
 import copy         from 'copy-to-clipboard';
@@ -78,12 +78,12 @@ function audioSrc(item) {
     return undefined;
 }
 
-function timeAgo(date) {
+function timeAgo(date, now) {
     if (typeof date !== 'object') {
         date = new Date(date);
     }
 
-    var seconds = Math.floor((new Date() - date) / 1000),
+    var seconds = Math.floor(((now || new Date()) - date) / 1000),
         interval = Math.floor(seconds / 31536000),
         intervalType;
 
@@ -187,7 +187,7 @@ export default {
 
         feed.loading = true;
 
-        fetcher(_.app.getProxy(), identity.items, feed, updatedAt, function() {
+        getFeed(_.app.getProxy(), identity.items, feed, updatedAt, function() {
             feed.loading = false;
 
             if (typeof done === 'function') {
@@ -324,8 +324,8 @@ export default {
         }
     },
 
-    dateFormat(date) {
-        return timeAgo(new Date(date));
+    dateFormat(date, now) {
+        return timeAgo(new Date(date), now);
     },
 
     popout(item) {
@@ -398,7 +398,7 @@ export default {
 
          _.app.loading = true;
 
-        fetcher(_.app.getProxy(), items, feed, Date.now(), function() {
+        getFeed(_.app.getProxy(), items, feed, Date.now(), function() {
             _.feed = feed;
 
             items.forEach(function(item) {

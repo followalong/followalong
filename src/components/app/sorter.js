@@ -1,4 +1,4 @@
-function sorter(identity, date) {
+function sorter(identity, date, feed) {
     if (!date) {
         date = 'pubDate';
     }
@@ -6,7 +6,7 @@ function sorter(identity, date) {
     return function sorter(a, b) {
         if (typeof a.feed === 'undefined') {
             Object.defineProperty(a, 'feed', {
-                value: identity.feeds.find(function(feed) {
+                value: feed || identity.feeds.find(function(feed) {
                     return a.feedId === feed.id;
                 }),
                 enumerable: false
@@ -15,7 +15,7 @@ function sorter(identity, date) {
 
         if (typeof b.feed === 'undefined') {
             Object.defineProperty(b, 'feed', {
-                value: identity.feeds.find(function(feed) {
+                value: feed || identity.feeds.find(function(feed) {
                     return b.feedId === feed.id;
                 }),
                 enumerable: false
