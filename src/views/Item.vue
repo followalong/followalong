@@ -41,7 +41,7 @@
       </div>
     </div>
     <div class="related-sidebar">
-      <h2>Newsfeed</h2>
+      <h2>What's Next?</h2>
       <ul class="related">
         <li
           is="item"

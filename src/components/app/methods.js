@@ -806,5 +806,17 @@ export default {
         }
 
         return '~' + (Math.round(size * 10) / 10) + ' ' + unit;
+    },
+
+    toggleSidebar(doHide) {
+        var _ = this;
+
+        if (doHide || _.app.sidebarClass === 'show') {
+            _.app.sidebarClass = '';
+            document.body.style.overflow = '';
+        } else {
+            _.app.sidebarClass = 'show';
+            document.body.style.overflow = 'hidden';
+        }
     }
 };

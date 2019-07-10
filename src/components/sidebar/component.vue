@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar">
+  <div :class="'sidebar ' + app.sidebarClass">
     <ul>
         <li>
           <router-link to="/">
@@ -94,5 +94,11 @@
 export default {
   name: 'Sidebar',
   props: ['app'],
+  watch: {
+    '$route' (to, from) {
+      var _ = this;
+      _.app.toggleSidebar(true);
+    }
+  }
 }
 </script>

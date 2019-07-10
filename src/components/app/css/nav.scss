@@ -20,6 +20,7 @@
   z-index: 100;
   background: #fff;
   border-bottom: 1px solid $medium-gray;
+  font-size: 16px;
 
   &:after {
     content: ' ';
@@ -40,6 +41,13 @@
     &:hover {
       background: rgba(255, 255, 255, 0.1);
     }
+  }
+
+  svg { /* loading icon */
+    display: inline-block;
+    font-size: 54px;
+    padding: 17px;
+    vertical-align: middle;
   }
 
   .table-cell {
@@ -66,15 +74,8 @@
 
       a {
         width: 64px;
-        padding: 0 7px;
+        padding: 2px 8px;
       }
-    }
-
-    svg {
-      display: inline-block;
-      font-size: 54px;
-      padding: 17px;
-      vertical-align: middle;
     }
 
     img {
@@ -162,6 +163,10 @@
         }
     }
 
+    svg {
+      vertical-align: middle;
+    }
+
     @media (max-width: 640px) {
       strong {
         display: none;
@@ -169,7 +174,7 @@
 
       & > a {
         display: block;
-        width: 40px;
+        width: 45px;
         text-align: center;
         color: #aaa;
         cursor: pointer;
@@ -183,7 +188,9 @@
     }
   }
 
-  li:hover ul {
-    display: block;
+  @media (min-width: 641px) {
+    li:hover ul {
+      display: block;
+    }
   }
 }

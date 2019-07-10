@@ -11,9 +11,21 @@
     border-right: 1px solid $medium-gray;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
+    font-size: 16px;
 
-    @media (max-width: 540px) {
+    @media (max-width: 880px) {
+        top: 59px;
+    }
+
+    @media (max-width: 640px) {
         display: none;
+    }
+
+    &.show {
+        display: block;
+        right: 0;
+        width: auto;
+        border-right: 0;
     }
 
     ul {

@@ -5,7 +5,11 @@
     text-align: left;
     color: $gray;
 
-    @media (max-width: 540px) {
+    @media (max-width: 880px) {
+        padding: 40px;
+    }
+
+    @media (max-width: 640px) {
         padding: 10px;
         margin-left: 0;
     }
@@ -86,11 +90,13 @@
     }
 
     .narrow-container {
-        max-width: 540px;
+        max-width: 640px;
+        margin: 0 auto;
     }
 
     .large-container {
         max-width: 980px;
+        margin: 0 auto;
     }
 
     .items {
@@ -98,7 +104,7 @@
 
         & > li {
             width: 100%;
-            padding: 1.5em 1.5em 1.5em 2.75em;
+            padding: 1.5em 0;
             border-bottom: 1px solid $medium-gray;
 
             @media (max-width: 640px) {
@@ -123,8 +129,12 @@
 
             & > .check {
                 float: left;
-                margin-left: -1.5em;
                 font-size: 130%;
+                margin-left: -1.5em;
+
+                @media (max-width: 880px) {
+                    margin-left: -1.25em;
+                }
             }
 
             & > div {
@@ -225,6 +235,10 @@
         padding: 10px 20px;
         cursor: pointer;
         text-align: center;
+
+        @media (max-width: 880px) {
+            padding: 3px 12px;
+        }
 
         &.button-small {
             font-size: 90%;
@@ -483,4 +497,16 @@ hr {
 
 .fa-spinner {
     opacity: 0.5;
+}
+
+@media (min-width: 641px) {
+    .mobile-only {
+        display: none !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .desktop-only {
+        display: none !important;
+    }
 }

@@ -6,6 +6,11 @@
     width: $media-player-width;
     z-index: 99999;
     background: #fff;
+    max-width: 100%;
+
+    @media (max-width: 640px) {
+        left: -1px;
+    }
 
     .video-embed {
         background: #000;

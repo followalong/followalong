@@ -6,7 +6,7 @@
             <div class="nav table">
                 <ul class="table-row">
                     <li class="table-cell logo">
-                        <a href="javascript:;" v-on:click="$router.push('/'); fetchAllFeeds(identity, true)">
+                        <a href="javascript:;" v-on:click="$router.push('/'); app.toggleSidebar(true); fetchAllFeeds(identity, true)">
                             <font-awesome-icon icon="spinner" spin v-if="loading" />
                             <img :src="logo" v-if="!loading">
                             <img :src="mobileLogo" v-if="!loading">
@@ -18,9 +18,12 @@
                         </form>
                     </li>
                     <li v-if="identity" class="table-cell identities">
-                        <a>
-                            <font-awesome-icon icon="bars" />
+                        <a class="desktop-only">
                             <strong>{{ identity.name }}</strong>
+                        </a>
+
+                        <a href="javascript:;" class="mobile-only" v-on:click="app.toggleSidebar()">
+                            <font-awesome-icon icon="bars" />
                         </a>
 
                         <ul>
@@ -100,6 +103,7 @@ export default {
             identities: [],
             keychain: {},
             identity: {},
+            sidebarClass: '',
             hints: [],
             now: new Date(),
             proxies: window.proxies.filter(function(server) {
