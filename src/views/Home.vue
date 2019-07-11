@@ -17,6 +17,10 @@
                 showContent="true"
             ></li>
         </ul>
+
+        <p v-else class="highlight">
+            There are no items here!
+        </p>
     </div>
 </template>
 

@@ -17,14 +17,21 @@
             </div>
           </v-tab>
 
-          <v-tab title="Proxy">
+          <v-tab title="Servers">
             <div class="field">
-              <p>
-                On the internet, there is a technical issue known as CORS, which blocks us from accessing popular RSS feeds directly.
-                Because of this, we do provide a passthrough as a default.
-                Don't trust us with your traffic? Good &mdash; use our templates to create your own in minutes!
-              </p>
+              <p>FollowAlong doesn't require <em>any</em> external services or servers, but they <em>can</em> be bolted on to boost your experience. There are 5 different connection points where you can plug in:</p>
             </div>
+
+            <div class="field">
+              <label>Choose a connection point:</label>
+              <select v-model="selectedServer">
+                <option v-for="(server, key) in servers" :key="key" :value="server">
+                  {{server.name}}
+                </option>
+              </select>
+              <p class="hint hint-after" v-html="selectedServer.description"></p>
+            </div>
+
             <div class="field" v-if="app.identity.proxy">
               <label for="proxy">
                 Passthrough Proxy
@@ -127,18 +134,13 @@
               </div>
             </div>
           </v-tab>
-          <v-tab title="Remote">
-            <div class="field">
-              <p>Coming Soon!</p>
-            </div>
-          </v-tab>
           <v-tab title="Identity">
             <div class="field">
               <div class="columns">
                 <div class="half-column">
-                  <label>Download My Identity</label>
+                  <label>Download My Data</label>
                   <span class="hint">
-                    Download a full copy of your identity.
+                    Download a full copy of your data.
                   </span>
                   <button v-on:click="app.download(app.identity)" class="button-gray">Download Identity</button>
                 </div>
@@ -156,7 +158,7 @@
             <div class="field">
               <div class="columns">
                 <div class="half-column">
-                  <label>Forget My Identity</label>
+                  <label>Forget My Data</label>
                   <span class="hint">
                     Wipe your data from this browser.
                   </span>
@@ -188,6 +190,29 @@
 <script>
 import {VueTabs, VTab} from 'vue-nav-tabs';
 
+var SERVERS = {
+  rss: {
+    name: 'RSS Proxy',
+    description: 'On the internet, there is a technical issue known as CORS, which blocks us from accessing popular RSS feeds directly. Because of this, we do provide a "passthrough" as a default. Don\'t trust us with your traffic? Good! Use our templates to create your own in minutes!'
+  },
+  read: {
+    name: 'Read Storage',
+    description: 'Store and sync your subscriptions and saved items.'
+  },
+  write: {
+    name: 'Write Storage',
+    description: 'Store and publish your own RSS feed.'
+  },
+  search: {
+    name: 'Search Proxy',
+    description: 'Provide a smarter, faster search.'
+  },
+  media: {
+    name: 'Media Proxy',
+    description: 'Avoid hotlinking or keep your media stored long-term.'
+  }
+};
+
 export default {
   name: 'settings',
   props: ['app'],
@@ -198,7 +223,9 @@ export default {
   data() {
     return {
       secretKey: undefined,
-      hasStorageSupport: this.app.store.INDEXEDDB || this.app.store.LOCALSTORAGE
+      hasStorageSupport: this.app.store.INDEXEDDB || this.app.store.LOCALSTORAGE,
+      selectedServer: SERVERS.rss,
+      servers: SERVERS
     };
   },
   // watch: {
