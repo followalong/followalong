@@ -5,10 +5,10 @@ var AWS_CONFIG = {
     secretAccessKey: atob('SFFOQ2RWdVQ3VXc5UUJvU0habTFSd01hdFB5Qm5oTm5iMDdwZXJsVA')
 };
 
-export default [{
-    id: 'followalong-lite',
-    name: 'FollowAlong Throttled',
-    description: '(limited to 1 request per minute) Use this server to test out FollowAlong.',
+var SERVICES = [{
+    id: 'followalong-free',
+    name: 'FollowAlong Free',
+    description: 'We\'re offering this as a public service. Your requests may be throttled. We don\'t record or track any data. Don\'t trust us with your traffic? Good! Use our <a href="https://github.com/followalong/followalong" target="_blank" class="link" onclick="event.stopImmediatePropagation();">template</a> to create your own in minutes!',
     data: {
         accessKeyId: AWS_CONFIG.accessKeyId,
         secretAccessKey: AWS_CONFIG.secretAccessKey,
@@ -86,12 +86,84 @@ export default [{
 //     }
 // },
 {
+    id: 'aws-lambda',
+    name: 'AWS Lambda',
+    description: 'Use our source code <a href="https://github.com/followalong/followalong" target="_blank" class="link" onclick="event.stopImmediatePropagation();">here</a> to quickly deploy your own passthrough server to Amazon\'s Lambda.',
+    fields: {
+        name: {
+            type: 'text',
+            label: 'Service Name',
+            required: true
+        },
+        accessKeyId: {
+            type: 'text',
+            label: 'Access Key ID',
+            required: true
+        },
+        secretAccessKey: {
+            type: 'password',
+            label: 'Secret Access Key',
+            required: true
+        },
+        region: {
+            type: 'text',
+            label: 'Region',
+            required: true
+        },
+        functionName: {
+            type: 'text',
+            label: 'Function Name',
+            required: true
+        }
+    },
+    data: {
+        region: 'us-east-1'
+    },
+    fetch: function fetch(app, identity, data, done) {
+        var _ = this;
+
+        app.cachedLoadExternal(AWS_CONFIG.sdk, function() {
+            var functionName = (_.data.functionName || '').length ? _.data.functionName : _.fields.functionName.default,
+                region = (_.data.region || '').length ? _.data.region : _.fields.region.default;
+
+            window.AWS.config.update({
+                accessKeyId: (_.data.accessKeyId || '').length ? _.data.accessKeyId : _.fields.accessKeyId.default,
+                secretAccessKey: (_.data.secretAccessKey || '').length ? _.data.secretAccessKey : _.fields.secretAccessKey.default,
+                region: region
+            });
+
+            new window.AWS.Lambda({
+                region: region,
+                apiVersion: '2015-03-31'
+            }).invoke({
+                FunctionName: functionName,
+                InvocationType: 'RequestResponse',
+                LogType: 'None',
+                Payload: JSON.stringify({
+                    url: data.url
+                })
+            }, function(err, data) {
+                try {
+                    done(undefined, JSON.parse(data.Payload));
+                } catch (e) {
+                    done(err);
+                }
+            });
+        });
+    }
+},
+{
     id: 'cors-anywhere',
     name: 'CORS Anywhere',
-    description: 'This is the "CORS Anywhere" demo server! Please deploy your own version to Heroku (or elsewhere) and change the URL. Deploy your own: https://github.com/Rob--W/cors-anywhere.',
+    description: 'Use the "CORS Anywhere" demo server! Please don\'t abuse this service, as you can <a href="https://github.com/Rob--W/cors-anywhere" target="_blank" class="link" onclick="event.stopImmediatePropagation();">quickly deploy your own version</a> to Heroku (or elsewhere).',
     fields: {
+        name: {
+            type: 'text',
+            label: 'Service Name',
+            required: true
+        },
         url: {
-            type: 'input',
+            type: 'text',
             label: 'URL',
             required: true,
             placeholder: 'https://cors-anywhere.herokuapp.com/',
@@ -102,7 +174,7 @@ export default [{
     },
     fetch: function fetch(app, identity, data, done) {
         var _ = this,
-            url = (identity.proxy.url || '').length ? identity.proxy.url : _.data.url,
+            url = (_.data.url || '').length ? _.data.url : _.data.url,
             x = new XMLHttpRequest();
 
         x.open('GET', url + data.url);
@@ -118,63 +190,26 @@ export default [{
         x.send();
     }
 },
-// {
-//     id: 'aws-lambda',
-//     name: 'Custom AWS Lambda',
-//     description: 'A simple AWS Lambda passthrough server. The defaults point to FollowAlong, but don\'t trust us! Deploy your own: server/aws-lambda.',
-//     fields: {
-//         accessKeyId: {
-//             type: 'input',
-//             label: 'Access Key ID',
-//             required: true
-//         },
-//         secretAccessKey: {
-//             type: 'input',
-//             label: 'Secret Access Key',
-//             required: true
-//         },
-//         region: {
-//             type: 'input',
-//             label: 'Region',
-//             required: true
-//         },
-//         functionName: {
-//             type: 'input',
-//             label: 'Function Name',
-//             required: true
-//         }
-//     },
-//     fetch: function fetch(app, identity, data, done) {
-//         var _ = this;
+{
+    id: 'followalong-none',
+    name: 'None',
+    description: 'No proxy will be used. This may result in Cross-Origin errors and Geo-Restrictions. By the way, why isn\'t RSS CORS-friendly by default?',
+    fetch: function fetch(app, identity, data, done) {
+        var x = new XMLHttpRequest();
 
-//         app.cachedLoadExternal(AWS_CONFIG.sdk, function() {
-//             var functionName = (identity.proxy.functionName || '').length ? identity.proxy.functionName : _.fields.functionName.default,
-//                 region = (identity.proxy.region || '').length ? identity.proxy.region : _.fields.region.default;
+        x.open('GET', data.url);
 
-//             window.AWS.config.update({
-//                 accessKeyId: (identity.proxy.accessKeyId || '').length ? identity.proxy.accessKeyId : _.fields.accessKeyId.default,
-//                 secretAccessKey: (identity.proxy.secretAccessKey || '').length ? identity.proxy.secretAccessKey : _.fields.secretAccessKey.default,
-//                 region: region
-//             });
+        x.onload = x.onerror = function() {
+            if (x.status === 200) {
+                done(undefined, x.responseText);
+            } else {
+                done(x.responseText);
+            }
+        };
 
-//             new window.AWS.Lambda({
-//                 region: region,
-//                 apiVersion: '2015-03-31'
-//             }).invoke({
-//                 FunctionName: functionName,
-//                 InvocationType: 'RequestResponse',
-//                 LogType: 'None',
-//                 Payload: JSON.stringify({
-//                     url: data.url
-//                 })
-//             }, function(err, data) {
-//                 try {
-//                     done(undefined, JSON.parse(data.Payload));
-//                 } catch (e) {
-//                     done(err);
-//                 }
-//             });
-//         });
-//     }
-// }
+        x.send();
+    }
+}
 ];
+
+export default SERVICES;

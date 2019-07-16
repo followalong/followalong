@@ -185,7 +185,7 @@ export default {
 
         feed.loading = true;
 
-        getFeed(_.app.findService(_.app.identity, 'rss'), identity.items, feed, updatedAt, function() {
+        getFeed(_.app.findService(_.app.identity, 'rss', true), identity.items, feed, updatedAt, function() {
             feed.loading = false;
 
             if (typeof done === 'function') {
@@ -269,11 +269,11 @@ export default {
 
         identity.services = identity.services || {};
         identity.services.custom  = identity.services.custom  || [];
-        identity.services.rss     = identity.services.rss     || { symlink: 'followalong-lite' };
-        identity.services.profile = identity.services.profile || { symlink: 'followalong-lite' };
-        identity.services.publish = identity.services.publish || { symlink: 'followalong-lite' };
-        identity.services.search  = identity.services.search  || { symlink: 'followalong-lite' };
-        identity.services.media   = identity.services.media   || { symlink: 'followalong-lite' };
+        identity.services.rss     = identity.services.rss     || { symlink: 'followalong-free' };
+        identity.services.profile = identity.services.profile || { symlink: 'followalong-free' };
+        identity.services.publish = identity.services.publish || { symlink: 'followalong-free' };
+        identity.services.search  = identity.services.search  || { symlink: 'followalong-free' };
+        identity.services.media   = identity.services.media   || { symlink: 'followalong-free' };
 
         if (typeof identity._decrypted === 'undefined') {
             identity._decrypted = false;
@@ -357,7 +357,7 @@ export default {
 
          _.app.loading = true;
 
-        getFeed(_.app.findService(_.app.identity, 'rss'), items, feed, Date.now(), function() {
+        getFeed(_.app.findService(_.app.identity, 'rss', true), items, feed, Date.now(), function() {
             _.feed = feed;
 
             items.forEach(function(item) {
@@ -781,7 +781,7 @@ export default {
         }
     },
 
-    findService(identity, type) {
+    findService(identity, type, forceResult) {
         if (!identity || !identity.services) {
             return;
         }
@@ -789,39 +789,45 @@ export default {
         var _ = this,
             service = identity.services[type];
 
+        if (!service && forceResult) {
+            service = identity.services[type] = { symlink: 'followalong-lite' };
+        }
+
         if (service && service.symlink) {
-            service = SERVICES.find(function(s) {
+            service = SERVICES.concat(identity.services.custom).find(function(s) {
                 return s.id === service.symlink;
             });
         }
 
-        // if (!service) {
-        //     service = {
-        //         id: 'none',
-        //         name: 'None',
-        //         description: 'No proxy will be used.',
-        //         fetch: function fetch(app, identity, data, done) {
-        //             var x = new XMLHttpRequest();
-
-        //             x.open('GET', data.url);
-
-        //             x.onload = x.onerror = function() {
-        //                 if (x.status === 200) {
-        //                     done(undefined, x.responseText);
-        //                 } else {
-        //                     done(x.responseText);
-        //                 }
-        //             };
-
-        //             x.send();
-        //         }
-        //     }
-        // }
-
         if (service) {
-            service.app = _.app;
+            if (!service.app) {
+                Object.defineProperty(service, 'app', {
+                    value: _.app,
+                    enumerable: false
+                });
+            }
+
+            if (typeof service.fetch !== 'function' && service.template) {
+                Object.defineProperty(service, 'fetch', {
+                    value: SERVICES.find(function(s) {
+                        return s.id === service.template;
+                    }).fetch,
+                    enumerable: false
+                });
+            }
         }
 
         return service;
+    },
+
+    removeService(identity, service) {
+        var _ = this,
+            arr = identity.services.custom;
+
+        if (confirm('Are you sure you want to remove this service?')) {
+            arr.splice(arr.indexOf(service), 1);
+        }
+
+        _.app.save();
     }
 };

@@ -44,13 +44,7 @@
                   </div>
 
                   <div v-else>
-                    <div class="field">
-                      <label for="proxy">
-                        Service
-                      </label>
-
-                      <ServiceEditor :app="app" :serverType="serverType" :serverTypeKey="key" />
-                    </div>
+                    <ServiceEditor :app="app" :serverType="serverType" :serverTypeKey="key" />
                   </div>
                 </v-tab>
               </vue-tabs>
@@ -192,7 +186,7 @@ var SERVER_TYPES = {
   rss: {
     shortName: 'RSS',
     name: 'RSS Fetch Proxy',
-    description: 'On the internet, there is a technical issue known as CORS, which blocks us from accessing some RSS feeds directly. Because of this, we do provide a rate-limited "passthrough" server as the default. Don\'t trust us with your traffic? Good! Use our <a href="https://github.com/followalong/followalong/tree/master/server/aws-lambda-passthrough" target="_blank">template</a> to create your own in minutes!'
+    description: 'On the internet, there is a technical issue known as CORS, which sometimes blocks us from accessing some RSS feeds directly. We use a proxy to get around the CORS issue, as well as bypassing geographically-restricted content.'
   },
   read: {
     shortName: 'Profile',
