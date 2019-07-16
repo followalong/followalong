@@ -185,8 +185,8 @@ import ServiceEditor from '@/components/service-editor/component.vue';
 var SERVER_TYPES = {
   rss: {
     shortName: 'RSS',
-    name: 'RSS Fetch Proxy',
-    description: 'On the internet, there is a technical issue known as CORS, which sometimes blocks us from accessing some RSS feeds directly. We use a proxy to get around the CORS issue, as well as bypassing geographically-restricted content.'
+    name: 'RSS Proxy',
+    description: 'On the internet, there is a technical issue known as CORS, which sometimes blocks us from accessing some RSS feeds directly. You may use a proxy to get around the CORS issue, as well as bypassing geographically-restricted content.'
   },
   read: {
     shortName: 'Profile',
