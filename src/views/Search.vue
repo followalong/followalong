@@ -64,7 +64,7 @@ function isRSS(data) {
 }
 
 function checkURLAndPossibilitiesForData(app, feed, url, done) {
-  var proxy = app.getProxy(),
+  var proxy = app.findService(app.identity, 'rss'),
       jsonResponse;
 
   getContent(proxy, url, function(err, data) {

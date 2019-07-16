@@ -1,6 +1,7 @@
 import Vue          from 'vue';
 import sorter       from '@/components/app/sorter';
 import { getFeed }  from '@/components/app/fetcher';
+import SERVICES     from '@/components/app/services';
 import aes256       from 'aes256';
 import uniqId       from 'uniq-id';
 import copy         from 'copy-to-clipboard';
@@ -126,9 +127,6 @@ function timeAgo(date, now) {
 }
 
 export default {
-    // log() {
-    //   console.log(...arguments);
-    // },
     fetchAllFeeds(identity, override, done) {
         var _ = this,
             updatedAt = Date.now();
@@ -187,7 +185,7 @@ export default {
 
         feed.loading = true;
 
-        getFeed(_.app.getProxy(), identity.items, feed, updatedAt, function() {
+        getFeed(_.app.findService(_.app.identity, 'rss'), identity.items, feed, updatedAt, function() {
             feed.loading = false;
 
             if (typeof done === 'function') {
@@ -256,29 +254,12 @@ export default {
         _.app.save();
     },
 
-    setProxyDefaults(proxy) {
-        if (!proxy) return;
-
-        var _ = this,
-            found = _.app.proxies.find(function(p) {
-                return p.strategy === proxy.strategy;
-            }),
-            field, key;
-
-        if (found && found.fields) {
-            for (key in found.fields) {
-                field = found.fields[key];
-                proxy[key] = proxy[key] || field.default;
-            }
-        }
-    },
-
     setIdentityDefaults(identity) {
         var _ = this;
 
         identity.id = identity.id || _.app.generateId();
         identity.name = identity.name || '...';
-        identity.maxReadCount = typeof identity.maxReadCount === 'undefined' ? 100 : parseInt(identity.maxReadCount);
+        identity.maxReadCount = typeof identity.maxReadCount === 'undefined' ? 150 : parseInt(identity.maxReadCount);
         identity.feeds = identity.feeds || [];
         identity.items = identity.items || [];
 
@@ -286,15 +267,13 @@ export default {
             strategy: 'none'
         };
 
-        identity.remote = identity.remote || {
-            strategy: 'none'
-        };
-
-        identity.proxy = identity.proxy || {
-            strategy: 'followalong'
-        };
-
-        _.app.setProxyDefaults(identity.proxy);
+        identity.services = identity.services || {};
+        identity.services.custom  = identity.services.custom  || [];
+        identity.services.rss     = identity.services.rss     || { symlink: 'followalong-lite' };
+        identity.services.profile = identity.services.profile || { symlink: 'followalong-lite' };
+        identity.services.publish = identity.services.publish || { symlink: 'followalong-lite' };
+        identity.services.search  = identity.services.search  || { symlink: 'followalong-lite' };
+        identity.services.media   = identity.services.media   || { symlink: 'followalong-lite' };
 
         if (typeof identity._decrypted === 'undefined') {
             identity._decrypted = false;
@@ -371,26 +350,6 @@ export default {
         return /^http/.test(q);
     },
 
-    getProxy() {
-        if (!this.app.identity || !this.app.identity.proxy) {
-            return false;
-        }
-
-        var _ = this,
-            proxy = _.app.proxies.find(function(p) {
-                return p.strategy === _.app.identity.proxy.strategy;
-            }),
-            key;
-
-        for (key in proxy.fields) {
-            proxy[key] = _.app.identity.proxy[key];
-        }
-
-        proxy.app = _;
-
-        return proxy;
-    },
-
     fetchURL(url, items, _) {
         _ = _ || this;
 
@@ -398,7 +357,7 @@ export default {
 
          _.app.loading = true;
 
-        getFeed(_.app.getProxy(), items, feed, Date.now(), function() {
+        getFeed(_.app.findService(_.app.identity, 'rss'), items, feed, Date.now(), function() {
             _.feed = feed;
 
             items.forEach(function(item) {
@@ -450,7 +409,8 @@ export default {
                     loading: false
                 };
             }),
-            items: identity.items.map(ITEM_MAP)
+            items: identity.items.map(ITEM_MAP),
+            services: identity.services
         };
     },
 
@@ -473,7 +433,8 @@ export default {
             }),
             items: identity.items.filter(function(item) {
                 return item.isSaved;
-            }).map(ITEM_MAP)
+            }).map(ITEM_MAP),
+            services: identity.services
         };
     },
 
@@ -674,7 +635,7 @@ export default {
                 return;
             }
 
-            _.app.copyAttrs(state, identity, ['name', 'proxy', 'maxReadCount', 'local', 'remote', 'items', 'feeds']);
+            _.app.copyAttrs(state, identity, ['name', 'proxy', 'maxReadCount', 'local', 'remote', 'items', 'feeds', 'services']);
 
             identity._decrypted = true;
 
@@ -818,5 +779,49 @@ export default {
             _.app.sidebarClass = 'show';
             document.body.style.overflow = 'hidden';
         }
+    },
+
+    findService(identity, type) {
+        if (!identity || !identity.services) {
+            return;
+        }
+
+        var _ = this,
+            service = identity.services[type];
+
+        if (service && service.symlink) {
+            service = SERVICES.find(function(s) {
+                return s.id === service.symlink;
+            });
+        }
+
+        // if (!service) {
+        //     service = {
+        //         id: 'none',
+        //         name: 'None',
+        //         description: 'No proxy will be used.',
+        //         fetch: function fetch(app, identity, data, done) {
+        //             var x = new XMLHttpRequest();
+
+        //             x.open('GET', data.url);
+
+        //             x.onload = x.onerror = function() {
+        //                 if (x.status === 200) {
+        //                     done(undefined, x.responseText);
+        //                 } else {
+        //                     done(x.responseText);
+        //                 }
+        //             };
+
+        //             x.send();
+        //         }
+        //     }
+        // }
+
+        if (service) {
+            service.app = _.app;
+        }
+
+        return service;
     }
 };

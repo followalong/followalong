@@ -15,10 +15,10 @@
 
     <About />
 
-    <p><br><br></p>
+    <p><br></p>
 
     <div class="first-loading">
-      <router-link to="/" class="button" :disabled="app.loading">
+      <router-link to="/" class="button button-large" :disabled="app.loading">
         <span v-if="app.loading">Loading Feeds...</span>
         <span v-else>Continue to FollowAlong! &nbsp; &raquo;</span>
       </router-link>

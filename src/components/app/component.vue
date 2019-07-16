@@ -92,8 +92,8 @@ export default {
 
         return {
             app: _,
-            logo: window.logo || '/img/logo.svg',
-            mobileLogo: window.mobileLogo || '/img/favicon.svg',
+            logo: '/img/logo.svg',
+            mobileLogo: '/img/favicon.svg',
             q: _.$route.query.q || '',
             api: false,
             store: localForage.createInstance({
@@ -106,15 +106,6 @@ export default {
             sidebarClass: '',
             hints: [],
             now: new Date(),
-            proxies: window.proxies.filter(function(server) {
-                return typeof server.fetchURL === 'function';
-            }),
-            remotes: window.proxies.filter(function(server) {
-                return typeof server.getIdentity === 'function' && typeof server.setIdentity === 'function';
-            }),
-            publishers: window.proxies.filter(function(server) {
-                return typeof server.publishItem === 'function';
-            }),
             playing: undefined,
             changelog: changelog,
             version: Object.keys(changelog)[0]

@@ -15,51 +15,49 @@
               <label for="name">Identity Nickname</label>
               <input type="text" id="name" v-model="app.identity.name" v-on:blur="app.save()" placeholder="Your Name">
             </div>
-          </v-tab>
-
-          <v-tab title="Servers">
-            <div class="field">
-              <p>FollowAlong doesn't require <em>any</em> external services or servers, but they <em>can</em> be bolted on to boost your experience. There are 5 different connection points where you can plug in:</p>
-            </div>
-
-            <div class="field">
-              <label>Choose a connection point:</label>
-              <select v-model="selectedServer">
-                <option v-for="(server, key) in servers" :key="key" :value="server">
-                  {{server.name}}
-                </option>
-              </select>
-              <p class="hint hint-after" v-html="selectedServer.description"></p>
-            </div>
-
-            <div class="field" v-if="app.identity.proxy">
-              <label for="proxy">
-                Passthrough Proxy
-              </label>
-              <span class="hint">Bypass CORS and geographic restrictions.</span>
-              <select v-model="app.identity.proxy.strategy" v-on:blur="app.save()">
-                <option v-for="proxy in app.proxies" :key="proxy.strategy" :value="proxy.strategy">
-                  {{proxy.name}}
-                </option>
-              </select>
-
-              <span class="hint hint-after" v-html="selectedProxy.description"></span>
-            </div>
-
-            <div v-for="(field, key) in selectedProxy.fields" :key="key" class="field">
-              <label :for="key">
-                {{selectedProxy.name}} Proxy &mdash; {{field.label}}
-              </label>
-              <input type="text" :id="key" v-model="app.identity.proxy[key]" v-on:blur="app.save()" :placeholder="field.placeholder" :required="field.required || false">
-            </div>
-          </v-tab>
-
-          <v-tab title="Local">
             <p v-if="!hasStorageSupport" class="highlight">
               This browser does not support any storage options.
               You can still use FollowAlong, but your data will be gone when you leave the page.
             </p>
+          </v-tab>
 
+          <v-tab title="Services">
+            <div class="field">
+              <p>
+                External services are not <em>required</em>, but they <em>can</em> improve load times, search results, cache images, allow for syncing and publishing, and much more.
+              </p>
+              <!-- <p class="hint hint-after">
+                The source code for the FollowAlong service can be found <a href="https://github.com/followalong/followalong/tree/master/server/aws-lambda-passthrough" target="_blank">here</a>.
+              </p> -->
+            </div>
+
+            <div class="field">
+              <vue-tabs>
+                <v-tab v-for="(serverType, key) in serverTypes" :key="key" :title="serverType.shortName">
+                  <div class="field">
+                    <h3>{{serverType.name}}</h3>
+                    <p class="hint hint-after" v-html="serverType.description"></p>
+                  </div>
+
+                  <div v-if="serverType.disabled" class="field">
+                    <p>Coming soon!</p>
+                  </div>
+
+                  <div v-else>
+                    <div class="field">
+                      <label for="proxy">
+                        Service
+                      </label>
+
+                      <ServiceEditor :app="app" :serverType="serverType" :serverTypeKey="key" />
+                    </div>
+                  </div>
+                </v-tab>
+              </vue-tabs>
+            </div>
+          </v-tab>
+
+          <v-tab title="Data">
             <div class="field">
               <label for="max-read-count">Maximum Number of "Read" Items to Keep</label>
               <span class="hint">Unread and Saved items are always kept.</span>
@@ -68,7 +66,7 @@
 
             <div class="field" v-if="app.identity.local">
               <label for="secretStrategy">
-                Storage Strategy
+                Local Data Encryption
               </label>
 
               <span class="hint">
@@ -130,11 +128,10 @@
                   Secret Key
                 </label>
                 <input type="password" id="secretKey" v-model="app.keychain[app.identity.id]" v-on:blur="app.saveKey(app.identity, app.keychain[app.identity.id])">
-                <span class="notice red" v-if="!app.keychain[app.identity.id] || !app.keychain[app.identity.id].length">Your data is NOT encrypted because you have not supplied a secret key!</span>
+                <span class="notice red" v-if="!app.keychain[app.identity.id] || !app.keychain[app.identity.id].length">Your local data is NOT encrypted because you have not supplied a secret key!</span>
               </div>
             </div>
-          </v-tab>
-          <v-tab title="Identity">
+
             <div class="field">
               <div class="columns">
                 <div class="half-column">
@@ -189,28 +186,44 @@
 
 <script>
 import {VueTabs, VTab} from 'vue-nav-tabs';
+import ServiceEditor from '@/components/service-editor/component.vue';
 
-var SERVERS = {
+var SERVER_TYPES = {
   rss: {
-    name: 'RSS Proxy',
-    description: 'On the internet, there is a technical issue known as CORS, which blocks us from accessing popular RSS feeds directly. Because of this, we do provide a "passthrough" as a default. Don\'t trust us with your traffic? Good! Use our templates to create your own in minutes!'
+    shortName: 'RSS',
+    name: 'RSS Fetch Proxy',
+    description: 'On the internet, there is a technical issue known as CORS, which blocks us from accessing some RSS feeds directly. Because of this, we do provide a rate-limited "passthrough" server as the default. Don\'t trust us with your traffic? Good! Use our <a href="https://github.com/followalong/followalong/tree/master/server/aws-lambda-passthrough" target="_blank">template</a> to create your own in minutes!'
   },
   read: {
-    name: 'Read Storage',
-    description: 'Store and sync your subscriptions and saved items.'
+    shortName: 'Profile',
+    name: 'Profile Syncing & Storage',
+    description: 'Store and sync your subscriptions and saved items.',
+    disabled: true
   },
   write: {
-    name: 'Write Storage',
-    description: 'Store and publish your own RSS feed.'
+    shortName: 'Publish',
+    name: 'Publish Storage',
+    description: 'Publish your own RSS feed.',
+    disabled: true
   },
   search: {
+    shortName: 'Search',
     name: 'Search Proxy',
-    description: 'Provide a smarter, faster search.'
+    description: 'Provide a smarter, faster search.',
+    disabled: true
   },
   media: {
+    shortName: 'Media',
     name: 'Media Proxy',
-    description: 'Avoid hotlinking or keep your media stored long-term.'
-  }
+    description: 'Avoid hotlinking or keep your media stored long-term.',
+    disabled: true
+  },
+  // ads: {
+  //   shortName: 'ads',
+  //   name: 'Ads Proxy',
+  //   description: 'Opt-in to receive ads which compensate the feeds you follow.',
+  //   disabled: true
+  // }
 };
 
 export default {
@@ -218,14 +231,15 @@ export default {
   props: ['app'],
   components: {
     VueTabs,
-    VTab
+    VTab,
+    ServiceEditor
   },
   data() {
     return {
       secretKey: undefined,
       hasStorageSupport: this.app.store.INDEXEDDB || this.app.store.LOCALSTORAGE,
-      selectedServer: SERVERS.rss,
-      servers: SERVERS
+      selectedServerType: SERVER_TYPES.rss,
+      serverTypes: SERVER_TYPES
     };
   },
   // watch: {
@@ -328,9 +342,9 @@ export default {
 
       switch (_.app.identity.local.strategy) {
         case 'none':
-          return 'Your data will not be encrypted.';
+          return 'Your local data will not be encrypted.';
         case 'rotate':
-          return 'A new secret key is generated every time your data is saved. It is all managed for you – without having to enter a secret key. If you trust this computer and browser, this is a great choice.';
+          return 'A new secret key is generated every time your data is saved locally. It is all managed for you – without having to enter a secret key. If you trust this computer and browser, this is a great choice.';
         case 'ask':
           return 'Every time you visit, you\'ll have to enter your secret key. This is as secure as the device you\'re using and the most secure option if you use multiple devices.';
         case 'store':

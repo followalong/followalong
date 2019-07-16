@@ -11,7 +11,7 @@ function getContent(proxy, url, done) {
         return done();
     }
 
-    proxy.fetchURL(proxy.app, proxy.app.identity, {
+    proxy.fetch(proxy.app, proxy.app.identity, {
         url: url
     }, function(err, data) {
         if (!data) {
