@@ -1,5 +1,67 @@
+import AWS from 'aws-sdk';
+import S3  from 'aws-sdk/clients/s3';
+
+var STRIP_SLASHES = /^\/|\/$/g;
+
+function lambdaPassthrough(app, identity, data, done) {
+    var _ = this;
+
+    new AWS.Lambda({
+        endpoint: new AWS.Endpoint(_.data.endpoint),
+        accessKeyId: _.data.accessKeyId,
+        secretAccessKey: _.data.secretAccessKey,
+        region: _.data.region,
+        apiVersion: 'latest'
+    }).invoke({
+        FunctionName: _.data.functionName,
+        InvocationType: 'RequestResponse',
+        LogType: 'None',
+        Payload: JSON.stringify(data)
+    }, function(err, data) {
+        try {
+            done(undefined, JSON.parse(data.Payload));
+        } catch (e) {
+            done(err);
+        }
+    });
+}
+
+function s3Sync(app, identity, data, done) {
+    var _ = this,
+        key = _.data.path.replace(STRIP_SLASHES, '') + '/' + 'FILENAME',
+        s3 = new AWS.S3({
+            endpoint: new AWS.Endpoint(_.data.endpoint),
+            accessKeyId: _.data.accessKeyId,
+            secretAccessKey: _.data.secretAccessKey,
+            apiVersion: 'latest'
+        });
+
+    s3.getObject({
+        Bucket: _.data.bucket,
+        Key: key,
+    }, function(err, oldData) {
+        if (oldData) {
+            // MERGE oldData into JSON.stringify(data.identity) if sooner updated timestamp!
+            console.log('found ', JSON.parse(oldData.Body.toString()))
+        }
+
+        s3.putObject({
+            Body: JSON.stringify(data.identity),
+            Bucket: _.data.bucket,
+            Key: key,
+        }, function(err, data) {
+            console.log(err, data)
+            try {
+                done(undefined, JSON.parse(data.Payload));
+            } catch (e) {
+                done(err);
+            }
+        });
+    });
+}
+
 var AWS_CONFIG = {
-    sdk: '/js/aws-sdk-2.444.0.min.js',
+    endpoint: 'lambda.us-east-1.amazonaws.com',
     region: 'us-east-1',
     accessKeyId: atob('QUtJQVZCVlI1Sk02U002TDVUTEU='),
     secretAccessKey: atob('SFFOQ2RWdVQ3VXc5UUJvU0habTFSd01hdFB5Qm5oTm5iMDdwZXJsVA')
@@ -10,79 +72,93 @@ var SERVICES = [
     id: 'followalong-free',
     name: 'FollowAlong Free',
     description: 'We\'re offering this as a public service. Your requests may be throttled. We don\'t record or track any data. Don\'t trust us with your traffic? Good! Use our <a href="https://github.com/followalong/followalong" target="_blank" class="link" onclick="event.stopImmediatePropagation();">template</a> to create your own in minutes!',
-    supports: 'rss,sync',
+    supports: 'rss',
     data: {
+        endpoint: AWS_CONFIG.endpoint,
         accessKeyId: AWS_CONFIG.accessKeyId,
         secretAccessKey: AWS_CONFIG.secretAccessKey,
         region: AWS_CONFIG.region,
         functionName: 'followalong-passthrough'
     },
-    request: function request(app, identity, data, done) {
-        var _ = this;
-
-        app.cachedLoadExternal(AWS_CONFIG.sdk, function() {
-            window.AWS.config.update({
-                accessKeyId: _.data.accessKeyId,
-                secretAccessKey: _.data.secretAccessKey,
-                region: _.data.region
-            });
-
-            new window.AWS.Lambda({
-                region: _.data.region,
-                apiVersion: '2015-03-31'
-            }).invoke({
-                FunctionName: _.data.functionName,
-                InvocationType: 'RequestResponse',
-                LogType: 'None',
-                Payload: JSON.stringify(data)
-            }, function(err, data) {
-                try {
-                    done(undefined, JSON.parse(data.Payload));
-                } catch (e) {
-                    done(err);
-                }
-            });
-        });
-    }
+    request: lambdaPassthrough
+},
+{
+    id: 's3',
+    name: 'S3',
+    description: 'Store data directly to an S3-compatible server.',
+    supports: 'sync',
+    data: {
+        endpoint: 's3.amazonaws.com',
+        path: '/identities/',
+        accessKeyId: AWS_CONFIG.accessKeyId,
+        secretAccessKey: AWS_CONFIG.secretAccessKey,
+        region: AWS_CONFIG.region,
+        functionName: 'followalong-passthrough'
+    },
+    fields: {
+        name: {
+            type: 'text',
+            label: 'Service Name',
+            required: true
+        },
+        endpoint: {
+            type: 'text',
+            label: 'Endpoint',
+            required: true
+        },
+        path: {
+            type: 'text',
+            label: 'Base Path',
+            required: true
+        },
+        accessKeyId: {
+            type: 'text',
+            label: 'Access Key ID',
+            required: true
+        },
+        secretAccessKey: {
+            type: 'password',
+            label: 'Secret Access Key',
+            required: true
+        },
+        region: {
+            type: 'text',
+            label: 'Region',
+            required: true
+        },
+        bucket: {
+            type: 'text',
+            label: 'Bucket',
+            required: true
+        }
+    },
+    request: s3Sync
 },
 // {
 //     id: 'followalong-unlimited',
-//     name: 'FollowAlong Unlimited',
-//     description: ' (9 USD per year) Unfortunately, data fetching and transfer is not free to us, so we offer a simple option for you to cover the expenses.',
-//     supports: 'rss,sync,publish,search,media',
+//     name: 'FollowAlong Premium',
+//     description: 'Unlimited access with no throttling, logging, or tracking.',
+//     supports: 'rss,sync',
+//     fields: {
+//         name: {
+//             type: 'text',
+//             label: 'Service Name',
+//             required: true
+//         },
+//         url: {
+//             type: 'text',
+//             label: 'Secret Access Key',
+//             required: true
+//         }
+//     },
 //     data: {
+//         endpoint: AWS_CONFIG.endpoint,
 //         accessKeyId: AWS_CONFIG.accessKeyId,
 //         secretAccessKey: AWS_CONFIG.secretAccessKey,
 //         region: AWS_CONFIG.region,
 //         functionName: 'followalong-passthrough'
 //     },
-//     request: function request(app, identity, data, done) {
-//         var _ = this;
-
-//         app.cachedLoadExternal(AWS_CONFIG.sdk, function() {
-//             window.AWS.config.update({
-//                 accessKeyId: _.data.accessKeyId,
-//                 secretAccessKey: _.data.secretAccessKey,
-//                 region: _.data.region
-//             });
-
-//             new window.AWS.Lambda({
-//                 region: _.data.region,
-//                 apiVersion: '2015-03-31'
-//             }).invoke({
-//                 FunctionName: _.data.functionName,
-//                 InvocationType: 'RequestResponse',
-//                 LogType: 'None',
-//                 Payload: JSON.stringify(data)
-//             }, function(err, data) {
-//                 try {
-//                     done(undefined, JSON.parse(data.Payload));
-//                 } catch (e) {
-//                     done(err);
-//                 }
-//             });
-//         });
-//     }
+//     request: lambdaPassthrough
 // },
 {
     id: 'aws-lambda',
@@ -93,6 +169,11 @@ var SERVICES = [
         name: {
             type: 'text',
             label: 'Service Name',
+            required: true
+        },
+        endpoint: {
+            type: 'text',
+            label: 'Endpoint',
             required: true
         },
         accessKeyId: {
@@ -117,38 +198,10 @@ var SERVICES = [
         }
     },
     data: {
-        region: 'us-east-1'
+        region: 'us-east-1',
+        endpoint: AWS_CONFIG.endpoint
     },
-    request: function request(app, identity, data, done) {
-        var _ = this;
-
-        app.cachedLoadExternal(AWS_CONFIG.sdk, function() {
-            var functionName = (_.data.functionName || '').length ? _.data.functionName : _.fields.functionName.default,
-                region = (_.data.region || '').length ? _.data.region : _.fields.region.default;
-
-            window.AWS.config.update({
-                accessKeyId: (_.data.accessKeyId || '').length ? _.data.accessKeyId : _.fields.accessKeyId.default,
-                secretAccessKey: (_.data.secretAccessKey || '').length ? _.data.secretAccessKey : _.fields.secretAccessKey.default,
-                region: region
-            });
-
-            new window.AWS.Lambda({
-                region: region,
-                apiVersion: '2015-03-31'
-            }).invoke({
-                FunctionName: functionName,
-                InvocationType: 'RequestResponse',
-                LogType: 'None',
-                Payload: JSON.stringify(data)
-            }, function(err, data) {
-                try {
-                    done(undefined, JSON.parse(data.Payload));
-                } catch (e) {
-                    done(err);
-                }
-            });
-        });
-    }
+    request: lambdaPassthrough
 },
 {
     id: 'cors-anywhere',

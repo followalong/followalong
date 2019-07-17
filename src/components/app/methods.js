@@ -220,7 +220,7 @@ export default {
 
         proxy.request(proxy.app, proxy.app.identity, {
             action: 'sync',
-            identity: _.app.toLocal(_.app.identity)
+            identity: _.app.toRemote(_.app.identity)
         }, function(err, data) {
             if (!data) {
                 err = err || 'Could not fetch feed. If you\'re not already, Try using a CORS proxy (in Setup).';
@@ -410,6 +410,7 @@ export default {
                     id: feed.id,
                     url: feed.url,
                     name: feed.name,
+                    _updatedAt: feed._updatedAt,
                     paused: feed.paused,
                     loading: false
                 };
