@@ -5,11 +5,12 @@ var AWS_CONFIG = {
     secretAccessKey: atob('SFFOQ2RWdVQ3VXc5UUJvU0habTFSd01hdFB5Qm5oTm5iMDdwZXJsVA')
 };
 
-var SERVICES = [{
+var SERVICES = [
+{
     id: 'followalong-free',
     name: 'FollowAlong Free',
     description: 'We\'re offering this as a public service. Your requests may be throttled. We don\'t record or track any data. Don\'t trust us with your traffic? Good! Use our <a href="https://github.com/followalong/followalong" target="_blank" class="link" onclick="event.stopImmediatePropagation();">template</a> to create your own in minutes!',
-    supports: 'rss',
+    supports: 'rss,sync',
     data: {
         accessKeyId: AWS_CONFIG.accessKeyId,
         secretAccessKey: AWS_CONFIG.secretAccessKey,
