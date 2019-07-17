@@ -198,51 +198,39 @@ export default {
         var _ = this;
 
         _.app.trimItems(_.app.identity);
-        _.app.beforeSave(function() {
-            _.app.store.setItem(
-                _.app.identity.id,
-                _.app.encrypt(
-                    _.app.identity,
-                    _.app.toLocal(_.app.identity)
-                )
-            );
 
-            _.afterSave(done);
+        _.app.store.setItem(
+            _.app.identity.id,
+            _.app.encrypt(
+                _.app.identity,
+                _.app.toLocal(_.app.identity)
+            )
+        );
+
+        _.sync(done);
+    },
+
+    sync(done) {
+        var _ = this,
+            proxy = _.app.findService(_.app.identity, 'sync');
+
+        if (!proxy) {
+            return;
+        }
+
+        proxy.request(proxy.app, proxy.app.identity, {
+            action: 'sync',
+            identity: _.app.toLocal(_.app.identity)
+        }, function(err, data) {
+            if (!data) {
+                err = err || 'Could not fetch feed. If you\'re not already, Try using a CORS proxy (in Setup).';
+                console.error(err);
+            }
+
+            if (typeof done === 'function') {
+                done(err, data);
+            }
         });
-    },
-
-    beforeSave(done) {
-        var _ = this,
-                remote = (window.remotes || []).find(function(r) {
-                    return r.strategy === _.app.identity.remote.strategy;
-                });
-
-        if (!remote || typeof remote.get !== 'function') {
-            if (typeof done === 'function') {
-                done();
-            }
-
-            return;
-        }
-
-        remote.get(_.app, _.app.identity, _.app.identity.remote, done);
-    },
-
-    afterSave(done) {
-        var _ = this,
-            remote = (window.remotes || []).find(function(r) {
-                return r.strategy === _.app.identity.remote.strategy;
-            });
-
-        if (!remote || typeof remote.update !== 'function') {
-            if (typeof done === 'function') {
-                done();
-            }
-
-            return;
-        }
-
-        remote.update(_.app, _.app.identity, _.app.identity.remote, done);
     },
 
     saveForLater(item) {
@@ -270,7 +258,7 @@ export default {
         identity.services = identity.services || {};
         identity.services.custom  = identity.services.custom  || [];
         identity.services.rss     = identity.services.rss     || { symlink: 'followalong-free' };
-        identity.services.profile = identity.services.profile || { symlink: 'followalong-free' };
+        identity.services.sync = identity.services.sync || { symlink: 'followalong-free' };
         identity.services.publish = identity.services.publish || { symlink: 'followalong-free' };
         identity.services.search  = identity.services.search  || { symlink: 'followalong-free' };
         identity.services.media   = identity.services.media   || { symlink: 'followalong-free' };

@@ -11,7 +11,8 @@ function getContent(proxy, url, done) {
         return done();
     }
 
-    proxy.fetch(proxy.app, proxy.app.identity, {
+    proxy.request(proxy.app, proxy.app.identity, {
+        action: 'rss',
         url: url
     }, function(err, data) {
         if (!data) {

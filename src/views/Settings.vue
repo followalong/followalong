@@ -188,15 +188,14 @@ var SERVER_TYPES = {
     name: 'RSS Proxy',
     description: 'On the internet, there is a technical issue known as CORS, which sometimes blocks us from accessing some RSS feeds directly. You may use a proxy to get around the CORS issue, as well as bypassing geographically-restricted content.'
   },
-  read: {
-    shortName: 'Profile',
-    name: 'Profile Syncing & Storage',
-    description: 'Store and sync your subscriptions and saved items.',
-    disabled: true
+  sync: {
+    shortName: 'Sync',
+    name: 'Feed Syncing & Storage',
+    description: 'Store and sync your subscriptions and saved items.'
   },
-  write: {
+  publish: {
     shortName: 'Publish',
-    name: 'Publish Storage',
+    name: 'Feed Publishing',
     description: 'Publish your own RSS feed.',
     disabled: true
   },

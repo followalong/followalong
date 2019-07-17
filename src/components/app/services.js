@@ -15,7 +15,7 @@ var SERVICES = [{
         region: AWS_CONFIG.region,
         functionName: 'followalong-passthrough'
     },
-    fetch: function fetch(app, identity, data, done) {
+    request: function request(app, identity, data, done) {
         var _ = this;
 
         app.cachedLoadExternal(AWS_CONFIG.sdk, function() {
@@ -55,7 +55,7 @@ var SERVICES = [{
 //         region: AWS_CONFIG.region,
 //         functionName: 'followalong-passthrough'
 //     },
-//     fetch: function fetch(app, identity, data, done) {
+//     request: function request(app, identity, data, done) {
 //         var _ = this;
 
 //         app.cachedLoadExternal(AWS_CONFIG.sdk, function() {
@@ -119,7 +119,7 @@ var SERVICES = [{
     data: {
         region: 'us-east-1'
     },
-    fetch: function fetch(app, identity, data, done) {
+    request: function request(app, identity, data, done) {
         var _ = this;
 
         app.cachedLoadExternal(AWS_CONFIG.sdk, function() {
@@ -172,7 +172,7 @@ var SERVICES = [{
     data: {
         url: 'https://cors-anywhere.herokuapp.com/'
     },
-    fetch: function fetch(app, identity, data, done) {
+    request: function request(app, identity, data, done) {
         var _ = this,
             url = (_.data.url || '').length ? _.data.url : _.data.url,
             x = new XMLHttpRequest();
@@ -194,7 +194,7 @@ var SERVICES = [{
     id: 'followalong-none',
     name: 'None',
     description: 'No proxy will be used. This may result in Cross-Origin errors and Geo-Restrictions. By the way, why isn\'t RSS CORS-friendly by default?',
-    fetch: function fetch(app, identity, data, done) {
+    request: function request(app, identity, data, done) {
         var x = new XMLHttpRequest();
 
         x.open('GET', data.url);
