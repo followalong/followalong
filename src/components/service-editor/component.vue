@@ -1,10 +1,18 @@
 <template>
   <div v-if="app.identity.services" class="field">
-    <label for="proxy">
-      <span v-if="!service">Choose A </span>Service
-    </label>
+    <div v-if="!services.length">
+      <ul>
+        <li>
+          <p>Coming soon!</p>
+        </li>
+      </ul>
+    </div>
 
-    <div class="services">
+    <div v-else class="services">
+      <label for="proxy">
+        <span v-if="!service">Choose A </span>Service
+      </label>
+
       <div v-if="service">
         <ul>
           <li class="single">
@@ -21,32 +29,30 @@
 
         <form>
           <div class="field" v-for="(field, key) in service.fields" :key="key">
-            <label :for="'field_' + key">{{field.label}}</label>
-            <input v-model="service.data[key]" v-on:blur="app.save()" :type="field.type" :id="'field_' + key" :name="key">
+            <label :for="'field_' + service.id + '_' + serverTypeKey + '_' + key">{{field.label}}</label>
+            <input v-model="service.data[key]" v-on:blur="app.save()" :type="field.type" :id="'field_' + service.id + '_' + serverTypeKey + '_' + key" :name="key">
           </div>
         </form>
       </div>
 
-      <div v-else>
-        <ul>
-          <li v-for="s in app.identity.services.custom" :key="s.id">
-            <a href="javascript:;" v-on:click="app.removeService(app.identity, s)" class="reset">
-              &times;
-            </a>
-            <a href="javascript:;" v-on:click="select(s)" class="select-service">
-              <h3>{{s.data.name}}</h3>
-              <p v-html="s.description"></p>
-            </a>
-          </li>
+      <ul v-else>
+        <li v-for="s in customServices" :key="s.id">
+          <a href="javascript:;" v-on:click="app.removeService(app.identity, s)" class="reset">
+            &times;
+          </a>
+          <a href="javascript:;" v-on:click="select(s)" class="select-service">
+            <h3>{{s.data.name}}</h3>
+            <p v-html="s.description"></p>
+          </a>
+        </li>
 
-          <li v-for="s in services" :key="s.id">
-            <a href="javascript:;" v-on:click="select(s)" class="select-service">
-              <h3>{{s.name}}</h3>
-              <p v-html="s.description"></p>
-            </a>
-          </li>
-        </ul>
-      </div>
+        <li v-for="s in services" :key="s.id">
+          <a href="javascript:;" v-on:click="select(s)" class="select-service">
+            <h3>{{s.name}}</h3>
+            <p v-html="s.description"></p>
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -61,7 +67,16 @@ export default {
 
   computed: {
     services() {
-      return SERVICES;
+      var _ = this;
+
+      return SERVICES.filter(function(service) {
+        return service.supports.indexOf(_.serverTypeKey) !== -1;
+      });
+    },
+
+    customServices() {
+      var _ = this;
+      return _.app.identity.services.custom;
     },
 
     service() {

@@ -14,11 +14,8 @@
     </p>
 
     <div v-for="(summary, version) in app.changelog" :key="version">
-      <h3>
-        Version {{version}}
-      </h3>
-
       <p>
+        <strong>Version {{version}}</strong><br>
         {{summary}}
       </p>
 

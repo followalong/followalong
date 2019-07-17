@@ -15,12 +15,11 @@ function getContent(proxy, url, done) {
         action: 'rss',
         url: url
     }, function(err, data) {
-        if (!data) {
-            done(err || 'Could not fetch feed. If you\'re not already, Try using a CORS proxy (in Setup).');
-            return;
+        if (data && parseInt(data.status) < 300) {
+            return done(undefined, data.body);
         }
 
-        done(undefined, data);
+        done(typeof data === 'object' ? data.body : 'Could not fetch feed. If you\'re not already, Try using a CORS proxy (in Setup).');
     });
 }
 

@@ -247,7 +247,6 @@ export default {
 
         identity.id = identity.id || _.app.generateId();
         identity.name = identity.name || '...';
-        identity.maxReadCount = typeof identity.maxReadCount === 'undefined' ? 150 : parseInt(identity.maxReadCount);
         identity.feeds = identity.feeds || [];
         identity.items = identity.items || [];
 
@@ -255,13 +254,15 @@ export default {
             strategy: 'none'
         };
 
+        identity.local.maxReadCount = typeof identity.local.maxReadCount === 'undefined' ? 150 : parseInt(identity.local.maxReadCount);
+
         identity.services = identity.services || {};
         identity.services.custom  = identity.services.custom  || [];
         identity.services.rss     = identity.services.rss     || { symlink: 'followalong-free' };
-        identity.services.sync = identity.services.sync || { symlink: 'followalong-free' };
-        identity.services.publish = identity.services.publish || { symlink: 'followalong-free' };
-        identity.services.search  = identity.services.search  || { symlink: 'followalong-free' };
-        identity.services.media   = identity.services.media   || { symlink: 'followalong-free' };
+        identity.services.sync    = identity.services.sync    || { symlink: 'followalong-none' };
+        identity.services.publish = identity.services.publish || { symlink: 'followalong-none' };
+        identity.services.search  = identity.services.search  || { symlink: 'followalong-none' };
+        identity.services.media   = identity.services.media   || { symlink: 'followalong-none' };
 
         if (typeof identity._decrypted === 'undefined') {
             identity._decrypted = false;
@@ -270,7 +271,7 @@ export default {
 
     trimItems(identity) {
         var _ = this,
-            limit = parseInt(identity.maxReadCount),
+            limit = parseInt(identity.local.maxReadCount),
             items = _.app.newsfeed.filter(function(item) {
                 return item.isRead && !item.isSaved;
             }).sort(sorter(identity, '_updatedAt')),
@@ -383,10 +384,7 @@ export default {
         return {
             id: identity.id,
             name: identity.name,
-            proxy: identity.proxy,
             local: identity.local,
-            remote: identity.remote,
-            maxReadCount: identity.maxReadCount,
             feeds: identity.feeds.map(function(feed) {
                 return {
                     id: feed.id,
@@ -406,10 +404,7 @@ export default {
         return {
             id: identity.id,
             name: identity.name,
-            proxy: identity.proxy,
             local: identity.local,
-            remote: identity.remote,
-            maxReadCount: identity.maxReadCount,
             feeds: identity.feeds.map(function(feed) {
                 return {
                     id: feed.id,
@@ -796,10 +791,10 @@ export default {
             }
 
             if (typeof service.fetch !== 'function' && service.template) {
-                Object.defineProperty(service, 'fetch', {
+                Object.defineProperty(service, 'request', {
                     value: SERVICES.find(function(s) {
                         return s.id === service.template;
-                    }).fetch,
+                    }).request,
                     enumerable: false
                 });
             }

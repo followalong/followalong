@@ -88,7 +88,9 @@ export default {
     data: function() {
         var _ = this;
 
-        window.app = _;
+        if (process.env.NODE_ENV === 'development') {
+            window.app = _;
+        }
 
         return {
             app: _,

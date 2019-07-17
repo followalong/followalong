@@ -39,26 +39,20 @@
                     <p class="hint hint-after" v-html="serverType.description"></p>
                   </div>
 
-                  <div v-if="serverType.disabled" class="field">
-                    <p>Coming soon!</p>
-                  </div>
-
-                  <div v-else>
-                    <ServiceEditor :app="app" :serverType="serverType" :serverTypeKey="key" />
-                  </div>
+                  <ServiceEditor :app="app" :serverType="serverType" :serverTypeKey="key" />
                 </v-tab>
               </vue-tabs>
             </div>
           </v-tab>
 
           <v-tab title="Data">
-            <div class="field">
-              <label for="max-read-count">Maximum Number of "Read" Items to Keep</label>
-              <span class="hint">Unread and Saved items are always kept.</span>
-              <input type="number" id="max-read-count" min="1" v-model="app.identity.maxReadCount" v-on:blur="app.identity.maxReadCount < 1 ? app.identity.maxReadCount = 1 : 1; app.save()" placeholder="100">
-            </div>
-
             <div class="field" v-if="app.identity.local">
+              <div class="field">
+                <label for="max-read-count">Maximum Number of "Read" Items to Keep</label>
+                <span class="hint">Unread and Saved items are always kept.</span>
+                <input type="number" id="max-read-count" min="1" v-model="app.identity.local.maxReadCount" v-on:blur="app.identity.local.maxReadCount < 1 ? app.identity.local.maxReadCount = 1 : 1; app.save()" placeholder="100">
+              </div>
+
               <label for="secretStrategy">
                 Local Data Encryption
               </label>
@@ -186,36 +180,32 @@ var SERVER_TYPES = {
   rss: {
     shortName: 'RSS',
     name: 'RSS Proxy',
-    description: 'On the internet, there is a technical issue known as CORS, which sometimes blocks us from accessing some RSS feeds directly. You may use a proxy to get around the CORS issue, as well as bypassing geographically-restricted content.'
+    description: 'On the internet, there is a technical issue known as CORS, which blocks us from accessing some RSS feeds directly. You may use a proxy to get around the CORS issue, as well as bypassing geographically-restricted content.'
   },
   sync: {
     shortName: 'Sync',
-    name: 'Feed Syncing & Storage',
-    description: 'Store and sync your subscriptions and saved items.'
+    name: 'Subscription Syncing & Storage',
+    description: 'Store and sync your subscriptions and saved items across multiple devices.'
   },
   publish: {
     shortName: 'Publish',
     name: 'Feed Publishing',
     description: 'Publish your own RSS feed.',
-    disabled: true
   },
   search: {
     shortName: 'Search',
     name: 'Search Proxy',
     description: 'Provide a smarter, faster search.',
-    disabled: true
   },
   media: {
     shortName: 'Media',
     name: 'Media Proxy',
     description: 'Avoid hotlinking or keep your media stored long-term.',
-    disabled: true
   },
   // ads: {
   //   shortName: 'ads',
   //   name: 'Ads Proxy',
   //   description: 'Opt-in to receive ads which compensate the feeds you follow.',
-  //   disabled: true
   // }
 };
 
