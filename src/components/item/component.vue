@@ -34,7 +34,7 @@
           </div>
 
           <div v-else>
-            <div v-if="item.content" v-html="item.content"></div>
+            <div v-if="item.content" v-html="app.blankifyLinks(item.content)"></div>
           </div>
         </div>
       </div>

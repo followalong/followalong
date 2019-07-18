@@ -53,7 +53,7 @@ export default {
         index = _.app.identity.feeds.indexOf(_.feed);
 
       _.app.identity.items.filter(function(item) {
-        return item.feedId === _.feed.id;
+        return item.feedURL === _.feed.url;
       }).forEach(function(item) {
         _.app.identity.items.splice(_.app.identity.items.indexOf(item), 1);
       });

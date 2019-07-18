@@ -1,5 +1,4 @@
 import AWS from 'aws-sdk';
-import S3  from 'aws-sdk/clients/s3';
 
 var STRIP_SLASHES = /^\/|\/$/g;
 
@@ -40,22 +39,18 @@ function s3Sync(app, identity, data, done) {
         Bucket: _.data.bucket,
         Key: key,
     }, function(err, oldData) {
-        if (oldData) {
-            // MERGE oldData into JSON.stringify(data.identity) if sooner updated timestamp!
-            console.log('found ', JSON.parse(oldData.Body.toString()))
-        }
+        try {
+            app.mergeData(identity, JSON.parse(oldData.Body.toString()));
+        } catch (e) { 1; }
 
         s3.putObject({
             Body: JSON.stringify(data.identity),
             Bucket: _.data.bucket,
             Key: key,
-        }, function(err, data) {
-            console.log(err, data)
-            try {
-                done(undefined, JSON.parse(data.Payload));
-            } catch (e) {
-                done(err);
-            }
+        }, function(err) {
+            app.saveLocal(function() {
+                done(err, err ? undefined : data.identity);
+            });
         });
     });
 }
@@ -92,7 +87,6 @@ var SERVICES = [
         path: '/identities/',
         accessKeyId: AWS_CONFIG.accessKeyId,
         secretAccessKey: AWS_CONFIG.secretAccessKey,
-        region: AWS_CONFIG.region,
         functionName: 'followalong-passthrough'
     },
     fields: {
@@ -119,11 +113,6 @@ var SERVICES = [
         secretAccessKey: {
             type: 'password',
             label: 'Secret Access Key',
-            required: true
-        },
-        region: {
-            type: 'text',
-            label: 'Region',
             required: true
         },
         bucket: {

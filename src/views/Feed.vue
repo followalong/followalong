@@ -54,7 +54,7 @@ export default {
       var _ = this;
 
       return (_.app.newsfeed || []).filter(function(item) {
-        return item.feedId === _.feed.id;
+        return item.feedURL === _.feed.url;
       }).sort(sorter(_.app.identity));
     }
   },

@@ -11,7 +11,7 @@
       <li
         is="feed"
         v-for="feed in app.feeds"
-        :key="feed.id"
+        :key="feed.url"
         :feed="feed"
         :app="app"
       ></li>

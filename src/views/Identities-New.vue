@@ -94,7 +94,7 @@ export default {
                     for (i = newIdentity.feeds.length - 1; i >= 0; i--) {
                         feed = newIdentity.feeds[i];
 
-                        if (!feed.id) continue;
+                        if (!feed.url) continue;
 
                         existingFeed = existingIdentity.feeds.find(function(f) {
                             return f.url === feed.url;

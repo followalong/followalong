@@ -26,8 +26,6 @@ function getContent(proxy, url, done) {
 function parseItems(app, feed, data, items, updatedAt, done) {
     var lastUpdate = feed._updatedAt || new Date(0);
 
-    feed.id = feed.id || app.generateId();
-
     parser.parseString(data, function(err, data) {
         if (err) {
             feed.error = 'Could not parse feed. Feed does not seem to be formatted correctly.';
@@ -47,7 +45,7 @@ function parseItems(app, feed, data, items, updatedAt, done) {
         }
 
         data.items.forEach(function(newItem) {
-            if (new Date(newItem.pubDate) < lastUpdate) {
+            if (typeof feed._remoteUpdatedAt === 'undefined' && new Date(newItem.pubDate) < lastUpdate) {
                 return;
             }
 
@@ -70,8 +68,9 @@ function parseItems(app, feed, data, items, updatedAt, done) {
                 newItem = oldItem;
             } else {
                 newItem.guid = newItem.guid || app.generateId();
-                newItem.isRead = false;
                 newItem.isSaved = false;
+                newItem.isRead = false;
+
                 items.push(newItem);
             }
 
@@ -82,9 +81,11 @@ function parseItems(app, feed, data, items, updatedAt, done) {
                 newItem.content = newItem.content.replace('<![CDATA[', '').replace(']]>', '');
             }
 
-            newItem.feedId = feed.id;
+            newItem.feedURL = feed.url;
             newItem._updatedAt = updatedAt;
         });
+
+        delete feed._remoteUpdatedAt;
 
         done(undefined, data.items);
     });

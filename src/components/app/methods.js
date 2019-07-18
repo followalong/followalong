@@ -34,7 +34,7 @@ function UNPAUSED(feed) {
 function ITEM_MAP(item) {
     return {
         author: item.author,
-        feedId: item.feedId,
+        feedURL: item.feedURL,
         guid: item.guid,
         image: item.image,
         isRead: item.isRead,
@@ -194,7 +194,7 @@ export default {
         });
     },
 
-    save(done) {
+    saveLocal(done) {
         var _ = this;
 
         _.app.trimItems(_.app.identity);
@@ -207,7 +207,17 @@ export default {
             )
         );
 
-        _.sync(done);
+        if (typeof done === 'function') {
+            done();
+        }
+    },
+
+    save(done) {
+        var _ = this;
+
+        _.saveLocal(function() {
+            _.sync(done);
+        });
     },
 
     sync(done) {
@@ -387,7 +397,6 @@ export default {
             local: identity.local,
             feeds: identity.feeds.map(function(feed) {
                 return {
-                    id: feed.id,
                     url: feed.url,
                     name: feed.name,
                     _updatedAt: feed._updatedAt,
@@ -407,7 +416,6 @@ export default {
             local: identity.local,
             feeds: identity.feeds.map(function(feed) {
                 return {
-                    id: feed.id,
                     url: feed.url,
                     name: feed.name,
                     _updatedAt: feed._updatedAt,
@@ -705,7 +713,7 @@ export default {
 
         _.decryptIdentity(identity, function() {
             _.app.setIdentityDefaults(identity);
-            _.app.save();
+            _.app.saveLocal();
 
             clearTimeout(nextFeedFetcher);
 
@@ -719,12 +727,63 @@ export default {
         });
     },
 
+    mergeData(identity, oldData) {
+        if (!oldData) {
+            return;
+        }
+
+        var localFeed, remoteFeed,
+            localItem, remoteItem,
+            i;
+
+        for (i = oldData.feeds.length - 1; i >= 0; i--) {
+            remoteFeed = oldData.feeds[i];
+            localFeed = identity.feeds.find(function(f) {
+                return f.url === remoteFeed.url;
+            });
+
+            if (localFeed) {
+                localFeed.url = remoteFeed.url;
+                localFeed.name = remoteFeed.name;
+                localFeed._remoteUpdatedAt = remoteFeed._updatedAt;
+                localFeed.paused = remoteFeed.paused;
+            } else {
+                identity.feeds.push(remoteFeed);
+            }
+        }
+
+        for (i = oldData.items.length - 1; i >= 0; i--) {
+            remoteItem = oldData.items[i];
+            localItem = identity.items.find(function(f) {
+                return f.guid === remoteItem.guid;
+            });
+
+            if (localItem) {
+                if (remoteItem._updatedAt > localItem._updatedAt) {
+                    for (var key in remoteItem) {
+                        localItem[key] = remoteItem[key];
+                    }
+                }
+            } else {
+                identity.items.push(remoteItem);
+            }
+        }
+
+        // services, name, local
+    },
+
+    blankifyLinks(str) {
+        return (str || '').replace(/target=['"]?[^"']+['"\s>]?/g, '').replace(/<a([^>]+)>?/g, '<a$1 target="_blank">');
+    },
+
     prepDescription(item, characterLimit, ellipsis) {
+        var _ = this;
+
         if (!item || !item.content) {
             return '';
         }
 
-        return truncate(
+        return _.app.blankifyLinks(truncate(
             item.content,
             characterLimit,
             {
@@ -732,7 +791,7 @@ export default {
                     allowedTags: ALLOWED_TAGS
                 }
             }
-        ).html;
+        ).html);
     },
 
     profileSize(identity, type) {
