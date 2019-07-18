@@ -77,6 +77,7 @@ function checkURLAndPossibilitiesForData(app, feed, url, done) {
     } catch (e) {}
 
     if (isRSS(data)) {
+      feed.url = url;
       parseItems(app, feed, data, [], undefined, function(err, items) {
         done(undefined, { url: url, items: items });
       });
@@ -162,7 +163,6 @@ function qChange() {
       checkURLAndPossibilitiesForData(_.app, feed, q, function(err, data) {
         if (data && data.items) {
           _.items = data.items;
-          feed.url = data.url;
         }
 
         next();
