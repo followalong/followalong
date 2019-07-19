@@ -81,7 +81,8 @@ var SERVICES = [
     id: 's3',
     name: 'S3',
     description: 'Store data directly to an S3-compatible server.',
-    supports: 'sync',
+    // supports: 'sync',
+    supports: '',
     data: {
         endpoint: 's3.amazonaws.com',
         path: '/identities/',
@@ -153,7 +154,7 @@ var SERVICES = [
     id: 'aws-lambda',
     name: 'AWS Lambda',
     description: 'Use our source code <a href="https://github.com/followalong/followalong" target="_blank" class="link" onclick="event.stopImmediatePropagation();">here</a> to quickly deploy your own passthrough server to Amazon\'s Lambda.',
-    supports: 'rss,sync',
+    supports: 'rss',
     fields: {
         name: {
             type: 'text',
@@ -235,7 +236,7 @@ var SERVICES = [
     id: 'followalong-none',
     name: 'None',
     description: 'No proxy will be used.',
-    supports: 'rss,sync',
+    supports: 'rss',
     request: function request(app, identity, data, done) {
         if (!data.url) return done('No URL supplied.');
 

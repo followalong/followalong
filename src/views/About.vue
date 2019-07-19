@@ -1,11 +1,7 @@
 <template>
   <div class="narrow-container">
     <h1>
-      <span v-if="app.loading">
-        <font-awesome-icon icon="spinner" spin v-if="app.loading" /> &nbsp;
-        Loading...
-      </span>
-      <span v-else>What is FollowAlong?</span>
+      What is FollowAlong?
     </h1>
 
     <p class="highlight">

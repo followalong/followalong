@@ -1,5 +1,4 @@
 {
-    "1.3.0": "Introduced the Syncing service so you can sync your data between devices.",
     "1.2.0": "Re-organized and renamed Services, including the ability to use and re-use templates.",
     "1.1.0": "Re-skinned the entire project, fixed audio embeds, and set up the \"smart\" categories of Watch, Read, and Listen.",
     "1.0.0": "Initial build. Thanks to VueJS for all the hard work making a truly special framework geared for developer productivity!"
