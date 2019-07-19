@@ -11,8 +11,6 @@
           </router-link>
         </li>
 
-        <li class="divider"></li>
-
         <li>
           <router-link to="/watch">
               <font-awesome-icon icon="film" /> Watch
@@ -45,6 +43,16 @@
           </router-link>
         </li>
 
+        <li>
+            <router-link to="/saved">
+              <font-awesome-icon icon="feather" />
+              Write
+              <span class="hint counter">
+                (1)
+              </span>
+            </router-link>
+        </li>
+
         <li class="divider"></li>
 
         <li v-if="app.saved.length">
@@ -57,12 +65,6 @@
             </router-link>
         </li>
 
-        <li v-if="app.api">
-            <router-link to="/discover">
-              <!-- Discover -->
-            </router-link>
-        </li>
-
         <li>
             <router-link to="/subscriptions">
               <font-awesome-icon icon="database" />
@@ -70,6 +72,22 @@
               <span class="hint counter">
                 <span v-if="app.feeds.length">({{app.feeds.length}})</span>
               </span>
+            </router-link>
+        </li>
+
+        <!-- <li>
+            <router-link to="/saved">
+              <font-awesome-icon icon="project-diagram" />
+              Analytics
+              <span class="hint counter">
+                (1)
+              </span>
+            </router-link>
+        </li> -->
+
+        <li v-if="app.api">
+            <router-link to="/discover">
+              <!-- Discover -->
             </router-link>
         </li>
 
