@@ -11,6 +11,8 @@
           </router-link>
         </li>
 
+        <li class="divider"></li>
+
         <li>
           <router-link to="/watch">
               <font-awesome-icon icon="film" /> Watch

@@ -15,6 +15,12 @@
               <label for="name">Identity Nickname</label>
               <input type="text" id="name" v-model="app.identity.name" v-on:blur="app.save()" placeholder="Your Name">
             </div>
+            <!-- <div class="field">
+              <label for="dark" class="checkbox-label">
+                <input type="checkbox" id="dark" v-model="app.identity.dark" value="dark" v-on:change="app.save()">
+                Dark Mode
+              </label>
+            </div> -->
             <p v-if="!hasStorageSupport" class="highlight">
               This browser does not support any storage options.
               You can still use FollowAlong, but your data will be gone when you leave the page.
@@ -36,7 +42,7 @@
                 <v-tab v-for="(serverType, key) in serverTypes" :key="key" :title="serverType.shortName">
                   <div class="field">
                     <h3>{{serverType.name}}</h3>
-                    <p class="hint hint-after" v-html="serverType.description"></p>
+                    <p v-html="serverType.description"></p>
                   </div>
 
                   <ServiceEditor :app="app" :serverType="serverType" :serverTypeKey="key" />

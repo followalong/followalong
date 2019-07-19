@@ -18,9 +18,10 @@
   right: 0;
   left: 0;
   z-index: 100;
-  background: #fff;
-  border-bottom: 1px solid $medium-gray;
+  background: $blue;
+  border-bottom: 1px solid $blue;
   font-size: 16px;
+  color: #fff;
 
   &:after {
     content: ' ';
@@ -34,20 +35,25 @@
     outline: none;
 
     @media (max-width: 640px) {
-      padding: 0;
+      padding: 5px;
     }
 
     // &.router-link-exact-active,
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
+    // &:hover {
+    //   background: rgba(255, 255, 255, 0.1);
+    // }
   }
 
-  svg { /* loading icon */
-    display: inline-block;
+  svg {
     font-size: 54px;
-    padding: 17px;
+    display: inline-block;
     vertical-align: middle;
+    padding: 17px;
+    color: rgba(255, 255, 255, 0.6);
+
+    &.loader {
+      opacity: 1;
+    }
   }
 
   .table-cell {
@@ -73,7 +79,7 @@
       width: auto;
 
       a {
-        width: 64px;
+        width: 60px;
         padding: 2px 8px;
       }
     }
@@ -119,22 +125,25 @@
 
     input {
       width: 100%;
-      background: $light-gray;
-      color: rgba(0, 0, 0, 0.3);
       outline: none;
       padding: 10px 13px;
       line-height: 1;
       border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.6);
 
       &::placeholder {
         color: inherit;
       }
 
       &:focus {
-        color: $gray;
+        // background: #fff;
+        // color: $blue;
+        background: rgba(255, 255, 255, 0.3);
+        color: #fff;
 
         &::placeholder {
-          color: rgba(0, 0, 0, 0.3);
+          color: rgba(255, 255, 255, 0.6);
         }
       }
     }
@@ -147,9 +156,9 @@
       display: none;
       position: absolute;
       right: 0;
-      background: #fff;
-      border: 1px solid $light-gray;
+      border-top: 1px solid $blue;
       text-align: left;
+      background: $light-gray;
 
         .encrypted {
           font-size: 80%;
@@ -160,7 +169,12 @@
         a {
           padding-top: 10px;
           padding-bottom: 10px;
-          border-bottom: 1px solid $light-gray;
+          border-bottom: 1px solid $medium-gray;
+          color: $blue;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.6);
+          }
         }
 
         li:last-child a {
@@ -178,11 +192,9 @@
       }
 
       & > a {
-        display: block;
-        width: 45px;
-        text-align: center;
-        color: #aaa;
-        cursor: pointer;
+        width: auto;
+        padding-left: 0;
+        padding-right: 0;
       }
     }
 
@@ -197,5 +209,10 @@
     li:hover ul {
       display: block;
     }
+  }
+
+  @media (max-width: 640px) {
+    background: $blue;
+    border-bottom-color: $blue;
   }
 }

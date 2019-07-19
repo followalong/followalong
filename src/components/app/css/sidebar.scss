@@ -14,7 +14,7 @@
     font-size: 16px;
 
     @media (max-width: 640px) {
-        top: 59px;
+        top: 65px;
     }
 
     @media (max-width: 640px) {
@@ -37,7 +37,7 @@
             &.divider {
                 background: $gray;
                 opacity: 0.1;
-                margin: 20px 28px;
+                margin: 15px 28px;
                 height: 1px;
             }
 

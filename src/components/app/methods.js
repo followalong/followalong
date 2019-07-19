@@ -627,7 +627,7 @@ export default {
                 return;
             }
 
-            _.app.copyAttrs(state, identity, ['name', 'proxy', 'maxReadCount', 'local', 'remote', 'items', 'feeds', 'services']);
+            _.app.copyAttrs(state, identity, ['name', 'local', 'items', 'feeds', 'services']);
 
             identity._decrypted = true;
 

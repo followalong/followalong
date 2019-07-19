@@ -7,7 +7,7 @@
                 <ul class="table-row">
                     <li class="table-cell logo">
                         <a href="javascript:;" v-on:click="$router.push('/'); app.toggleSidebar(true); fetchAllFeeds(identity, true)">
-                            <font-awesome-icon icon="spinner" spin v-if="loading" />
+                            <font-awesome-icon icon="spinner" spin v-if="loading" class="loader" />
                             <img :src="logo" v-if="!loading">
                             <img :src="mobileLogo" v-if="!loading">
                         </a>
@@ -94,8 +94,8 @@ export default {
 
         return {
             app: _,
-            logo: '/img/logo.svg',
-            mobileLogo: '/img/favicon.svg',
+            logo: '/img/logo-white.svg',
+            mobileLogo: '/img/favicon-white.svg',
             q: _.$route.query.q || '',
             api: false,
             store: localForage.createInstance({
@@ -123,6 +123,7 @@ export default {
         _.$on('loading', function(bool) {
             _.loading = bool;
         });
+            _.loading = true;
 
         _.constructIdentities(function(identities, keychain) {
             _.keychain = keychain;
