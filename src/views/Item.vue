@@ -1,6 +1,6 @@
 <template>
   <div v-if="item && item.feed" class="single-item">
-    <EmbedMedia :item="item" :app="app" />
+    <MediaPlayer :item="item" :app="app" showHeader="false" />
 
     <div class="feed">
       <h1>
@@ -56,14 +56,13 @@
 </template>
 
 <script>
-import EmbedMedia from '@/components/embed-media/component.vue';
-import Item       from '@/components/item/component.vue';
+import Item           from '@/components/item/component.vue';
+import MediaPlayer    from '@/components/media-player/component.vue';
 
 export default {
   props: ['app'],
   components: {
-    Item,
-    EmbedMedia
+    Item
   },
   watch: {
     'item.guid' () {

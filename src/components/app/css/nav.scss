@@ -107,6 +107,11 @@
     padding-right: $content-padding;
     padding-left: $content-padding;
 
+    @media (max-width: 880px) {
+      padding-left: $tablet-content-padding;
+      padding-right: $tablet-content-padding;
+    }
+
     @media (max-width: 640px) {
       padding-left: 10px;
       padding-right: 10px;

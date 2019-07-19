@@ -3,6 +3,16 @@
     <ul>
         <li>
           <router-link to="/">
+              <font-awesome-icon icon="igloo" /> What's New?
+              <span class="hint counter">
+                <span v-if="app.unread.length">({{app.unread.length}})</span>
+                <!-- <span v-else>&check;</span> -->
+              </span>
+          </router-link>
+        </li>
+
+        <li>
+          <router-link to="/watch">
               <font-awesome-icon icon="film" /> Watch
               <span class="hint counter">
                 <span v-if="app.unreadWatches.length">({{app.unreadWatches.length}})</span>
@@ -32,6 +42,8 @@
               </span>
           </router-link>
         </li>
+
+        <li class="divider"></li>
 
         <li v-if="app.saved.length">
             <router-link to="/saved">
@@ -65,6 +77,8 @@
               Settings
             </router-link>
         </li>
+
+        <li class="divider"></li>
     </ul>
 
     <div class="section info-section" v-if="app.hintIsShown('sidebar-about')">

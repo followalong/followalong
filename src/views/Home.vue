@@ -1,7 +1,7 @@
 <template>
     <div class="feed home-feed wide-feed">
         <button v-if="app.unread && app.unread.length" v-on:click="catchMeUp()" class="button-gray button-small float-right">Catch Me Up!</button>
-        <h1>{{app.capitalize(mediaVerb)}}</h1>
+        <h1>{{mediaVerb ? app.capitalize(mediaVerb) : 'What\'s New?'}}</h1>
 
         <p v-if="items.length && !unreadItems.length" class="highlight">
             You're all caught up!
@@ -19,7 +19,7 @@
         </ul>
 
         <p v-else class="highlight">
-            There are no items here!
+            You're all caught up!
         </p>
     </div>
 </template>
@@ -52,7 +52,7 @@ export default {
             var _ = this;
 
             return _.app.newsfeed.filter(function(item) {
-                return item._mediaVerb === _.mediaVerb;
+                return !_.mediaVerb || item._mediaVerb === _.mediaVerb;
             }).slice(0, _.limit);
         },
         unreadItems() {
@@ -64,7 +64,7 @@ export default {
             var verb = this.$route.params.media_verb;
 
             if (VERBS.indexOf(verb) === -1) {
-                verb = 'watch';
+                return;
             }
 
             return verb;
@@ -75,7 +75,7 @@ export default {
             var _ = this;
 
             _.app.newsfeed.filter(function(item) {
-                return item._mediaVerb === _.mediaVerb;
+                return !_.mediaVerb || item._mediaVerb === _.mediaVerb;
             }).forEach(function(item) {
                 item.isRead = true;
             });

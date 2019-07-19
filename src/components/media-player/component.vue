@@ -13,7 +13,7 @@
             </router-link>
         </p>
     </div>
-    <EmbedMedia :item="playing" :app="app" :autoplay="true" />
+    <EmbedMedia :item="playing" :app="app" :autoplay="true" expanded="true" />
   </div>
 </template>
 

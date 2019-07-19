@@ -1,6 +1,9 @@
 <template>
   <div :class="klass" v-if="videoSrc || audioSrc">
-    <a href="javascript:;" class="popout" v-on:click="app.popout(item, true)">&micro;</a>
+    <a href="javascript:;" class="expander" v-on:click="app.popout(item, true)">
+      <font-awesome-icon v-if="expanded" icon="compress" />
+      <font-awesome-icon v-else icon="expand" />
+    </a>
 
     <div v-if="videoSrc">
         <iframe :src="videoSrc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -21,7 +24,7 @@ import methods  from '@/components/app/methods';
 
 export default {
   name: 'EmbedMedia',
-  props: ['app', 'item', 'autoplay'],
+  props: ['app', 'item', 'autoplay', 'expanded'],
   computed: {
     klass() {
       var _ = this,
