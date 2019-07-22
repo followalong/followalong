@@ -41,6 +41,11 @@
         line-height: 1.4;
         border-bottom: 2px solid $light-gray;
 
+        svg {
+            margin-right: 20px;
+            color: $light-gray;
+        }
+
         @media (max-width: 640px) {
             font-size: 150%;
             margin: 10px 0;

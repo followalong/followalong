@@ -43,15 +43,12 @@
           </router-link>
         </li>
 
-        <li>
-            <router-link to="/saved">
+        <!-- <li>
+            <router-link to="/create">
               <font-awesome-icon icon="feather" />
-              Write
-              <span class="hint counter">
-                (1)
-              </span>
+              Create
             </router-link>
-        </li>
+        </li> -->
 
         <li class="divider"></li>
 
@@ -72,22 +69,6 @@
               <span class="hint counter">
                 <span v-if="app.feeds.length">({{app.feeds.length}})</span>
               </span>
-            </router-link>
-        </li>
-
-        <!-- <li>
-            <router-link to="/saved">
-              <font-awesome-icon icon="project-diagram" />
-              Analytics
-              <span class="hint counter">
-                (1)
-              </span>
-            </router-link>
-        </li> -->
-
-        <li v-if="app.api">
-            <router-link to="/discover">
-              <!-- Discover -->
             </router-link>
         </li>
 
