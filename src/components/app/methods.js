@@ -126,7 +126,7 @@ function timeAgo(date, now) {
     return interval + ' ' + intervalType + ' ago';
 }
 
-export default {
+var methods = {
     fetchAllFeeds(identity, override, done) {
         var _ = this,
             updatedAt = Date.now();
@@ -727,18 +727,22 @@ export default {
         });
     },
 
-    mergeData(identity, oldData) {
-        if (!oldData) {
+    mergeData(identity, remoteData) {
+        if (!remoteData) {
             return;
         }
 
-        var localFeed, remoteFeed,
+        var localFeeds = identity.feeds || [],
+            localItems = identity.items || [],
+            remoteFeeds = remoteData.feeds || [],
+            remoteItems = remoteData.items || [],
+            localFeed, remoteFeed,
             localItem, remoteItem,
             i;
 
-        for (i = oldData.feeds.length - 1; i >= 0; i--) {
-            remoteFeed = oldData.feeds[i];
-            localFeed = identity.feeds.find(function(f) {
+        for (i = remoteFeeds.length - 1; i >= 0; i--) {
+            remoteFeed = remoteFeeds[i];
+            localFeed = localFeeds.find(function(f) {
                 return f.url === remoteFeed.url;
             });
 
@@ -748,13 +752,13 @@ export default {
                 localFeed._remoteUpdatedAt = remoteFeed._updatedAt;
                 localFeed.paused = remoteFeed.paused;
             } else {
-                identity.feeds.push(remoteFeed);
+                localFeeds.push(remoteFeed);
             }
         }
 
-        for (i = oldData.items.length - 1; i >= 0; i--) {
-            remoteItem = oldData.items[i];
-            localItem = identity.items.find(function(f) {
+        for (i = remoteItems.length - 1; i >= 0; i--) {
+            remoteItem = remoteItems[i];
+            localItem = localItems.find(function(f) {
                 return f.guid === remoteItem.guid;
             });
 
@@ -765,11 +769,31 @@ export default {
                     }
                 }
             } else {
-                identity.items.push(remoteItem);
+                localItems.push(remoteItem);
             }
         }
 
-        // services, name, local
+        for (i = localFeeds.length - 1; i >= 0; i--) {
+            localFeed = localFeeds[i];
+            remoteFeed = remoteFeeds.find(function(f) {
+                return f.url === remoteFeed.url;
+            });
+
+            if (!remoteFeed) {
+                localFeeds.splice(i, 1);
+            }
+        }
+
+        for (i = localItems.length - 1; i >= 0; i--) {
+            localItem = localItem[i];
+            remoteItem = remoteItems.find(function(f) {
+                return f.url === remoteItem.url;
+            });
+
+            if (!remoteItem) {
+                localItem.splice(i, 1);
+            }
+        }
     },
 
     blankifyLinks(str) {
@@ -874,3 +898,5 @@ export default {
         _.app.save();
     }
 };
+
+export default methods;

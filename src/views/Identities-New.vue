@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import seed from '@/components/app/seed';
+
 export default {
     name: 'subscriptions',
     props: ['app'],
@@ -45,14 +47,14 @@ export default {
 
         startFresh() {
             var _ = this,
-                newIdentity = {
-                    name: 'Fresh',
-                    _decrypted: true
-                };
+                newIdentity = seed[0];
+
+            delete newIdentity.id;
 
             _.app.setIdentityDefaults(newIdentity);
             _.app.setIdentity(newIdentity);
             _.app.identities.push(newIdentity);
+
             _.$router.push('/');
         },
 

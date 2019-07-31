@@ -356,7 +356,7 @@
 
 .home-feed, .related-sidebar {
     .read {
-        & > h3, & > .feed.meta, .media-player:not(.popout):not(.clicked) {
+        & > h3, & > .feed.meta, .clickable-media {
             opacity: 0.6;
         }
     }

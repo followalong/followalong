@@ -1,6 +1,25 @@
-import AWS from 'aws-sdk';
+import AWS     from 'aws-sdk';
+import uniqId       from 'uniq-id';
 
-var STRIP_SLASHES = /^\/|\/$/g;
+function xmlRequest(app, identity, data, done) {
+    if (!data.url) return done('No URL supplied.');
+
+    var _ = this,
+        url = _.data.url || '',
+        x = new XMLHttpRequest();
+
+    x.open('GET', url + data.url);
+
+    x.onload = x.onerror = function() {
+        if (x.status === 200) {
+            done(undefined, x.responseText);
+        } else {
+            done(x.responseText);
+        }
+    };
+
+    x.send();
+}
 
 function lambdaPassthrough(app, identity, data, done) {
     var _ = this;
@@ -26,13 +45,18 @@ function lambdaPassthrough(app, identity, data, done) {
 }
 
 function s3Sync(app, identity, data, done) {
+    if (!this.data || !this.data.key || !this.data.bucket || !this.data.accessKeyId || !this.data.secretAccessKey || !this.data.endpoint) {
+        return;
+    }
+
     var _ = this,
-        key = _.data.path.replace(STRIP_SLASHES, '') + '/' + 'FILENAME',
+        key = _.data.key.replace(STRIP_SLASHES, ''),
         s3 = new AWS.S3({
             endpoint: new AWS.Endpoint(_.data.endpoint),
             accessKeyId: _.data.accessKeyId,
             secretAccessKey: _.data.secretAccessKey,
-            apiVersion: 'latest'
+            apiVersion: 'latest',
+            maxRetries: 1
         });
 
     s3.getObject({
@@ -55,12 +79,18 @@ function s3Sync(app, identity, data, done) {
     });
 }
 
-var AWS_CONFIG = {
-    endpoint: 'lambda.us-east-1.amazonaws.com',
-    region: 'us-east-1',
-    accessKeyId: atob('QUtJQVZCVlI1Sk02U002TDVUTEU='),
-    secretAccessKey: atob('SFFOQ2RWdVQ3VXc5UUJvU0habTFSd01hdFB5Qm5oTm5iMDdwZXJsVA')
-};
+var STRIP_SLASHES = /^\/|\/$/g,
+    generateId = uniqId.generateUUID('xxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxy', 32),
+    AWS_CONFIG = {
+        endpoint: 'lambda.us-east-1.amazonaws.com',
+        region: 'us-east-1',
+        accessKeyId: atob('QUtJQVZCVlI1Sk02U002TDVUTEU='),
+        secretAccessKey: atob('SFFOQ2RWdVQ3VXc5UUJvU0habTFSd01hdFB5Qm5oTm5iMDdwZXJsVA')
+    };
+    // DO_CONFIG = {
+    //     accessKeyId: atob('REZJQ002N1paWUpGTTRPSUM2Sk4='),
+    //     secretAccessKey: atob('czFYbHlDeWYzVDB0M21vUHU3dkNoOU9NTjBBK2pKS0ZEbkdwSmpWUWlBOA==')
+    // };
 
 var SERVICES = [
 {
@@ -81,14 +111,12 @@ var SERVICES = [
     id: 's3',
     name: 'S3',
     description: 'Store data directly to an S3-compatible server.',
-    // supports: 'sync',
-    supports: '',
+    supports: 'sync',
     data: {
         endpoint: 's3.amazonaws.com',
-        path: '/identities/',
-        accessKeyId: AWS_CONFIG.accessKeyId,
-        secretAccessKey: AWS_CONFIG.secretAccessKey,
-        functionName: 'followalong-passthrough'
+        key: '/identities/' + generateId()  + '.json',
+        // accessKeyId: AWS_CONFIG.accessKeyId,
+        // secretAccessKey: AWS_CONFIG.secretAccessKey
     },
     fields: {
         name: {
@@ -101,9 +129,9 @@ var SERVICES = [
             label: 'Endpoint',
             required: true
         },
-        path: {
+        key: {
             type: 'text',
-            label: 'Base Path',
+            label: 'Key',
             required: true
         },
         accessKeyId: {
@@ -214,46 +242,14 @@ var SERVICES = [
     data: {
         url: 'https://cors-anywhere.herokuapp.com/'
     },
-    request: function request(app, identity, data, done) {
-        var _ = this,
-            url = (_.data.url || '').length ? _.data.url : _.data.url,
-            x = new XMLHttpRequest();
-
-        x.open('GET', url + data.url);
-
-        x.onload = x.onerror = function() {
-            if (x.status === 200) {
-                done(undefined, x.responseText);
-            } else {
-                done(x.responseText);
-            }
-        };
-
-        x.send();
-    }
+    request: xmlRequest
 },
 {
     id: 'followalong-none',
     name: 'None',
     description: 'No proxy will be used.',
-    supports: 'rss',
-    request: function request(app, identity, data, done) {
-        if (!data.url) return done('No URL supplied.');
-
-        var x = new XMLHttpRequest();
-
-        x.open('GET', data.url);
-
-        x.onload = x.onerror = function() {
-            if (x.status === 200) {
-                done(undefined, x.responseText);
-            } else {
-                done(x.responseText);
-            }
-        };
-
-        x.send();
-    }
+    supports: 'rss,sync',
+    request: xmlRequest
 }
 ];
 
