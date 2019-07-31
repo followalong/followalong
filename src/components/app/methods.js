@@ -747,10 +747,12 @@ var methods = {
             });
 
             if (localFeed) {
-                localFeed.url = remoteFeed.url;
-                localFeed.name = remoteFeed.name;
-                localFeed._remoteUpdatedAt = remoteFeed._updatedAt;
-                localFeed.paused = remoteFeed.paused;
+                if (remoteFeed._updatedAt > localFeed._updatedAt) {
+                    localFeed.url = remoteFeed.url;
+                    localFeed.name = remoteFeed.name;
+                    localFeed._remoteUpdatedAt = remoteFeed._updatedAt;
+                    localFeed.paused = remoteFeed.paused;
+                }
             } else {
                 localFeeds.push(remoteFeed);
             }
