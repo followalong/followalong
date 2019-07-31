@@ -42,6 +42,7 @@ export default {
     pause() {
       var _ = this;
 
+      _.feed._updatedAt = Date.now();
       _.feed.paused = !_.feed.paused;
       _.app.save();
     },
