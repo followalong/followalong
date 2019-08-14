@@ -79,6 +79,12 @@
             </router-link>
         </li>
 
+        <li class="mobile-only">
+            <router-link to="/identities/new">
+                + Add Identity
+            </router-link>
+        </li>
+
         <li class="divider"></li>
     </ul>
 
