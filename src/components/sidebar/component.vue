@@ -79,6 +79,21 @@
             </router-link>
         </li>
 
+        <li v-if="!nonIdentities.length">
+            <router-link to="/settings">
+                Settings
+            </router-link>
+        </li>
+
+        <li class="divider"></li>
+
+        <li v-for="i in app.nonIdentities" :key="i.id" class="mobile-only">
+            <a href="javascript:;" v-on:click="app.setIdentity(i);">
+                <span v-if="i._decrypted">{{i.name}}</span>
+                <span v-else>{{i.id.slice(0, 8)}} <span class="encrypted">(not yet decrypted)</span></span>
+            </a>
+        </li>
+
         <li class="mobile-only">
             <router-link to="/identities/new">
                 + Add Identity

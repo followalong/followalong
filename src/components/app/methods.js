@@ -57,7 +57,7 @@ function videoSrc(item, autoplay) {
     }
 
     if (item.guid && item.guid.slice(0, 9) === 'yt:video:') {
-        return 'https://www.youtube.com/embed/' + item.guid.slice(9) + (autoplay ? '?&autoplay=1' : '');
+        return 'https://www.youtube.com/embed/' + item.guid.slice(9) + (autoplay ? '?&rel=0&modestbranding=1&playsinline=1&autoplay=1' : '');
     } else if (item.enclosure && VIDEO_TYPES.test(item.enclosure.url)) {
         return item.enclosure.url;
     }
