@@ -79,12 +79,6 @@
             </router-link>
         </li>
 
-        <li v-if="!nonIdentities.length">
-            <router-link to="/settings">
-                Settings
-            </router-link>
-        </li>
-
         <li class="divider"></li>
 
         <li v-for="i in app.nonIdentities" :key="i.id" class="mobile-only">
