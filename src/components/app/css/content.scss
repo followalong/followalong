@@ -500,8 +500,9 @@
             background: #fff;
         }
 
-        @media (max-width: 880px) {
-            margin-right: 3px;
+        @media (max-width: 640px) {
+            font-size: 100%;
+            margin-right: 7px;
 
             a {
                 padding: 0.5em 0.65em;

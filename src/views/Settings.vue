@@ -52,11 +52,11 @@
           </v-tab>
 
           <v-tab title="Data">
-            <div class="field" v-if="app.identity.local">
+            <div class="field" v-if="app.identity.services.local">
               <div class="field">
                 <label for="max-read-count">Maximum Number of "Read" Items to Keep</label>
                 <span class="hint">Unread and Saved items are always kept.</span>
-                <input type="number" id="max-read-count" min="1" v-model="app.identity.local.maxReadCount" v-on:blur="app.identity.local.maxReadCount < 1 ? app.identity.local.maxReadCount = 1 : 1; app.save()" placeholder="100">
+                <input type="number" id="max-read-count" min="1" v-model="app.identity.services.local.maxReadCount" v-on:blur="app.identity.services.local.maxReadCount < 1 ? app.identity.services.local.maxReadCount = 1 : 1; app.save()" placeholder="100">
               </div>
 
               <label for="secretStrategy">
@@ -67,7 +67,7 @@
                 There is no perfect strategy: it depends how you use FollowAlong, how much you trust your device, care about convenience, or if you use multiple devices. Flip through the options to see more details.
               </span>
 
-              <select id="secretStrategy" v-model="app.identity.local.strategy" v-on:change="app.saveKey(app.identity, secretKey)">
+              <select id="secretStrategy" v-model="app.identity.services.local.strategy" v-on:change="app.saveKey(app.identity, secretKey)">
                 <option value="ask">Ask Every Page Load (best, most secure, slightly annoying)</option>
                 <option value="rotate">Rotate Keys (recommended if using one device and you trust it)</option>
                 <option value="store">Store Key Locally (recommended if you trust your device)</option>
@@ -113,11 +113,11 @@
                     </tr>
                   </table>
 
-                  <button v-if="app.identity.local.strategy === 'ask'" v-on:click="app.getAskSecretKey(app.identity, true)" class="button-gray">Reset Secret Key</button>
+                  <button v-if="app.identity.services.local.strategy === 'ask'" v-on:click="app.getAskSecretKey(app.identity, true)" class="button-gray">Reset Secret Key</button>
                 </span>
               </div>
 
-              <div v-if="app.identity.local.strategy === 'store'">
+              <div v-if="app.identity.services.local.strategy === 'store'">
                 <label for="secretKey">
                   Secret Key
                 </label>
@@ -232,7 +232,7 @@ export default {
     };
   },
   // watch: {
-  //   'app.identity.local.strategy' (val) {
+  //   'app.identity.services.local.strategy' (val) {
   //     if (val === 'ask') {
   //       delete this.app.keychain[this.app.identity.id];
   //     }
@@ -244,7 +244,7 @@ export default {
           star = '&#9733;',
           stars = star;
 
-      switch (_.app.identity.local.strategy) {
+      switch (_.app.identity.services.local.strategy) {
         case 'ask':
           stars += ' ' + star;
           stars += ' ' + star;
@@ -260,7 +260,7 @@ export default {
           star = '&#9733;',
           stars = star;
 
-      switch (_.app.identity.local.strategy) {
+      switch (_.app.identity.services.local.strategy) {
         case 'rotate':
           stars += ' ' + star;
         case 'ask':
@@ -278,7 +278,7 @@ export default {
           star = '&#9733;',
           stars = star;
 
-      switch (_.app.identity.local.strategy) {
+      switch (_.app.identity.services.local.strategy) {
         case 'rotate':
           stars += ' ' + star;
         case 'ask':
@@ -296,7 +296,7 @@ export default {
           star = '&#9733;',
           stars = star;
 
-      switch (_.app.identity.local.strategy) {
+      switch (_.app.identity.services.local.strategy) {
         case 'none':
           stars += ' ' + star;
           stars += ' ' + star;
@@ -313,7 +313,7 @@ export default {
     drawback() {
       var _ = this;
 
-      switch (_.app.identity.local.strategy) {
+      switch (_.app.identity.services.local.strategy) {
         case 'none':
           return 'No Security!';
         case 'rotate':
@@ -329,7 +329,7 @@ export default {
     description() {
       var _ = this;
 
-      switch (_.app.identity.local.strategy) {
+      switch (_.app.identity.services.local.strategy) {
         case 'none':
           return 'Your local data will not be encrypted.';
         case 'rotate':

@@ -79,7 +79,7 @@
             </router-link>
         </li>
 
-        <li class="divider"></li>
+        <li class="divider mobile-only"></li>
 
         <li v-for="i in app.nonIdentities" :key="i.id" class="mobile-only">
             <a href="javascript:;" v-on:click="app.setIdentity(i);">

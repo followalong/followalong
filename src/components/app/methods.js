@@ -48,6 +48,27 @@ function ITEM_MAP(item) {
     };
 }
 
+function stripScriptsAndStyles(s) {
+    var div = document.createElement('div'),
+        scripts, i;
+
+    div.innerHTML = s;
+
+    scripts = div.getElementsByTagName('script');
+
+    for (i = scripts.length - 1; i >= 0; i--) {
+        scripts[i].parentNode.removeChild(scripts[i]);
+    }
+
+    scripts = div.getElementsByTagName('style');
+
+    for (i = scripts.length - 1; i >= 0; i--) {
+        scripts[i].parentNode.removeChild(scripts[i]);
+    }
+
+    return div.innerHTML;
+}
+
 var VIDEO_TYPES = /\.(mp4)/,
     AUDIO_TYPES = /\.(mp3|wav)/;
 
@@ -260,12 +281,6 @@ var methods = {
         identity.feeds = identity.feeds || [];
         identity.items = identity.items || [];
 
-        identity.local = identity.local || {
-            strategy: 'none'
-        };
-
-        identity.local.maxReadCount = typeof identity.local.maxReadCount === 'undefined' ? 150 : parseInt(identity.local.maxReadCount);
-
         identity.services = identity.services || {};
         identity.services.custom  = identity.services.custom  || [];
         identity.services.rss     = identity.services.rss     || { symlink: 'followalong-free' };
@@ -273,6 +288,10 @@ var methods = {
         identity.services.publish = identity.services.publish || { symlink: 'followalong-none' };
         identity.services.search  = identity.services.search  || { symlink: 'followalong-none' };
         identity.services.media   = identity.services.media   || { symlink: 'followalong-none' };
+        identity.services.local = identity.services.local || {
+            strategy: 'none'
+        };
+        identity.services.local.maxReadCount = typeof identity.services.local.maxReadCount === 'undefined' ? 150 : parseInt(identity.services.local.maxReadCount);
 
         if (typeof identity._decrypted === 'undefined') {
             identity._decrypted = false;
@@ -281,7 +300,7 @@ var methods = {
 
     trimItems(identity) {
         var _ = this,
-            limit = parseInt(identity.local.maxReadCount),
+            limit = parseInt(identity.services.local.maxReadCount),
             items = _.app.newsfeed.filter(function(item) {
                 return item.isRead && !item.isSaved;
             }).sort(sorter(identity, '_updatedAt')),
@@ -394,7 +413,6 @@ var methods = {
         return {
             id: identity.id,
             name: identity.name,
-            local: identity.local,
             feeds: identity.feeds.map(function(feed) {
                 return {
                     url: feed.url,
@@ -413,7 +431,6 @@ var methods = {
         return {
             id: identity.id,
             name: identity.name,
-            local: identity.local,
             feeds: identity.feeds.map(function(feed) {
                 return {
                     url: feed.url,
@@ -478,14 +495,14 @@ var methods = {
             key = _.app.keychain[identity.id],
             encrypted = json;
 
-        if (identity.local.strategy === 'none') {
+        if (identity.services.local.strategy === 'none') {
             return encrypted;
-        } else if (identity.local.strategy === 'rotate') {
+        } else if (identity.services.local.strategy === 'rotate') {
             key = _.app.generateId();
             _.app.saveKey(identity, key, true);
-        } else if (identity.local.strategy === 'ask') {
+        } else if (identity.services.local.strategy === 'ask') {
             key = _.app.getAskSecretKey(identity, false);
-        } else if (identity.local.strategy === 'store') {
+        } else if (identity.services.local.strategy === 'store') {
             if (typeof _.app.keychain[identity.id] === 'undefined') {
                 key = _.app.generateId();
                 _.app.saveKey(identity, key, true);
@@ -518,7 +535,7 @@ var methods = {
                     if (key !== null) {
                             str = JSON.parse(aes256.decrypt(key, str));
 
-                            if (typeof str === 'object' && str.local.strategy === 'store') {
+                            if (typeof str === 'object' && str.services.local.strategy === 'store') {
                                 _.app.saveKey(identity, key, true);
                                 _.app.keychain[identity.id] = key;
                             }
@@ -551,7 +568,7 @@ var methods = {
             _.app.keychain[identity.id] = prompt('What is your secret key?');
 
             if (_.app.keychain[identity.id] === null && reset) {
-                identity.local.strategy = 'rotate';
+                identity.services.local.strategy = 'rotate';
                 var key = _.app.generateId();
                 _.app.saveKey(identity, key, true);
                 return key;
@@ -568,12 +585,12 @@ var methods = {
     saveKey(identity, key, ignoreSave) {
         var _ = this;
 
-        if (identity.local.strategy === 'ask') {
+        if (identity.services.local.strategy === 'ask') {
             delete _.app.keychain[identity.id];
             key = undefined;
         }
 
-        if (identity.local.strategy === 'store' && !key) {
+        if (identity.services.local.strategy === 'store' && !key) {
             key = _.app.generateId();
             _.app.keychain[identity.id] = key;
         }
@@ -612,7 +629,7 @@ var methods = {
 
             state = _.decrypt(identity, state);
 
-            if (identity.local.strategy === 'ask') {
+            if (identity.services.local.strategy === 'ask') {
                 delete _.app.keychain[identity.id];
                 state = _.decrypt(identity, state);
             }
@@ -799,7 +816,11 @@ var methods = {
     },
 
     blankifyLinks(str) {
-        return (str || '').replace(/target=['"]?[^"']+['"\s>]?/g, '').replace(/<a([^>]+)>?/g, '<a$1 target="_blank">');
+        return stripScriptsAndStyles(
+            (str || '')
+                .replace(/target=['"]?[^"']+['"\s>]?/g, '')
+                .replace(/<a([^>]+)>?/g, '<a$1 target="_blank">')
+        );
     },
 
     prepDescription(item, characterLimit, ellipsis) {
