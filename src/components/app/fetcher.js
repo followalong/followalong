@@ -45,10 +45,6 @@ function parseItems(app, feed, data, items, updatedAt, done) {
         }
 
         data.items.forEach(function(newItem) {
-            if (typeof feed._remoteUpdatedAt === 'undefined' && new Date(newItem.pubDate) < lastUpdate) {
-                return;
-            }
-
             newItem.guid = newItem.guid || newItem.id || app.generateId();
 
             try {
@@ -69,7 +65,12 @@ function parseItems(app, feed, data, items, updatedAt, done) {
             } else {
                 newItem.guid = newItem.guid || app.generateId();
                 newItem.isSaved = false;
-                newItem.isRead = false;
+
+                if (new Date(newItem.pubDate) < lastUpdate) {
+                    newItem.isRead = true;
+                } else {
+                    newItem.isRead = false;
+                }
 
                 items.push(newItem);
             }

@@ -52,7 +52,7 @@
           </v-tab>
 
           <v-tab title="Data">
-            <div class="field" v-if="app.identity.services.local">
+            <div class="field" v-if="app.identity.services">
               <div class="field">
                 <label for="max-read-count">Maximum Number of "Read" Items to Keep</label>
                 <span class="hint">Unread and Saved items are always kept.</span>

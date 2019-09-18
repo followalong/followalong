@@ -5,6 +5,7 @@
         <div class="field">
             <label>How would you like to add your identity?</label>
             <select v-model="tab">
+                <option value="fresh">Start Fresh</option>
                 <option value="upload">Upload File</option>
                 <option value="paste">Copy and Paste</option>
             </select>
@@ -21,13 +22,18 @@
         </div>
 
         <div class="field">
-            <button v-on:click="importConfig(tab)">Import My Configuration</button> &nbsp;
-            <button class="button-gray" v-on:click="startFresh()">Start a Fresh Identity</button>
+            <button v-if="tab === 'fresh'" v-on:click="startFresh()">
+                Start a Fresh Identity
+            </button>
+            <button v-else v-on:click="importConfig(tab)">
+                Import My Configuration
+            </button>
         </div>
     </div>
 </template>
 
 <script>
+import { Base64 }   from 'js-base64';
 import seed from '@/components/app/seed';
 
 export default {
@@ -35,7 +41,7 @@ export default {
     props: ['app'],
     data() {
         return {
-            tab: 'upload',
+            tab: 'fresh',
             paste: ''
         };
     },
@@ -72,6 +78,11 @@ export default {
 
         importConfig(type) {
             var _ = this;
+
+            try {
+                var paste = Base64.decode(_.paste);
+                _.paste = paste;
+            } catch (e) { }
 
             try {
                 var feed, newIdentity, existingIdentity, existingFeed, key, i;
@@ -113,7 +124,7 @@ export default {
                     }
                 }
 
-                _.app.setIdentity(existingIdentity);
+                _.app.setIdentity(existingIdentity, true);
                 _.$router.push('/');
             } catch (e) {
                 // console.log(e);

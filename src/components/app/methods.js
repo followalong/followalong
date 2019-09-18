@@ -1,4 +1,5 @@
 import Vue          from 'vue';
+import { Base64 }   from 'js-base64';
 import sorter       from '@/components/app/sorter';
 import { getFeed }  from '@/components/app/fetcher';
 import SERVICES     from '@/components/app/services';
@@ -288,7 +289,7 @@ var methods = {
         identity.services.publish = identity.services.publish || { symlink: 'followalong-none' };
         identity.services.search  = identity.services.search  || { symlink: 'followalong-none' };
         identity.services.media   = identity.services.media   || { symlink: 'followalong-none' };
-        identity.services.local = identity.services.local || {
+        identity.services.local   = identity.services.local   || {
             strategy: 'none'
         };
         identity.services.local.maxReadCount = typeof identity.services.local.maxReadCount === 'undefined' ? 150 : parseInt(identity.services.local.maxReadCount);
@@ -612,7 +613,7 @@ var methods = {
 
     copyConfig(identity) {
         var _ = this;
-        copy(JSON.stringify(_.toRemote(identity)));
+        copy(Base64.encode(JSON.stringify(_.toRemote(identity))));
     },
 
     decryptIdentity(identity, done) {
@@ -721,7 +722,7 @@ var methods = {
         return _.app.hints.indexOf(hint) === -1;
     },
 
-    setIdentity(identity) {
+    setIdentity(identity, override) {
         var _ = this;
 
         _.app.setIdentityDefaults(identity);
@@ -736,7 +737,7 @@ var methods = {
 
             _.app.loading = false;
 
-            _.fetchAllFeeds(identity, false, function() {
+            _.fetchAllFeeds(identity, override, function() {
                 nextFeedFetcher = setTimeout(function() {
                     _.fetchNextFeed(_.app.identity);
                 }, TWO_MINUTES);
