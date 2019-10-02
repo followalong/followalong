@@ -438,7 +438,12 @@ var methods = {
                     name: feed.name,
                     _updatedAt: feed._updatedAt,
                     paused: feed.paused,
-                    loading: false
+                    loading: false,
+                    unreads: identity.items.filter(function(item) {
+                        return !item.isRead && item.feedURL === feed.url;
+                    }).map(function(item) {
+                        return item.guid;
+                    })
                 };
             }),
             items: identity.items.filter(function(item) {
@@ -448,7 +453,7 @@ var methods = {
         };
     },
 
-    download(identity) {
+    downloadIdentity(identity) {
         var _ = this,
             filename = window.location.host.replace(':', '.') + '.' + identity.id + '.json',
             str = JSON.stringify(_.toRemote(identity)),
@@ -614,6 +619,8 @@ var methods = {
     copyConfig(identity) {
         var _ = this;
         copy(Base64.encode(JSON.stringify(_.toRemote(identity))));
+
+        alert('Copied configuration to clipboard.');
     },
 
     decryptIdentity(identity, done) {
@@ -920,7 +927,53 @@ var methods = {
         }
 
         _.app.save();
-    }
+    },
+
+    downloadService(service) {
+        service = JSON.parse(JSON.stringify({
+            id: service.id,
+            template: service.template,
+            data: service.data
+        }));
+
+        service.template = service.template || service.id;
+
+        var filename = window.location.host.replace(':', '.') + '.' + service.id + '.json',
+            str = JSON.stringify(service),
+            blob = new Blob([str], { type: 'application/json;charset=utf-8' });
+
+        saveAs(blob, filename);
+    },
+
+    copyService(service) {
+        service = JSON.parse(JSON.stringify({
+            id: service.id,
+            template: service.template,
+            data: service.data
+        }));
+
+        service.template = service.template || service.id;
+
+        copy(Base64.encode(JSON.stringify(service)));
+
+        alert('Copied service to clipboard.');
+    },
+
+    isBase64(str) {
+        return /^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$/.test(str);
+    },
+
+    // serviceShouldPromptCredentials(service, data) {
+    //     if (service.pricing) {
+    //         for (var key in service.fields) {
+    //             if (service.fields[key].credential && !service.data[key]) {
+    //                 return true;
+    //             }
+    //         }
+    //     }
+
+    //     return false;
+    // }
 };
 
 export default methods;

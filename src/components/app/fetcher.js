@@ -66,7 +66,9 @@ function parseItems(app, feed, data, items, updatedAt, done) {
                 newItem.guid = newItem.guid || app.generateId();
                 newItem.isSaved = false;
 
-                if (new Date(newItem.pubDate) < lastUpdate) {
+                if (feed.unreads && feed.unreads.indexOf(newItem.guid) !== -1) {
+                    newItem.isRead = false;
+                } else if (new Date(newItem.pubDate) < lastUpdate) {
                     newItem.isRead = true;
                 } else {
                     newItem.isRead = false;
@@ -87,6 +89,7 @@ function parseItems(app, feed, data, items, updatedAt, done) {
         });
 
         delete feed._remoteUpdatedAt;
+        delete feed.unreads;
 
         done(undefined, data.items);
     });

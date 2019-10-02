@@ -79,15 +79,18 @@ export default {
         importConfig(type) {
             var _ = this;
 
-            try {
-                var paste = Base64.decode(_.paste);
-                _.paste = paste;
-            } catch (e) { }
+            if (_.app.isBase64(_.paste)) {
+                try {
+                    _.paste = Base64.decode(_.paste);
+                } catch (e) { }
+            }
 
             try {
                 var feed, newIdentity, existingIdentity, existingFeed, key, i;
 
                 newIdentity = JSON.parse(_.paste);
+
+                _.paste = '';
 
                 if (!newIdentity.id) throw new Error('No ID provided.');
 

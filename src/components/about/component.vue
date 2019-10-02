@@ -3,7 +3,7 @@
     <div class="narrow-container">
       <p>
         FollowAlong is a website that knows how to get new content from the people and things you care about.
-        <strong>Most importantly, all of your data stays <em>right here</em> &mdash; in <em>this</em> browser (we don't even have a server and we don't collect analytics).</strong>
+        <strong>Most importantly, all of your data stays <em>right here</em> &mdash; in <em>this</em> browser (we don't collect analytics and offer an optional you-to-you encrypted "syncing" server for multi-device support).</strong>
       </p>
 
       <p>

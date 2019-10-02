@@ -29,6 +29,15 @@
                 background: $light-gray;
                 border-color: #ccc;
             }
+
+            &.custom-service h3 {
+                &:after {
+                    color: $blue;
+                    content: '*';
+                    opacity: 0.5;
+                    margin-left: 3px;
+                }
+            }
         }
 
         &.single .select-service {
@@ -37,8 +46,8 @@
         }
 
         h3 {
-            margin: 0;
-            font-size: 90%;
+            margin: 0 0 10px;
+            font-size: 100%;
             line-height: 1.3;
         }
 
@@ -47,24 +56,48 @@
             margin: 0;
         }
 
-        .reset {
-            display: inline-block;
-            padding: 5px 10px;
-            background: $blue;
-            color: #fff;
+        .post-meta, .reset {
             position: absolute;
-            top: 0;
-            right: 0;
             font-size: 70%;
             line-height: 1;
-            text-transform: uppercase;
-            border-top-right-radius: 7px;
 
             svg {
                 font-size: 70%;
                 vertical-align: top;
                 margin-top: 1px;
                 margin-right: 4px;
+            }
+        }
+
+        .reset, .post-meta a {
+            display: inline-block;
+            padding: 5px 10px;
+            color: #fff;
+            text-transform: uppercase;
+            margin-left: 3px;
+        }
+
+        .reset {
+            background: $blue;
+            border-top-right-radius: 7px;
+            top: 0;
+            right: 0;
+        }
+
+        .post-meta {
+            bottom: 1px;
+            right: 1px;
+
+            a {
+                background: #999;
+
+                &:hover {
+                    background: #777;
+                }
+            }
+
+            a:last-child {
+                border-bottom-right-radius: 7px;
             }
         }
     }

@@ -1,6 +1,6 @@
 <template>
   <div v-if="item && item.feed" class="single-item">
-    <MediaPlayer :item="item" :app="app" showHeader="false" />
+    <EmbedMedia v-if="app.hasMedia(item)" :item="item" :app="app" :autoplay="true" />
 
     <div class="feed">
       <h1>
@@ -20,7 +20,7 @@
         <span :title="item.pubDate" v-if="item.pubDate" class="feed-name">{{app.dateFormat(item.pubDate, app.now)}}</span>
       </h3>
 
-      <div v-html="item.content" class="description"></div>
+      <div v-if="item.content" v-html="app.blankifyLinks(item.content)" class="description"></div>
 
       <div style="margin-top: 20px;">
         <a :href="item.link" class="button" target="_blank">
@@ -56,13 +56,14 @@
 </template>
 
 <script>
-import Item           from '@/components/item/component.vue';
-import MediaPlayer    from '@/components/media-player/component.vue';
+import Item       from '@/components/item/component.vue';
+import EmbedMedia from '@/components/embed-media/component.vue';
 
 export default {
   props: ['app'],
   components: {
-    Item
+    Item,
+    EmbedMedia
   },
   watch: {
     'item.guid' () {

@@ -133,7 +133,7 @@
                   <span class="hint">
                     Download a full copy of your data.
                   </span>
-                  <button v-on:click="app.download(app.identity)" class="button-gray">Download Identity</button>
+                  <button v-on:click="app.downloadIdentity(app.identity)" class="button-gray">Download Identity</button>
                 </div>
 
                 <div class="half-column">
