@@ -77,18 +77,19 @@ export default {
         },
 
         importConfig(type) {
-            var _ = this;
+            var _ = this,
+                paste = _.paste.trim();
 
-            if (_.app.isBase64(_.paste)) {
+            if (_.app.isBase64(paste)) {
                 try {
-                    _.paste = Base64.decode(_.paste);
+                    paste = Base64.decode(paste);
                 } catch (e) { }
             }
 
             try {
                 var feed, newIdentity, existingIdentity, existingFeed, key, i;
 
-                newIdentity = JSON.parse(_.paste);
+                newIdentity = JSON.parse(paste);
 
                 _.paste = '';
 

@@ -219,7 +219,7 @@ export default {
         s = JSON.parse(JSON.stringify(s));
         s.template = s.template || s.id;
         s.id = _.app.generateId();
-        s.data.name = s.name + ' (Custom)';
+        s.data.name = s.data.name || (s.name + ' (Custom)');
 
         _.app.identity.services.custom.push(s);
       }
@@ -236,15 +236,16 @@ export default {
     },
 
     importService() {
-      var _ = this;
+      var _ = this,
+          paste = _.paste.trim();
 
-      if (_.app.isBase64(_.paste)) {
+      if (_.app.isBase64(paste)) {
           try {
-              _.paste = Base64.decode(_.paste);
+              paste = Base64.decode(paste);
           } catch (e) { }
       }
 
-      _.selectService(JSON.parse(_.paste), true);
+      _.selectService(JSON.parse(paste), true);
 
       _.paste = '';
     },

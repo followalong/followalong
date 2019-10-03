@@ -898,18 +898,24 @@ var methods = {
         }
 
         if (service) {
+            var template = SERVICES.find(function(s) {
+                return s.id === service.template;
+            });
+
+            if (template) {
+                var items = ['fields', 'pricing', 'description', 'request'];
+
+                for (var i = items.length - 1; i >= 0; i--) {
+                    service[items[i]] || Object.defineProperty(service, items[i], {
+                        value: template[items[i]],
+                        enumerable: false
+                    });
+                }
+            }
+
             if (!service.app) {
                 Object.defineProperty(service, 'app', {
                     value: _.app,
-                    enumerable: false
-                });
-            }
-
-            if (typeof service.fetch !== 'function' && service.template) {
-                Object.defineProperty(service, 'request', {
-                    value: SERVICES.find(function(s) {
-                        return s.id === service.template;
-                    }).request,
                     enumerable: false
                 });
             }
