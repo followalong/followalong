@@ -29,7 +29,7 @@ function parseItems(app, feed, data, items, updatedAt, done) {
     parser.parseString(data, function(err, data) {
         if (err) {
             feed.error = 'Could not parse feed. Feed does not seem to be formatted correctly.';
-            console.error(data);
+            console.log(err, data);
             done(err);
             return;
         } else {
