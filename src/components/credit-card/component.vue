@@ -8,6 +8,40 @@
   </form>
 </template>
 
+<style type="text/css">
+/**
+ * The CSS shown here will not be introduced in the Quickstart guide, but shows
+ * how you can use CSS to style your Element's container.
+ */
+.StripeElement {
+  box-sizing: border-box;
+
+  height: 40px;
+
+  padding: 10px 12px;
+
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: white;
+
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+  -webkit-transition: box-shadow 150ms ease;
+  transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus {
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+  border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
+</style>
+
 <script>
 import loadExternal from 'load-external';
 import SERVICES     from '@/components/app/services';
@@ -31,8 +65,7 @@ export default {
     var _ = this;
 
     cachedLoadExternal('https://js.stripe.com/v3/', function() {
-        stripe = stripe || window.Stripe('pk_test_ovSgIfRBzeqGwOYQl6P39IR300ktMwyAXW');
-        // stripe = stripe || window.Stripe(atob('cGtfbGl2ZV9GZDZwUUtwMWkwMUtnVlE1aFFhWTlBOG0wMEU3ak43Y2hK'));
+        stripe = stripe || window.Stripe(atob('cGtfbGl2ZV9GZDZwUUtwMWkwMUtnVlE1aFFhWTlBOG0wMEU3ak43Y2hK'));
         elements = elements || stripe.elements();
         card = card || elements.create('card', {
           style: {
@@ -77,11 +110,18 @@ export default {
           SERVICES[0].request({}, {}, {
             action: 'subscribe',
             token: result.token.id
-          }, function(err, data) {
+          }, function(err, response) {
             if (err) {
               _.handler.error(err.message);
+            } else if (response.body) {
+              if (response.status === 200) {
+                _.submit(response.body);
+              } else {
+                _.handler.error(response.body);
+              }
             } else {
-              _.submit(data);
+              console.error(response);
+              _.handler.error('Something went wrong.');
             }
           });
         }
@@ -92,37 +132,3 @@ export default {
   }
 };
 </script>
-
-<style type="text/css">
-/**
- * The CSS shown here will not be introduced in the Quickstart guide, but shows
- * how you can use CSS to style your Element's container.
- */
-.StripeElement {
-  box-sizing: border-box;
-
-  height: 40px;
-
-  padding: 10px 12px;
-
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background-color: white;
-
-  box-shadow: 0 1px 3px 0 #e6ebf1;
-  -webkit-transition: box-shadow 150ms ease;
-  transition: box-shadow 150ms ease;
-}
-
-.StripeElement--focus {
-  box-shadow: 0 1px 3px 0 #cfd7df;
-}
-
-.StripeElement--invalid {
-  border-color: #fa755a;
-}
-
-.StripeElement--webkit-autofill {
-  background-color: #fefde5 !important;
-}
-</style>

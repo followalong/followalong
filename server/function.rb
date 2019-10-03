@@ -2,10 +2,15 @@ require 'net/https'
 require 'uri'
 require 'erb'
 require 'cgi'
+require 'date'
+require 'stripe'
+require 'securerandom'
+
+Stripe.api_key = ENV['stripe_api_key']
 
 class FollowAlong
   TIMEOUT = 5
-  ALLOWED_METHODS = %w[rss sync] # publish search media
+  ALLOWED_METHODS = %w[rss subscribe] # sync publish search media
 
   attr_reader :event, :context
 
@@ -22,8 +27,37 @@ class FollowAlong
     end
   end
 
-  def sync
-    { body: 'Saved.' }
+  # def sync
+  #   { body: 'Saved.' }
+  # end
+
+  def subscribe
+    begin
+      Stripe::Charge.create({
+          amount: 2900,
+          currency: 'usd',
+          description: '1-Year Unlimited Access',
+          source: event['token'],
+      })
+
+      token = SecureRandom.urlsafe_base64(32)
+      expiry = (Date.today + 366).to_s
+
+      {
+        status: 200,
+        headers: {},
+        body: {
+          token: token,
+          expiry: expiry
+        }
+      }
+    rescue => e
+      {
+        status: 401,
+        headers: {},
+        body: e.message
+      }
+    end
   end
 
   def rss
