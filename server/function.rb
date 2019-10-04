@@ -3,6 +3,8 @@ require 'uri'
 require 'erb'
 require 'cgi'
 require 'date'
+require 'json'
+require 'aws-sdk-s3'
 require 'stripe'
 require 'securerandom'
 
@@ -31,17 +33,40 @@ class FollowAlong
   #   { body: 'Saved.' }
   # end
 
+  def s3
+    @s3 ||= Aws::S3::Resource.new
+  end
+
+  def accounts
+    @accounts ||= s3.bucket(ENV['aws_bucket']).object 'accounts.json'
+  end
+
+  def read_accounts
+    JSON.parse accounts.get.body.read
+  end
+
+  def write_accounts(data)
+    accounts.put(
+      acl: 'private',
+      body: data.to_json
+    )
+  end
+
   def subscribe
     begin
+      token = SecureRandom.urlsafe_base64(32)
+      expiry = (Date.today + 366).to_s
+
+      accounts = read_accounts
+      accounts[token] = expiry
+      write_accounts accounts
+
       Stripe::Charge.create({
           amount: 2900,
           currency: 'usd',
           description: '1-Year Unlimited Access',
           source: event['token'],
       })
-
-      token = SecureRandom.urlsafe_base64(32)
-      expiry = (Date.today + 366).to_s
 
       {
         status: 200,

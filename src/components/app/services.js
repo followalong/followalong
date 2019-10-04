@@ -161,7 +161,7 @@ var SERVICES = [
 },
 {
     id: 'followalong-unlimited',
-    name: 'FollowAlong Premium',
+    name: 'FollowAlong Unlimited',
     description: 'One Year of <strong>unlimited access to our proxy server</strong> AND <strong>fully-encrypted data storage</strong> (eg. we can\'t read it) for $29 USD. No throttling, logging, or tracking.',
     supports: 'rss,sync',
     pricing: {
