@@ -303,8 +303,8 @@ var methods = {
         var _ = this,
             limit = parseInt(identity.services.local.maxReadCount),
             items = _.app.newsfeed.filter(function(item) {
-                return item.isRead && !item.isSaved;
-            }).sort(sorter(identity, '_updatedAt')),
+                return item.isRead && !item.isSaved && !item.isPlaying;
+            }).sort(sorter(identity)),
             itemsLength = items.length,
             item, i;
 

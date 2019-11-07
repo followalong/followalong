@@ -50,6 +50,12 @@ export default {
       set() {}
     },
   },
+  mounted() {
+    this.item.isPlaying = true;
+  },
+  beforeDestroy() {
+    delete this.item.isPlaying;
+  },
   methods
 };
 </script>

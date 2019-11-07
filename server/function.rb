@@ -54,11 +54,13 @@ class FollowAlong
 
   def subscribe
     begin
-      token = SecureRandom.urlsafe_base64(32)
-      expiry = (Date.today + 366).to_s
+      metadata = {
+          token: SecureRandom.urlsafe_base64(32),
+          expiry: (Date.today + 366).to_s
+      }
 
       accounts = read_accounts
-      accounts[token] = expiry
+      accounts[metadata[:token]] = metadata[:expiry]
       write_accounts accounts
 
       Stripe::Charge.create({
@@ -66,15 +68,13 @@ class FollowAlong
           currency: 'usd',
           description: '1-Year Unlimited Access',
           source: event['token'],
+          metadata: metadata
       })
 
       {
         status: 200,
         headers: {},
-        body: {
-          token: token,
-          expiry: expiry
-        }
+        body: metadata
       }
     rescue => e
       {
