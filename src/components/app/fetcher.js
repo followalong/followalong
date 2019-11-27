@@ -6,12 +6,12 @@ var parser = new Parser({
     }
 });
 
-function getContent(proxy, url, done) {
-    if (!proxy) {
+function getContent(service, url, done) {
+    if (!service) {
         return done();
     }
 
-    proxy.request(proxy.app, proxy.app.identity, {
+    service.request(service.app, service.app.identity, {
         action: 'rss',
         url: url
     }, function(err, data) {
@@ -19,7 +19,7 @@ function getContent(proxy, url, done) {
             return done(undefined, data.body);
         }
 
-        done(typeof data === 'object' ? data.body : 'Could not fetch feed. If you\'re not already, Try using a CORS proxy (in Setup).');
+        done(typeof data === 'object' ? data.body : 'Could not fetch feed. If you\'re not already, Try using a CORS proxy service (in Setup).');
     });
 }
 
@@ -29,7 +29,7 @@ function parseItems(app, feed, data, items, updatedAt, done) {
     parser.parseString(data, function(err, data) {
         if (err) {
             feed.error = 'Could not parse feed. Feed does not seem to be formatted correctly.';
-            console.log(err, data);
+            console.error(err);
             done(err);
             return;
         } else {
@@ -95,12 +95,12 @@ function parseItems(app, feed, data, items, updatedAt, done) {
     });
 }
 
-function getFeed(proxy, items, feed, updatedAt, callback, forEachCallback) {
-    if (!proxy) {
+function getFeed(service, items, feed, updatedAt, callback, forEachCallback) {
+    if (!service) {
         return callback();
     }
 
-    getContent(proxy, feed.url, function(err, data) {
+    getContent(service, feed.url, function(err, data) {
         if (err) {
             feed.error = err;
             console.error(err);
@@ -110,7 +110,7 @@ function getFeed(proxy, items, feed, updatedAt, callback, forEachCallback) {
             delete feed.error;
         }
 
-        parseItems(proxy.app, feed, data, items, updatedAt, callback);
+        parseItems(service.app, feed, data, items, updatedAt, callback);
     });
 }
 

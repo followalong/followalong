@@ -94,7 +94,9 @@ private
   def perform_request(limit = 5)
     return { status: 400, body: 'HTTP redirect too deep' } if limit == 0
 
-    uri = URI(event['url'])
+    url = event['url']
+    url = Base64.decode64 url if url[0..3] != 'http'
+    uri = URI url
 
     if "#{event['method']}".downcase == 'post'
       req = Net::HTTP::Post.new(uri, event)
@@ -109,35 +111,33 @@ private
       req[key] = value
     end
 
-    begin
-      response = Net::HTTP.start(uri.hostname, uri.port, {
-        use_ssl: uri.scheme == 'https',
-        open_timeout: TIMEOUT,
-        ssl_timeout: TIMEOUT,
-        read_timeout: TIMEOUT,
-        keep_alive_timeout: TIMEOUT
-      }) { |http|
-        http.request(req)
-      }
+    response = Net::HTTP.start(uri.hostname, uri.port, {
+      use_ssl: uri.scheme == 'https',
+      open_timeout: TIMEOUT,
+      ssl_timeout: TIMEOUT,
+      read_timeout: TIMEOUT,
+      keep_alive_timeout: TIMEOUT
+    }) { |http|
+      http.request(req)
+    }
 
-      case response
-      when Net::HTTPRedirection
-        event['url'] = response['location']
-        perform_request limit - 1
-      else
-        {
-          status: response.code,
-          headers: response.to_hash,
-          body: response.body.force_encoding('utf-8')
-        }
-      end
-    rescue => e
+    case response
+    when Net::HTTPRedirection
+      event['url'] = response['location']
+      perform_request limit - 1
+    else
       {
-        status: 401,
-        headers: {},
-        body: e.message
+        status: response.code,
+        headers: response.to_hash,
+        body: response.body.force_encoding('utf-8')
       }
     end
+  rescue => e
+    {
+      status: 401,
+      headers: {},
+      body: e.message
+    }
   end
 end
 
