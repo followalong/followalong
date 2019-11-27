@@ -1,4 +1,5 @@
 {
+    "1.2.3": "Added offline support.",
     "1.2.2": "Add paid services.",
     "1.2.1": "Scrub script/style tags from post content. Added import via file. Moved `identity.local` to `identity.services.local` to clean up the data structure. Copy config is base64 encoded to avoid accidents.",
     "1.2.0": "Re-organized and renamed Services, including the ability to use and re-use templates.",

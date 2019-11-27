@@ -990,19 +990,19 @@ var methods = {
     },
 
     isMemberable(feed) {
-        return false;// true;
+        return false; // true;
     },
 
     isMember(feed) {
-        return false;// feed.membership;
+        return false; // feed.membership;
     },
 
     isMemberExpired(feed) {
-        return false;// feed.membership && feed.membership.expireAt & feed.membership.expireAt < new Date();
+        return false; // feed.membership && feed.membership.expireAt & feed.membership.expireAt < new Date();
     },
 
     isHelpable(feed) {
-        return false;// false;
+        return false; // false;
     },
 
     editMembership(feed, intent) {

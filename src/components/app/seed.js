@@ -24,12 +24,12 @@ var generateId = uniqId.generateUUID('xxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxy',
                     loading: false,
                     paused: false
                 },
-                {
-                    name: 'John Stossel',
-                    url: 'https://reason.com/tag/john-stossel/feed/',
-                    loading: false,
-                    paused: false
-                },
+                // {
+                //     name: 'John Stossel',
+                //     url: 'https://reason.com/tag/john-stossel/feed/',
+                //     loading: false,
+                //     paused: false
+                // },
                 {
                     name: 'Dude Perfect',
                     url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCRijo3ddMTht_IHyNSNXpNQ',
