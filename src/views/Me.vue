@@ -1,6 +1,8 @@
 <template>
   <div class="me">
-    <h1>Me as {{identity.name}}.</h1>
+    <div class="title-wrapper">
+        <h1>Me as {{identity.name}}.</h1>
+    </div>
     <p>My posts, edit my profile.</p>
   </div>
 </template>

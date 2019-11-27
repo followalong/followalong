@@ -1,7 +1,9 @@
 <template>
     <div class="feed home-feed wide-feed">
-        <button v-if="app.unread && app.unread.length" v-on:click="catchMeUp()" class="button-gray button-small float-right">Catch Me Up!</button>
-        <h1>{{mediaVerb ? app.capitalize(mediaVerb) : 'What\'s New?'}}</h1>
+        <div class="title-wrapper">
+            <button v-if="app.unread && app.unread.length" v-on:click="catchMeUp()" class="button-gray button-small float-right">Catch Me Up!</button>
+            <h1>{{mediaVerb ? app.capitalize(mediaVerb) : 'What\'s New?'}}</h1>
+        </div>
 
         <p v-if="items.length && !unreadItems.length" class="highlight">
             You're all caught up!

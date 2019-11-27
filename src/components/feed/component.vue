@@ -12,7 +12,9 @@
       <router-link :to="{ name: 'feed', params: { feed_url: feed.url } }">
         {{feed.name}}
       </router-link>
-      <a href="javascript:;" class="hint remove" v-on:click="remove()">Delete</a>
+      <a href="javascript:;" class="hint remove" v-on:click="app.unsubscribe(feed)">
+        Unsubscribe
+      </a>
     </h2>
     <p v-if="feed.meta && feed.meta.description" class="description">{{feed.meta.description}}</p>
     <p v-if="feed.error" class="description red">{{feed.error}}</p>
@@ -44,23 +46,6 @@ export default {
 
       _.feed._updatedAt = Date.now();
       _.feed.paused = !_.feed.paused;
-      _.app.save();
-    },
-
-    remove() {
-      if (!confirm('Are you sure you want to remove this feed?')) return;
-
-      var _ = this,
-        index = _.app.identity.feeds.indexOf(_.feed);
-
-      _.app.identity.items.filter(function(item) {
-        return item.feedURL === _.feed.url;
-      }).forEach(function(item) {
-        _.app.identity.items.splice(_.app.identity.items.indexOf(item), 1);
-      });
-
-      _.app.identity.feeds.splice(index, 1);
-
       _.app.save();
     }
   }

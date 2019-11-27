@@ -1,7 +1,9 @@
 <template>
   <div class="settings">
     <div v-if="app.identity" class="narrow-container">
-      <h1>Setup</h1>
+      <div class="title-wrapper">
+        <h1>Setup</h1>
+      </div>
 
       <vue-tabs>
           <v-tab title="General">

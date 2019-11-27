@@ -3,6 +3,7 @@ import Router         from 'vue-router';
 import Home           from './views/Home.vue';
 import Me             from './views/Me.vue';
 import About          from './views/About.vue';
+import Splash         from './views/Splash.vue';
 import Messages       from './views/Messages.vue';
 import Discover       from './views/Discover.vue';
 import Search         from './views/Search.vue';
@@ -31,6 +32,12 @@ export default new Router({
       path: '/about',
       name: 'about',
       component: About,
+      props: true
+    },
+    {
+      path: '/splash',
+      name: 'splash',
+      component: Splash,
       props: true
     },
     {

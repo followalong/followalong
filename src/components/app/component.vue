@@ -58,6 +58,8 @@
                 <p>Securely loading your data...</p>
             </div>
         </div>
+
+        <Membership :app="app" :membership="membership" />
     </div>
 </template>
 
@@ -69,6 +71,7 @@
 import localForage   from 'localforage';
 import Sidebar       from '@/components/sidebar/component.vue';
 import MediaPlayer   from '@/components/media-player/component.vue';
+import Membership    from '@/components/membership/component.vue';
 import seed          from '@/components/app/seed';
 import sorter        from '@/components/app/sorter';
 import methods       from '@/components/app/methods';
@@ -83,7 +86,8 @@ function SORT_BY_NAME(a, b) {
 export default {
     components: {
         Sidebar,
-        MediaPlayer
+        MediaPlayer,
+        Membership
     },
     data: function() {
         var _ = this;
@@ -101,6 +105,10 @@ export default {
             store: localForage.createInstance({
                 name: 'commmunity'
             }),
+            membership: {
+                feed: undefined,
+                intent: undefined
+            },
             loading: true,
             identities: [],
             keychain: {},
@@ -130,7 +138,7 @@ export default {
 
             if (!identities || !identities.length) {
                 identities = seed;
-                _.$router.push('about');
+                _.$router.push('splash');
             }
 
             for (var i = identities.length - 1; i >= 0; i--) {

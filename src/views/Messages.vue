@@ -1,6 +1,8 @@
 <template>
   <div class="messages">
-    <h1>One day, you'll be able to message others directly as {{identity.name}}!</h1>
+    <div class="title-wrapper">
+        <h1>One day, you'll be able to message others directly as {{identity.name}}!</h1>
+    </div>
   </div>
 </template>
 

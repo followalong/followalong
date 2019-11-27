@@ -166,14 +166,18 @@
           opacity: 0.5;
         }
 
+        li {
+          border-bottom: 1px solid #fff;
+        }
+
         a {
           padding-top: 10px;
           padding-bottom: 10px;
-          border-bottom: 1px solid $medium-gray;
           color: $gray;
 
           &:hover {
             background: rgba(255, 255, 255, 0.6);
+            color: $blue;
           }
         }
 

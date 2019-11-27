@@ -1,9 +1,11 @@
 <template>
   <div class="search">
-    <h1>
-      <span v-if="feed && feed.name">{{feed.name}}</span>
-      <span v-else><strong>Search:</strong> {{app.q}}</span>
-    </h1>
+    <div class="title-wrapper">
+      <h1>
+        <span v-if="feed && feed.name">{{feed.name}}</span>
+        <span v-else><strong>Search:</strong> {{app.q}}</span>
+      </h1>
+    </div>
 
     <p v-if="error">{{error}}</p>
 

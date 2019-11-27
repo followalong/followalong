@@ -1,11 +1,13 @@
 <template>
   <div class="feeds">
-    <button :class="'float-right ' + (app.loading ? 'loading' : '')" v-on:click="app.fetchAllFeeds(app.identity, true)">
-      <span v-if="app.loading">Loading...</span>
-      <span v-else>Fetch All Feeds</span>
-    </button>
+    <div class="title-wrapper">
+      <button :class="'float-right ' + (app.loading ? 'loading' : '')" v-on:click="app.fetchAllFeeds(app.identity, true)">
+        <span v-if="app.loading">Loading...</span>
+        <span v-else>Fetch All Feeds</span>
+      </button>
 
-    <h1>Subscriptions</h1>
+      <h1>Subscriptions</h1>
+    </div>
 
     <ul>
       <li

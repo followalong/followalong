@@ -1,26 +1,104 @@
 <template>
   <div v-if="feed">
     <div class="feed wide-feed">
+      <div class="title-wrapper">
+        <h1>
+          <a v-on:click="showMenu = !showMenu" href="javascript:;" class="float-right">
+            <font-awesome-icon icon="bars" class="i" />
+          </a>
 
-      <div class="float-right">
-        <button v-on:click="pause()" :class="(feed.paused ? 'button-gray' : '') + ' button-small'">
-          <span v-if="feed.paused">&#10074;&#10074;</span>
-          <span v-else>&#9658;</span>
-        </button> &nbsp;
-        <button v-if="unreadItems.length" v-on:click="catchFeedUp()" class="button-gray button-small">Catch Me Up!</button> &nbsp;
-        <button v-on:click="fetch()" :class="(feed.loading ? 'loading' : '') + ' button-small'">
-          <span v-if="feed.loading">Loading...</span>
-          <span v-else>Fetch Now</span>
-        </button>
+          <a v-if="app.isMemberable(feed)" v-on:click="app.editMembership(feed, 'register')" href="javascript:;" class="float-right">
+            <font-awesome-icon icon="money-bill-wave" class="i" />
+          </a>
+
+          <router-link :to="{ name: 'feed', params: { feed_url: feed.url } }">
+            {{feed.name}}
+          </router-link>
+
+          <font-awesome-icon v-if="feed.loading" icon="spinner" spin class="i" />
+
+          <a v-else v-on:click="pause()" href="javascript:;" class="i">
+            <span v-if="feed.paused">&#10074;&#10074;</span>
+            <span v-else>&#9658;</span>
+          </a>
+        </h1>
+
+        <!-- <a :href="feed.url" class="hint">
+          {{feed.url}}
+        </a> -->
+
+        <ul v-if="showMenu" class="actions">
+          <li v-if="unreadItems.length">
+            <a href="javascript:;" v-on:click="catchFeedUp()">
+              Catch Me Up!
+            </a>
+          </li>
+          <li>
+            <a href="javascript:;" v-on:click="fetch()">
+              <span v-if="feed.loading">Fetching...</span>
+              <span v-else>Fetch Now</span>
+            </a>
+          </li>
+          <li v-if="app.isMemberable(feed) && !app.isMember(feed)">
+            <a href="javascript:;" v-on:click="showMenu = false; app.editMembership(feed, 'register')">
+              Become a Member
+            </a>
+          </li>
+          <li v-if="app.isMemberable(feed) && !app.isMember(feed)">
+            <a href="javascript:;" v-on:click="showMenu = false; app.editMembership(feed, 'login')">
+              Login as Member
+            </a>
+          </li>
+          <li v-if="app.isMember(feed)">
+            <a href="javascript:;" v-on:click="showMenu = false; app.editMembership(feed, 'renew')">
+              Renew Membership
+            </a>
+          </li>
+          <li v-if=" app.isHelpable(feed)">
+            <a href="javascript:;" v-on:click="showMenu = false; app.editMembership(feed, 'support')">
+              Member Support
+            </a>
+          </li>
+          <li v-if="app.isMember(feed)">
+            <a href="javascript:;" v-on:click="showMenu = false; app.editMembership(feed, 'password')">
+              Change Member Password
+            </a>
+          </li>
+          <li v-if="app.isMember(feed)">
+              <a href="javascript:;" v-on:click="showMenu = false; app.editMembership(feed, 'logout')">
+                Logout as Member
+              </a>
+          </li>
+          <li>
+            <a href="javascript:;" v-on:click="showMenu = false; app.unsubscribe(feed, true)">
+              Unsubscribe
+            </a>
+          </li>
+        </ul>
       </div>
-
-      <h1><a :href="feed.url">{{feed.name}}</a></h1>
 
       <ul class="items">
         <li v-if="items.length === 0">
           <h3>You're all caught up!</h3>
           <p>
             If you want to be able to see more "history", visit the <router-link to="/settings" class="link">Settings</router-link> page and increase the maximum number of items to keep.
+          </p>
+        </li>
+
+        <li v-if="app.isMemberExpired(feed)" class="warning">
+          <p>
+            Your membership has expired.
+          </p>
+          <p>
+            <a href="javascript:;">
+              Renew Now
+            </a>
+
+            &nbsp; <span class="hint inline">-</span> &nbsp;
+
+            <a href="javascript:;">
+              Cancel
+            </a>
           </p>
         </li>
 
@@ -47,6 +125,11 @@ export default {
   props: ['app'],
   components: {
     Item
+  },
+  data() {
+    return {
+      showMenu: false
+    };
   },
   computed: {
     feed() {

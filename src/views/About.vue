@@ -1,8 +1,10 @@
 <template>
   <div class="narrow-container">
-    <h1>
-      What is FollowAlong?
-    </h1>
+    <div class="title-wrapper">
+      <h1>
+        Our Story
+      </h1>
+    </div>
 
     <p class="highlight">
       <span v-if="app.loading">FollowAlong is preparing "What's New?" &mdash; just for you!</span>
@@ -30,6 +32,11 @@ export default {
   props: ['app'],
   components: {
     About
+  },
+  data() {
+    return {
+      readMore: false
+    };
   }
 };
 </script>

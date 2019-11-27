@@ -1,6 +1,8 @@
 <template>
     <div class="feeds">
-        <h1>New Identity</h1>
+        <div class="title-wrapper">
+            <h1>New Identity</h1>
+        </div>
 
         <div class="field">
             <label>How would you like to add your identity?</label>

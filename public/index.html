@@ -15,6 +15,13 @@
         <noscript>
             <strong>We're sorry but FollowAlong doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
         </noscript>
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('./sw.js');
+                });
+            }
+        </script>
         <div id="app"></div>
         <!-- built files will be auto injected -->
     </body>

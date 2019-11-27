@@ -1,6 +1,9 @@
 <template>
   <div class="feed wide-feed">
-    <h1>Saved For Later</h1>
+    <div class="title-wrapper">
+      <h1>Saved For Later</h1>
+    </div>
+
     <ul class="items">
       <li
         is="item"

@@ -3,9 +3,11 @@
     <EmbedMedia v-if="app.hasMedia(item)" :item="item" :app="app" :autoplay="true" />
 
     <div class="feed">
-      <h1>
-        <a :href="item.link">{{item.title}}</a>
-      </h1>
+      <div class="title-wrapper">
+        <h1>
+          <a :href="item.link">{{item.title}}</a>
+        </h1>
+      </div>
 
       <h3>
         <router-link :to="{ name: 'feed', params: { feed_url: item.feed.url } }" class="feed-name">

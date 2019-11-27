@@ -4,10 +4,12 @@
       Add New
     </router-link>
 
-    <h1>
-      <!-- <font-awesome-icon icon="feather" /> -->
-      Create
-    </h1>
+    <div class="title-wrapper">
+      <h1>
+        <!-- <font-awesome-icon icon="feather" /> -->
+        Create
+      </h1>
+    </div>
 
     <p>BAM.</p>
   </div>

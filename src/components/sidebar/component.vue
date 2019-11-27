@@ -104,7 +104,7 @@
       </h3>
       <p>
         A social network where voices <em>can't</em> be censored and your data is kept safe with <em>you</em>.
-        <router-link to="/about" class="primary">
+        <router-link to="/splash" class="primary">
           Read more &raquo;
         </router-link>
       </p>

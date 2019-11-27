@@ -1,10 +1,12 @@
 <template>
   <div class="narrow-container">
-    <router-link to="/about" class="button button-gray button-small float-right">
-      What is FollowAlong?
-    </router-link>
+    <div class="title-wrapper">
+      <router-link to="/about" class="button button-gray button-small float-right">
+        What is FollowAlong?
+      </router-link>
 
-    <h1>Changeblog</h1>
+      <h1>Changeblog</h1>
+    </div>
 
     <p class="highlight">
       <strong>Why isn't FollowAlong open source?</strong><br>

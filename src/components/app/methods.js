@@ -969,6 +969,49 @@ var methods = {
         return /^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$/.test(str);
     },
 
+    unsubscribe(feed, redirect) {
+      if (!confirm('Are you sure you want to unsubscribe from this feed?')) return;
+
+      var _ = this,
+        index = _.app.identity.feeds.indexOf(feed);
+
+      _.app.identity.items.filter(function(item) {
+        return item.feedURL === feed.url;
+      }).forEach(function(item) {
+        _.app.identity.items.splice(_.app.identity.items.indexOf(item), 1);
+      });
+
+      _.app.identity.feeds.splice(index, 1);
+      _.app.save(function() {
+        if (redirect) {
+            _.app.$router.push('/');
+        }
+      });
+    },
+
+    isMemberable(feed) {
+        return true;
+    },
+
+    isMember(feed) {
+        return feed.membership;
+    },
+
+    isMemberExpired(feed) {
+        return feed.membership && feed.membership.expireAt & feed.membership.expireAt < new Date();
+    },
+
+    isHelpable(feed) {
+        return false;
+    },
+
+    editMembership(feed, intent) {
+        var _ = this;
+
+        _.app.membership.feed = feed;
+        _.app.membership.intent = intent || 'login';
+    }
+
     // serviceShouldPromptCredentials(service, data) {
     //     if (service.pricing) {
     //         for (var key in service.fields) {
