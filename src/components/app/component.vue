@@ -17,7 +17,7 @@
                             <input type="text" name="q" v-model="q" autocomplete="off" placeholder="Search...">
                         </form>
                     </li>
-                    <li v-if="identity" class="table-cell identities">
+                    <li v-if="identity && identity._decrypted" class="table-cell identities">
                         <a class="desktop-only">
                             <strong>{{ identity.name }}</strong>
                         </a>
@@ -131,14 +131,15 @@ export default {
         _.$on('loading', function(bool) {
             _.loading = bool;
         });
-            _.loading = true;
+
+        _.loading = true;
 
         _.constructIdentities(function(identities, keychain) {
             _.keychain = keychain;
 
             if (!identities || !identities.length) {
                 identities = seed;
-                _.$router.push('splash');
+                _.$router.push('/splash');
             }
 
             for (var i = identities.length - 1; i >= 0; i--) {
@@ -148,6 +149,14 @@ export default {
             _.identities = identities;
             _.app.setIdentity(identities[0]);
         });
+
+        if (process.env.NODE_ENV !== 'development') {
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js');
+                });
+            }
+        }
     },
     computed: {
         nonIdentities() {

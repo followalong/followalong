@@ -25,6 +25,9 @@ var generateId = uniqId.generateUUID('xxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxy',
                     paused: false
                 },
                 // {
+                //     url: 'https://www.theatlantic.com/feed/channel/ideas/'
+                // },
+                // {
                 //     name: 'John Stossel',
                 //     url: 'https://reason.com/tag/john-stossel/feed/',
                 //     loading: false,

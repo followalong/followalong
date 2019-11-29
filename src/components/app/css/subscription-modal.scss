@@ -1,20 +1,12 @@
 .modal {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 99999999;
-    padding: 10px;
-
     .overlay {
-        position: absolute;
+        position: fixed;
         top: 0;
         right: 0;
         bottom: 0;
         left: 0;
         background: rgba(0, 0, 0, 0.4);
-        z-index: -1;
+        z-index: 999;
         cursor: pointer;
     }
 
@@ -32,14 +24,33 @@
         margin-bottom: 10px;
     }
 
-    .content {
-        margin: 10% auto;
-        max-width: 480px;
-        width: 100%;
-        border: 1px solid $light-gray;
-        background: #fff;
-        border-radius: 9px;
-        padding: 20px;
+    h4 {
+        font-size: 110%;
+        margin-top: -11px;
+        color: $blue;
+        font-style: oblique;
+    }
+
+    .content-wrapper {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 99999999;
+        padding: 10px;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+
+        .content {
+            margin: 10% auto;
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid $light-gray;
+            background: #fff;
+            border-radius: 9px;
+            padding: 20px;
+        }
     }
 
     .notice {

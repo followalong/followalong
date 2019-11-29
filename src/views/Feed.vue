@@ -7,9 +7,7 @@
             <font-awesome-icon icon="bars" class="i" />
           </a>
 
-          <a v-if="app.isMemberable(feed)" v-on:click="app.editMembership(feed, 'register')" href="javascript:;" class="float-right">
-            <font-awesome-icon icon="money-bill-wave" class="i" />
-          </a>
+          <QuickSubscribe :app="app" :feed="feed" class="float-right" />
 
           <router-link :to="{ name: 'feed', params: { feed_url: feed.url } }">
             {{feed.name}}
@@ -85,12 +83,13 @@
           </p>
         </li>
 
-        <li v-if="app.isMemberExpired(feed)" class="warning">
+        <!-- <li v-if="app.isMemberExpired(feed)" :class="'warning ' + app.membershipClass(feed) + '-background'">
           <p>
             Your membership has expired.
           </p>
+
           <p>
-            <a href="javascript:;">
+            <a href="javascript:;" v-on:click="app.editMembership(feed, 'register')">
               Renew Now
             </a>
 
@@ -100,7 +99,7 @@
               Cancel
             </a>
           </p>
-        </li>
+        </li> -->
 
         <li
           is="item"
@@ -117,14 +116,16 @@
 </template>
 
 <script>
-import Item      from '@/components/item/component.vue';
-import sorter    from '@/components/app/sorter';
+import Item           from '@/components/item/component.vue';
+import QuickSubscribe from '@/components/quick-subscribe/component.vue';
+import sorter         from '@/components/app/sorter';
 
 export default {
   name: 'feed',
   props: ['app'],
   components: {
-    Item
+    Item,
+    QuickSubscribe
   },
   data() {
     return {

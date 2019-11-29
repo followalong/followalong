@@ -19,6 +19,8 @@
       &mdash;
 
       <span :title="item.pubDate" v-if="item.pubDate" class="feed-name">{{dateFormat(item.pubDate, app.now)}}</span>
+
+      &nbsp; <QuickSubscribe :app="app" :feed="item.feed" />
     </div>
 
     <div v-if="showContent">
@@ -28,8 +30,8 @@
         <div class="description">
           <div v-if="!isExpanded && item.content.length > characterLimit">
             <div v-html="app.prepDescription(item, characterLimit, '...')"></div>
-            <button class="button-gray float-right" v-on:click="isExpanded = !isExpanded">
-              Expand &nbsp; &raquo;
+            <button class="button-gray" v-on:click="isExpanded = !isExpanded">
+              Read More
             </button>
           </div>
 
@@ -57,12 +59,14 @@
 <script>
 import methods from '@/components/app/methods';
 import ClickableMedia from '@/components/clickable-media/component.vue';
+import QuickSubscribe from '@/components/quick-subscribe/component.vue';
 
 export default {
   name: 'sidebar',
   props: ['app', 'item', 'showContent'],
   components: {
-    ClickableMedia
+    ClickableMedia,
+    QuickSubscribe
   },
   data() {
     return {

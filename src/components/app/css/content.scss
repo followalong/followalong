@@ -382,6 +382,33 @@
     }
 }
 
+.secure-note {
+    @include clearfix();
+
+    background: $light-gray;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 85%;
+
+    svg {
+        color: $dark-gray;
+        float: left;
+        display: inline-block;
+        vertical-align: bottom;
+        margin-top: 3px;
+    }
+
+    p {
+        margin-left: 23px;
+        margin-bottom: 0;
+    }
+
+    a {
+        border-bottom: 1px solid $dark-gray;
+    }
+}
+
 .notice {
     font-size: 80%;
     display: block;
@@ -659,5 +686,52 @@ hr {
         &:last-child {
             margin-bottom: 0;
         }
+
+        p {
+            margin-bottom: 0;
+        }
     }
+}
+
+.align-center {
+    text-align: center;
+}
+
+.is-expired, .is-expired svg.i {
+    color: $red !important;
+}
+
+.is-expired-background {
+    background: $red !important;
+    color: #fff !important;
+    font-weight: bold;
+}
+
+.is-expiring, .is-expiring svg.i {
+    color: $orange !important;
+}
+
+.is-expiring-background {
+    background: $orange !important;
+    color: #fff !important;
+    font-weight: bold;
+}
+
+.is-member, .is-member svg.i {
+    color: $green !important;
+}
+
+.is-member-background {
+    background: $green !important;
+    color: #fff !important;
+    font-weight: bold;
+}
+
+.is-nonmember, .is-nonmember svg.i {
+    color: $dark-gray !important;
+}
+
+.is-nonmember-background {
+    background: $light-gray !important;
+    color: $gray !important;
 }

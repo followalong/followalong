@@ -1,5 +1,6 @@
 // $blue: #005B80;
 $green: #1BCC04;
+$orange: #D47F1F;
 $tan: #69583B;
 $blue: #1b8cd8;
 $gray: #333;
@@ -32,3 +33,4 @@ $media-player-width: 350px;
 @import "./css/columns.scss";
 @import "./css/services.scss";
 @import "./css/subscription-modal.scss";
+@import "../../components/credit-card/style.scss";

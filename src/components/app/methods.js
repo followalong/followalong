@@ -990,19 +990,33 @@ var methods = {
     },
 
     isMemberable(feed) {
-        return false; // true;
+        return true;
     },
 
     isMember(feed) {
-        return false; // feed.membership;
+        return false;
+    },
+
+    isMemberExpiring(feed) {
+        return false; //feed.membership && feed.membership.expireAt & feed.membership.expireAt < new Date();
     },
 
     isMemberExpired(feed) {
-        return false; // feed.membership && feed.membership.expireAt & feed.membership.expireAt < new Date();
+        return false;//feed.membership && feed.membership.expireAt & feed.membership.expireAt < new Date();
     },
 
     isHelpable(feed) {
-        return false; // false;
+        return this.isMemberable(feed);
+    },
+
+    membershipClass(feed) {
+        var _ = this;
+
+        if (_.app.isMemberExpired(feed))  return 'is-expired';
+        if (_.app.isMemberExpiring(feed)) return 'is-expiring';
+        if (_.app.isMember(feed))         return 'is-member';
+
+        return 'is-nonmember';
     },
 
     editMembership(feed, intent) {

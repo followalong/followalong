@@ -21,7 +21,8 @@
         <li>You can say <em>anything</em> and follow <em>anyone</em> &mdash; censorship is virtually impossible.</li>
         <li>A less-addictive interface hides the noise and focuses your attention.</li>
         <li>Follow blogs, YouTube channels, and any other RSS-based feed.</li>
-        <li>Easily donate, subscribe, and support the people you follow.</li>
+        <li>Easily donate, subscribe, and support the people you follow &mdash; directly.</li>
+        <li>FollowAlong works offline so you can read articles on the go!</li>
         <li>
           <router-link to="/about" class="link">
             Read more about the technical details.

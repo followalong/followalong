@@ -2,15 +2,68 @@
   <div v-if="membership.feed" class="subscription-modal modal">
     <div class="overlay" v-on:click="app.editMembership()"></div>
 
-    <div class="content form">
-      <a href="javascript:;" v-on:click="app.editMembership()" class="close">
-        &times;
-      </a>
+    <div class="content-wrapper">
+      <div class="content form">
+        <a href="javascript:;" v-on:click="app.editMembership()" class="close">
+          &times;
+        </a>
 
-      <h3>{{membership.feed.name}}: {{title}}</h3>
+        <h3>{{membership.feed.name}}: {{title}}</h3>
 
-      <div v-if="membership.intent === 'register'">
-        <CreditCard :handler="this">
+        <div v-if="membership.intent === 'register'">
+          <h4><strong>${{pricing.stripe.price}} {{pricing.stripe.currency}}</strong> for a <strong>One-Year Membership</strong></h4>
+
+          <div :class="'secure-note ' + app.membershipClass(feed) + '-background'">
+            <font-awesome-icon icon="lock" />
+
+            <p v-if="app.isMemberExpiring(feed)">
+              Your membership is expiring.
+            </p>
+
+            <p v-if="app.isMemberExpired(feed)">
+              Your membership has expired.
+            </p>
+
+            <p v-if="app.isMember(feed) && !app.isMemberExpiring(feed) && !app.isMemberExpired(feed)">
+              Your membership is still active, but feel free to renew to show your support to <em>{{membership.feed.name}}</em>.
+            </p>
+
+            <p v-if="!app.isMember(feed)">
+              <!-- This is a direct, one-time payment. from you to {{membership.feed.name}}.
+              While FollowAlong is happy to provide a convenient service for creators to be compensated, this This is a direct interaction with {{membership.feed.name}}. -->
+              <!-- Because this is a direct-connection, one-time payment to {{membership.feed.name}}, all requests (refund, customer service) must be sent to {{membership.feed.name}}. -->
+              This is a secure, one-time transaction directly with <a target="_blank" :href="(membership.feed.help || {website:'www.fifa.com'}).website">{{(membership.feed.help || {website:'www.fifa.com'}).website}}</a>.
+              As such, all customer-service requests should be forwarded to "{{membership.feed.name}}" (<a target="_blank" :href="(membership.feed.help || {website:'www.fifa.com'}).website">{{(membership.feed.help || {website:'www.fifa.com'}).website}}</a> or <a target="_blank" :href="'mailto:' + (membership.feed.help || { email: 'bob@email.com' }).email">{{(membership.feed.help || { email: 'bob@email.com' }).email}}</a>).
+            </p>
+          </div>
+
+          <CreditCard :handler="this">
+            <div class="field">
+              <label>Username / Email Address</label>
+              <input type="email" placeholder="you@email.com">
+            </div>
+
+            <div class="field">
+              <label>Password</label>
+              <input type="password" placeholder="* * * * * * * *">
+            </div>
+
+            <div class="field">
+              <button type="submit" class="button-large full-width">
+                Subscribe (${{pricing.stripe.price}} {{pricing.stripe.currency}})
+              </button>
+            </div>
+
+            <div class="field">
+              <p class="hint align-center">
+                Already a member?
+                <a href="javascript:;" v-on:click="membership.intent = 'login'">Log in.</a>
+              </p>
+            </div>
+          </CreditCard>
+        </div>
+
+        <div v-if="membership.intent === 'login'">
           <div class="field">
             <label>Username / Email Address</label>
             <input type="email" placeholder="you@email.com">
@@ -18,86 +71,75 @@
 
           <div class="field">
             <label>Password</label>
-            <input type="password">
+            <input type="password" placeholder="* * * * * * * *">
           </div>
 
           <div class="field">
             <button type="submit" class="button-large full-width">
-              Subscribe ($23 USD)
+              Log In as Member
             </button>
           </div>
-        </CreditCard>
-      </div>
 
-      <div v-if="membership.intent === 'login'">
-        <div class="field">
-          <label>Username / Email Address</label>
-          <input type="email" placeholder="you@email.com">
+            <div class="field">
+              <p class="hint align-center">
+                Not a member?
+                <a href="javascript:;" v-on:click="membership.intent = 'register'">Become a Member.</a>
+              </p>
+            </div>
         </div>
 
-        <div class="field">
-          <label>Password</label>
-          <input type="password">
+        <div v-if="membership.intent === 'renew'">
+          <CreditCard :handler="this">
+            <div class="field">
+              <button type="submit" class="button-large full-width">
+                Re-Subscribe ($23 USD)
+              </button>
+            </div>
+          </CreditCard>
         </div>
 
-        <div class="field">
-          <button type="submit" class="button-large full-width">
-            Log In as Member
-          </button>
-        </div>
-      </div>
+        <div v-if="membership.intent === 'support'">
+          <div class="field">
+            <label>Email Address</label>
+            <input type="email" placeholder="you@email.com">
+          </div>
 
-      <div v-if="membership.intent === 'renew'">
-        <CreditCard :handler="this">
+          <div class="field">
+            <label>What's on your mind?</label>
+            <textarea></textarea>
+          </div>
+
           <div class="field">
             <button type="submit" class="button-large full-width">
-              Re-Subscribe ($23 USD)
+              Send Message
             </button>
           </div>
-        </CreditCard>
-      </div>
-
-      <div v-if="membership.intent === 'support'">
-        <div class="field">
-          <label>Email Address</label>
-          <input type="email" placeholder="you@email.com">
         </div>
 
-        <div class="field">
-          <label>What's on your mind?</label>
-          <textarea></textarea>
+        <div v-if="membership.intent === 'password'">
+          <div class="field">
+            <label>Password</label>
+            <input type="password" placeholder="* * * * * * * *">
+          </div>
+
+          <div class="field">
+            <label>Confirm Password</label>
+            <input type="password" placeholder="* * * * * * * *">
+          </div>
+
+          <div class="field">
+            <button type="submit" class="button-large full-width">
+              Change Password
+            </button>
+          </div>
         </div>
 
-        <div class="field">
-          <button type="submit" class="button-large full-width">
-            Send Message
-          </button>
-        </div>
-      </div>
-
-      <div v-if="membership.intent === 'password'">
-        <div class="field">
-          <label>Password</label>
-          <input type="password">
-        </div>
-
-        <div class="field">
-          <label>Confirm Password</label>
-          <input type="password">
-        </div>
-
-        <div class="field">
-          <button type="submit" class="button-large full-width">
-            Change Password
-          </button>
-        </div>
-      </div>
-
-      <div v-if="membership.intent === 'logout'">
-        <div class="field">
-          <button type="submit" class="button-large full-width">
-            Log Out
-          </button>
+        <div v-if="membership.intent === 'logout'">
+          <div class="field">
+            <button type="submit" class="button-large full-width">
+              Log Out
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -108,13 +150,13 @@
 import CreditCard from '@/components/credit-card/component.vue';
 
 var INTENT_TITLES = {
-      register: 'Become a Member',
-      login: 'Login as Member',
-      renew: 'Renew Membership',
-      support: 'Member Support',
-      password: 'Change Member Password',
-      logout: 'Logout as Member',
-  };
+        register: 'New Membership',
+        login: 'Login as Member',
+        renew: 'Renew Membership',
+        support: 'Member Support',
+        password: 'Change Member Password',
+        logout: 'Logout as Member',
+    };
 
 export default {
   name: 'Membership',
@@ -130,6 +172,22 @@ export default {
   computed: {
     title() {
       return this.membership ? INTENT_TITLES[this.membership.intent] : 'Loading...';
+    },
+
+    pricing() {
+      return this.membership.feed.pricing || {
+        stripe: {
+          publishableKey: 'asdf',
+          price: 29,
+          currency: 'USD',
+          method: 'stripe'
+        },
+        bitcoin: {
+          price: 0.0001,
+          currency: 'USD',
+          method: 'bitcoin'
+        }
+      };
     }
   }
 };
