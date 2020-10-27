@@ -138,29 +138,31 @@
     <div v-if="subscriptionModalService" class="subscription-modal modal">
       <div class="overlay" v-on:click="subscriptionModalService = undefined"></div>
 
-      <div class="content">
-        <a href="javascript:;" v-on:click="subscriptionModalService = undefined" class="close">
-          &times;
-        </a>
+      <div class="content-wrapper">
+        <div class="content">
+          <a href="javascript:;" v-on:click="subscriptionModalService = undefined" class="close">
+            &times;
+          </a>
 
-        <h3>{{subscriptionModalService.name}}</h3>
+          <h3>{{subscriptionModalService.name}}</h3>
 
-        <p v-if="subscriptionModalService.description" v-html="subscriptionModalService.description"></p>
+          <p v-if="subscriptionModalService.description" v-html="subscriptionModalService.description"></p>
 
-        <CreditCard :handler="this" :submit="subscribeToService">
-          <p class="notice">
-            <span v-if="errorMessage" class="red" v-html="errorMessage"></span>
-            <span v-else>This is a one-time payment; it does NOT renew automatically.</span>
-          </p>
+          <CreditCard :handler="this" :submit="subscribeToService">
+            <p class="notice">
+              <span v-if="errorMessage" class="red" v-html="errorMessage"></span>
+              <span v-else>This is a one-time payment; it does NOT renew automatically.</span>
+            </p>
 
-          <button type="submit" :disabled="loading" class="button-large full-width">
-            <span v-if="loading">Loading...</span>
-            <span v-else>
-              <span v-if="subscriptionModalService && subscriptionModalService.data.token">Re-</span>Subscribe Now
-              (${{subscriptionModalService.pricing.stripe.price}} USD)
-            </span>
-          </button>
-        </CreditCard>
+            <button type="submit" :disabled="loading" class="button-large full-width">
+              <span v-if="loading">Loading...</span>
+              <span v-else>
+                <span v-if="subscriptionModalService && subscriptionModalService.data.token">Re-</span>Subscribe Now
+                (${{subscriptionModalService.pricing.stripe.price}} USD)
+              </span>
+            </button>
+          </CreditCard>
+        </div>
       </div>
     </div>
   </div>
