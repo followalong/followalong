@@ -86,6 +86,13 @@
         <li class="divider"></li>
 
         <li>
+            <router-link to="/services">
+              <font-awesome-icon icon="sitemap" />
+              Services
+            </router-link>
+        </li>
+
+        <li>
             <router-link to="/settings">
               <font-awesome-icon icon="cog" />
               Settings

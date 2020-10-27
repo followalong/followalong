@@ -15,6 +15,7 @@ import Item           from './views/Item.vue';
 import NewIdentity    from './views/Identities-New.vue';
 import Updates        from './views/Updates.vue';
 import Help           from './views/Help.vue';
+import Services       from './views/Services.vue';
 import Create         from './views/Create.vue';
 
 Vue.use(Router);
@@ -111,6 +112,12 @@ export default new Router({
       path: '/help',
       name: 'help',
       component: Help,
+      props: true
+    },
+    {
+      path: '/services',
+      name: 'services',
+      component: Services,
       props: true
     },
     {
