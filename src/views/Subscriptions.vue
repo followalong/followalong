@@ -25,7 +25,6 @@
 import Feed from '@/components/feed/component.vue';
 
 export default {
-  name: 'subscriptions',
   props: ['app'],
   components: {
     Feed

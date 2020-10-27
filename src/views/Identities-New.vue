@@ -39,7 +39,6 @@ import { Base64 }   from 'js-base64';
 import seed from '@/components/app/seed';
 
 export default {
-    name: 'subscriptions',
     props: ['app'],
     data() {
         return {

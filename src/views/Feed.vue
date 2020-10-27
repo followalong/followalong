@@ -121,7 +121,6 @@ import QuickSubscribe from '@/components/quick-subscribe/component.vue';
 import sorter         from '@/components/app/sorter';
 
 export default {
-  name: 'feed',
   props: ['app'],
   components: {
     Item,

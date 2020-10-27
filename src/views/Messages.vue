@@ -8,7 +8,6 @@
 
 <script>
 export default {
-  name: 'messages',
   props: ['identity']
 }
 </script>

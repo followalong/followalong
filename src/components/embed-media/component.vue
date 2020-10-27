@@ -23,7 +23,6 @@
 import methods  from '@/components/app/methods';
 
 export default {
-  name: 'EmbedMedia',
   props: ['app', 'item', 'autoplay', 'expanded'],
   computed: {
     klass() {

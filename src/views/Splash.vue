@@ -50,7 +50,6 @@
 
 <script>
 export default {
-    name: 'Splash',
     props: ['app']
 };
 </script>

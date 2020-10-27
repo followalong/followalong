@@ -21,7 +21,6 @@
 import Item      from '@/components/item/component.vue';
 
 export default {
-  name: 'feed',
   props: ['app'],
   components: {
     Item

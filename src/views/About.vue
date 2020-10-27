@@ -28,7 +28,6 @@
 import About from '@/components/about/component.vue';
 
 export default {
-  name: 'about',
   props: ['app'],
   components: {
     About

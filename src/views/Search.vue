@@ -198,7 +198,6 @@ function qChange() {
 }
 
 export default {
-  name: 'search',
   props: ['app'],
   components: {
     Item

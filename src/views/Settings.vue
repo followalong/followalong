@@ -151,7 +151,6 @@
 import {VueTabs, VTab} from 'vue-nav-tabs';
 
 export default {
-  name: 'settings',
   props: ['app'],
   components: {
     VueTabs,

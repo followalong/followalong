@@ -28,7 +28,6 @@
 import methods from '@/components/app/methods';
 
 export default {
-  name: 'feed',
   props: ['app', 'feed'],
   methods: {
     save: methods.save,

@@ -6,7 +6,6 @@
 
 <script>
 export default {
-  name: 'quick-subscribe',
   props: ['app', 'feed']
 };
 </script>

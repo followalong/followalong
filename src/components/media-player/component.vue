@@ -22,7 +22,6 @@ import methods  from '@/components/app/methods';
 import EmbedMedia from '@/components/embed-media/component.vue';
 
 export default {
-  name: 'MediaPlayer',
   components: {
     EmbedMedia
   },

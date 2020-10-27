@@ -59,7 +59,6 @@ var SERVER_TYPES = {
 };
 
 export default {
-  name: 'services',
   props: ['app'],
   components: {
     ServiceEditor,

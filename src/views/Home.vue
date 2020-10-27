@@ -34,7 +34,6 @@ var VERBS = ['watch', 'read', 'listen'],
     LOADING;
 
 export default {
-    name: 'home',
     props: ['app'],
     data() {
         return {

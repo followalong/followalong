@@ -136,7 +136,6 @@
 
 <script>
 export default {
-  name: 'Sidebar',
   props: ['app'],
   watch: {
     '$route' (to, from) {

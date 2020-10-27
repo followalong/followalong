@@ -175,7 +175,6 @@ import SERVICES   from '@/components/app/services';
 import CreditCard from '@/components/credit-card/component.vue';
 
 export default {
-  name: 'ServiceEditor',
   props: ['app', 'serverType', 'serverTypeKey'],
 
   components: {

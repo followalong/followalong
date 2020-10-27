@@ -14,7 +14,6 @@
 
 <script>
 export default {
-  name: 'help',
   props: ['app']
 };
 </script>

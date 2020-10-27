@@ -62,7 +62,6 @@ import ClickableMedia from '@/components/clickable-media/component.vue';
 import QuickSubscribe from '@/components/quick-subscribe/component.vue';
 
 export default {
-  name: 'sidebar',
   props: ['app', 'item', 'showContent'],
   components: {
     ClickableMedia,

@@ -26,7 +26,6 @@ function cachedLoadExternal(url, done) {
 }
 
 export default {
-  name: 'credit-card',
   props: ['submit', 'handler'],
   mounted() {
     var _ = this;
