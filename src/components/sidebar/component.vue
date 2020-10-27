@@ -56,15 +56,6 @@
           </router-link>
         </li>
 
-        <!-- <li>
-            <router-link to="/create">
-              <font-awesome-icon icon="feather" />
-              Create
-            </router-link>
-        </li> -->
-
-        <li class="divider"></li>
-
         <li v-if="app.saved.length">
             <router-link to="/saved">
               <font-awesome-icon icon="save" />
@@ -84,6 +75,15 @@
               </span>
             </router-link>
         </li>
+
+        <!-- <li>
+            <router-link to="/create">
+              <font-awesome-icon icon="feather" />
+              Create
+            </router-link>
+        </li> -->
+
+        <li class="divider"></li>
 
         <li>
             <router-link to="/settings">
