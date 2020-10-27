@@ -1,5 +1,5 @@
 import AWS     from 'aws-sdk';
-import uniqId       from 'uniq-id';
+import uniqId  from 'uniq-id';
 
 function xmlRequest(app, identity, data, done) {
     if (!data.url) return done('No URL supplied.');

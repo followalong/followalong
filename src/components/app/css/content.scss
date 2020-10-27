@@ -729,6 +729,10 @@ hr {
 
 .is-nonmember, .is-nonmember svg.i {
     color: $dark-gray !important;
+
+    &:hover {
+        color: $blue !important;
+    }
 }
 
 .is-nonmember-background {
