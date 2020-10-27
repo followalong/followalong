@@ -14,7 +14,8 @@ import Saved          from './views/Saved.vue';
 import Item           from './views/Item.vue';
 import NewIdentity    from './views/Identities-New.vue';
 import Updates        from './views/Updates.vue';
-import Create          from './views/Create.vue';
+import Help           from './views/Help.vue';
+import Create         from './views/Create.vue';
 
 Vue.use(Router);
 
@@ -104,6 +105,12 @@ export default new Router({
       path: '/create',
       name: 'create',
       component: Create,
+      props: true
+    },
+    {
+      path: '/help',
+      name: 'help',
+      component: Help,
       props: true
     },
     {

@@ -79,6 +79,13 @@
             </router-link>
         </li>
 
+        <li>
+            <router-link to="/help">
+              <font-awesome-icon icon="question-circle" />
+              Help
+            </router-link>
+        </li>
+
         <li class="divider mobile-only"></li>
 
         <li v-for="i in app.nonIdentities" :key="i.id" class="mobile-only">

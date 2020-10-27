@@ -166,15 +166,6 @@
               </div>
             </div>
           </v-tab>
-          <v-tab title="Help">
-            <div class="field">
-              <p>
-                Need some help?
-                Email <a href="mailto:followalong@protonmail.com" target="_blank" class="link">followalong@protonmail.com</a>.
-                We respond to mail once a day.
-              </p>
-            </div>
-          </v-tab>
       </vue-tabs>
     </div>
   </div>
