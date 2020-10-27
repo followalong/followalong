@@ -112,4 +112,8 @@
             }
         }
     }
+
+    &:first-child .section.info-section {
+        margin-top: 0;
+    }
 }

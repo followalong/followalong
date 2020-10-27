@@ -1,5 +1,18 @@
 <template>
   <div :class="'sidebar ' + app.sidebarClass">
+    <div class="section info-section" v-if="app.hintIsShown('sidebar-about')">
+      <h3>
+        What is FollowAlong?
+        <a href="javascript:;" class="float-right close-hint" v-on:click="app.hideHint('sidebar-about')">&times;</a>
+      </h3>
+      <p>
+        A social network where voices <em>can't</em> be censored and your data is kept safe with <em>you</em>.
+        <router-link to="/splash" class="primary">
+          Read more &raquo;
+        </router-link>
+      </p>
+    </div>
+
     <ul>
         <li>
           <router-link to="/">
@@ -103,19 +116,6 @@
 
         <li class="divider"></li>
     </ul>
-
-    <div class="section info-section" v-if="app.hintIsShown('sidebar-about')">
-      <h3>
-        What is FollowAlong?
-        <a href="javascript:;" class="float-right close-hint" v-on:click="app.hideHint('sidebar-about')">&times;</a>
-      </h3>
-      <p>
-        A social network where voices <em>can't</em> be censored and your data is kept safe with <em>you</em>.
-        <router-link to="/splash" class="primary">
-          Read more &raquo;
-        </router-link>
-      </p>
-    </div>
 
     <div class="section">
       <h3>
