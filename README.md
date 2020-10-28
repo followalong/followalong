@@ -1,6 +1,14 @@
 # FollowAlong
 
 ## Todo
+
+- Better media player
+- Make Services approachable
+- Better search
+- Simplify Local service in Settings (use password / store password)
+- Simplify account loading, fetcher
+
+## Past Todo
 - Public
   - when app.subscribe, prompt login if POSSIBLE
     - Optional Login
@@ -39,27 +47,27 @@
 
 ## Project setup
 ```
-npm install
+yarn
 ```
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+yarn serve
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
+yarn build
 ```
 
 ### Run your tests
 ```
-npm run test
+yarn test:unit
 ```
 
 ### Lints and fixes files
 ```
-npm run lint
+yarn lint:fix
 ```
 
 ### Customize configuration
