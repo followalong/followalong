@@ -4,7 +4,7 @@ const fs = require('fs')
 const changelog = require('../changelog.json')
 const version = Object.keys(changelog)[0]
 
-(async () => {
+const deploy = async (target, version) => {
   try {
     await execa('git', ['checkout', '--orphan', 'gh-pages'])
 
@@ -12,15 +12,13 @@ const version = Object.keys(changelog)[0]
 
     await execa('npm', ['run', 'build'])
 
-    const folderName = fs.existsSync('dist') ? 'dist' : 'build'
-
-    await execa('git', ['--work-tree', folderName, 'add', '--all'])
-    await execa('git', ['--work-tree', folderName, 'commit', '-m', `Publish ${version}: ${changelog[version]}`])
+    await execa('git', ['--work-tree', target, 'add', '--all'])
+    await execa('git', ['--work-tree', target, 'commit', '-m', `Publish ${version}`])
 
     console.log('Pushing to gh-pages...')
 
     await execa('git', ['push', 'origin', 'HEAD:gh-pages', '--force'])
-    await execa('rm', ['-r', folderName])
+    await execa('rm', ['-r', target])
     await execa('rm', ['-rf', '.git/gc.log'])
     await execa('git', ['checkout', '-f', 'master'])
     await execa('git', ['branch', '-D', 'gh-pages'])
@@ -30,4 +28,6 @@ const version = Object.keys(changelog)[0]
     console.log(e.message)
     process.exit(1)
   }
-})()
+}
+
+deploy('dist', `${version}: ${changelog[version]}`)
