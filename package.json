@@ -3,10 +3,11 @@
   "version": "1.2.3",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "deploy": "node scripts/deploy.js",
     "lint": "eslint src --ext .js,.vue",
-    "lint:fix": "eslint src --ext .js,.vue --fix"
+    "lint:fix": "eslint src --ext .js,.vue --fix",
+    "serve": "vue-cli-service serve"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.17",
