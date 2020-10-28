@@ -1,52 +1,241 @@
 <template>
-  <li>
-    <button v-on:click="fetch()" :class="feed.loading ? 'loading' : ''">
-      <span v-if="feed.loading">Loading...</span>
-      <span v-else>Fetch Now</span>
-    </button>
-    <button v-on:click="pause()" :class="feed.paused ? 'button-gray' : ''">
-      <span v-if="feed.paused">&#10074;&#10074;</span>
-      <span v-else>&#9658;</span>
-    </button>
-    <h2>
-      <router-link :to="{ name: 'feed', params: { feed_url: feed.url } }">
-        {{feed.name}}
-      </router-link>
-      <a href="javascript:;" class="hint remove" v-on:click="app.unsubscribe(feed)">
-        Unsubscribe
-      </a>
-    </h2>
-    <p v-if="feed.meta && feed.meta.description" class="description">{{feed.meta.description}}</p>
-    <p v-if="feed.error" class="description red">{{feed.error}}</p>
-    <p>
-      <a :href="feed.url" class="hint">Source: {{feed.url}}</a>
-    </p>
-  </li>
+  <div v-if="feed">
+    <div class="feed wide-feed">
+      <div class="title-wrapper">
+        <h1>
+          <a
+            href="javascript:;"
+            class="float-right"
+            @click="showMenu = !showMenu"
+          >
+            <font-awesome-icon
+              icon="bars"
+              class="i"
+            />
+          </a>
+
+          <QuickSubscribe
+            :app="app"
+            :feed="feed"
+            class="float-right"
+          />
+
+          <router-link :to="{ name: 'feed', params: { feed_url: feed.url } }">
+            {{ feed.name }}
+          </router-link>
+
+          <font-awesome-icon
+            v-if="feed.loading"
+            icon="spinner"
+            spin
+            class="i"
+          />
+
+          <a
+            v-else
+            href="javascript:;"
+            class="i"
+            @click="pause()"
+          >
+            <span v-if="feed.paused">&#10074;&#10074;</span>
+            <span v-else>&#9658;</span>
+          </a>
+        </h1>
+
+        <!-- <a :href="feed.url" class="hint">
+          {{feed.url}}
+        </a> -->
+
+        <ul
+          v-if="showMenu"
+          class="actions"
+        >
+          <li v-if="unreadItems.length">
+            <a
+              href="javascript:;"
+              @click="catchFeedUp()"
+            >
+              Catch Me Up!
+            </a>
+          </li>
+          <li>
+            <a
+              href="javascript:;"
+              @click="fetch()"
+            >
+              <span v-if="feed.loading">Fetching...</span>
+              <span v-else>Fetch Now</span>
+            </a>
+          </li>
+          <li v-if="app.isMemberable(feed) && !app.isMember(feed)">
+            <a
+              href="javascript:;"
+              @click="showMenu = false; app.editMembership(feed, 'register')"
+            >
+              Become a Member
+            </a>
+          </li>
+          <li v-if="app.isMemberable(feed) && !app.isMember(feed)">
+            <a
+              href="javascript:;"
+              @click="showMenu = false; app.editMembership(feed, 'login')"
+            >
+              Login as Member
+            </a>
+          </li>
+          <li v-if="app.isMember(feed)">
+            <a
+              href="javascript:;"
+              @click="showMenu = false; app.editMembership(feed, 'renew')"
+            >
+              Renew Membership
+            </a>
+          </li>
+          <li v-if=" app.isHelpable(feed)">
+            <a
+              href="javascript:;"
+              @click="showMenu = false; app.editMembership(feed, 'support')"
+            >
+              Member Support
+            </a>
+          </li>
+          <li v-if="app.isMember(feed)">
+            <a
+              href="javascript:;"
+              @click="showMenu = false; app.editMembership(feed, 'password')"
+            >
+              Change Member Password
+            </a>
+          </li>
+          <li v-if="app.isMember(feed)">
+            <a
+              href="javascript:;"
+              @click="showMenu = false; app.editMembership(feed, 'logout')"
+            >
+              Logout as Member
+            </a>
+          </li>
+          <li>
+            <a
+              href="javascript:;"
+              @click="showMenu = false; app.unsubscribe(feed, true)"
+            >
+              Unsubscribe
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <ul class="items">
+        <li v-if="items.length === 0">
+          <h3>You're all caught up!</h3>
+          <p>
+            If you want to be able to see more "history", visit the <router-link
+              to="/settings"
+              class="link"
+            >
+              Settings
+            </router-link> page and increase the maximum number of items to keep.
+          </p>
+        </li>
+
+        <!-- <li v-if="app.isMemberExpired(feed)" :class="'warning ' + app.membershipClass(feed) + '-background'">
+          <p>
+            Your membership has expired.
+          </p>
+
+          <p>
+            <a href="javascript:;" v-on:click="app.editMembership(feed, 'register')">
+              Renew Now
+            </a>
+
+            &nbsp; <span class="hint inline">-</span> &nbsp;
+
+            <a href="javascript:;">
+              Cancel
+            </a>
+          </p>
+        </li> -->
+
+        <Item
+          v-for="item in items"
+          :key="item.guid"
+          :item="item"
+          :app="app"
+          show-content="true"
+        />
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script>
-import methods from '@/components/app/methods';
+import Item from '@/components/item/li.vue'
+import QuickSubscribe from '@/components/quick-subscribe/component.vue'
+import sorter from '@/components/app/sorter'
 
 export default {
-  props: ['app', 'feed'],
+  components: {
+    Item,
+    QuickSubscribe
+  },
+  props: ['app'],
+  data () {
+    return {
+      showMenu: false
+    }
+  },
+  computed: {
+    feed () {
+      var _ = this
+
+      if (!_.app.identity.feeds) return
+
+      return _.app.identity.feeds.find(function (feed) {
+        return feed.url + '' === _.$route.params.feed_url + ''
+      })
+    },
+    unreadItems () {
+      var _ = this
+
+      return _.items.filter(function (item) {
+        return !item.isRead
+      })
+    },
+    items () {
+      var _ = this
+
+      return (_.app.newsfeed || []).filter(function (item) {
+        return item.feedURL === _.feed.url
+      }).sort(sorter(_.app.identity))
+    }
+  },
   methods: {
-    save: methods.save,
+    catchFeedUp () {
+      var _ = this
 
-    fetch() {
-      var _ = this;
+      for (var i = _.items.length - 1; i >= 0; i--) {
+        _.items[i].isRead = true
+      }
 
-      _.app.fetchFeed(_.app.identity, _.feed, Date.now(), true, function() {
-        _.app.save();
-      });
+      _.app.save()
     },
 
-    pause() {
-      var _ = this;
+    pause () {
+      var _ = this
 
-      _.feed._updatedAt = Date.now();
-      _.feed.paused = !_.feed.paused;
-      _.app.save();
+      _.feed._updatedAt = Date.now()
+      _.feed.paused = !_.feed.paused
+      _.app.save()
+    },
+
+    fetch () {
+      var _ = this
+
+      _.app.fetchFeed(_.app.identity, _.feed, Date.now(), true, function () {
+        _.app.save()
+      })
     }
   }
-};
+}
 </script>

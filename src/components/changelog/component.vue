@@ -1,11 +1,14 @@
 <template>
   <div class="narrow-container">
     <div class="title-wrapper">
-      <router-link to="/about" class="button button-gray button-small float-right">
+      <router-link
+        to="/about"
+        class="button button-gray button-small float-right"
+      >
         What is FollowAlong?
       </router-link>
 
-      <h1>Changeblog</h1>
+      <h1>Changelog</h1>
     </div>
 
     <p class="highlight">
@@ -15,10 +18,13 @@
       Ultimately, FollowAlong will be released to open source once we settle on a more stable implementation.
     </p>
 
-    <div v-for="(summary, version) in app.changelog" :key="version">
+    <div
+      v-for="(summary, version) in app.changelog"
+      :key="version"
+    >
       <p>
-        <strong>Version {{version}}</strong><br>
-        {{summary}}
+        <strong>Version {{ version }}</strong><br>
+        {{ summary }}
       </p>
 
       <hr>
@@ -29,5 +35,5 @@
 <script>
 export default {
   props: ['app']
-};
+}
 </script>

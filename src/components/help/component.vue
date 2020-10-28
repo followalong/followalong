@@ -6,7 +6,11 @@
 
     <p>
       Need some help?
-      Email <a href="mailto:followalong@protonmail.com" target="_blank" class="link">followalong@protonmail.com</a>.
+      Email <a
+        href="mailto:followalong@protonmail.com"
+        target="_blank"
+        class="link"
+      >followalong@protonmail.com</a>.
       We respond to mail once a day.
     </p>
   </div>
@@ -15,5 +19,5 @@
 <script>
 export default {
   props: ['app']
-};
+}
 </script>

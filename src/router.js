@@ -1,136 +1,136 @@
-import Vue            from 'vue';
-import Router         from 'vue-router';
-import Home           from './views/Home.vue';
-import Me             from './views/Me.vue';
-import About          from './views/About.vue';
-import Splash         from './views/Splash.vue';
-import Messages       from './views/Messages.vue';
-import Discover       from './views/Discover.vue';
-import Search         from './views/Search.vue';
-import Settings       from './views/Settings.vue';
-import Feed           from './views/Feed.vue';
-import Subscriptions  from './views/Subscriptions.vue';
-import Saved          from './views/Saved.vue';
-import Item           from './views/Item.vue';
-import NewIdentity    from './views/Identities-New.vue';
-import Updates        from './views/Updates.vue';
-import Help           from './views/Help.vue';
-import Services       from './views/Services.vue';
-import Create         from './views/Create.vue';
+import { createRouter, createWebHistory } from 'vue-router'
+import About from './components/about/component.vue'
+import Create from './components/create/component.vue'
+import Discover from './components/discover/component.vue'
+import Feed from './components/feed/component.vue'
+import Help from './components/help/component.vue'
+import Home from './components/home/component.vue'
+import Item from './components/item/component.vue'
+import Me from './components/me/component.vue'
+import Messages from './components/messages/component.vue'
+import IdentitiesNew from './components/identities/new/component.vue'
+import Saved from './components/saved/component.vue'
+import Search from './components/search/component.vue'
+import Services from './components/services/component.vue'
+import Settings from './components/settings/component.vue'
+import Splash from './components/splash/component.vue'
+import Subscriptions from './components/subscriptions/component.vue'
+import Changelog from './components/changelog/component.vue'
 
-Vue.use(Router);
+const routes = [
+  {
+    path: '/me',
+    name: 'me',
+    component: Me,
+    props: true
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: About,
+    props: true
+  },
+  {
+    path: '/splash',
+    name: 'splash',
+    component: Splash,
+    props: true
+  },
+  {
+    path: '/messages',
+    name: 'messages',
+    component: Messages,
+    props: true
+  },
+  {
+    path: '/discover',
+    name: 'discover',
+    component: Discover,
+    props: true
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: Search,
+    props: true
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: Settings,
+    props: true
+  },
+  {
+    path: '/subscriptions',
+    name: 'subscriptions',
+    component: Subscriptions,
+    props: true
+  },
+  {
+    path: '/saved',
+    name: 'saved',
+    component: Saved,
+    props: true
+  },
+  {
+    path: '/changelog',
+    name: 'Changelog',
+    component: Changelog,
+    props: true
+  },
+  {
+    path: '/identities/new',
+    name: 'identities/new',
+    component: IdentitiesNew,
+    props: true
+  },
+  {
+    path: '/feeds/:feed_url',
+    name: 'feed',
+    component: Feed,
+    props: true
+  },
+  {
+    path: '/feeds/:feed_url/:guid',
+    name: 'item',
+    component: Item,
+    props: true
+  },
+  {
+    path: '/create',
+    name: 'create',
+    component: Create,
+    props: true
+  },
+  {
+    path: '/help',
+    name: 'help',
+    component: Help,
+    props: true
+  },
+  {
+    path: '/services',
+    name: 'services',
+    component: Services,
+    props: true
+  },
+  {
+    path: '/:media_verb',
+    name: 'media_verb_home',
+    component: Home,
+    props: true
+  },
+  {
+    path: '/',
+    name: 'home',
+    component: Home,
+    props: true
+  }
+]
 
-export default new Router({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes: [
-    {
-      path: '/me',
-      name: 'me',
-      component: Me,
-      props: true
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: About,
-      props: true
-    },
-    {
-      path: '/splash',
-      name: 'splash',
-      component: Splash,
-      props: true
-    },
-    {
-      path: '/messages',
-      name: 'messages',
-      component: Messages,
-      props: true
-    },
-    {
-      path: '/discover',
-      name: 'discover',
-      component: Discover,
-      props: true
-    },
-    {
-      path: '/search',
-      name: 'search',
-      component: Search,
-      props: true
-    },
-    {
-      path: '/settings',
-      name: 'settings',
-      component: Settings,
-      props: true
-    },
-    {
-      path: '/subscriptions',
-      name: 'subscriptions',
-      component: Subscriptions,
-      props: true
-    },
-    {
-      path: '/saved',
-      name: 'saved',
-      component: Saved,
-      props: true
-    },
-    {
-      path: '/updates',
-      name: 'updates',
-      component: Updates,
-      props: true
-    },
-    {
-      path: '/identities/new',
-      name: 'identities/new',
-      component: NewIdentity,
-      props: true
-    },
-    {
-      path: '/feeds/:feed_url',
-      name: 'feed',
-      component: Feed,
-      props: true
-    },
-    {
-      path: '/feeds/:feed_url/:guid',
-      name: 'item',
-      component: Item,
-      props: true
-    },
-    {
-      path: '/create',
-      name: 'create',
-      component: Create,
-      props: true
-    },
-    {
-      path: '/help',
-      name: 'help',
-      component: Help,
-      props: true
-    },
-    {
-      path: '/services',
-      name: 'services',
-      component: Services,
-      props: true
-    },
-    {
-      path: '/:media_verb',
-      name: 'media_verb_home',
-      component: Home,
-      props: true
-    },
-    {
-      path: '/',
-      name: 'home',
-      component: Home,
-      props: true
-    }
-  ]
+const router = createRouter({
+  history: createWebHistory(),
+  routes
 })
+
+export default router

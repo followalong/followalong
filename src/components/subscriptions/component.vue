@@ -1,7 +1,10 @@
 <template>
   <div class="feeds">
     <div class="title-wrapper">
-      <button :class="'float-right ' + (app.loading ? 'loading' : '')" v-on:click="app.fetchAllFeeds(app.identity, true)">
+      <button
+        :class="'float-right ' + (app.loading ? 'loading' : '')"
+        @click="app.fetchAllFeeds(app.identity, true)"
+      >
         <span v-if="app.loading">Loading...</span>
         <span v-else>Fetch All Feeds</span>
       </button>
@@ -10,24 +13,23 @@
     </div>
 
     <ul>
-      <li
-        is="feed"
+      <Feed
         v-for="feed in app.feeds"
         :key="feed.url"
         :feed="feed"
         :app="app"
-      ></li>
+      />
     </ul>
   </div>
 </template>
 
 <script>
-import Feed from '@/components/feed/component.vue';
+import Feed from '@/components/feed/li.vue'
 
 export default {
-  props: ['app'],
   components: {
     Feed
-  }
-};
+  },
+  props: ['app']
+}
 </script>

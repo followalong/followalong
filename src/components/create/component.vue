@@ -1,6 +1,9 @@
 <template>
   <div class="feed home-feed wide-feed">
-    <router-link to="/about" class="button button-gray button-small float-right">
+    <router-link
+      to="/about"
+      class="button button-gray button-small float-right"
+    >
       Add New
     </router-link>
 
@@ -18,5 +21,5 @@
 <script>
 export default {
   props: ['app']
-};
+}
 </script>

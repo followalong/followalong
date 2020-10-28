@@ -5,30 +5,29 @@
     </div>
 
     <ul class="items">
-      <li
-        is="item"
+      <Item
         v-for="item in items"
         :key="item.guid"
         :item="item"
         :app="app"
-        showContent="true"
-      ></li>
+        show-content="true"
+      />
     </ul>
   </div>
 </template>
 
 <script>
-import Item      from '@/components/item/component.vue';
+import Item from '@/components/item/li.vue'
 
 export default {
-  props: ['app'],
   components: {
     Item
   },
+  props: ['app'],
   computed: {
-    items() {
-      return this.app.saved;
+    items () {
+      return this.app.saved
     }
   }
-};
+}
 </script>

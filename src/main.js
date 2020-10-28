@@ -1,18 +1,14 @@
-import Vue from 'vue';
-import App from './components/app/component.vue';
-import router from './router';
-import vueScrollBehavior from 'vue-scroll-behavior';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSpinner, faHeadphonesAlt, faBookOpen, faFilm, faDatabase, faSave, faCog, faLink, faBars, faSync, faTrash, faExpand, faCompress, faIgloo, faFeather, faProjectDiagram, faCopy, faDownload, faPause, faDollarSign, faLock, faIdCardAlt, faQuestionCircle, faSitemap } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { createApp } from 'vue'
+import App from './components/app/component.vue'
+import router from './router'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSpinner, faHeadphonesAlt, faBookOpen, faFilm, faDatabase, faSave, faCog, faLink, faBars, faSync, faTrash, faExpand, faCompress, faIgloo, faFeather, faProjectDiagram, faCopy, faDownload, faPause, faDollarSign, faLock, faIdCardAlt, faQuestionCircle, faSitemap } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faSpinner, faHeadphonesAlt, faBookOpen, faFilm, faDatabase, faSave, faCog, faLink, faBars, faSync, faTrash, faExpand, faCompress, faIgloo, faFeather, faProjectDiagram, faCopy, faDownload, faPause, faDollarSign, faLock, faIdCardAlt, faQuestionCircle, faSitemap);
+library.add(faSpinner, faHeadphonesAlt, faBookOpen, faFilm, faDatabase, faSave, faCog, faLink, faBars, faSync, faTrash, faExpand, faCompress, faIgloo, faFeather, faProjectDiagram, faCopy, faDownload, faPause, faDollarSign, faLock, faIdCardAlt, faQuestionCircle, faSitemap)
 
-Vue.config.productionTip = false;
-Vue.use(vueScrollBehavior, { router: router });
-Vue.component('font-awesome-icon', FontAwesomeIcon);
+const app = createApp(App)
 
-new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app');
+app.component('FontAwesomeIcon', FontAwesomeIcon)
+
+app.use(router).mount('#app')

@@ -1,7 +1,7 @@
 <template>
   <div class="me">
     <div class="title-wrapper">
-        <h1>Me as {{identity.name}}.</h1>
+      <h1>Me as {{ identity.name }}.</h1>
     </div>
     <p>My posts, edit my profile.</p>
   </div>
@@ -10,5 +10,5 @@
 <script>
 export default {
   props: ['identity']
-};
+}
 </script>

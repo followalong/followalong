@@ -1,78 +1,134 @@
 <template>
-  <li v-if="item && item.feed" :class="item.isRead ? 'read' : ''">
-    <a href="javascript:;" class="check" v-on:click="app.read(item)">&check;</a>
+  <div
+    v-if="item && item.feed"
+    class="single-item"
+  >
+    <EmbedMedia
+      v-if="app.hasMedia(item)"
+      :item="item"
+      :app="app"
+      :autoplay="true"
+    />
 
-    <h3>
-      <router-link :to="{ name: 'item', params: { feed_url: item.feed.url, guid: item.guid } }">
-        {{ item.title }}
-      </router-link>
-    </h3>
-
-    <div class="feed-meta">
-      <router-link :to="{ name: 'feed', params: { feed_url: item.feed.url } }" class="feed-name">
-        <span v-if="item.author && item.author !== item.feed.name">
-          {{item.author}} @
-        </span>
-        {{item.feed.name}}
-      </router-link>
-
-      &mdash;
-
-      <span :title="item.pubDate" v-if="item.pubDate" class="feed-name">{{dateFormat(item.pubDate, app.now)}}</span>
-
-      &nbsp; <QuickSubscribe :app="app" :feed="item.feed" />
-    </div>
-
-    <div v-if="showContent">
-      <ClickableMedia :item="item" :app="app" v-if="app.hasMedia(item)" />
-
-      <div v-if="item.content && item.content.length">
-        <div class="description">
-          <div v-if="!isExpanded && item.content.length > characterLimit">
-            <div v-html="app.prepDescription(item, characterLimit, '...')"></div>
-            <button class="button-gray" v-on:click="isExpanded = !isExpanded">
-              Read More
-            </button>
-          </div>
-
-          <div v-else>
-            <div v-if="item.content" v-html="app.blankifyLinks(item.content)"></div>
-          </div>
-        </div>
+    <div class="feed">
+      <div class="title-wrapper">
+        <h1>
+          <a :href="item.link">{{ item.title }}</a>
+        </h1>
       </div>
 
-      <p class="hint float-right">
-        <a href="javascript:;" v-on:click="app.saveForLater(item)">
-          <font-awesome-icon icon="save" :class="item.isSaved ? 'selected' : ''" />
+      <h3>
+        <router-link
+          :to="{ name: 'feed', params: { feed_url: item.feed.url } }"
+          class="feed-name"
+        >
+          <span v-if="item.author && item.author !== item.feed.name">
+            {{ item.author }} @
+          </span>
+          {{ item.feed.name }}
+        </router-link>
+
+        &mdash;
+
+        <span
+          v-if="item.pubDate"
+          :title="item.pubDate"
+          class="feed-name"
+        >{{ app.dateFormat(item.pubDate, app.now) }}</span>
+      </h3>
+
+      <div
+        v-if="item.content"
+        class="description"
+        v-html="app.blankifyLinks(item.content)"
+      />
+
+      <div style="margin-top: 20px;">
+        <a
+          :href="item.link"
+          class="button"
+          target="_blank"
+        >
+          View Source
         </a>
 
-        <a :href="item.link" target="_blank" v-on:click="app.read(item, true)">
-          <font-awesome-icon icon="link" />
-        </a>
-      </p>
+        &nbsp;
 
-      <p class="hint">Comments are closed.</p>
+        <a
+          href="javascript:;"
+          :class="'button' + (item.isSaved ? '' : ' button-gray')"
+          @click="app.saveForLater(item)"
+        >
+          Save<span v-if="item.isSaved">d</span>
+        </a>
+
+        &nbsp;
+
+        <a
+          href="javascript:;"
+          class="button button-gray"
+          @click="app.read(item)"
+        >
+          Mark As <span v-if="item.isRead">Unread</span><span v-else>Read</span>
+        </a>
+      </div>
     </div>
-  </li>
+    <div class="related-sidebar">
+      <h2>What's Next?</h2>
+      <ul class="related">
+        <Item
+          v-for="i in related"
+          :key="i.guid"
+          :item="i"
+          :app="app"
+        />
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script>
-import methods from '@/components/app/methods';
-import ClickableMedia from '@/components/clickable-media/component.vue';
-import QuickSubscribe from '@/components/quick-subscribe/component.vue';
+import Item from '@/components/item/li.vue'
+import EmbedMedia from '@/components/embed-media/component.vue'
 
 export default {
-  props: ['app', 'item', 'showContent'],
   components: {
-    ClickableMedia,
-    QuickSubscribe
+    Item,
+    EmbedMedia
   },
-  data() {
-    return {
-      characterLimit: 450,
-      isExpanded: false
-    };
+  props: ['app'],
+  computed: {
+    related () {
+      var _ = this
+
+      return _.app.newsfeed.filter(function (i) {
+        return i !== _.item
+      }).slice(0, 7)
+    },
+
+    item () {
+      var _ = this
+
+      return (_.app.identity.items || []).find(function (item) {
+        return item.guid + '' === _.$route.params.guid + ''
+      })
+    }
   },
-  methods
-};
+  watch: {
+    'item.guid' () {
+      var _ = this
+
+      if (_.item) {
+        _.app.read(_.item, true)
+      }
+    }
+  },
+  mounted () {
+    var _ = this
+
+    if (_.item) {
+      _.app.read(_.item, true)
+    }
+  }
+}
 </script>

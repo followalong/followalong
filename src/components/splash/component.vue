@@ -17,21 +17,27 @@
       </p>
 
       <ul class="list">
-        <li>You own <em>and</em> control <em>all</em> your data.</li>
-        <li>You can say <em>anything</em> and follow <em>anyone</em> &mdash; censorship is virtually impossible.</li>
+        <li>Follow blogs, YouTube channels, calendars, participate in groups, and anything else with an RSS-based feed.</li>
+        <li>Because you interact with your feeds <em>directly</em> &mdash; censorship is virtually impossible.</li>
+        <li>Easily donate or subscribe to the feeds you follow.</li>
+        <li>You own <em>and</em> control <em>all</em> your data &mdash; it stays in-browser.</li>
         <li>A less-addictive interface hides the noise and focuses your attention.</li>
-        <li>Follow blogs, YouTube channels, and any other RSS-based feed.</li>
-        <li>Easily donate, subscribe, and support the people you follow &mdash; directly.</li>
         <li>FollowAlong works offline so you can read articles on the go!</li>
         <li>
-          <router-link to="/about" class="link">
+          <router-link
+            to="/about"
+            class="link"
+          >
             Read more about the technical details.
           </router-link>
         </li>
         <li>
           Or...
-          <router-link to="/" class="link">
-            Get Started!
+          <router-link
+            to="/"
+            class="link"
+          >
+            dig in!
           </router-link>
         </li>
       </ul>
@@ -39,7 +45,11 @@
       <br><br><br><br><br>
 
       <div class="first-loading">
-        <router-link to="/" class="button button-large" :disabled="app.loading">
+        <router-link
+          to="/"
+          class="button button-large"
+          :disabled="app.loading"
+        >
           <span v-if="app.loading">Loading Feeds...</span>
           <span v-else>Continue to FollowAlong! &nbsp; &raquo;</span>
         </router-link>
@@ -50,6 +60,6 @@
 
 <script>
 export default {
-    props: ['app']
-};
+  props: ['app']
+}
 </script>
