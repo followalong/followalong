@@ -676,7 +676,7 @@ var methods = {
       async.eachParallel(keys || [], function (id, next) {
         if (id === 'hints') {
           _.store.getItem(id, function (err, value) {
-            _.app.hints = value
+            _.app.hints = JSON.parse(value || '')
             next()
           })
         } else if (id.slice(0, 4) !== 'key-') {
@@ -720,7 +720,7 @@ var methods = {
     _.app.hints.push(hint)
     _.app.store.setItem(
       'hints',
-      _.app.hints
+      JSON.stringify(_.app.hints)
     )
   },
 
