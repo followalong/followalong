@@ -12,22 +12,17 @@ Stripe.api_key = ENV['stripe_api_key']
 
 class FollowAlong
   TIMEOUT = 5
-  ALLOWED_METHODS = %w[rss subscribe] # sync publish search media
+  ALLOWED_METHODS = %w(rss subscribe).freeze # sync publish search media
 
-  attr_reader :event, :context
-
-  def initialize(event = {}, context = {})
-    @event = event
-    @context = context
-  end
-
-  def run
-    if ALLOWED_METHODS.include? event['action']
-      send event['action']
+  def run(action, data)
+    if ALLOWED_METHODS.include? action
+      send action, data
     else
       { status: 403, body: 'Unauthorized' }
     end
   end
+
+  private
 
   # def sync
   #   { body: 'Saved.' }
@@ -35,6 +30,41 @@ class FollowAlong
 
   def s3
     @s3 ||= Aws::S3::Resource.new
+  end
+
+  def subscribe(data = {})
+    metadata = {
+      token: SecureRandom.urlsafe_base64(32),
+      expiry: (Date.today + 366).to_s,
+    }
+
+    accounts = read_accounts
+    accounts[metadata[:token]] = metadata[:expiry]
+    write_accounts accounts
+
+    Stripe::Charge.create(
+      amount: 2900,
+      currency: 'usd',
+      description: '1-Year Unlimited Access',
+      source: data['token'],
+      metadata: metadata
+    )
+
+    {
+      status: 200,
+      headers: {},
+      body: metadata,
+    }
+  rescue => e
+    {
+      status: 401,
+      headers: {},
+      body: e.message,
+    }
+  end
+
+  def rss(data = {})
+    perform_request data
   end
 
   def accounts
@@ -45,102 +75,63 @@ class FollowAlong
     JSON.parse accounts.get.body.read
   end
 
-  def write_accounts(data)
+  def write_accounts(data = {})
     accounts.put(
       acl: 'private',
       body: data.to_json
     )
   end
 
-  def subscribe
-    begin
-      metadata = {
-          token: SecureRandom.urlsafe_base64(32),
-          expiry: (Date.today + 366).to_s
-      }
-
-      accounts = read_accounts
-      accounts[metadata[:token]] = metadata[:expiry]
-      write_accounts accounts
-
-      Stripe::Charge.create({
-          amount: 2900,
-          currency: 'usd',
-          description: '1-Year Unlimited Access',
-          source: event['token'],
-          metadata: metadata
-      })
-
-      {
-        status: 200,
-        headers: {},
-        body: metadata
-      }
-    rescue => e
-      {
-        status: 401,
-        headers: {},
-        body: e.message
-      }
-    end
-  end
-
-  def rss
-    perform_request
-  end
-
-private
-
-  def perform_request(limit = 5)
+  def perform_request(data = {}, limit = 5)
     return { status: 400, body: 'HTTP redirect too deep' } if limit == 0
 
-    url = event['url']
+    url = data['url']
     url = Base64.decode64 url if url[0..3] != 'http'
     uri = URI url
 
-    if "#{event['method']}".downcase == 'post'
-      req = Net::HTTP::Post.new(uri, event)
-    else
-      req = Net::HTTP::Get.new(uri)
-    end
+    req = if data['method'].to_s.downcase == 'post'
+            Net::HTTP::Post.new(uri, data)
+          else
+            Net::HTTP::Get.new(uri)
+          end
 
-    event['headers'] ||= {}
-    event['headers']['User-Agent'] ||= 'Mozilla /5.0 (Compatible MSIE 9.0;Windows NT 6.1;WOW64; Trident/5.0)'
+    data['headers'] ||= {}
+    data['headers']['User-Agent'] ||= 'Mozilla /5.0 (Compatible MSIE 9.0;Windows NT 6.1;WOW64; Trident/5.0)'
 
-    event['headers'].each do |key, value|
+    data['headers'].each do |key, value|
       req[key] = value
     end
 
-    response = Net::HTTP.start(uri.hostname, uri.port, {
+    response = Net::HTTP.start(uri.hostname, uri.port,
       use_ssl: uri.scheme == 'https',
       open_timeout: TIMEOUT,
       ssl_timeout: TIMEOUT,
       read_timeout: TIMEOUT,
       keep_alive_timeout: TIMEOUT
-    }) { |http|
+    ) do |http|
       http.request(req)
-    }
+    end
 
     case response
     when Net::HTTPRedirection
-      event['url'] = response['location']
-      perform_request limit - 1
+      data['url'] = response['location']
+      perform_request data, limit - 1
     else
       {
         status: response.code,
         headers: response.to_hash,
-        body: response.body.force_encoding('utf-8')
+        body: response.body.force_encoding('utf-8'),
       }
     end
   rescue => e
     {
       status: 401,
       headers: {},
-      body: e.message
+      body: e.message,
     }
   end
 end
 
-def lambda_handler(event:, context:)
-  FollowAlong.new(event, context).run
+def lambda_handler(event:)
+  FollowAlong.new.run(event['action'], event)
 end
