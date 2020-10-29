@@ -76,64 +76,14 @@
           </option>
         </select>
 
-        <div class="secret-info">
-          <span class="explanation">{{ description }}</span>
-          <span class="red">Drawback: <strong>{{ drawback }}</strong></span>
-          <span class="star-wrapper">
-            <table>
-              <tr>
-                <td>
-                  Client Security:
-                </td>
-                <td>
-                  <span
-                    class="stars"
-                    v-html="clientSecurity"
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Network Security:
-                </td>
-                <td>
-                  <span
-                    class="stars"
-                    v-html="networkSecurity"
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Server Security:
-                </td>
-                <td>
-                  <span
-                    class="stars"
-                    v-html="serverSecurity"
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Speed to Save:
-                </td>
-                <td>
-                  <span
-                    class="stars"
-                    v-html="speed"
-                  />
-                </td>
-              </tr>
-            </table>
-
-            <button
-              v-if="app.identity.services.local.strategy === 'ask'"
-              class="button-gray"
-              @click="app.getAskSecretKey(app.identity, true)"
-            >Reset Secret Key</button>
-          </span>
-        </div>
+        <a
+          v-if="app.identity.services.local.strategy === 'ask'"
+          href="javascript:;"
+          class="hint"
+          @click="app.getAskSecretKey(app.identity, true)"
+        >
+          Reset Secret Key
+        </a>
 
         <div v-if="app.identity.services.local.strategy === 'store'">
           <label for="secretKey">

@@ -5,7 +5,6 @@
 - Better media player
 - Make Services approachable
 - Better search
-- Simplify Local service in Settings (use password / store password)
 - Simplify account loading, fetcher
 
 ## Past Todo
