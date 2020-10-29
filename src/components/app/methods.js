@@ -246,7 +246,7 @@ var methods = {
     var _ = this
     var proxy = _.app.findService(_.app.identity, 'sync')
 
-    if (!proxy) {
+    if (!proxy || proxy.supports.indexOf('sync') === -1) {
       return
     }
 
