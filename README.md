@@ -2,10 +2,10 @@
 
 ## Todo
 
-- Better search
+- Better local search
 - Make Services approachable
-- Better media player
 - Simplify loading
+- Better media player
 
 ## Past Todo
 - Public

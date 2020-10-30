@@ -279,9 +279,11 @@ var SERVICES = [{
 {
   id: 'followalong-none',
   name: 'None',
-  description: 'No proxy will be used.',
+  description: 'No service will be used.',
   supports: 'rss,sync,search',
-  request: xmlRequest
+  request (app, identity, data, done) {
+    done()
+  }
 }]
 
 export default SERVICES
