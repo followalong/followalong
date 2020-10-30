@@ -280,7 +280,7 @@ var SERVICES = [{
   id: 'followalong-none',
   name: 'None',
   description: 'No proxy will be used.',
-  supports: 'rss',
+  supports: 'rss,sync,search',
   request: xmlRequest
 }]
 
