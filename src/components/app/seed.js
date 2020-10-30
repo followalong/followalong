@@ -19,8 +19,8 @@ var identities = [
         paused: false
       },
       {
-        name: 'The Intercept',
-        url: 'https://theintercept.com/staff/glenn-greenwald/feed/?rss',
+        name: 'Glenn Greenwald',
+        url: 'https://greenwald.substack.com/feed',
         loading: false,
         paused: false
       },
