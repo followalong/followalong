@@ -91,11 +91,12 @@
     </div>
 
     <div class="content">
-      <Sidebar :app="app" />
       <div v-if="identity">
+        <Sidebar :app="app" />
         <router-view :app="app" />
       </div>
       <div v-else>
+        <div class="sidebar" />
         <p>Securely loading your data...</p>
       </div>
     </div>
@@ -152,7 +153,7 @@ export default {
       loading: true,
       identities: [],
       keychain: {},
-      identity: {},
+      identity: null,
       sidebarClass: '',
       hints: [],
       now: new Date(),
