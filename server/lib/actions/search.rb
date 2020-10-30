@@ -4,7 +4,11 @@ require 'uri'
 module FollowAlong
   class Search
     def perform(data = {})
-      # Implement
+      if data['q'].start_with? 'http'
+        [{ name: 'Feed', url: data['q'], source: 'Direct' }]
+      else
+        []
+      end
     end
   end
 end

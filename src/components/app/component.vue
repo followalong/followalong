@@ -34,7 +34,7 @@
             <form
               method="GET"
               action="/search"
-              @submit="search"
+              @submit.prevent="search(q)"
             >
               <input
                 v-model="q"

@@ -37,7 +37,7 @@ function parseItems (app, feed, data, items, updatedAt, done) {
     }
 
     feed.lastFetchCount = data.items.length
-    feed.name = feed.name || data.name || data.title
+    feed.name = data.title || data.name || feed.name
     feed.description = feed.description || data.description
 
     if (updatedAt) {

@@ -107,7 +107,7 @@ var SERVICES = [{
   id: 'followalong-free',
   name: 'FollowAlong Free',
   description: 'We\'re offering this as a public service. Your requests may be throttled. We don\'t record or track any data. Don\'t trust us with your traffic? Good! Use our <a href="https://github.com/followalong/followalong/tree/master/server" target="_blank" class="link" onclick="event.stopImmediatePropagation();">template</a> to create your own in minutes!',
-  supports: 'rss',
+  supports: 'rss,search',
   data: {},
   request: lambdaPassthrough({
     endpoint: AWS_CONFIG.endpoint,

@@ -246,7 +246,7 @@ var methods = {
     var _ = this
     var proxy = _.app.findService(_.app.identity, 'sync')
 
-    if (!proxy || proxy.supports.indexOf('sync') === -1) {
+    if (!proxy) {
       return
     }
 
@@ -287,7 +287,7 @@ var methods = {
     identity.services.rss = identity.services.rss || { symlink: 'followalong-free' }
     identity.services.sync = identity.services.sync || { symlink: 'followalong-none' }
     identity.services.publish = identity.services.publish || { symlink: 'followalong-none' }
-    identity.services.search = identity.services.search || { symlink: 'followalong-none' }
+    identity.services.search = identity.services.search || { symlink: 'followalong-free' }
     identity.services.media = identity.services.media || { symlink: 'followalong-none' }
     identity.services.local = identity.services.local || {
       strategy: 'none'
@@ -403,11 +403,10 @@ var methods = {
     _.$router.push({ name: 'feed', params: { feed_url: feed.url } })
   },
 
-  search (e) {
+  search (q) {
     var _ = this
 
-    _.$router.push({ path: '/search', query: { q: _.app.q } })
-    e.preventDefault()
+    _.$router.push({ path: '/search', query: { q: q } })
   },
 
   toLocal (identity) {
@@ -891,7 +890,7 @@ var methods = {
     var service = identity.services[type]
 
     if (!service && forceResult) {
-      service = identity.services[type] = { symlink: 'followalong-lite' }
+      service = identity.services[type] = { symlink: 'followalong-free' }
     }
 
     if (service && service.symlink) {

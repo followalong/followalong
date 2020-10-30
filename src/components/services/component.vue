@@ -42,17 +42,17 @@ var SERVER_TYPES = {
     shortName: 'Sync',
     name: 'Subscription Syncing & Storage',
     description: 'Store and sync your subscriptions and saved items across multiple devices.'
-  }
+  },
   // publish: {
   //   shortName: 'Publish',
   //   name: 'Feed Publishing',
   //   description: 'Publish your own RSS feed.'
   // },
-  // search: {
-  //   shortName: 'Search',
-  //   name: 'Search Proxy',
-  //   description: 'Provide a smarter, faster search.'
-  // },
+  search: {
+    shortName: 'Search',
+    name: 'Search Proxy',
+    description: 'Provide a smarter, faster search.'
+  }
   // media: {
   //   shortName: 'Media',
   //   name: 'Media Proxy',
