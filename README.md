@@ -2,10 +2,10 @@
 
 ## Todo
 
-- Better search with tests
-- Simplify account loading, fetcher with tests
-- Make Services approachable with tests
-- Better media player with tests
+- Better search
+- Make Services approachable
+- Better media player
+- Simplify loading
 
 ## Past Todo
 - Public
