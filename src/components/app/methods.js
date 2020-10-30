@@ -254,11 +254,6 @@ var methods = {
       action: 'sync',
       identity: _.app.toRemote(_.app.identity)
     }, function (err, data) {
-      if (!data) {
-        err = err || 'Could not fetch feed. If you\'re not already, Try using a CORS proxy (in Setup).'
-        console.error(err)
-      }
-
       if (typeof done === 'function') {
         done(err, data)
       }

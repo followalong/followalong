@@ -6,6 +6,7 @@
 - Make Services approachable
 - Simplify loading
 - Better media player
+- console.error notifier
 
 ## Past Todo
 - Public
