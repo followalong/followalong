@@ -670,7 +670,11 @@ var methods = {
       async.eachParallel(keys || [], function (id, next) {
         if (id === 'hints') {
           _.store.getItem(id, function (err, value) {
-            _.app.hints = JSON.parse(value || '')
+            if (typeof value === 'string') {
+              value = JSON.parse(value || '')
+            }
+
+            _.app.hints = value
             next()
           })
         } else if (id.slice(0, 4) !== 'key-') {
