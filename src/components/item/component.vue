@@ -10,7 +10,7 @@
       :autoplay="true"
     />
 
-    <div class="feed">
+    <div class="feed home-feed wide-feed">
       <div class="title-wrapper">
         <h1>
           <a :href="item.link">{{ item.title }}</a>
@@ -73,27 +73,14 @@
         </a>
       </div>
     </div>
-    <div class="related-sidebar">
-      <h2>What's Next?</h2>
-      <ul class="related">
-        <Item
-          v-for="i in related"
-          :key="i.guid"
-          :item="i"
-          :app="app"
-        />
-      </ul>
-    </div>
   </div>
 </template>
 
 <script>
-import Item from '@/components/item/li.vue'
 import EmbedMedia from '@/components/embed-media/component.vue'
 
 export default {
   components: {
-    Item,
     EmbedMedia
   },
   props: ['app'],
