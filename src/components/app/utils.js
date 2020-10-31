@@ -10,23 +10,6 @@ const VIDEO_TYPES = /\.(mp4)/
 const AUDIO_TYPES = /\.(mp3|wav)/
 const srcCache = {}
 
-const MAPPER_ITEM = function (item) {
-  return {
-    author: item.author,
-    feedURL: item.feedURL,
-    guid: item.guid,
-    image: item.image,
-    isRead: item.isRead,
-    isSaved: item.isSaved,
-    link: item.link,
-    enclosure: item.enclosure,
-    pubDate: item.pubDate,
-    title: item.title,
-    content: item.content,
-    _updatedAt: item._updatedAt
-  }
-}
-
 const generateId = function () {
   return uniqId.generateUUID('xxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxy', 32)()
 }
@@ -86,7 +69,22 @@ export default {
   },
 
   mappers: {
-    MAPPER_ITEM,
+    MAPPER_ITEM (item) {
+      return {
+        author: item.author,
+        feedURL: item.feedURL,
+        guid: item.guid,
+        image: item.image,
+        isRead: item.isRead,
+        isSaved: item.isSaved,
+        link: item.link,
+        enclosure: item.enclosure,
+        pubDate: item.pubDate,
+        title: item.title,
+        content: item.content,
+        _updatedAt: item._updatedAt
+      }
+    },
 
     IDENTITY_LOCAL (identity) {
       return {
@@ -101,7 +99,7 @@ export default {
             loading: false
           }
         }),
-        items: identity.items.map(MAPPER_ITEM),
+        items: identity.items.map(this.MAPPER_ITEM),
         services: identity.services
       }
     },
@@ -126,7 +124,7 @@ export default {
         }),
         items: identity.items.filter(function (item) {
           return item.isSaved
-        }).map(MAPPER_ITEM),
+        }).map(this.MAPPER_ITEM),
         services: identity.services
       }
     }
