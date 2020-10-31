@@ -1,5 +1,6 @@
 import AWS from 'aws-sdk'
 import uniqId from 'uniq-id'
+import utils from './utils'
 
 function xmlRequest (app, identity, data, done) {
   if (!data.url) return done('No URL supplied.')
@@ -75,7 +76,7 @@ function s3Sync (app, identity, data, done) {
     Key: key
   }, function (err, oldData) {
     try {
-      app.mergeData(identity, JSON.parse(oldData.Body.toString()))
+      utils.mergeData(identity, JSON.parse(oldData.Body.toString()))
     } catch (e) { }
 
     s3.putObject({

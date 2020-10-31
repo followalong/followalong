@@ -1,5 +1,6 @@
 import loadExternal from 'load-external'
 import sorter from '@/components/app/sorter'
+import async from 'no-async'
 
 const TWO_MINUTES = 1000 * 60 * 1
 const HALF_HOUR = 1000 * 60 * 60 * 0.5
@@ -185,5 +186,106 @@ export default {
     srcCache[url] = true
 
     loadExternal(url, done)
+  },
+
+  mergeData (identity, remoteData) {
+    if (!remoteData) {
+      return
+    }
+
+    var localFeeds = identity.feeds || []
+    var localItems = identity.items || []
+    var remoteFeeds = remoteData.feeds || []
+    var remoteItems = remoteData.items || []
+    var localFeed; var remoteFeed
+    var localItem; var remoteItem
+    var i
+
+    for (i = remoteFeeds.length - 1; i >= 0; i--) {
+      remoteFeed = remoteFeeds[i]
+      localFeed = localFeeds.find(function (f) {
+        return f.url === remoteFeed.url
+      })
+
+      if (localFeed) {
+        if (remoteFeed._updatedAt > localFeed._updatedAt) {
+          localFeed.url = remoteFeed.url
+          localFeed.name = remoteFeed.name
+          localFeed._remoteUpdatedAt = remoteFeed._updatedAt
+          localFeed.paused = remoteFeed.paused
+        }
+      } else {
+        localFeeds.push(remoteFeed)
+      }
+    }
+
+    for (i = remoteItems.length - 1; i >= 0; i--) {
+      remoteItem = remoteItems[i]
+      localItem = localItems.find(function (f) {
+        return f.guid === remoteItem.guid
+      })
+
+      if (localItem) {
+        if (remoteItem._updatedAt > localItem._updatedAt) {
+          for (var key in remoteItem) {
+            localItem[key] = remoteItem[key]
+          }
+        }
+      } else {
+        localItems.push(remoteItem)
+      }
+    }
+
+    for (i = localFeeds.length - 1; i >= 0; i--) {
+      localFeed = localFeeds[i]
+      remoteFeed = remoteFeeds.find(function (f) {
+        return f.url === remoteFeed.url
+      })
+
+      if (!remoteFeed) {
+        localFeeds.splice(i, 1)
+      }
+    }
+
+    for (i = localItems.length - 1; i >= 0; i--) {
+      localItem = localItem[i]
+      remoteItem = remoteItems.find(function (f) {
+        return f.url === remoteItem.url
+      })
+
+      if (!remoteItem) {
+        localItem.splice(i, 1)
+      }
+    }
+  },
+
+  constructIdentities (app, done) {
+    var identities = []
+    var keychain = {}
+
+    app.store.keys(function (err, keys) {
+      async.eachParallel(keys || [], function (id, next) {
+        if (id === 'hints') {
+          app.store.getItem(id, function (err, value) {
+            if (typeof value === 'string') {
+              value = JSON.parse(value || '')
+            }
+
+            app.hints = value
+            next()
+          })
+        } else if (id.slice(0, 4) !== 'key-') {
+          identities.push({ id: id })
+          next()
+        } else {
+          app.store.getItem(id, function (err, value) {
+            keychain[id.slice(4)] = value
+            next()
+          })
+        }
+      }, function () {
+        done(identities, keychain)
+      })
+    })
   }
 }

@@ -376,37 +376,6 @@ var methods = {
     }
   },
 
-  constructIdentities (done) {
-    var _ = this
-    var identities = []
-    var keychain = {}
-
-    _.store.keys(function (err, keys) {
-      async.eachParallel(keys || [], function (id, next) {
-        if (id === 'hints') {
-          _.store.getItem(id, function (err, value) {
-            if (typeof value === 'string') {
-              value = JSON.parse(value || '')
-            }
-
-            _.app.hints = value
-            next()
-          })
-        } else if (id.slice(0, 4) !== 'key-') {
-          identities.push({ id: id })
-          next()
-        } else {
-          _.store.getItem(id, function (err, value) {
-            keychain[id.slice(4)] = value
-            next()
-          })
-        }
-      }, function () {
-        done(identities, keychain)
-      })
-    })
-  },
-
   hideHint (hint) {
     var _ = this
 
@@ -446,77 +415,6 @@ var methods = {
         }, utils.TWO_MINUTES)
       })
     })
-  },
-
-  mergeData (identity, remoteData) {
-    if (!remoteData) {
-      return
-    }
-
-    var localFeeds = identity.feeds || []
-    var localItems = identity.items || []
-    var remoteFeeds = remoteData.feeds || []
-    var remoteItems = remoteData.items || []
-    var localFeed; var remoteFeed
-    var localItem; var remoteItem
-    var i
-
-    for (i = remoteFeeds.length - 1; i >= 0; i--) {
-      remoteFeed = remoteFeeds[i]
-      localFeed = localFeeds.find(function (f) {
-        return f.url === remoteFeed.url
-      })
-
-      if (localFeed) {
-        if (remoteFeed._updatedAt > localFeed._updatedAt) {
-          localFeed.url = remoteFeed.url
-          localFeed.name = remoteFeed.name
-          localFeed._remoteUpdatedAt = remoteFeed._updatedAt
-          localFeed.paused = remoteFeed.paused
-        }
-      } else {
-        localFeeds.push(remoteFeed)
-      }
-    }
-
-    for (i = remoteItems.length - 1; i >= 0; i--) {
-      remoteItem = remoteItems[i]
-      localItem = localItems.find(function (f) {
-        return f.guid === remoteItem.guid
-      })
-
-      if (localItem) {
-        if (remoteItem._updatedAt > localItem._updatedAt) {
-          for (var key in remoteItem) {
-            localItem[key] = remoteItem[key]
-          }
-        }
-      } else {
-        localItems.push(remoteItem)
-      }
-    }
-
-    for (i = localFeeds.length - 1; i >= 0; i--) {
-      localFeed = localFeeds[i]
-      remoteFeed = remoteFeeds.find(function (f) {
-        return f.url === remoteFeed.url
-      })
-
-      if (!remoteFeed) {
-        localFeeds.splice(i, 1)
-      }
-    }
-
-    for (i = localItems.length - 1; i >= 0; i--) {
-      localItem = localItem[i]
-      remoteItem = remoteItems.find(function (f) {
-        return f.url === remoteItem.url
-      })
-
-      if (!remoteItem) {
-        localItem.splice(i, 1)
-      }
-    }
   },
 
   blankifyLinks (str) {
@@ -646,7 +544,7 @@ var methods = {
   setupApp (app) {
     app.loading = true
 
-    app.constructIdentities((identities, keychain) => {
+    utils.constructIdentities(app, (identities, keychain) => {
       app.keychain = keychain
 
       if (!identities || !identities.length) {
