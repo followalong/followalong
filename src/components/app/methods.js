@@ -8,6 +8,8 @@ import crypt from './crypt'
 
 let nextFeedFetcher
 
+const TWO_MINUTES = 1000 * 60 * 1
+
 var methods = {
   fetchAllFeeds (identity, override, done) {
     var _ = this
@@ -317,7 +319,7 @@ var methods = {
       _.fetchAllFeeds(identity, override, function () {
         nextFeedFetcher = setTimeout(function () {
           _.fetchNextFeed(_.app.identity)
-        }, utils.TWO_MINUTES)
+        }, TWO_MINUTES)
       })
     })
   },
