@@ -97,7 +97,7 @@ export default {
 
       return _.newsfeed.filter(function (item) {
         return !!item.isSaved
-      }).sort(sorter(_.identity))
+      })
     },
     unread () {
       var _ = this
