@@ -18,27 +18,17 @@
 </template>
 
 <script>
-import loadExternal from 'load-external'
 import SERVICES from '@/components/app/services'
+import utils from '@/components/app/utils'
 
-var srcCache = {}
 var stripe; var elements; var card
-
-function cachedLoadExternal (url, done) {
-  if (srcCache[url]) {
-    return done()
-  }
-
-  srcCache[url] = true
-  loadExternal(url, done)
-}
 
 export default {
   props: ['submit', 'handler'],
   mounted () {
     var _ = this
 
-    cachedLoadExternal('https://js.stripe.com/v3/', function () {
+    utils.cachedLoadExternal('https://js.stripe.com/v3/', function () {
       // stripe = stripe || window.Stripe('pk_test_ovSgIfRBzeqGwOYQl6P39IR300ktMwyAXW');
       stripe = stripe || window.Stripe(atob('cGtfbGl2ZV9GZDZwUUtwMWkwMUtnVlE1aFFhWTlBOG0wMEU3ak43Y2hK'))
       elements = elements || stripe.elements()

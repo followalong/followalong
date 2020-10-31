@@ -63,6 +63,7 @@
 
 <script>
 import methods from '@/components/app/methods'
+import utils from '@/components/app/utils'
 
 export default {
   props: ['app', 'item', 'autoplay'],
@@ -74,11 +75,11 @@ export default {
   },
   computed: {
     videoSrc () {
-      return methods.getVideoSrc(this.item, true)
+      return utils.getVideoSrc(this.item, true)
     },
 
     audioSrc () {
-      return methods.getAudioSrc(this.item, true)
+      return utils.getAudioSrc(this.item, true)
     }
   },
   methods: {

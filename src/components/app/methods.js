@@ -17,132 +17,6 @@ const ALLOWED_TAGS = [
 
 let nextFeedFetcher
 
-function LAST_UPDATED (a, b) {
-  if (a._updatedAt < b._updatedAt) return -1
-  if (a._updatedAt > b._updatedAt) return 1
-  return 0
-}
-
-function UNPAUSED (feed) {
-  return !feed.paused
-}
-
-function ITEM_MAP (item) {
-  return {
-    author: item.author,
-    feedURL: item.feedURL,
-    guid: item.guid,
-    image: item.image,
-    isRead: item.isRead,
-    isSaved: item.isSaved,
-    link: item.link,
-    enclosure: item.enclosure,
-    pubDate: item.pubDate,
-    title: item.title,
-    content: item.content,
-    _updatedAt: item._updatedAt
-  }
-}
-
-function stripScriptsAndStyles (s) {
-  var div = document.createElement('div')
-  var scripts; var i
-
-  div.innerHTML = s
-
-  scripts = div.getElementsByTagName('script')
-
-  for (i = scripts.length - 1; i >= 0; i--) {
-    scripts[i].parentNode.removeChild(scripts[i])
-  }
-
-  scripts = div.getElementsByTagName('style')
-
-  for (i = scripts.length - 1; i >= 0; i--) {
-    scripts[i].parentNode.removeChild(scripts[i])
-  }
-
-  return div.innerHTML
-}
-
-var VIDEO_TYPES = /\.(mp4)/
-var AUDIO_TYPES = /\.(mp3|wav)/
-
-function getVideoSrc (item, autoplay) {
-  if (!item) {
-    return undefined
-  }
-
-  if (item.guid && item.guid.slice(0, 9) === 'yt:video:') {
-    return 'https://www.youtube.com/embed/' + item.guid.slice(9) + (autoplay ? '?&rel=0&modestbranding=1&playsinline=1&autoplay=1' : '')
-  } else if (item.enclosure && VIDEO_TYPES.test(item.enclosure.url)) {
-    return item.enclosure.url
-  }
-
-  return undefined
-}
-
-function getAudioSrc (item) {
-  if (!item) {
-    return undefined
-  }
-
-  if (item.link && AUDIO_TYPES.test(item.link)) {
-    return item.link
-  } else if (item.enclosure && AUDIO_TYPES.test(item.enclosure.url)) {
-    return item.enclosure.url
-  }
-
-  return undefined
-}
-
-function timeAgo (date, now) {
-  if (typeof date !== 'object') {
-    date = new Date(date)
-  }
-
-  var seconds = Math.floor(((now || new Date()) - date) / 1000)
-  var interval = Math.floor(seconds / 31536000)
-  var intervalType
-
-  if (interval >= 1) {
-    intervalType = 'year'
-  } else {
-    interval = Math.floor(seconds / 2592000)
-
-    if (interval >= 1) {
-      intervalType = 'month'
-    } else {
-      interval = Math.floor(seconds / 86400)
-
-      if (interval >= 1) {
-        intervalType = 'day'
-      } else {
-        interval = Math.floor(seconds / 3600)
-
-        if (interval >= 1) {
-          intervalType = 'hour'
-        } else {
-          interval = Math.floor(seconds / 60)
-
-          if (interval >= 1) {
-            intervalType = 'minute'
-          } else {
-            interval = seconds
-            intervalType = 'second'
-          }
-        }
-      }
-    }
-  }
-
-  if (interval > 1 || interval === 0) {
-    intervalType += 's'
-  }
-
-  return interval + ' ' + intervalType + ' ago'
-}
-
 var methods = {
   fetchAllFeeds (identity, override, done) {
     var _ = this
@@ -152,7 +26,7 @@ var methods = {
 
     _.app.loading = true
 
-    async.eachParallel(identity.feeds.filter(UNPAUSED), function (feed, next) {
+    async.eachParallel(identity.feeds.filter(utils.filters.UNPAUSED), function (feed, next) {
       _.fetchFeed(identity, feed, updatedAt, override, next)
     }, function () {
       _.app.loading = false
@@ -168,7 +42,7 @@ var methods = {
     var _ = this
     var updatedAt = Date.now()
 
-    var feed = identity.feeds.filter(UNPAUSED).sort(LAST_UPDATED)[0]
+    var feed = identity.feeds.filter(utils.filters.UNPAUSED).sort(utils.sorters.LAST_UPDATED)[0]
 
     if (_.app.loading || !feed) {
       setTimeout(function () {
@@ -282,15 +156,15 @@ var methods = {
   },
 
   dateFormat (date, now) {
-    return timeAgo(new Date(date), now)
+    return utils.timeAgo(new Date(date), now)
   },
 
-  getVideoSrc,
+  getVideoSrc: utils.getVideoSrc,
 
-  getAudioSrc,
+  getAudioSrc: utils.getAudioSrc,
 
   hasMedia (item) {
-    return getVideoSrc(item) || getAudioSrc(item)
+    return utils.getVideoSrc(item) || utils.getAudioSrc(item)
   },
 
   setMediaVerb (item) {
@@ -298,9 +172,9 @@ var methods = {
       return item._mediaVerb
     }
 
-    if (getVideoSrc(item)) {
+    if (utils.getVideoSrc(item)) {
       item._mediaVerb = 'watch'
-    } else if (getAudioSrc(item)) {
+    } else if (utils.getAudioSrc(item)) {
       item._mediaVerb = 'listen'
     } else {
       item._mediaVerb = 'read'
@@ -364,7 +238,7 @@ var methods = {
           loading: false
         }
       }),
-      items: identity.items.map(ITEM_MAP),
+      items: identity.items.map(utils.mappers.ITEM),
       services: identity.services
     }
   },
@@ -389,7 +263,7 @@ var methods = {
       }),
       items: identity.items.filter(function (item) {
         return item.isSaved
-      }).map(ITEM_MAP),
+      }).map(utils.mappers.ITEM),
       services: identity.services
     }
   },
@@ -654,7 +528,7 @@ var methods = {
   },
 
   blankifyLinks (str) {
-    return stripScriptsAndStyles(
+    return utils.stripScriptsAndStyles(
       (str || '')
         .replace(/target=['"]?[^"']+['"\s>]?/g, '')
         .replace(/<a([^>]+)>?/g, '<a$1 target="_blank">')

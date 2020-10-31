@@ -25,12 +25,7 @@
 
 <script>
 import Feed from '@/components/feed/li.vue'
-
-function SORT_BY_NAME (a, b) {
-  if (a.name < b.name) return -1
-  if (a.name > b.name) return 1
-  return 0
-}
+import utils from '@/components/app/utils'
 
 export default {
   components: {
@@ -40,7 +35,7 @@ export default {
   computed: {
     feeds () {
       if (!this.app.identity) return []
-      return (this.app.identity.feeds || []).sort(SORT_BY_NAME)
+      return (this.app.identity.feeds || []).sort(utils.sorters.NAME)
     }
   }
 }
