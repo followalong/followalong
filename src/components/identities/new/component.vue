@@ -134,7 +134,7 @@ export default {
             existingIdentity[key] = newIdentity[key]
           }
         } else {
-          existingIdentity = _.app.toRemote(newIdentity)
+          existingIdentity = utils.mappers.IDENTITY_REMOTE(newIdentity)
           existingIdentity._decrypted = true
           _.app.identities.push(existingIdentity)
         }

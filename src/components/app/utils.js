@@ -9,6 +9,23 @@ const VIDEO_TYPES = /\.(mp4)/
 const AUDIO_TYPES = /\.(mp3|wav)/
 const srcCache = {}
 
+const MAPPER_ITEM = function (item) {
+  return {
+    author: item.author,
+    feedURL: item.feedURL,
+    guid: item.guid,
+    image: item.image,
+    isRead: item.isRead,
+    isSaved: item.isSaved,
+    link: item.link,
+    enclosure: item.enclosure,
+    pubDate: item.pubDate,
+    title: item.title,
+    content: item.content,
+    _updatedAt: item._updatedAt
+  }
+}
+
 export default {
   TWO_MINUTES,
   HALF_HOUR,
@@ -64,20 +81,48 @@ export default {
   },
 
   mappers: {
-    ITEM (item) {
+    MAPPER_ITEM,
+
+    IDENTITY_LOCAL (identity) {
       return {
-        author: item.author,
-        feedURL: item.feedURL,
-        guid: item.guid,
-        image: item.image,
-        isRead: item.isRead,
-        isSaved: item.isSaved,
-        link: item.link,
-        enclosure: item.enclosure,
-        pubDate: item.pubDate,
-        title: item.title,
-        content: item.content,
-        _updatedAt: item._updatedAt
+        id: identity.id,
+        name: identity.name,
+        feeds: identity.feeds.map(function (feed) {
+          return {
+            url: feed.url,
+            name: feed.name,
+            _updatedAt: feed._updatedAt,
+            paused: feed.paused,
+            loading: false
+          }
+        }),
+        items: identity.items.map(MAPPER_ITEM),
+        services: identity.services
+      }
+    },
+
+    IDENTITY_REMOTE (identity) {
+      return {
+        id: identity.id,
+        name: identity.name,
+        feeds: identity.feeds.map(function (feed) {
+          return {
+            url: feed.url,
+            name: feed.name,
+            _updatedAt: feed._updatedAt,
+            paused: feed.paused,
+            loading: false,
+            unreads: identity.items.filter(function (item) {
+              return !item.isRead && item.feedURL === feed.url
+            }).map(function (item) {
+              return item.guid
+            })
+          }
+        }),
+        items: identity.items.filter(function (item) {
+          return item.isSaved
+        }).map(MAPPER_ITEM),
+        services: identity.services
       }
     }
   },

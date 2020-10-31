@@ -8,7 +8,7 @@
       >
         Catch Me Up!
       </button>
-      <h1>{{ mediaVerb ? app.capitalize(mediaVerb) : 'What\'s New?' }}</h1>
+      <h1>{{ mediaVerb ? capitalize(mediaVerb) : 'What\'s New?' }}</h1>
     </div>
 
     <p
@@ -119,6 +119,10 @@ export default {
       })
 
       _.app.save()
+    },
+
+    capitalize (str) {
+      return str[0].toUpperCase() + str.slice(1, str.length)
     }
   }
 }

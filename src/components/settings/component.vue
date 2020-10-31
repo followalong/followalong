@@ -162,6 +162,7 @@
 import { Base64 } from 'js-base64'
 import copy from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
+import utils from '@/components/app/utils'
 
 export default {
   props: ['app'],
@@ -173,7 +174,7 @@ export default {
   },
   methods: {
     copyConfig (identity) {
-      copy(Base64.encode(JSON.stringify(this.app.toRemote(identity))))
+      copy(Base64.encode(JSON.stringify(utils.mappers.IDENTITY_REMOTE(identity))))
       alert('Copied configuration to clipboard.')
     },
 
@@ -196,7 +197,7 @@ export default {
 
     downloadIdentity (identity) {
       const filename = window.location.host.replace(':', '.') + '.' + identity.id + '.json'
-      const str = JSON.stringify(this.app.toRemote(identity))
+      const str = JSON.stringify(utils.mappers.IDENTITY_REMOTE(identity))
       const blob = new Blob([str], { type: 'application/json;charset=utf-8' })
 
       saveAs(blob, filename)

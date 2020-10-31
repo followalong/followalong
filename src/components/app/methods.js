@@ -83,7 +83,7 @@ var methods = {
       crypt.en(
         _.app,
         _.app.identity,
-        _.app.toLocal(_.app.identity)
+        utils.mappers.IDENTITY_LOCAL(_.app.identity)
       )
     )
 
@@ -107,7 +107,7 @@ var methods = {
 
     proxy.request(proxy.app, proxy.app.identity, {
       action: 'sync',
-      identity: this.app.toRemote(this.app.identity)
+      identity: utils.mappers.IDENTITY_REMOTE(this.app.identity)
     }, function (err, data) {
       if (typeof done === 'function') {
         done(err, data)
@@ -175,14 +175,6 @@ var methods = {
     return item._mediaVerb
   },
 
-  capitalize (str) {
-    return str[0].toUpperCase() + str.slice(1, str.length)
-  },
-
-  isURL (q) {
-    return /^http/.test(q)
-  },
-
   subscribe (feed, items) {
     var _ = this
 
@@ -197,49 +189,6 @@ var methods = {
 
     _.app.q = ''
     _.$router.push({ name: 'feed', params: { feed_url: feed.url } })
-  },
-
-  toLocal (identity) {
-    return {
-      id: identity.id,
-      name: identity.name,
-      feeds: identity.feeds.map(function (feed) {
-        return {
-          url: feed.url,
-          name: feed.name,
-          _updatedAt: feed._updatedAt,
-          paused: feed.paused,
-          loading: false
-        }
-      }),
-      items: identity.items.map(utils.mappers.ITEM),
-      services: identity.services
-    }
-  },
-
-  toRemote (identity) {
-    return {
-      id: identity.id,
-      name: identity.name,
-      feeds: identity.feeds.map(function (feed) {
-        return {
-          url: feed.url,
-          name: feed.name,
-          _updatedAt: feed._updatedAt,
-          paused: feed.paused,
-          loading: false,
-          unreads: identity.items.filter(function (item) {
-            return !item.isRead && item.feedURL === feed.url
-          }).map(function (item) {
-            return item.guid
-          })
-        }
-      }),
-      items: identity.items.filter(function (item) {
-        return item.isSaved
-      }).map(utils.mappers.ITEM),
-      services: identity.services
-    }
   },
 
   read (item, val) {
