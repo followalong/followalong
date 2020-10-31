@@ -148,8 +148,8 @@
           </div>
           <div class="half-column">
             <p>
-              Remote: <strong>{{ app.profileSize(app.identity, 'Remote') }}</strong><br>
-              Local: <strong>{{ app.profileSize(app.identity, 'Local') }}</strong>
+              Remote: <strong>{{ profileSize(app.identity, 'Remote') }}</strong><br>
+              Local: <strong>{{ profileSize(app.identity, 'Local') }}</strong>
             </p>
           </div>
         </div>
@@ -174,6 +174,23 @@ export default {
     copyConfig (identity) {
       copy(Base64.encode(JSON.stringify(this.app.toRemote(identity))))
       alert('Copied configuration to clipboard.')
+    },
+
+    profileSize (identity, type) {
+      if (!identity || !identity.items) return 'N/A'
+
+      let unit = 'b'
+      let size = JSON.stringify(this.app['to' + type](identity)).length
+
+      if (size > 1000000) {
+        size = size / 1000000
+        unit = 'mb'
+      } else if (size > 1000) {
+        size = size / 1000
+        unit = 'kb'
+      }
+
+      return '~' + (Math.round(size * 10) / 10) + ' ' + unit
     }
   }
 }

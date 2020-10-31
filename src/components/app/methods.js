@@ -792,24 +792,6 @@ var methods = {
     ).html)
   },
 
-  profileSize (identity, type) {
-    if (!identity || !identity.items) return 'N/A'
-
-    var _ = this
-    var unit = 'b'
-    var size = JSON.stringify(_.app['to' + type](identity)).length
-
-    if (size > 1000000) {
-      size = size / 1000000
-      unit = 'mb'
-    } else if (size > 1000) {
-      size = size / 1000
-      unit = 'kb'
-    }
-
-    return '~' + (Math.round(size * 10) / 10) + ' ' + unit
-  },
-
   toggleSidebar (doHide) {
     var _ = this
 
