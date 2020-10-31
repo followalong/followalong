@@ -2,13 +2,13 @@ import { reactive } from 'vue'
 import seed from '@/components/app/seed'
 import { getFeed } from '@/components/app/fetcher'
 import SERVICES from '@/components/app/services'
-import aes256 from 'aes256'
 import uniqId from 'uniq-id'
 import async from 'no-async'
 import loadExternal from 'load-external'
 import { saveAs } from 'file-saver'
 import truncate from 'trunc-html'
 import utils from './utils'
+import crypt from './crypt'
 
 const ALLOWED_TAGS = [
   'a', 'article', 'b', 'blockquote', 'br', 'caption', 'code', 'del', 'details', 'div', 'em',
@@ -217,7 +217,8 @@ var methods = {
 
     _.app.store.setItem(
       _.app.identity.id,
-      _.app.encrypt(
+      crypt.en(
+        _.app,
         _.app.identity,
         _.app.toLocal(_.app.identity)
       )
@@ -439,74 +440,6 @@ var methods = {
     }
   },
 
-  encrypt (identity, json) {
-    var _ = this
-    var key = _.app.keychain[identity.id]
-    var encrypted = json
-
-    encrypted = typeof json === 'string' ? json : JSON.stringify(json)
-
-    if (identity.services.local.strategy === 'none') {
-      return encrypted
-    } else if (identity.services.local.strategy === 'rotate') {
-      key = _.app.generateId()
-      _.app.saveKey(identity, key, true)
-    } else if (identity.services.local.strategy === 'ask') {
-      key = _.app.getAskSecretKey(identity, false)
-    } else if (identity.services.local.strategy === 'store') {
-      if (typeof _.app.keychain[identity.id] === 'undefined') {
-        key = _.app.generateId()
-        _.app.saveKey(identity, key, true)
-      }
-    }
-
-    if (!key || !key.length) {
-      return encrypted
-    }
-
-    encrypted = aes256.encrypt(key, encrypted)
-
-    return encrypted
-  },
-
-  decrypt (identity, str) {
-    var _ = this
-    var key = _.app.keychain[identity.id]
-
-    if (str && typeof str !== 'string') {
-      return str
-    } else if (typeof key === 'undefined') {
-      try {
-        str = JSON.parse(str)
-      } catch (e) {
-        try {
-          key = _.app.getAskSecretKey(identity)
-
-          if (key !== null) {
-            str = JSON.parse(aes256.decrypt(key, str))
-
-            if (typeof str === 'object' && str.services.local.strategy === 'store') {
-              _.app.saveKey(identity, key, true)
-              _.app.keychain[identity.id] = key
-            }
-          }
-        } catch (e) {
-          return false
-        }
-      }
-    } else {
-      try {
-        str = JSON.parse(aes256.decrypt(key, str))
-      } catch (e) { }
-    }
-
-    if (typeof str === 'object') {
-      return str
-    } else {
-      return false
-    }
-  },
-
   getAskSecretKey (identity, reset) {
     var _ = this
 
@@ -561,22 +494,20 @@ var methods = {
   },
 
   decryptIdentity (identity, done) {
-    var _ = this
-
     if (identity._decrypted) {
       return done()
     }
 
-    _.store.getItem(identity.id, function (err, state) {
+    this.store.getItem(identity.id, (err, state) => {
       if (!state) {
         return done()
       }
 
-      state = _.decrypt(identity, state)
+      state = crypt.de(this.app, identity, state)
 
       if (identity.services.local.strategy === 'ask') {
-        delete _.app.keychain[identity.id]
-        state = _.decrypt(identity, state)
+        delete this.app.keychain[identity.id]
+        state = crypt.de(this.app, identity, state)
       }
 
       if (!state) {
@@ -589,7 +520,7 @@ var methods = {
         return
       }
 
-      _.app.copyAttrs(state, identity, ['name', 'local', 'items', 'feeds', 'services'])
+      this.app.copyAttrs(state, identity, ['name', 'local', 'items', 'feeds', 'services'])
 
       identity._decrypted = true
 
