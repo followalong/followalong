@@ -29,7 +29,6 @@
           <font-awesome-icon icon="igloo" /> What's New?
           <span class="hint counter">
             <span v-if="app.unread.length">({{ app.unread.length }})</span>
-            <!-- <span v-else>&check;</span> -->
           </span>
         </router-link>
       </li>
@@ -38,8 +37,7 @@
         <router-link to="/watch">
           <font-awesome-icon icon="film" /> Watch
           <span class="hint counter">
-            <span v-if="app.unreadWatches.length">({{ app.unreadWatches.length }})</span>
-            <!-- <span v-else>&check;</span> -->
+            <span v-if="unreadWatches.length">({{ unreadWatches.length }})</span>
           </span>
         </router-link>
       </li>
@@ -49,8 +47,7 @@
           <font-awesome-icon icon="book-open" />
           Read
           <span class="hint counter">
-            <span v-if="app.unreadReads.length">({{ app.unreadReads.length }})</span>
-            <!-- <span v-else>&check;</span> -->
+            <span v-if="unreadReads.length">({{ unreadReads.length }})</span>
           </span>
         </router-link>
       </li>
@@ -60,8 +57,7 @@
           <font-awesome-icon icon="headphones-alt" />
           Listen
           <span class="hint counter">
-            <span v-if="app.unreadListens.length">({{ app.unreadListens.length }})</span>
-            <!-- <span v-else>&check;</span> -->
+            <span v-if="unreadListens.length">({{ unreadListens.length }})</span>
           </span>
         </router-link>
       </li>
@@ -154,6 +150,23 @@
 <script>
 export default {
   props: ['app'],
+  computed: {
+    unreadWatches () {
+      return this.app.unread.filter((item) => {
+        return item._mediaVerb === 'watch'
+      })
+    },
+    unreadListens () {
+      return this.app.unread.filter((item) => {
+        return item._mediaVerb === 'listen'
+      })
+    },
+    unreadReads () {
+      return this.app.unread.filter((item) => {
+        return item._mediaVerb === 'read'
+      })
+    }
+  },
   watch: {
     '$route' (to, from) {
       const _ = this

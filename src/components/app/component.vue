@@ -58,7 +58,6 @@ export default {
 
     return {
       app: _,
-      api: false,
       store: localForage.createInstance({
         name: 'commmunity'
       }),
@@ -109,27 +108,6 @@ export default {
       return _.newsfeed.filter(function (item) {
         return !item.isRead
       }).sort(sorter(_.identity))
-    },
-    unreadWatches () {
-      var _ = this
-
-      return _.unread.filter(function (item) {
-        return item._mediaVerb === 'watch'
-      })
-    },
-    unreadListens () {
-      var _ = this
-
-      return _.unread.filter(function (item) {
-        return item._mediaVerb === 'listen'
-      })
-    },
-    unreadReads () {
-      var _ = this
-
-      return _.unread.filter(function (item) {
-        return item._mediaVerb === 'read'
-      })
     },
     feeds () {
       var _ = this
