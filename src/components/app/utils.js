@@ -78,8 +78,8 @@ export default {
         content: item.content,
         _updatedAt: item._updatedAt
       }
-    },
-  }
+    }
+  },
 
   stripScriptsAndStyles (s) {
     var div = document.createElement('div')

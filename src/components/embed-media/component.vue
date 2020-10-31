@@ -62,7 +62,6 @@
 </template>
 
 <script>
-import methods from '@/components/app/methods'
 import utils from '@/components/app/utils'
 
 export default {

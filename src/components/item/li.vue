@@ -32,7 +32,7 @@
         v-if="item.pubDate"
         :title="item.pubDate"
         class="feed-name"
-      >{{ dateFormat(item.pubDate, app.now) }}</span>
+      >{{ app.dateFormat(item.pubDate, app.now) }}</span>
 
       &nbsp; <QuickSubscribe
         :app="app"
@@ -52,7 +52,7 @@
       <div v-if="item.content && item.content.length">
         <div class="description">
           <div v-if="!isExpanded && item.content.length > characterLimit">
-            <div v-html="app.prepDescription(item, characterLimit, '...')" />
+            <div v-html="prepDescription(item, characterLimit, '...')" />
             <button
               class="button-gray"
               @click="isExpanded = !isExpanded"
@@ -98,9 +98,16 @@
 </template>
 
 <script>
-import methods from '@/components/app/methods'
+import truncate from 'trunc-html'
 import EmbedMedia from '@/components/embed-media/component.vue'
 import QuickSubscribe from '@/components/quick-subscribe/component.vue'
+
+const ALLOWED_TAGS = [
+  'a', 'article', 'b', 'blockquote', 'br', 'caption', 'code', 'del', 'details', 'div', 'em',
+  'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'img', 'ins', 'kbd', 'li', 'main', 'ol',
+  'p', 'pre', 'section', 'span', 'strike', 'strong', 'sub', 'summary', 'sup', 'table',
+  'tbody', 'td', 'th', 'thead', 'tr', 'u', 'ul'
+]
 
 export default {
   components: {
@@ -114,6 +121,22 @@ export default {
       isExpanded: false
     }
   },
-  methods
+  methods: {
+    prepDescription (item, characterLimit, ellipsis) {
+      if (!item || !item.content) {
+        return ''
+      }
+
+      return this.app.blankifyLinks(truncate(
+        item.content,
+        characterLimit,
+        {
+          sanitizer: {
+            allowedTags: ALLOWED_TAGS
+          }
+        }
+      ).html)
+    }
+  }
 }
 </script>

@@ -4,16 +4,8 @@ import { getFeed } from '@/components/app/fetcher'
 import SERVICES from '@/components/app/services'
 import uniqId from 'uniq-id'
 import async from 'no-async'
-import truncate from 'trunc-html'
 import utils from './utils'
 import crypt from './crypt'
-
-const ALLOWED_TAGS = [
-  'a', 'article', 'b', 'blockquote', 'br', 'caption', 'code', 'del', 'details', 'div', 'em',
-  'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'img', 'ins', 'kbd', 'li', 'main', 'ol',
-  'p', 'pre', 'section', 'span', 'strike', 'strong', 'sub', 'summary', 'sup', 'table',
-  'tbody', 'td', 'th', 'thead', 'tr', 'u', 'ul'
-]
 
 let nextFeedFetcher
 
@@ -533,24 +525,6 @@ var methods = {
         .replace(/target=['"]?[^"']+['"\s>]?/g, '')
         .replace(/<a([^>]+)>?/g, '<a$1 target="_blank">')
     )
-  },
-
-  prepDescription (item, characterLimit, ellipsis) {
-    var _ = this
-
-    if (!item || !item.content) {
-      return ''
-    }
-
-    return _.app.blankifyLinks(truncate(
-      item.content,
-      characterLimit,
-      {
-        sanitizer: {
-          allowedTags: ALLOWED_TAGS
-        }
-      }
-    ).html)
   },
 
   toggleSidebar (doHide) {
