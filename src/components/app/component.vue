@@ -35,12 +35,6 @@ import Sidebar from '@/components/sidebar/component.vue'
 import sorter from '@/components/app/sorter'
 import TopBar from '@/components/top-bar/component.vue'
 
-function SORT_BY_NAME (a, b) {
-  if (a.name < b.name) return -1
-  if (a.name > b.name) return 1
-  return 0
-}
-
 export default {
   components: {
     MediaPlayer,
@@ -105,12 +99,6 @@ export default {
       return _.newsfeed.filter(function (item) {
         return !item.isRead
       }).sort(sorter(_.identity))
-    },
-    feeds () {
-      var _ = this
-
-      if (!_.identity) return []
-      return (_.identity.feeds || []).sort(SORT_BY_NAME)
     }
   },
   mounted () {

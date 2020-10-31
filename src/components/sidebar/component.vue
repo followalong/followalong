@@ -77,7 +77,7 @@
           <font-awesome-icon icon="database" />
           Subscriptions
           <span class="hint counter">
-            <span v-if="app.feeds.length">({{ app.feeds.length }})</span>
+            <span v-if="app.identity.feeds.length">({{ app.identity.feeds.length }})</span>
           </span>
         </router-link>
       </li>

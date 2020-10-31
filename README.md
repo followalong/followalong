@@ -2,12 +2,13 @@
 
 ## Todo
 
+- Simplify app component
+- Tags (media verbs)
 - Better local search
   + Youtube
   + DuckDuckGo
   + RSSSearch
 - Make Services approachable
-- Simplify app component
 - console.error notifier
 
 ## Past Todo

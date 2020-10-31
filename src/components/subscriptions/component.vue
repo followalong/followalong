@@ -14,7 +14,7 @@
 
     <ul>
       <Feed
-        v-for="feed in app.feeds"
+        v-for="feed in feeds"
         :key="feed.url"
         :feed="feed"
         :app="app"
@@ -26,10 +26,22 @@
 <script>
 import Feed from '@/components/feed/li.vue'
 
+function SORT_BY_NAME (a, b) {
+  if (a.name < b.name) return -1
+  if (a.name > b.name) return 1
+  return 0
+}
+
 export default {
   components: {
     Feed
   },
-  props: ['app']
+  props: ['app'],
+  computed: {
+    feeds () {
+      if (!this.app.identity) return []
+      return (this.app.identity.feeds || []).sort(SORT_BY_NAME)
+    }
+  }
 }
 </script>
