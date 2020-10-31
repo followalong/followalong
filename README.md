@@ -2,7 +2,6 @@
 
 ## Todo
 
-- Simplify app component
 - Tags (media verbs)
 - Better local search
   + Youtube

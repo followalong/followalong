@@ -70,35 +70,27 @@ export default {
   },
   computed: {
     nonIdentities () {
-      var _ = this
-
-      return _.app.identities.filter(function (i) {
-        return i.id !== _.identity.id
+      return this.app.identities.filter((i) => {
+        return i.id !== this.identity.id
       })
     },
     newsfeed () {
-      var _ = this
+      if (!this.identity) return []
 
-      if (!_.identity) return []
-
-      return (_.identity.items || []).filter(function (item) {
-        _.setMediaVerb(item)
+      return (this.identity.items || []).filter((item) => {
+        this.setMediaVerb(item)
         return true
-      }).sort(sorter(_.identity))
+      }).sort(sorter(this.identity))
     },
     saved () {
-      var _ = this
-
-      return _.newsfeed.filter(function (item) {
+      return this.newsfeed.filter(function (item) {
         return !!item.isSaved
       })
     },
     unread () {
-      var _ = this
-
-      return _.newsfeed.filter(function (item) {
+      return this.newsfeed.filter(function (item) {
         return !item.isRead
-      }).sort(sorter(_.identity))
+      })
     }
   },
   mounted () {
