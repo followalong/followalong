@@ -73,7 +73,7 @@ function stripScriptsAndStyles (s) {
 var VIDEO_TYPES = /\.(mp4)/
 var AUDIO_TYPES = /\.(mp3|wav)/
 
-function videoSrc (item, autoplay) {
+function getVideoSrc (item, autoplay) {
   if (!item) {
     return undefined
   }
@@ -87,7 +87,7 @@ function videoSrc (item, autoplay) {
   return undefined
 }
 
-function audioSrc (item) {
+function getAudioSrc (item) {
   if (!item) {
     return undefined
   }
@@ -332,12 +332,12 @@ var methods = {
     }
   },
 
-  videoSrc,
+  getVideoSrc,
 
-  audioSrc,
+  getAudioSrc,
 
   hasMedia (item) {
-    return videoSrc(item) || audioSrc(item)
+    return getVideoSrc(item) || getAudioSrc(item)
   },
 
   setMediaVerb (item) {
@@ -345,9 +345,9 @@ var methods = {
       return item._mediaVerb
     }
 
-    if (videoSrc(item)) {
+    if (getVideoSrc(item)) {
       item._mediaVerb = 'watch'
-    } else if (audioSrc(item)) {
+    } else if (getAudioSrc(item)) {
       item._mediaVerb = 'listen'
     } else {
       item._mediaVerb = 'read'
@@ -1025,6 +1025,10 @@ var methods = {
 
     _.app.membership.feed = feed
     _.app.membership.intent = intent || 'login'
+  },
+
+  pictureInPicture (item) {
+
   }
 
   // serviceShouldPromptCredentials(service, data) {

@@ -10,6 +10,8 @@
       :autoplay="true"
     />
 
+    <br>
+
     <div class="feed home-feed wide-feed">
       <div class="title-wrapper">
         <h1>
@@ -25,7 +27,9 @@
           <span v-if="item.author && item.author !== item.feed.name">
             {{ item.author }} @
           </span>
-          {{ item.feed.name }}
+          <span>
+            {{ item.feed.name }}
+          </span>
         </router-link>
 
         &mdash;

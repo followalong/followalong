@@ -23,20 +23,18 @@
       :item="playing"
       :app="app"
       :autoplay="true"
-      expanded="true"
+      :expanded="true"
     />
   </div>
 </template>
 
 <script>
-import methods from '@/components/app/methods'
 import EmbedMedia from '@/components/embed-media/component.vue'
 
 export default {
   components: {
     EmbedMedia
   },
-  props: ['app', 'playing'],
-  methods
+  props: ['app', 'playing']
 }
 </script>

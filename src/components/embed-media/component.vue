@@ -1,40 +1,61 @@
 <template>
-  <div
-    v-if="videoSrc || audioSrc"
-    :class="klass"
-  >
-    <a
-      href="javascript:;"
-      class="expander"
-      @click="app.popout(item, true)"
-    >
-      <font-awesome-icon
-        v-if="expanded"
-        icon="compress"
-      />
-      <font-awesome-icon
-        v-else
-        icon="expand"
-      />
-    </a>
-
-    <div v-if="videoSrc">
-      <iframe
-        :src="videoSrc"
-        frameborder="0"
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-      />
+  <div class="embed-media">
+    <div class="relativizer">
+      <a
+        href="javascript:;"
+        class="expander"
+        @click="app.popout(item)"
+      >
+        <font-awesome-icon
+          icon="expand"
+        />
+      </a>
     </div>
 
-    <div v-else>
-      <div v-if="audioSrc">
-        <audio
-          controls
-          :autoplay="autoplay"
+    <div
+      class="aspect-ratio-box"
+    >
+      <a
+        v-if="!clicked"
+        href="javascript:;"
+        @click="clicked = true"
+      >
+        <img
+          v-if="item.image && item.image.url"
+          class="aspect-ratio-box-inside"
+          :style="'background-image:url(' + item.image.url + ')'"
         >
-          <source :src="audioSrc">
-        </audio>
+        <span
+          v-else
+          href="javascript:;"
+        >&#9658;</span>
+      </a>
+
+      <div v-else>
+        <div
+          v-if="videoSrc"
+          class="video-embed"
+        >
+          <iframe
+            :src="videoSrc"
+            class="aspect-ratio-box-inside"
+            frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          />
+        </div>
+
+        <div
+          v-if="audioSrc"
+          class="audio-embed"
+        >
+          <audio
+            controls
+            :autoplay="true"
+          >
+            <source :src="audioSrc">
+          </audio>
+        </div>
       </div>
     </div>
   </div>
@@ -44,38 +65,21 @@
 import methods from '@/components/app/methods'
 
 export default {
-  props: ['app', 'item', 'autoplay', 'expanded'],
-  computed: {
-    klass () {
-      var _ = this
-      var str = 'embed'
-
-      if (_.videoSrc) str += ' video-embed'
-      if (_.audioSrc) str += ' audio-embed'
-
-      return str
-    },
-
-    videoSrc: {
-      get () {
-        return methods.videoSrc(this.item, this.autoplay)
-      },
-      set () {}
-    },
-
-    audioSrc: {
-      get () {
-        return methods.audioSrc(this.item, this.autoplay)
-      },
-      set () {}
+  props: ['app', 'item', 'autoplay'],
+  data () {
+    return {
+      clicked: this.autoplay || false,
+      expanded: false
     }
   },
-  mounted () {
-    this.item.isPlaying = true
-  },
-  beforeUnmount () {
-    delete this.item.isPlaying
-  },
-  methods
+  computed: {
+    videoSrc () {
+      return methods.getVideoSrc(this.item, true)
+    },
+
+    audioSrc () {
+      return methods.getAudioSrc(this.item, true)
+    }
+  }
 }
 </script>

@@ -40,8 +40,10 @@
       />
     </div>
 
-    <div v-if="showContent">
-      <ClickableMedia
+    <div
+      v-if="showContent"
+    >
+      <EmbedMedia
         v-if="app.hasMedia(item)"
         :item="item"
         :app="app"
@@ -97,12 +99,12 @@
 
 <script>
 import methods from '@/components/app/methods'
-import ClickableMedia from '@/components/clickable-media/component.vue'
+import EmbedMedia from '@/components/embed-media/component.vue'
 import QuickSubscribe from '@/components/quick-subscribe/component.vue'
 
 export default {
   components: {
-    ClickableMedia,
+    EmbedMedia,
     QuickSubscribe
   },
   props: ['app', 'item', 'showContent'],

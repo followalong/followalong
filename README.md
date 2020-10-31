@@ -5,7 +5,6 @@
 - Better local search
 - Make Services approachable
 - Simplify loading
-- Better media player
 - console.error notifier
 
 ## Past Todo

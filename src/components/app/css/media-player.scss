@@ -1,3 +1,7 @@
+.relativizer {
+    position: relative;
+}
+
 .media-player {
     position: fixed;
     bottom: -1px;
@@ -55,38 +59,5 @@
             font-size: 75%;
             opacity: 0.75;
         }
-    }
-}
-
-.expander {
-    position: absolute;
-    top: -2.3em;
-    right: 0;
-    text-align: center;
-    margin: 0;
-    padding: 0.6em 0.8em;
-    border-radius: 7px 7px 0 0;
-    font-size: 90%;
-    line-height: 1;
-    color: #aaa;
-    background: $medium-gray;
-    display: block;
-
-    &:hover {
-        background: #ddd;
-    }
-}
-
-.clickable-media {
-    position: relative;
-
-    &.clicked {
-        .expander {
-            background: $blue;
-        }
-    }
-
-    img {
-        width: 100%;
     }
 }
