@@ -4,7 +4,7 @@
       <a
         href="javascript:;"
         class="expander"
-        @click="app.popout(item)"
+        @click="popout(item)"
       >
         <font-awesome-icon
           icon="expand"
@@ -79,6 +79,16 @@ export default {
 
     audioSrc () {
       return methods.getAudioSrc(this.item, true)
+    }
+  },
+  methods: {
+    popout (item) {
+      if (this.app.playing === item) {
+        this.app.playing = undefined
+      } else {
+        this.app.read(item, true)
+        this.app.playing = item
+      }
     }
   }
 }

@@ -124,7 +124,7 @@
             </span>
             <button
               class="button-gray"
-              @click="app.copyConfig(app.identity)"
+              @click="copyConfig(app.identity)"
             >
               Copy Configuration
             </button>
@@ -159,12 +159,21 @@
 </template>
 
 <script>
+import { Base64 } from 'js-base64'
+import copy from 'copy-to-clipboard'
+
 export default {
   props: ['app'],
   data () {
     return {
       secretKey: undefined,
       hasStorageSupport: this.app.store.INDEXEDDB || this.app.store.LOCALSTORAGE
+    }
+  },
+  methods: {
+    copyConfig (identity) {
+      copy(Base64.encode(JSON.stringify(this.app.toRemote(identity))))
+      alert('Copied configuration to clipboard.')
     }
   }
 }

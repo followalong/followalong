@@ -64,6 +64,7 @@
 import { reactive } from 'vue'
 import { Base64 } from 'js-base64'
 import seed from '@/components/app/seed'
+import utils from '@/components/app/utils'
 
 export default {
   props: ['app'],
@@ -108,7 +109,7 @@ export default {
       var _ = this
       var paste = _.paste.trim()
 
-      if (_.app.isBase64(paste)) {
+      if (utils.isBase64(paste)) {
         try {
           paste = Base64.decode(paste)
         } catch (e) { }

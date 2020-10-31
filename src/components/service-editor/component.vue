@@ -83,7 +83,7 @@
 
                 <a
                   href="javascript:;"
-                  @click="app.copyService(service)"
+                  @click="copyService(service)"
                 >
                   <font-awesome-icon icon="copy" />
                   Copy
@@ -91,7 +91,7 @@
 
                 <a
                   href="javascript:;"
-                  @click="app.downloadService(service)"
+                  @click="downloadService(service)"
                 >
                   <font-awesome-icon icon="download" />
                   Download
@@ -99,7 +99,7 @@
 
                 <a
                   href="javascript:;"
-                  @click="app.removeService(app.identity, service)"
+                  @click="removeService(app.identity, service)"
                 >
                   Delete
                 </a>
@@ -273,7 +273,10 @@
 
 <script>
 import { Base64 } from 'js-base64'
+import { saveAs } from 'file-saver'
+import copy from 'copy-to-clipboard'
 import SERVICES from '@/components/app/services'
+import utils from '@/components/app/utils'
 import CreditCard from '@/components/credit-card/component.vue'
 
 export default {
@@ -342,7 +345,7 @@ export default {
       var _ = this
       var paste = _.paste.trim()
 
-      if (_.app.isBase64(paste)) {
+      if (utils.isBase64(paste)) {
         try {
           paste = Base64.decode(paste)
         } catch (e) { }
@@ -400,6 +403,46 @@ export default {
 
       _.errorMessage = msg
       _.loading = false
+    },
+
+    copyService (service) {
+      service = JSON.parse(JSON.stringify({
+        id: service.id,
+        template: service.template,
+        data: service.data
+      }))
+
+      service.template = service.template || service.id
+
+      copy(Base64.encode(JSON.stringify(service)))
+
+      alert('Copied service to clipboard.')
+    },
+
+    removeService (identity, service) {
+      var arr = identity.services.custom
+
+      if (confirm('Are you sure you want to remove this service?')) {
+        arr.splice(arr.indexOf(service), 1)
+      }
+
+      this.app.save()
+    },
+
+    downloadService (service) {
+      service = JSON.parse(JSON.stringify({
+        id: service.id,
+        template: service.template,
+        data: service.data
+      }))
+
+      service.template = service.template || service.id
+
+      var filename = window.location.host.replace(':', '.') + '.' + service.id + '.json'
+      var str = JSON.stringify(service)
+      var blob = new Blob([str], { type: 'application/json;charset=utf-8' })
+
+      saveAs(blob, filename)
     }
   }
 }

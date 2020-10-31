@@ -118,7 +118,7 @@
           <li>
             <a
               href="javascript:;"
-              @click="showMenu = false; app.unsubscribe(feed, true)"
+              @click="showMenu = false; app.unsubscribeFeed(feed, true)"
             >
               Unsubscribe
             </a>

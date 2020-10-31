@@ -1,27 +1,24 @@
 import { reactive } from 'vue'
-import { Base64 } from 'js-base64'
 import seed from '@/components/app/seed'
-import sorter from '@/components/app/sorter'
 import { getFeed } from '@/components/app/fetcher'
 import SERVICES from '@/components/app/services'
 import aes256 from 'aes256'
 import uniqId from 'uniq-id'
-import copy from 'copy-to-clipboard'
 import async from 'no-async'
 import loadExternal from 'load-external'
 import { saveAs } from 'file-saver'
 import truncate from 'trunc-html'
+import utils from './utils'
 
-var HALF_HOUR = 1000 * 60 * 60 * 0.5
-var TWO_MINUTES = 1000 * 60 * 1
-var ALLOWED_TAGS = [
+const ALLOWED_TAGS = [
   'a', 'article', 'b', 'blockquote', 'br', 'caption', 'code', 'del', 'details', 'div', 'em',
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'img', 'ins', 'kbd', 'li', 'main', 'ol',
   'p', 'pre', 'section', 'span', 'strike', 'strong', 'sub', 'summary', 'sup', 'table',
   'tbody', 'td', 'th', 'thead', 'tr', 'u', 'ul'
 ]
-var SCRIPT_CACHE = {}
-var nextFeedFetcher
+const SCRIPT_CACHE = {}
+
+let nextFeedFetcher
 
 function LAST_UPDATED (a, b) {
   if (a._updatedAt < b._updatedAt) return -1
@@ -170,10 +167,6 @@ var methods = {
     })
   },
 
-  feedFetcherDuration (identity) {
-    return HALF_HOUR / identity.feeds.length
-  },
-
   fetchNextFeed (identity) {
     var _ = this
     var updatedAt = Date.now()
@@ -183,7 +176,7 @@ var methods = {
     if (_.app.loading || !feed) {
       setTimeout(function () {
         _.fetchNextFeed(identity)
-      }, _.feedFetcherDuration(identity))
+      }, utils.feedFetcherDuration(identity))
 
       return
     }
@@ -193,7 +186,7 @@ var methods = {
 
       setTimeout(function () {
         _.fetchNextFeed(identity)
-      }, _.feedFetcherDuration(identity))
+      }, utils.feedFetcherDuration(identity))
     })
   },
 
@@ -202,7 +195,7 @@ var methods = {
 
     updatedAt = updatedAt || Date.now()
 
-    if (!override && feed._updatedAt && feed._updatedAt > updatedAt - HALF_HOUR) {
+    if (!override && feed._updatedAt && feed._updatedAt > updatedAt - utils.HALF_HOUR) {
       return done()
     }
 
@@ -220,7 +213,7 @@ var methods = {
   saveLocal (done) {
     var _ = this
 
-    _.app.trimItems(_.app.identity)
+    utils.trimItems(_.app.identity)
 
     _.app.store.setItem(
       _.app.identity.id,
@@ -236,16 +229,13 @@ var methods = {
   },
 
   save (done) {
-    var _ = this
-
-    _.saveLocal(function () {
-      _.sync(done)
+    this.saveLocal(() => {
+      this.sync(done)
     })
   },
 
   sync (done) {
-    var _ = this
-    var proxy = _.app.findService(_.app.identity, 'sync')
+    const proxy = this.app.findService(this.app.identity, 'sync')
 
     if (!proxy) {
       return
@@ -253,7 +243,7 @@ var methods = {
 
     proxy.request(proxy.app, proxy.app.identity, {
       action: 'sync',
-      identity: _.app.toRemote(_.app.identity)
+      identity: this.app.toRemote(this.app.identity)
     }, function (err, data) {
       if (typeof done === 'function') {
         done(err, data)
@@ -271,9 +261,7 @@ var methods = {
   },
 
   setIdentityDefaults (identity) {
-    var _ = this
-
-    identity.id = identity.id || _.app.generateId()
+    identity.id = identity.id || this.app.generateId()
     identity.name = identity.name || '...'
     identity.feeds = identity.feeds || []
     identity.items = identity.items || []
@@ -295,42 +283,8 @@ var methods = {
     }
   },
 
-  trimItems (identity) {
-    var _ = this
-    var limit = parseInt(identity.services.local.maxReadCount)
-    var items = _.app.newsfeed.filter(function (item) {
-      return item.isRead && !item.isSaved && !item.isPlaying
-    }).sort(sorter(identity))
-    var itemsLength = items.length
-    var item; var i
-
-    for (i = itemsLength - 1; i >= 0; i--) {
-      if (itemsLength <= limit) {
-        break
-      }
-
-      item = items[i]
-
-      if (!item) continue
-
-      identity.items.splice(identity.items.indexOf(item), 1)
-      itemsLength--
-    }
-  },
-
   dateFormat (date, now) {
     return timeAgo(new Date(date), now)
-  },
-
-  popout (item) {
-    var _ = this
-
-    if (_.app.playing === item) {
-      _.app.playing = undefined
-    } else {
-      _.app.read(item, true)
-      _.app.playing = item
-    }
   },
 
   getVideoSrc,
@@ -606,13 +560,6 @@ var methods = {
     return uniqId.generateUUID('xxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxy', 32)()
   },
 
-  copyConfig (identity) {
-    var _ = this
-    copy(Base64.encode(JSON.stringify(_.toRemote(identity))))
-
-    alert('Copied configuration to clipboard.')
-  },
-
   decryptIdentity (identity, done) {
     var _ = this
 
@@ -743,7 +690,7 @@ var methods = {
       _.fetchAllFeeds(identity, override, function () {
         nextFeedFetcher = setTimeout(function () {
           _.fetchNextFeed(_.app.identity)
-        }, TWO_MINUTES)
+        }, utils.TWO_MINUTES)
       })
     })
   },
@@ -920,52 +867,7 @@ var methods = {
     return service
   },
 
-  removeService (identity, service) {
-    var _ = this
-    var arr = identity.services.custom
-
-    if (confirm('Are you sure you want to remove this service?')) {
-      arr.splice(arr.indexOf(service), 1)
-    }
-
-    _.app.save()
-  },
-
-  downloadService (service) {
-    service = JSON.parse(JSON.stringify({
-      id: service.id,
-      template: service.template,
-      data: service.data
-    }))
-
-    service.template = service.template || service.id
-
-    var filename = window.location.host.replace(':', '.') + '.' + service.id + '.json'
-    var str = JSON.stringify(service)
-    var blob = new Blob([str], { type: 'application/json;charset=utf-8' })
-
-    saveAs(blob, filename)
-  },
-
-  copyService (service) {
-    service = JSON.parse(JSON.stringify({
-      id: service.id,
-      template: service.template,
-      data: service.data
-    }))
-
-    service.template = service.template || service.id
-
-    copy(Base64.encode(JSON.stringify(service)))
-
-    alert('Copied service to clipboard.')
-  },
-
-  isBase64 (str) {
-    return /^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$/.test(str)
-  },
-
-  unsubscribe (feed, redirect) {
+  unsubscribeFeed (feed, redirect) {
     if (!confirm('Are you sure you want to unsubscribe from this feed?')) return
 
     var _ = this
@@ -1006,20 +908,16 @@ var methods = {
   },
 
   membershipClass (feed) {
-    var _ = this
-
-    if (_.app.isMemberExpired(feed)) return 'is-expired'
-    if (_.app.isMemberExpiring(feed)) return 'is-expiring'
-    if (_.app.isMember(feed)) return 'is-member'
+    if (this.app.isMemberExpired(feed)) return 'is-expired'
+    if (this.app.isMemberExpiring(feed)) return 'is-expiring'
+    if (this.app.isMember(feed)) return 'is-member'
 
     return 'is-nonmember'
   },
 
   editMembership (feed, intent) {
-    var _ = this
-
-    _.app.membership.feed = feed
-    _.app.membership.intent = intent || 'login'
+    this.app.membership.feed = feed
+    this.app.membership.intent = intent || 'login'
   },
 
   updateNow () {
@@ -1048,18 +946,6 @@ var methods = {
       app.updateNow()
     })
   }
-
-  // serviceShouldPromptCredentials(service, data) {
-  //     if (service.pricing) {
-  //         for (var key in service.fields) {
-  //             if (service.fields[key].credential && !service.data[key]) {
-  //                 return true;
-  //             }
-  //         }
-  //     }
-
-  //     return false;
-  // }
 }
 
 export default methods
