@@ -4,7 +4,6 @@ import { getFeed } from '@/components/app/fetcher'
 import SERVICES from '@/components/app/services'
 import uniqId from 'uniq-id'
 import async from 'no-async'
-import loadExternal from 'load-external'
 import truncate from 'trunc-html'
 import utils from './utils'
 import crypt from './crypt'
@@ -15,7 +14,6 @@ const ALLOWED_TAGS = [
   'p', 'pre', 'section', 'span', 'strike', 'strong', 'sub', 'summary', 'sup', 'table',
   'tbody', 'td', 'th', 'thead', 'tr', 'u', 'ul'
 ]
-const SCRIPT_CACHE = {}
 
 let nextFeedFetcher
 
@@ -541,26 +539,6 @@ var methods = {
         done(identities, keychain)
       })
     })
-  },
-
-  cachedLoadExternal (url, done) {
-    var _ = this
-
-    if (SCRIPT_CACHE[url] === true) {
-      done()
-    } else if (SCRIPT_CACHE[url] instanceof Array) {
-      SCRIPT_CACHE[url].push(done)
-    } else {
-      SCRIPT_CACHE[url] = [done]
-
-      loadExternal(url, function () {
-        for (var i = SCRIPT_CACHE[url].length - 1; i >= 0; i--) {
-          SCRIPT_CACHE[url][i].call(_)
-        }
-
-        SCRIPT_CACHE[url] = true
-      })
-    }
   },
 
   hideHint (hint) {
