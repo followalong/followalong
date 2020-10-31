@@ -5,7 +5,6 @@ import SERVICES from '@/components/app/services'
 import uniqId from 'uniq-id'
 import async from 'no-async'
 import loadExternal from 'load-external'
-import { saveAs } from 'file-saver'
 import truncate from 'trunc-html'
 import utils from './utils'
 import crypt from './crypt'
@@ -397,15 +396,6 @@ var methods = {
     }
   },
 
-  downloadIdentity (identity) {
-    var _ = this
-    var filename = window.location.host.replace(':', '.') + '.' + identity.id + '.json'
-    var str = JSON.stringify(_.toRemote(identity))
-    var blob = new Blob([str], { type: 'application/json;charset=utf-8' })
-
-    saveAs(blob, filename)
-  },
-
   read (item, val) {
     var _ = this
     var current = item.isRead
@@ -426,18 +416,6 @@ var methods = {
     return arr.filter(function (feed) {
       return feed[attr] === value
     })
-  },
-
-  reset (identity) {
-    if (confirm('Are you sure you want to forget this identity?')) {
-      var _ = this
-
-      _.app.store.removeItem(identity.id, function () {
-        _.app.store.removeItem('key-' + identity.id, function () {
-          window.location.href = '/'
-        })
-      })
-    }
   },
 
   getAskSecretKey (identity, reset) {

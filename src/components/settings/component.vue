@@ -111,7 +111,7 @@
             </span>
             <button
               class="button-gray"
-              @click="app.downloadIdentity(app.identity)"
+              @click="downloadIdentity(app.identity)"
             >
               Download Identity
             </button>
@@ -141,7 +141,7 @@
             </span>
             <button
               class="button-red"
-              @click="app.reset(app.identity)"
+              @click="reset(app.identity)"
             >
               Forget This Identity
             </button>
@@ -161,6 +161,7 @@
 <script>
 import { Base64 } from 'js-base64'
 import copy from 'copy-to-clipboard'
+import { saveAs } from 'file-saver'
 
 export default {
   props: ['app'],
@@ -191,6 +192,24 @@ export default {
       }
 
       return '~' + (Math.round(size * 10) / 10) + ' ' + unit
+    },
+
+    downloadIdentity (identity) {
+      const filename = window.location.host.replace(':', '.') + '.' + identity.id + '.json'
+      const str = JSON.stringify(this.app.toRemote(identity))
+      const blob = new Blob([str], { type: 'application/json;charset=utf-8' })
+
+      saveAs(blob, filename)
+    },
+
+    reset (identity) {
+      if (confirm('Are you sure you want to forget this identity?')) {
+        this.app.store.removeItem(identity.id, () => {
+          this.app.store.removeItem('key-' + identity.id, () => {
+            window.location.href = '/'
+          })
+        })
+      }
     }
   }
 }
