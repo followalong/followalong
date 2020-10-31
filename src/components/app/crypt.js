@@ -1,4 +1,5 @@
 import aes256 from 'aes256'
+import utils from './utils'
 
 export default {
   en (app, identity, json) {
@@ -10,13 +11,13 @@ export default {
     if (identity.services.local.strategy === 'none') {
       return encrypted
     } else if (identity.services.local.strategy === 'rotate') {
-      key = app.generateId()
+      key = utils.generateId()
       app.saveKey(identity, key, true)
     } else if (identity.services.local.strategy === 'ask') {
       key = app.getAskSecretKey(identity, false)
     } else if (identity.services.local.strategy === 'store') {
       if (typeof app.keychain[identity.id] === 'undefined') {
-        key = app.generateId()
+        key = utils.generateId()
         app.saveKey(identity, key, true)
       }
     }

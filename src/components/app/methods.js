@@ -2,7 +2,6 @@ import { reactive } from 'vue'
 import seed from '@/components/app/seed'
 import { getFeed } from '@/components/app/fetcher'
 import SERVICES from '@/components/app/services'
-import uniqId from 'uniq-id'
 import async from 'no-async'
 import utils from './utils'
 import crypt from './crypt'
@@ -124,29 +123,6 @@ var methods = {
     _.app.save()
   },
 
-  setIdentityDefaults (identity) {
-    identity.id = identity.id || this.app.generateId()
-    identity.name = identity.name || '...'
-    identity.feeds = identity.feeds || []
-    identity.items = identity.items || []
-
-    identity.services = identity.services || {}
-    identity.services.custom = identity.services.custom || []
-    identity.services.rss = identity.services.rss || { symlink: 'followalong-free' }
-    identity.services.sync = identity.services.sync || { symlink: 'followalong-none' }
-    identity.services.publish = identity.services.publish || { symlink: 'followalong-none' }
-    identity.services.search = identity.services.search || { symlink: 'followalong-free' }
-    identity.services.media = identity.services.media || { symlink: 'followalong-none' }
-    identity.services.local = identity.services.local || {
-      strategy: 'none'
-    }
-    identity.services.local.maxReadCount = typeof identity.services.local.maxReadCount === 'undefined' ? 150 : parseInt(identity.services.local.maxReadCount)
-
-    if (typeof identity._decrypted === 'undefined') {
-      identity._decrypted = false
-    }
-  },
-
   dateFormat (date, now) {
     return utils.timeAgo(new Date(date), now)
   },
@@ -225,7 +201,7 @@ var methods = {
 
       if (_.app.keychain[identity.id] === null && reset) {
         identity.services.local.strategy = 'rotate'
-        var key = _.app.generateId()
+        var key = utils.generateId()
         _.app.saveKey(identity, key, true)
         return key
       }
@@ -247,7 +223,7 @@ var methods = {
     }
 
     if (identity.services.local.strategy === 'store' && !key) {
-      key = _.app.generateId()
+      key = utils.generateId()
       _.app.keychain[identity.id] = key
     }
 
@@ -260,10 +236,6 @@ var methods = {
     if (!ignoreSave) {
       _.app.save()
     }
-  },
-
-  generateId () {
-    return uniqId.generateUUID('xxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxy', 32)()
   },
 
   decryptIdentity (identity, done) {
@@ -328,12 +300,14 @@ var methods = {
 
     identity = reactive(identity)
 
-    _.app.setIdentityDefaults(identity)
+    utils.setIdentityDefaults(identity)
+
     _.app.identity = identity
     _.app.loading = true
 
     _.decryptIdentity(identity, function () {
-      _.app.setIdentityDefaults(identity)
+      utils.setIdentityDefaults(identity)
+
       _.app.saveLocal()
 
       clearTimeout(nextFeedFetcher)
@@ -484,7 +458,7 @@ var methods = {
       }
 
       for (var i = identities.length - 1; i >= 0; i--) {
-        app.setIdentityDefaults(identities[i])
+        utils.setIdentityDefaults(identities[i])
       }
 
       app.identities = identities

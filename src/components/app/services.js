@@ -92,7 +92,6 @@ function s3Sync (app, identity, data, done) {
 }
 
 var STRIP_SLASHES = /^\/|\/$/g
-var generateId = uniqId.generateUUID('xxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxy', 32)
 var AWS_CONFIG = {
   endpoint: 'lambda.us-east-1.amazonaws.com',
   region: 'us-east-1',
@@ -126,7 +125,7 @@ var SERVICES = [{
   supports: 'sync',
   data: {
     endpoint: 's3.amazonaws.com',
-    key: '/identities/' + generateId() + '.json'
+    key: '/identities/' + utils.generateId() + '.json'
     // accessKeyId: AWS_CONFIG.accessKeyId,
     // secretAccessKey: AWS_CONFIG.secretAccessKey
   },

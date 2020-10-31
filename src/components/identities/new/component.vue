@@ -81,7 +81,8 @@ export default {
 
       delete newIdentity.id
 
-      _.app.setIdentityDefaults(newIdentity)
+      utils.setIdentityDefaults(newIdentity)
+
       _.app.setIdentity(newIdentity)
       _.app.identities.push(newIdentity)
 

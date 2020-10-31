@@ -1,9 +1,8 @@
-import uniqId from 'uniq-id'
+import utils from './utils'
 
-var generateId = uniqId.generateUUID('xxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxy', 32)
 var identities = [
   {
-    id: generateId(),
+    id: utils.generateId(),
     name: 'My Account',
     feeds: [
       {
@@ -62,7 +61,7 @@ var identities = [
 ]
 
 // {
-//   id: generateId(),
+//   id: utils.generateId(),
 //   name: 'The Library of Economics and Liberty',
 //   url: 'http://econlog.econlib.org/index.xml',
 // }
@@ -70,22 +69,22 @@ var identities = [
 // https://mises.org/dailyarticles.xml
 
 // {
-//   id: generateId(),
+//   id: utils.generateId(),
 //   name: 'Reuters',
 //   url: 'http://feeds.reuters.com/reuters/topNews.rss?format=xml',
 // },
 // {
-//   id: generateId(),
+//   id: utils.generateId(),
 //   name: 'Signal v. Noise',
 //   url: 'https://m.signalvnoise.com/feed/',
 // },
 // {
-//   id: generateId(),
+//   id: utils.generateId(),
 //   name: 'Daily Wire',
 //   url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCaeO5vkdj5xOQHp4UmIN6dw',
 // },
 // {
-//   id: generateId(),
+//   id: utils.generateId(),
 //   name: 'Hacker News',
 //   url: 'https://news.ycombinator.com/rss',
 // }

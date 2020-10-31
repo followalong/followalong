@@ -1,4 +1,5 @@
 import Parser from 'rss-parser'
+import utils from './utils'
 
 var parser = new Parser({
   customFields: {
@@ -45,7 +46,7 @@ function parseItems (app, feed, data, items, updatedAt, done) {
     }
 
     data.items.forEach(function (newItem) {
-      newItem.guid = newItem.guid || newItem.id || app.generateId()
+      newItem.guid = newItem.guid || newItem.id || utils.generateId()
 
       try {
         newItem.image = newItem['media:group']['media:thumbnail'][0].$
@@ -63,7 +64,7 @@ function parseItems (app, feed, data, items, updatedAt, done) {
 
         newItem = oldItem
       } else {
-        newItem.guid = newItem.guid || app.generateId()
+        newItem.guid = newItem.guid || utils.generateId()
         newItem.isSaved = false
         newItem._updatedAt = updatedAt
 

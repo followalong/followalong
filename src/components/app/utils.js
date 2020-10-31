@@ -1,6 +1,7 @@
 import loadExternal from 'load-external'
 import sorter from '@/components/app/sorter'
 import async from 'no-async'
+import uniqId from 'uniq-id'
 
 const TWO_MINUTES = 1000 * 60 * 1
 const HALF_HOUR = 1000 * 60 * 60 * 0.5
@@ -24,6 +25,10 @@ const MAPPER_ITEM = function (item) {
     content: item.content,
     _updatedAt: item._updatedAt
   }
+}
+
+const generateId = function () {
+  return uniqId.generateUUID('xxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxy', 32)()
 }
 
 export default {
@@ -332,5 +337,30 @@ export default {
         done(identities, keychain)
       })
     })
-  }
+  },
+
+  setIdentityDefaults (identity) {
+    identity.id = identity.id || generateId()
+    identity.name = identity.name || '...'
+    identity.feeds = identity.feeds || []
+    identity.items = identity.items || []
+
+    identity.services = identity.services || {}
+    identity.services.custom = identity.services.custom || []
+    identity.services.rss = identity.services.rss || { symlink: 'followalong-free' }
+    identity.services.sync = identity.services.sync || { symlink: 'followalong-none' }
+    identity.services.publish = identity.services.publish || { symlink: 'followalong-none' }
+    identity.services.search = identity.services.search || { symlink: 'followalong-free' }
+    identity.services.media = identity.services.media || { symlink: 'followalong-none' }
+    identity.services.local = identity.services.local || {
+      strategy: 'none'
+    }
+    identity.services.local.maxReadCount = typeof identity.services.local.maxReadCount === 'undefined' ? 150 : parseInt(identity.services.local.maxReadCount)
+
+    if (typeof identity._decrypted === 'undefined') {
+      identity._decrypted = false
+    }
+  },
+
+  generateId
 }

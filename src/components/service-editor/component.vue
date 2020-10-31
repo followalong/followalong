@@ -324,7 +324,7 @@ export default {
       if (override || (!s.template && s.fields)) {
         s = JSON.parse(JSON.stringify(s))
         s.template = s.template || s.id
-        s.id = _.app.generateId()
+        s.id = utils.generateId()
         s.data.name = s.data.name || (s.name + ' (Custom)')
 
         _.app.identity.services.custom.push(s)
