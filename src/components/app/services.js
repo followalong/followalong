@@ -1,5 +1,4 @@
 import AWS from 'aws-sdk'
-import uniqId from 'uniq-id'
 import utils from './utils'
 
 function xmlRequest (app, identity, data, done) {
