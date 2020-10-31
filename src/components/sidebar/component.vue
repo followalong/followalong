@@ -140,7 +140,7 @@
     <div class="section">
       <h3>
         <router-link to="/changelog">
-          Version {{ app.version }}
+          Version {{ version }}
         </router-link>
       </h3>
     </div>
