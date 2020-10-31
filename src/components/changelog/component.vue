@@ -19,7 +19,7 @@
     </p>
 
     <div
-      v-for="(summary, version) in app.changelog"
+      v-for="(summary, version) in changelog"
       :key="version"
     >
       <p>
@@ -33,7 +33,14 @@
 </template>
 
 <script>
+import changelog from '@/../changelog.json'
+
 export default {
-  props: ['app']
+  props: ['app'],
+  data () {
+    return {
+      changelog
+    }
+  }
 }
 </script>

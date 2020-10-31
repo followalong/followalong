@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import changelog from '@/../changelog.json'
 import localForage from 'localforage'
 import MediaPlayer from '@/components/media-player/component.vue'
 import Membership from '@/components/membership/component.vue'
@@ -72,9 +71,7 @@ export default {
       sidebarClass: '',
       hints: [],
       now: new Date(),
-      playing: undefined,
-      changelog: changelog,
-      version: Object.keys(changelog)[0]
+      playing: undefined
     }
   },
   computed: {

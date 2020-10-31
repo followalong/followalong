@@ -148,8 +148,15 @@
 </template>
 
 <script>
+import changelog from '@/../changelog.json'
+
 export default {
   props: ['app'],
+  data () {
+    return {
+      version: Object.keys(changelog)[0]
+    }
+  },
   computed: {
     unreadWatches () {
       return this.app.unread.filter((item) => {
