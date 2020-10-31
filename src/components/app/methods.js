@@ -1,5 +1,6 @@
 import { reactive } from 'vue'
 import { Base64 } from 'js-base64'
+import seed from '@/components/app/seed'
 import sorter from '@/components/app/sorter'
 import { getFeed } from '@/components/app/fetcher'
 import SERVICES from '@/components/app/services'
@@ -396,12 +397,6 @@ var methods = {
 
     _.app.q = ''
     _.$router.push({ name: 'feed', params: { feed_url: feed.url } })
-  },
-
-  search (q) {
-    var _ = this
-
-    _.$router.push({ path: '/search', query: { q: q } })
   },
 
   toLocal (identity) {
@@ -1027,8 +1022,31 @@ var methods = {
     _.app.membership.intent = intent || 'login'
   },
 
-  pictureInPicture (item) {
+  updateNow () {
+    setInterval(() => {
+      this.now = new Date()
+    }, 60000)
+  },
 
+  setupApp (app) {
+    app.loading = true
+
+    app.constructIdentities((identities, keychain) => {
+      app.keychain = keychain
+
+      if (!identities || !identities.length) {
+        identities = seed
+        app.$router.push('/splash')
+      }
+
+      for (var i = identities.length - 1; i >= 0; i--) {
+        app.setIdentityDefaults(identities[i])
+      }
+
+      app.identities = identities
+      app.setIdentity(identities[0])
+      app.updateNow()
+    })
   }
 
   // serviceShouldPromptCredentials(service, data) {
