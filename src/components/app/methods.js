@@ -183,24 +183,6 @@ var methods = {
     return /^http/.test(q)
   },
 
-  fetchURL (url, items, _) {
-    _ = _ || this
-
-    var feed = reactive({ url: url })
-
-    _.app.loading = true
-
-    getFeed(_.app.findService(_.app.identity, 'rss', true), items, feed, Date.now(), function () {
-      _.feed = feed
-
-      items.forEach(function (item) {
-        item.feed = _.feed
-      })
-
-      _.app.loading = false
-    })
-  },
-
   subscribe (feed, items) {
     var _ = this
 
