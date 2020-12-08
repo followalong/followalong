@@ -371,10 +371,7 @@ var methods = {
         var items = ['fields', 'pricing', 'description', 'request']
 
         for (var i = items.length - 1; i >= 0; i--) {
-          service[items[i]] || Object.defineProperty(service, items[i], {
-            value: template[items[i]],
-            enumerable: false
-          })
+          service[items[i]] = service[items[i]] || template[items[i]]
         }
       }
 
