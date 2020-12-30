@@ -102,10 +102,10 @@ function getFeed (service, items, feed, updatedAt, callback, forEachCallback) {
   }
 
   getContent(service, feed.url, function (err, data) {
-    if (err) {
-      feed.error = err
-      console.error(err)
-      callback(err)
+    if (err || !data) {
+      feed.error = err || 'Feed has no data'
+      console.error(feed.error)
+      callback(feed.error)
       return
     } else {
       delete feed.error
