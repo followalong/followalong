@@ -66,6 +66,7 @@ function s3Sync (app, identity, data, done) {
     endpoint: new AWS.Endpoint(_.data.endpoint),
     accessKeyId: _.data.accessKeyId,
     secretAccessKey: _.data.secretAccessKey,
+    region: _.data.region,
     apiVersion: 'latest',
     maxRetries: 1
   })
@@ -137,6 +138,11 @@ var SERVICES = [{
     endpoint: {
       type: 'text',
       label: 'Endpoint',
+      required: true
+    },
+    region: {
+      type: 'text',
+      label: 'Region',
       required: true
     },
     key: {
