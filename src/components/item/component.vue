@@ -1,124 +1,143 @@
 <template>
-  <div
+  <li
     v-if="item && item.feed"
-    class="single-item"
+    :class="item.isRead ? 'read' : ''"
   >
-    <EmbedMedia
-      v-if="app.hasMedia(item)"
-      :item="item"
-      :app="app"
-      :autoplay="true"
-    />
+    <a
+      href="javascript:;"
+      class="check"
+      @click="app.read(item)"
+    >&check;</a>
 
-    <br>
+    <h3>
+      <router-link :to="{ name: 'item', params: { feed_url: item.feed.url, guid: item.guid } }">
+        {{ item.title }}
+      </router-link>
+    </h3>
 
-    <div class="feed home-feed wide-feed">
-      <div class="title-wrapper">
-        <h1>
-          <a :href="item.link">{{ item.title }}</a>
-        </h1>
-      </div>
+    <div class="feed-meta">
+      <router-link
+        :to="{ name: 'feed', params: { feed_url: item.feed.url } }"
+        class="feed-name"
+      >
+        <span v-if="item.author && item.author !== item.feed.name">
+          {{ item.author }} @
+        </span>
+        {{ item.feed.name }}
+      </router-link>
 
-      <h3>
-        <router-link
-          :to="{ name: 'feed', params: { feed_url: item.feed.url } }"
-          class="feed-name"
-        >
-          <span v-if="item.author && item.author !== item.feed.name">
-            {{ item.author }} @
-          </span>
-          <span>
-            {{ item.feed.name }}
-          </span>
-        </router-link>
+      &mdash;
 
-        &mdash;
+      <span
+        v-if="item.pubDate"
+        :title="item.pubDate"
+        class="feed-name"
+      >{{ app.dateFormat(item.pubDate, app.now) }}</span>
 
-        <span
-          v-if="item.pubDate"
-          :title="item.pubDate"
-          class="feed-name"
-        >{{ app.dateFormat(item.pubDate, app.now) }}</span>
-      </h3>
+      &nbsp; <QuickSubscribe
+        :app="app"
+        :feed="item.feed"
+      />
+    </div>
 
-      <div
-        v-if="item.content"
-        class="description"
-        v-html="app.blankifyLinks(item.content)"
+    <div
+      v-if="showContent"
+    >
+      <EmbedMedia
+        v-if="app.hasMedia(item)"
+        :item="item"
+        :app="app"
       />
 
-      <div style="margin-top: 20px;">
-        <a
-          :href="item.link"
-          class="button"
-          target="_blank"
-        >
-          View Source
-        </a>
+      <div v-if="hasContent">
+        <div class="description">
+          <div v-if="!isExpanded && hasContent && item.content.length > characterLimit">
+            <div v-html="prepDescription(item, characterLimit, '...')" />
+            <button
+              class="button-gray"
+              @click="isExpanded = !isExpanded"
+            >
+              Read More
+            </button>
+          </div>
+          <div
+            v-else-if="hasContent"
+            v-html="app.blankifyLinks(item.content)"
+          />
+        </div>
+      </div>
 
-        &nbsp;
-
+      <p class="hint float-right">
         <a
           href="javascript:;"
-          :class="'button' + (item.isSaved ? '' : ' button-gray')"
           @click="app.saveForLater(item)"
         >
-          Save<span v-if="item.isSaved">d</span>
+          <font-awesome-icon
+            icon="save"
+            :class="item.isSaved ? 'selected' : ''"
+          />
         </a>
-
-        &nbsp;
 
         <a
-          href="javascript:;"
-          class="button button-gray"
-          @click="app.read(item)"
+          :href="item.link"
+          target="_blank"
+          @click="app.read(item, true)"
         >
-          Mark As <span v-if="item.isRead">Unread</span><span v-else>Read</span>
+          <font-awesome-icon icon="link" />
         </a>
-      </div>
+      </p>
+
+      <p class="hint">
+        Comments are closed.
+      </p>
     </div>
-  </div>
+  </li>
 </template>
 
 <script>
+import truncate from 'trunc-html'
 import EmbedMedia from '@/components/embed-media/component.vue'
+import QuickSubscribe from '@/components/quick-subscribe/component.vue'
+
+const ALLOWED_TAGS = [
+  'a', 'article', 'b', 'blockquote', 'br', 'caption', 'code', 'del', 'details', 'div', 'em',
+  'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'img', 'ins', 'kbd', 'li', 'main', 'ol',
+  'p', 'pre', 'section', 'span', 'strike', 'strong', 'sub', 'summary', 'sup', 'table',
+  'tbody', 'td', 'th', 'thead', 'tr', 'u', 'ul'
+]
 
 export default {
   components: {
-    EmbedMedia
+    EmbedMedia,
+    QuickSubscribe
   },
-  props: ['app'],
+  props: ['app', 'item', 'showContent'],
+  data () {
+    return {
+      characterLimit: 450,
+      isExpanded: false
+    }
+  },
   computed: {
-    related () {
-      var _ = this
-
-      return _.app.newsfeed.filter(function (i) {
-        return i !== _.item
-      }).slice(0, 7)
-    },
-
-    item () {
-      var _ = this
-
-      return (_.app.identity.items || []).find(function (item) {
-        return item.guid + '' === _.$route.params.guid + ''
-      })
+    hasContent () {
+      return this.item ? (this.item.content || '').trim().length : false
     }
   },
-  watch: {
-    'item.guid' () {
-      var _ = this
-
-      if (_.item) {
-        _.app.read(_.item, true)
+  methods: {
+    prepDescription (item, characterLimit, ellipsis) {
+      if (!this.hasContent) {
+        return ''
       }
-    }
-  },
-  mounted () {
-    var _ = this
 
-    if (_.item) {
-      _.app.read(_.item, true)
+      return this.app.blankifyLinks(truncate(
+        item.content,
+        characterLimit,
+        {
+          sanitizer: {
+            allowedTags: ALLOWED_TAGS
+          }
+        }
+      ).html)
     }
   }
 }

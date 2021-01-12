@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import Feed from '@/components/feed/li.vue'
+import Feed from '@/components/feed/component.vue'
 import utils from '@/components/app/utils'
 
 export default {

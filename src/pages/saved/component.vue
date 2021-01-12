@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Item from '@/components/item/li.vue'
+import Item from '@/components/item/component.vue'
 
 export default {
   components: {

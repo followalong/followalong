@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import Item from '@/components/item/li.vue'
+import Item from '@/components/item/component.vue'
 
 const VERBS = ['watch', 'read', 'listen']
 const DISTANCE_FROM_BOTTOM = 1000
