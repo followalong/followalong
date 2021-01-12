@@ -13,7 +13,7 @@
     </div>
 
     <div
-      class="aspect-ratio-box"
+      :class="videoSrc ? 'aspect-ratio-box' : ''"
     >
       <a
         v-if="!clicked"
