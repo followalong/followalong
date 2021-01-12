@@ -46,8 +46,8 @@ const routes = [
     props: true
   },
   {
-    path: '/subscriptions',
-    name: 'subscriptions',
+    path: '/feeds',
+    name: 'feeds',
     component: FeedsIndex,
     props: true
   },

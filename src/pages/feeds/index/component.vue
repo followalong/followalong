@@ -9,7 +9,7 @@
         <span v-else>Fetch All Feeds</span>
       </button>
 
-      <h1>Subscriptions</h1>
+      <h1>Feeds</h1>
     </div>
 
     <ul>

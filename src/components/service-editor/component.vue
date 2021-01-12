@@ -37,7 +37,7 @@
                 v-if="service.fields"
                 class="form"
               >
-                <div v-if="!service.pricing || service.data.token || showPaidSubscription">
+                <div v-if="!service.pricing || service.data.token || showPaidFeed">
                   <div
                     v-for="(field, key) in service.fields"
                     :key="key"
@@ -68,7 +68,7 @@
                 <a
                   v-if="service.pricing"
                   href="javascript:;"
-                  @click="subscriptionModalService = service"
+                  @click="membershipModalService = service"
                 >
                   <span v-if="service.data.token">Re-</span>Subscribe
                 </a>
@@ -76,7 +76,7 @@
                 <a
                   v-if="service.pricing && !service.data.token"
                   href="javascript:;"
-                  @click="showPaidSubscription = !showPaidSubscription"
+                  @click="showPaidFeed = !showPaidFeed"
                 >
                   Credentials
                 </a>
@@ -215,12 +215,12 @@
     </div>
 
     <div
-      v-if="subscriptionModalService"
-      class="subscription-modal modal"
+      v-if="membershipModalService"
+      class="modal"
     >
       <div
         class="overlay"
-        @click="subscriptionModalService = undefined"
+        @click="membershipModalService = undefined"
       />
 
       <div class="content-wrapper">
@@ -228,16 +228,16 @@
           <a
             href="javascript:;"
             class="close"
-            @click="subscriptionModalService = undefined"
+            @click="membershipModalService = undefined"
           >
             &times;
           </a>
 
-          <h3>{{ subscriptionModalService.name }}</h3>
+          <h3>{{ membershipModalService.name }}</h3>
 
           <p
-            v-if="subscriptionModalService.description"
-            v-html="subscriptionModalService.description"
+            v-if="membershipModalService.description"
+            v-html="membershipModalService.description"
           />
 
           <CreditCard
@@ -260,8 +260,8 @@
             >
               <span v-if="loading">Loading...</span>
               <span v-else>
-                <span v-if="subscriptionModalService && subscriptionModalService.data.token">Re-</span>Subscribe Now
-                (${{ subscriptionModalService.pricing.stripe.price }} USD)
+                <span v-if="membershipModalService && membershipModalService.data.token">Re-</span>Subscribe Now
+                (${{ membershipModalService.pricing.stripe.price }} USD)
               </span>
             </button>
           </CreditCard>
@@ -292,8 +292,8 @@ export default {
       errorMessage: undefined,
       loading: false,
       tab: undefined,
-      showPaidSubscription: false,
-      subscriptionModalService: undefined
+      showPaidFeed: false,
+      membershipModalService: undefined
     }
   },
 
@@ -330,12 +330,12 @@ export default {
         _.app.identity.services.custom.push(s)
       }
 
-      _.showPaidSubscription = false
+      _.showPaidFeed = false
 
       _.app.identity.services[_.serverTypeKey] = { symlink: s.id }
 
       if (s.pricing && !s.data.token) {
-        _.subscriptionModalService = s
+        _.membershipModalService = s
       }
 
       _.app.save()
@@ -381,11 +381,11 @@ export default {
 
     subscribeToService (response) {
       var _ = this
-      var service = _.subscriptionModalService
+      var service = _.membershipModalService
       var supports = (service.supports || '').split(/,\s?/)
 
-      _.subscriptionModalService = undefined
-      _.showPaidSubscription = true
+      _.membershipModalService = undefined
+      _.showPaidFeed = true
 
       service.data.token = response.token
       service.data.expiry = response.expiry

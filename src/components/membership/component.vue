@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="membership.feed"
-    class="subscription-modal modal"
+    class="modal"
   >
     <div
       class="overlay"

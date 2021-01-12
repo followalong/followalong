@@ -73,9 +73,9 @@
       </li>
 
       <li>
-        <router-link to="/subscriptions">
+        <router-link to="/feeds">
           <font-awesome-icon icon="database" />
-          Subscriptions
+          Feeds
           <span class="hint counter">
             <span v-if="app.identity.feeds.length">({{ app.identity.feeds.length }})</span>
           </span>
