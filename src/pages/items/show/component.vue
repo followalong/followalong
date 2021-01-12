@@ -3,7 +3,7 @@
     v-if="item && item.feed"
     class="single-item"
   >
-    <EmbedMedia
+    <MediaPlayer
       v-if="app.hasMedia(item)"
       :item="item"
       :app="app"
@@ -81,11 +81,11 @@
 </template>
 
 <script>
-import EmbedMedia from '@/components/embed-media/component.vue'
+import MediaPlayer from '@/components/media-player/component.vue'
 
 export default {
   components: {
-    EmbedMedia
+    MediaPlayer
   },
   props: ['app'],
   computed: {

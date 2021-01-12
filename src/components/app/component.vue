@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <MediaPlayer
+    <PopoutPlayer
       v-if="playing"
       :app="app"
       :playing="playing"
@@ -28,7 +28,7 @@
 
 <script>
 import localForage from 'localforage'
-import MediaPlayer from '@/components/media-player/component.vue'
+import PopoutPlayer from '@/components/popout-player/component.vue'
 import Membership from '@/components/membership/component.vue'
 import methods from '@/components/app/methods'
 import Sidebar from '@/components/sidebar/component.vue'
@@ -37,7 +37,7 @@ import TopBar from '@/components/top-bar/component.vue'
 
 export default {
   components: {
-    MediaPlayer,
+    PopoutPlayer,
     Membership,
     Sidebar,
     TopBar

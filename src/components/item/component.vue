@@ -43,7 +43,7 @@
     <div
       v-if="showContent"
     >
-      <EmbedMedia
+      <MediaPlayer
         v-if="app.hasMedia(item)"
         :item="item"
         :app="app"
@@ -96,7 +96,7 @@
 
 <script>
 import truncate from 'trunc-html'
-import EmbedMedia from '@/components/embed-media/component.vue'
+import MediaPlayer from '@/components/media-player/component.vue'
 import QuickSubscribe from '@/components/quick-subscribe/component.vue'
 
 const ALLOWED_TAGS = [
@@ -108,7 +108,7 @@ const ALLOWED_TAGS = [
 
 export default {
   components: {
-    EmbedMedia,
+    MediaPlayer,
     QuickSubscribe
   },
   props: ['app', 'item', 'showContent'],
