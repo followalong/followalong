@@ -25,12 +25,12 @@ $media-player-width: 350px;
 
 @import "./css/reset.css";
 @import "./css/content.scss";
-@import "./css/nav.scss";
+@import "@/components/top-bar/style.scss";
 @import "./css/app.scss";
-@import "./css/sidebar.scss";
-@import "./css/feed.scss";
-@import "./css/media-player.scss";
+@import "@/components/sidebar/style.scss";
+@import "@/components/feed/style.scss";
+@import "@/components/popout-player/style.scss";
 @import "./css/columns.scss";
-@import "./css/services.scss";
+@import "@/components/service-editor/style.scss";
 @import "./css/modal.scss";
 @import "../../components/credit-card/style.scss";

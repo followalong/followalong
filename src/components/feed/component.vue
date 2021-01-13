@@ -67,7 +67,7 @@ export default {
       var _ = this
 
       _.feed._updatedAt = Date.now()
-      _.feed.paused = !_.feed.paused
+      _.feed.paused = false
       _.app.save()
     }
   }
