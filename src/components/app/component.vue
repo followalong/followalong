@@ -18,18 +18,12 @@
       :app="app"
       :playing="playing"
     />
-
-    <Membership
-      :app="app"
-      :membership="membership"
-    />
   </div>
 </template>
 
 <script>
 import localForage from 'localforage'
 import PopoutPlayer from '@/components/popout-player/component.vue'
-import Membership from '@/components/membership/component.vue'
 import methods from '@/components/app/methods'
 import Sidebar from '@/components/sidebar/component.vue'
 import sorter from '@/components/app/sorter'
@@ -38,7 +32,6 @@ import TopBar from '@/components/top-bar/component.vue'
 export default {
   components: {
     PopoutPlayer,
-    Membership,
     Sidebar,
     TopBar
   },
@@ -52,10 +45,6 @@ export default {
       store: localForage.createInstance({
         name: 'commmunity'
       }),
-      membership: {
-        feed: undefined,
-        intent: undefined
-      },
       loading: true,
       identities: [],
       keychain: {},

@@ -406,39 +406,6 @@ var methods = {
     })
   },
 
-  isMemberable (feed) {
-    return false
-  },
-
-  isMember (feed) {
-    return false
-  },
-
-  isMemberExpiring (feed) {
-    return false // feed.membership && feed.membership.expireAt & feed.membership.expireAt < new Date();
-  },
-
-  isMemberExpired (feed) {
-    return false// feed.membership && feed.membership.expireAt & feed.membership.expireAt < new Date();
-  },
-
-  isHelpable (feed) {
-    return this.isMemberable(feed)
-  },
-
-  membershipClass (feed) {
-    if (this.app.isMemberExpired(feed)) return 'is-expired'
-    if (this.app.isMemberExpiring(feed)) return 'is-expiring'
-    if (this.app.isMember(feed)) return 'is-member'
-
-    return 'is-nonmember'
-  },
-
-  editMembership (feed, intent) {
-    this.app.membership.feed = feed
-    this.app.membership.intent = intent || 'login'
-  },
-
   updateNow () {
     setInterval(() => {
       this.now = new Date()

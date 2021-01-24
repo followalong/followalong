@@ -33,11 +33,6 @@
         :title="item.pubDate"
         class="feed-name"
       >{{ app.dateFormat(item.pubDate, app.now) }}</span>
-
-      &nbsp; <QuickSubscribe
-        :app="app"
-        :feed="item.feed"
-      />
     </div>
 
     <div
@@ -97,7 +92,6 @@
 <script>
 import truncate from 'trunc-html'
 import MediaPlayer from '@/components/media-player/component.vue'
-import QuickSubscribe from '@/components/quick-subscribe/component.vue'
 
 const ALLOWED_TAGS = [
   'a', 'article', 'b', 'blockquote', 'br', 'caption', 'code', 'del', 'details', 'div', 'em',
@@ -108,8 +102,7 @@ const ALLOWED_TAGS = [
 
 export default {
   components: {
-    MediaPlayer,
-    QuickSubscribe
+    MediaPlayer
   },
   props: ['app', 'item', 'showContent'],
   data () {

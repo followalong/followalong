@@ -14,12 +14,6 @@
             />
           </a>
 
-          <QuickSubscribe
-            :app="app"
-            :feed="feed"
-            class="float-right"
-          />
-
           <router-link :to="{ name: 'feed', params: { feed_url: feed.url } }">
             {{ feed.name }}
           </router-link>
@@ -68,54 +62,6 @@
               <span v-else>Fetch Now</span>
             </a>
           </li>
-          <li v-if="app.isMemberable(feed) && !app.isMember(feed)">
-            <a
-              href="javascript:;"
-              @click="showMenu = false; app.editMembership(feed, 'register')"
-            >
-              Become a Member
-            </a>
-          </li>
-          <li v-if="app.isMemberable(feed) && !app.isMember(feed)">
-            <a
-              href="javascript:;"
-              @click="showMenu = false; app.editMembership(feed, 'login')"
-            >
-              Login as Member
-            </a>
-          </li>
-          <li v-if="app.isMember(feed)">
-            <a
-              href="javascript:;"
-              @click="showMenu = false; app.editMembership(feed, 'renew')"
-            >
-              Renew Membership
-            </a>
-          </li>
-          <li v-if=" app.isHelpable(feed)">
-            <a
-              href="javascript:;"
-              @click="showMenu = false; app.editMembership(feed, 'support')"
-            >
-              Member Support
-            </a>
-          </li>
-          <li v-if="app.isMember(feed)">
-            <a
-              href="javascript:;"
-              @click="showMenu = false; app.editMembership(feed, 'password')"
-            >
-              Change Member Password
-            </a>
-          </li>
-          <li v-if="app.isMember(feed)">
-            <a
-              href="javascript:;"
-              @click="showMenu = false; app.editMembership(feed, 'logout')"
-            >
-              Logout as Member
-            </a>
-          </li>
           <li>
             <a
               href="javascript:;"
@@ -140,24 +86,6 @@
           </p>
         </li>
 
-        <!-- <li v-if="app.isMemberExpired(feed)" :class="'warning ' + app.membershipClass(feed) + '-background'">
-          <p>
-            Your membership has expired.
-          </p>
-
-          <p>
-            <a href="javascript:;" v-on:click="app.editMembership(feed, 'register')">
-              Renew Now
-            </a>
-
-            &nbsp; <span class="hint inline">-</span> &nbsp;
-
-            <a href="javascript:;">
-              Cancel
-            </a>
-          </p>
-        </li> -->
-
         <Item
           v-for="item in items"
           :key="item.guid"
@@ -172,13 +100,11 @@
 
 <script>
 import Item from '@/components/item/component.vue'
-import QuickSubscribe from '@/components/quick-subscribe/component.vue'
 import sorter from '@/components/app/sorter'
 
 export default {
   components: {
-    Item,
-    QuickSubscribe
+    Item
   },
   props: ['app'],
   data () {
