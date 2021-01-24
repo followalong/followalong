@@ -44,7 +44,7 @@ var methods = {
     _.decryptIdentity(identity, function () {
       utils.setIdentityDefaults(identity)
 
-      _.app.saveLocal()
+      _.app.saveLocal(identity)
 
       clearTimeout(nextFeedFetcher)
 

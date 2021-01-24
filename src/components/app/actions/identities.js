@@ -61,8 +61,8 @@ export default {
   },
 
   save (identity, done) {
-    this.saveLocal(identity, () => {
-      this.sync(identity, done)
+    this.app.saveLocal(identity, () => {
+      this.app.sync(identity, done)
     })
   },
 
