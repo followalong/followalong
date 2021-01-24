@@ -21,7 +21,7 @@
           v-model="app.identity.name"
           type="text"
           placeholder="Your Name"
-          @blur="app.save()"
+          @blur="app.save(app.identity)"
         >
       </div>
       <p
@@ -45,7 +45,7 @@
             type="number"
             min="1"
             placeholder="100"
-            @blur="app.identity.services.local.maxReadCount < 1 ? app.identity.services.local.maxReadCount = 1 : 1; app.save()"
+            @blur="app.identity.services.local.maxReadCount < 1 ? app.identity.services.local.maxReadCount = 1 : 1; app.save(app.identity)"
           >
         </div>
 

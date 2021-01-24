@@ -14,7 +14,7 @@ export default {
     item._updatedAt = Date.now()
     item.isRead = val
 
-    _.app.save()
+    _.app.save(_.app.identity)
   },
 
   blankifyLinks (str) {
@@ -39,7 +39,7 @@ export default {
     item._updatedAt = Date.now()
     item.isSaved = !item.isSaved
 
-    _.app.save()
+    _.app.save(_.app.identity)
   },
 
   setMediaVerb (item) {

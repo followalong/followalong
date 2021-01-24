@@ -59,7 +59,7 @@ export default {
       var _ = this
 
       _.app.fetchFeed(_.app.identity, _.feed, Date.now(), true, function () {
-        _.app.save()
+        _.app.save(_.app.identity)
       })
     },
 
@@ -68,7 +68,7 @@ export default {
 
       _.feed._updatedAt = Date.now()
       _.feed.paused = false
-      _.app.save()
+      _.app.save(_.app.identity)
     }
   }
 }

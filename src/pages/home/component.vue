@@ -118,7 +118,7 @@ export default {
         item.isRead = true
       })
 
-      _.app.save()
+      _.app.save(_.app.identity)
     },
 
     capitalize (str) {

@@ -15,7 +15,7 @@ export default {
       _.fetchFeed(identity, feed, updatedAt, override, next)
     }, function () {
       _.app.loading = false
-      _.app.save()
+      _.app.save(identity)
 
       if (typeof done === 'function') {
         done()
@@ -38,7 +38,7 @@ export default {
     }
 
     _.fetchFeed(identity, feed, updatedAt, true, function () {
-      _.app.save()
+      _.app.save(identity)
 
       setTimeout(function () {
         _.fetchNextFeed(identity)
@@ -76,7 +76,7 @@ export default {
     _.app.identity.feeds.push(feed)
     _.app.identity.items.push.apply(_.app.identity.items, items)
 
-    _.app.save()
+    _.app.save(_.app.identity)
 
     _.app.q = ''
     _.$router.push({ name: 'feed', params: { feed_url: feed.url } })
@@ -95,7 +95,7 @@ export default {
     })
 
     _.app.identity.feeds.splice(index, 1)
-    _.app.save(function () {
+    _.app.save(_.app.identity, function () {
       if (redirect) {
         _.app.$router.push('/')
       }

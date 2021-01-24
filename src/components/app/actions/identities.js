@@ -99,7 +99,7 @@ export default {
     }
 
     if (reset) {
-      _.app.save()
+      _.app.save(identity)
     }
 
     return _.app.keychain[identity.id]
@@ -125,11 +125,11 @@ export default {
     }
 
     if (!ignoreSave) {
-      _.app.save()
+      _.app.save(identity)
     }
   },
 
-  sync (done) {
+  sync (identity, done) {
     const proxy = this.app.findService(this.app.identity, 'sync')
 
     if (!proxy) {
@@ -142,13 +142,13 @@ export default {
     }, done)
   },
 
-  save (done) {
-    this.saveLocal(() => {
-      this.sync(done)
+  save (identity, done) {
+    this.saveLocal(identity, () => {
+      this.sync(identity, done)
     })
   },
 
-  saveLocal (done) {
+  saveLocal (identity, done) {
     var _ = this
 
     utils.trimItems(_.app.identity)
