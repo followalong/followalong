@@ -100,7 +100,7 @@ export default {
     item () {
       var _ = this
 
-      return (_.app.identity.items || []).find(function (item) {
+      return _.app.identity.items.find(function (item) {
         return item.guid + '' === _.$route.params.guid + ''
       })
     }
