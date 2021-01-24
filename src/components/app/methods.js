@@ -35,7 +35,7 @@ var methods = {
     utils.setIdentityDefaults(identity)
 
     _.app.identity = identity
-    _.app.isLoading = true
+    _.app.loading = true
 
     _.decryptIdentity(identity, function () {
       utils.setIdentityDefaults(identity)
@@ -48,7 +48,7 @@ var methods = {
 
       clearTimeout(nextFeedFetcher)
 
-      _.app.isLoading = false
+      _.app.loading = false
 
       _.fetchAllFeeds(identity, override, function () {
         nextFeedFetcher = setTimeout(function () {
@@ -85,7 +85,7 @@ var methods = {
   },
 
   setupApp (app) {
-    app.isLoading = true
+    app.loading = true
 
     utils.constructIdentities(app, (identities, keychain) => {
       app.keychain = keychain

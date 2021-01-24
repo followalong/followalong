@@ -4,17 +4,17 @@
     @click="fetchAll"
   >
     <font-awesome-icon
-      v-if="app.isLoading"
+      v-if="app.loading"
       icon="spinner"
       spin
       class="loader"
     />
     <img
-      v-if="!app.isLoading"
+      v-if="!app.loading"
       :src="logo"
     >
     <img
-      v-if="!app.isLoading"
+      v-if="!app.loading"
       :src="mobileLogo"
     >
   </a>

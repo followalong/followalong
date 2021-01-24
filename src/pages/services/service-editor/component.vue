@@ -255,10 +255,10 @@
 
             <button
               type="submit"
-              :disabled="isLoading"
+              :disabled="loading"
               class="button-large full-width"
             >
-              <span v-if="isLoading">Loading...</span>
+              <span v-if="loading">Loading...</span>
               <span v-else>
                 <span v-if="paidServiceModal && paidServiceModal.data.token">Re-</span>Subscribe Now
                 (${{ paidServiceModal.pricing.stripe.price }} USD)
@@ -290,7 +290,7 @@ export default {
     return {
       paste: '',
       errorMessage: undefined,
-      isLoading: false,
+      loading: false,
       tab: undefined,
       showPaidFeed: false,
       paidServiceModal: undefined
@@ -394,7 +394,7 @@ export default {
         _.app.identity.services[supports[i]] = { symlink: service.id }
       }
 
-      _.isLoading = false
+      _.loading = false
       _.app.save(_.app.identity)
     },
 
@@ -402,7 +402,7 @@ export default {
       var _ = this
 
       _.errorMessage = msg
-      _.isLoading = false
+      _.loading = false
     },
 
     copyService (service) {
