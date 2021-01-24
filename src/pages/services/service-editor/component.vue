@@ -68,7 +68,7 @@
                 <a
                   v-if="service.pricing"
                   href="javascript:;"
-                  @click="membershipModalService = service"
+                  @click="paidServiceModal = service"
                 >
                   <span v-if="service.data.token">Re-</span>Subscribe
                 </a>
@@ -215,12 +215,12 @@
     </div>
 
     <div
-      v-if="membershipModalService"
+      v-if="paidServiceModal"
       class="modal"
     >
       <div
         class="overlay"
-        @click="membershipModalService = undefined"
+        @click="paidServiceModal = undefined"
       />
 
       <div class="content-wrapper">
@@ -228,16 +228,16 @@
           <a
             href="javascript:;"
             class="close"
-            @click="membershipModalService = undefined"
+            @click="paidServiceModal = undefined"
           >
             &times;
           </a>
 
-          <h3>{{ membershipModalService.name }}</h3>
+          <h3>{{ paidServiceModal.name }}</h3>
 
           <p
-            v-if="membershipModalService.description"
-            v-html="membershipModalService.description"
+            v-if="paidServiceModal.description"
+            v-html="paidServiceModal.description"
           />
 
           <CreditCard
@@ -260,8 +260,8 @@
             >
               <span v-if="loading">Loading...</span>
               <span v-else>
-                <span v-if="membershipModalService && membershipModalService.data.token">Re-</span>Subscribe Now
-                (${{ membershipModalService.pricing.stripe.price }} USD)
+                <span v-if="paidServiceModal && paidServiceModal.data.token">Re-</span>Subscribe Now
+                (${{ paidServiceModal.pricing.stripe.price }} USD)
               </span>
             </button>
           </CreditCard>
@@ -293,7 +293,7 @@ export default {
       loading: false,
       tab: undefined,
       showPaidFeed: false,
-      membershipModalService: undefined
+      paidServiceModal: undefined
     }
   },
 
@@ -335,7 +335,7 @@ export default {
       _.app.identity.services[_.serverTypeKey] = { symlink: s.id }
 
       if (s.pricing && !s.data.token) {
-        _.membershipModalService = s
+        _.paidServiceModal = s
       }
 
       _.app.save()
@@ -381,10 +381,10 @@ export default {
 
     subscribeToService (response) {
       var _ = this
-      var service = _.membershipModalService
+      var service = _.paidServiceModal
       var supports = (service.supports || '').split(/,\s?/)
 
-      _.membershipModalService = undefined
+      _.paidServiceModal = undefined
       _.showPaidFeed = true
 
       service.data.token = response.token
