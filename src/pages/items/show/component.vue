@@ -61,7 +61,7 @@
         <a
           href="javascript:;"
           :class="'button' + (item.isSaved ? '' : ' button-gray')"
-          @click="app.saveForLater(item)"
+          @click="app.useCases.saveItemForLater(item)"
         >
           Save<span v-if="item.isSaved">d</span>
         </a>

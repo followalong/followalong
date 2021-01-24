@@ -3,7 +3,6 @@ import seed from '@/components/app/seed'
 import utils from './utils'
 import actionsForIdentities from './actions/identities'
 import actionsForIdentitiesKeychain from './actions/identities-keychain'
-import actionsForItems from './actions/items'
 
 const ONE_MINUTE = 1000 * 60 * 1
 
@@ -27,8 +26,6 @@ var methods = {
   decryptIdentity: actionsForIdentitiesKeychain.decryptIdentity,
   getAskSecretKey: actionsForIdentitiesKeychain.getAskSecretKey,
   saveKey: actionsForIdentitiesKeychain.saveKey,
-
-  saveForLater: actionsForItems.saveForLater,
 
   setIdentity (identity, override) {
     var _ = this

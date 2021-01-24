@@ -65,7 +65,7 @@
       <p class="hint float-right">
         <a
           href="javascript:;"
-          @click="app.saveForLater(item)"
+          @click="app.useCases.saveItemForLater(item)"
         >
           <font-awesome-icon
             icon="save"
