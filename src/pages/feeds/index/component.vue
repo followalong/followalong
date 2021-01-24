@@ -2,10 +2,10 @@
   <div class="feeds">
     <div class="title-wrapper">
       <button
-        :class="'float-right ' + (app.loading ? 'loading' : '')"
+        :class="'float-right ' + (app.isLoading ? 'loading' : '')"
         @click="app.fetchAllFeeds(app.identity, true)"
       >
-        <span v-if="app.loading">Loading...</span>
+        <span v-if="app.isLoading">Loading...</span>
         <span v-else>Fetch All Feeds</span>
       </button>
 

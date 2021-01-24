@@ -107,14 +107,14 @@ export default {
     var _ = this
     var updatedAt = Date.now()
 
-    if (_.app.loading) return
+    if (_.app.isLoading) return
 
-    _.app.loading = true
+    _.app.isLoading = true
 
     async.eachParallel(identity.feeds.filter(utils.filters.UNPAUSED), function (feed, next) {
       _.fetchFeed(identity, feed, updatedAt, override, next)
     }, function () {
-      _.app.loading = false
+      _.app.isLoading = false
       _.app.save(identity)
 
       if (typeof done === 'function') {
@@ -129,7 +129,7 @@ export default {
 
     var feed = identity.feeds.filter(utils.filters.UNPAUSED).sort(utils.sorters.LAST_UPDATED)[0]
 
-    if (_.app.loading || !feed) {
+    if (_.app.isLoading || !feed) {
       setTimeout(function () {
         _.fetchNextFeed(identity)
       }, utils.feedFetcherDuration(identity))
