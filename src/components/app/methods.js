@@ -26,8 +26,6 @@ var methods = {
   getAskSecretKey: actionsForIdentitiesKeychain.getAskSecretKey,
   saveKey: actionsForIdentitiesKeychain.saveKey,
 
-  blankifyLinks: actionsForItems.blankifyLinks,
-  dateFormat: actionsForItems.dateFormat,
   hasMedia: actionsForItems.hasMedia,
   read: actionsForItems.read,
   saveForLater: actionsForItems.saveForLater,
@@ -70,6 +68,18 @@ var methods = {
       _.app.sidebarClass = 'show'
       document.body.style.overflow = 'hidden'
     }
+  },
+
+  dateFormat (date, now) {
+    return utils.timeAgo(new Date(date), now)
+  },
+
+  blankifyLinks (str) {
+    return utils.stripScriptsAndStyles(
+      (str || '')
+        .replace(/target=['"]?[^"']+['"\s>]?/g, '')
+        .replace(/<a([^>]+)>?/g, '<a$1 target="_blank">')
+    )
   },
 
   updateNow () {
