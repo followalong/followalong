@@ -22,6 +22,7 @@ var methods = {
   saveLocal: actionsForIdentities.saveLocal,
   sync: actionsForIdentities.sync,
   addFeedToIdentity: actionsForIdentities.addFeedToIdentity,
+  addItemsToIdentity: actionsForIdentities.addItemsToIdentity,
 
   decryptIdentity: actionsForIdentitiesKeychain.decryptIdentity,
   getAskSecretKey: actionsForIdentitiesKeychain.getAskSecretKey,

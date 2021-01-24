@@ -174,8 +174,7 @@ export default {
     feed.loading = false
 
     _.app.addFeedToIdentity(identity, feed)
-
-    identity.items.push.apply(identity.items, items)
+    _.app.addItemsToIdentity(identity, feed, items)
 
     _.app.save(identity)
 
@@ -209,5 +208,17 @@ export default {
     }
 
     identity.feeds.push(feed)
+  },
+
+  addItemsToIdentity (identity, feed, items) {
+    return items.map((item) => {
+      item.feed = feed || identity.feeds.find(function (feed) {
+        return item.feedURL === feed.url
+      })
+
+      identity.items.push(item)
+
+      return item
+    })
   }
 }
