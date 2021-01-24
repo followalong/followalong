@@ -73,10 +73,6 @@ var methods = {
     }
   },
 
-  dateFormat (date, now) {
-    return utils.timeAgo(new Date(date), now)
-  },
-
   blankifyLinks (str) {
     return utils.stripScriptsAndStyles(
       (str || '')

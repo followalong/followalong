@@ -62,6 +62,9 @@ export default {
     },
     hasMedia () {
       return utils.getVideoSrc(this) || utils.getAudioSrc(this)
+    },
+    prettyDate () {
+      return utils.timeAgo(new Date(this.pubDate), new Date())
     }
   },
   methods: {
