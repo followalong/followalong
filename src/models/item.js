@@ -1,3 +1,5 @@
+import utils from '../components/app/utils'
+
 export default {
   props: {
     _updatedAt: {
@@ -49,6 +51,17 @@ export default {
     _mediaVerb: {
       type: String,
       default: ''
+    }
+  },
+  computed: {
+    _mediaVerb () {
+      if (utils.getVideoSrc(this)) {
+        return 'watch'
+      } else if (utils.getAudioSrc(this)) {
+        return 'listen'
+      } else {
+        return 'read'
+      }
     }
   }
 }

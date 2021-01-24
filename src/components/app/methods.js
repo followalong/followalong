@@ -31,7 +31,6 @@ var methods = {
   hasMedia: actionsForItems.hasMedia,
   read: actionsForItems.read,
   saveForLater: actionsForItems.saveForLater,
-  setMediaVerb: actionsForItems.setMediaVerb,
 
   setIdentity (identity, override) {
     var _ = this

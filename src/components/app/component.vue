@@ -68,10 +68,7 @@ export default {
     newsfeed () {
       if (!this.app.identity) return []
 
-      return (this.app.identity.items || []).filter((item) => {
-        this.setMediaVerb(item)
-        return true
-      }).sort(sorter(this.app.identity))
+      return this.app.identity.items.sort(sorter(this.app.identity))
     },
     saved () {
       return this.newsfeed.filter(function (item) {

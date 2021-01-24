@@ -26,21 +26,5 @@ export default {
     item._updatedAt = Date.now()
     item.isSaved = !item.isSaved
     _.app.save(_.app.identity)
-  },
-
-  setMediaVerb (item) {
-    if (item._mediaVerb) {
-      return item._mediaVerb
-    }
-
-    if (utils.getVideoSrc(item)) {
-      item._mediaVerb = 'watch'
-    } else if (utils.getAudioSrc(item)) {
-      item._mediaVerb = 'listen'
-    } else {
-      item._mediaVerb = 'read'
-    }
-
-    return item._mediaVerb
   }
 }
