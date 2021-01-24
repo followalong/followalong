@@ -1,7 +1,6 @@
 import { reactive } from 'vue'
 import seed from '@/components/app/seed'
 import utils from './utils'
-import actionsForFeeds from './actions/feeds'
 import actionsForIdentities from './actions/identities'
 import actionsForIdentitiesKeychain from './actions/identities-keychain'
 import actionsForItems from './actions/items'
@@ -11,28 +10,26 @@ const ONE_MINUTE = 1000 * 60 * 1
 let nextFeedFetcher
 
 var methods = {
-  fetchAllFeeds: actionsForFeeds.fetchAllFeeds,
-  fetchNextFeed: actionsForFeeds.fetchNextFeed,
-
-  fetchFeed: actionsForFeeds.fetchFeed,
-  subscribe: actionsForFeeds.subscribe,
-  unsubscribeFeed: actionsForFeeds.unsubscribeFeed,
-
+  fetchFeed: actionsForIdentities.fetchFeed,
+  subscribe: actionsForIdentities.subscribe,
+  unsubscribeFeed: actionsForIdentities.unsubscribeFeed,
+  fetchAllFeeds: actionsForIdentities.fetchAllFeeds,
+  fetchNextFeed: actionsForIdentities.fetchNextFeed,
+  findService: actionsForIdentities.findService,
   hideHint: actionsForIdentities.hideHint,
   hintIsShown: actionsForIdentities.hintIsShown,
-  findService: actionsForIdentities.findService,
-  sync: actionsForIdentities.sync,
   save: actionsForIdentities.save,
   saveLocal: actionsForIdentities.saveLocal,
+  sync: actionsForIdentities.sync,
 
   decryptIdentity: actionsForIdentitiesKeychain.decryptIdentity,
   getAskSecretKey: actionsForIdentitiesKeychain.getAskSecretKey,
   saveKey: actionsForIdentitiesKeychain.saveKey,
 
-  read: actionsForItems.read,
   blankifyLinks: actionsForItems.blankifyLinks,
-  hasMedia: actionsForItems.hasMedia,
   dateFormat: actionsForItems.dateFormat,
+  hasMedia: actionsForItems.hasMedia,
+  read: actionsForItems.read,
   saveForLater: actionsForItems.saveForLater,
   setMediaVerb: actionsForItems.setMediaVerb,
 
