@@ -332,10 +332,10 @@ var methods = {
     )
   },
 
-  toggleSidebar (doHide) {
+  toggleSidebar (forceHide) {
     var _ = this
 
-    if (doHide || _.app.sidebarClass === 'show') {
+    if (forceHide || _.app.sidebarClass === 'show') {
       _.app.sidebarClass = ''
       document.body.style.overflow = ''
     } else {
