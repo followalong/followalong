@@ -6,9 +6,9 @@ import actionsForHints from './actions/hints'
 import actionsForIdentities from './actions/identities'
 import actionsForItems from './actions/items'
 
-let nextFeedFetcher
+const ONE_MINUTE = 1000 * 60 * 1
 
-const TWO_MINUTES = 1000 * 60 * 1
+let nextFeedFetcher
 
 var methods = {
   fetchAllFeeds: actionsForFeeds.fetchAllFeeds,
@@ -57,7 +57,7 @@ var methods = {
       _.fetchAllFeeds(identity, override, function () {
         nextFeedFetcher = setTimeout(function () {
           _.fetchNextFeed(_.app.identity)
-        }, TWO_MINUTES)
+        }, ONE_MINUTE)
       })
     })
   },
@@ -77,7 +77,7 @@ var methods = {
   updateNow () {
     setInterval(() => {
       this.now = new Date()
-    }, 60000)
+    }, ONE_MINUTE)
   },
 
   setupApp (app) {
