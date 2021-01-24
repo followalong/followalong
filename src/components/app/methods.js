@@ -129,10 +129,6 @@ var methods = {
     return utils.timeAgo(new Date(date), now)
   },
 
-  getVideoSrc: utils.getVideoSrc,
-
-  getAudioSrc: utils.getAudioSrc,
-
   hasMedia (item) {
     return utils.getVideoSrc(item) || utils.getAudioSrc(item)
   },
@@ -183,12 +179,6 @@ var methods = {
     item.isRead = val
 
     _.app.save()
-  },
-
-  filterBy (arr, attr, value) {
-    return arr.filter(function (feed) {
-      return feed[attr] === value
-    })
   },
 
   getAskSecretKey (identity, reset) {
@@ -267,18 +257,12 @@ var methods = {
         return
       }
 
-      this.app.copyAttrs(state, identity, ['name', 'local', 'items', 'feeds', 'services'])
+      utils.copyAttrs(state, identity, ['name', 'local', 'items', 'feeds', 'services'])
 
       identity._decrypted = true
 
       done()
     })
-  },
-
-  copyAttrs (from, to, attrs) {
-    for (var i = attrs.length - 1; i >= 0; i--) {
-      to[attrs[i]] = from[attrs[i]]
-    }
   },
 
   hideHint (hint) {
