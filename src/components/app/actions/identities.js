@@ -57,7 +57,11 @@ export default {
     proxy.request(proxy.app, identity, {
       action: 'sync',
       identity: utils.mappers.IDENTITY_REMOTE(identity)
-    }, done)
+    }, function (err, data) {
+      if (typeof done === 'function') {
+        done(err, data)
+      }
+    })
   },
 
   save (identity, done) {
