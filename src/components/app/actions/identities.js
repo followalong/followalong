@@ -45,100 +45,16 @@ export default {
     return service
   },
 
-  decryptIdentity (identity, done) {
-    if (identity._decrypted) {
-      return done()
-    }
-
-    this.store.getItem(identity.id, (err, state) => {
-      if (!state) {
-        return done()
-      }
-
-      state = crypt.de(this.app, identity, state)
-
-      if (identity.services.local.strategy === 'ask') {
-        delete this.app.keychain[identity.id]
-        state = crypt.de(this.app, identity, state)
-      }
-
-      if (!state) {
-        if (confirm('Unauthorized. Would you like to refresh this page?')) {
-          window.location.reload()
-        } else {
-          document.body.innerHTML = ''
-        }
-
-        return
-      }
-
-      utils.copyAttrs(state, identity, ['name', 'local', 'items', 'feeds', 'services'])
-
-      identity._decrypted = true
-
-      done()
-    })
-  },
-
-  getAskSecretKey (identity, reset) {
-    var _ = this
-
-    if (reset) {
-      delete _.app.keychain[identity.id]
-    }
-
-    if (!_.app.keychain[identity.id]) {
-      _.app.keychain[identity.id] = prompt('What is your secret key?')
-
-      if (_.app.keychain[identity.id] === null && reset) {
-        identity.services.local.strategy = 'rotate'
-        var key = utils.generateId()
-        _.app.saveKey(identity, key, true)
-        return key
-      }
-    }
-
-    if (reset) {
-      _.app.save(identity)
-    }
-
-    return _.app.keychain[identity.id]
-  },
-
-  saveKey (identity, key, ignoreSave) {
-    var _ = this
-
-    if (identity.services.local.strategy === 'ask') {
-      delete _.app.keychain[identity.id]
-      key = undefined
-    }
-
-    if (identity.services.local.strategy === 'store' && !key) {
-      key = utils.generateId()
-      _.app.keychain[identity.id] = key
-    }
-
-    if (key) {
-      _.store.setItem('key-' + identity.id, key)
-    } else {
-      _.store.removeItem('key-' + identity.id)
-    }
-
-    if (!ignoreSave) {
-      _.app.save(identity)
-    }
-  },
-
   sync (identity, done) {
-    const proxy = this.app.findService(this.app.identity, 'sync')
+    const proxy = this.app.findService(identity, 'sync')
 
     if (!proxy) {
       return
     }
 
-    proxy.request(proxy.app, proxy.app.identity, {
+    proxy.request(proxy.app, identity, {
       action: 'sync',
-      identity: utils.mappers.IDENTITY_REMOTE(this.app.identity)
+      identity: utils.mappers.IDENTITY_REMOTE(identity)
     }, done)
   },
 
@@ -151,14 +67,14 @@ export default {
   saveLocal (identity, done) {
     var _ = this
 
-    utils.trimItems(_.app.identity)
+    utils.trimItems(identity)
 
     _.app.store.setItem(
-      _.app.identity.id,
+      identity.id,
       crypt.en(
         _.app,
-        _.app.identity,
-        utils.mappers.IDENTITY_LOCAL(_.app.identity)
+        identity,
+        utils.mappers.IDENTITY_LOCAL(identity)
       )
     )
 

@@ -4,6 +4,7 @@ import utils from './utils'
 import actionsForFeeds from './actions/feeds'
 import actionsForHints from './actions/hints'
 import actionsForIdentities from './actions/identities'
+import actionsForIdentitiesKeychain from './actions/identities-keychain'
 import actionsForItems from './actions/items'
 
 const ONE_MINUTE = 1000 * 60 * 1
@@ -13,6 +14,7 @@ let nextFeedFetcher
 var methods = {
   fetchAllFeeds: actionsForFeeds.fetchAllFeeds,
   fetchNextFeed: actionsForFeeds.fetchNextFeed,
+
   fetchFeed: actionsForFeeds.fetchFeed,
   subscribe: actionsForFeeds.subscribe,
   unsubscribeFeed: actionsForFeeds.unsubscribeFeed,
@@ -21,12 +23,13 @@ var methods = {
   hintIsShown: actionsForHints.hintIsShown,
 
   findService: actionsForIdentities.findService,
-  decryptIdentity: actionsForIdentities.decryptIdentity,
-  getAskSecretKey: actionsForIdentities.getAskSecretKey,
-  saveKey: actionsForIdentities.saveKey,
   sync: actionsForIdentities.sync,
   save: actionsForIdentities.save,
   saveLocal: actionsForIdentities.saveLocal,
+
+  decryptIdentity: actionsForIdentitiesKeychain.decryptIdentity,
+  getAskSecretKey: actionsForIdentitiesKeychain.getAskSecretKey,
+  saveKey: actionsForIdentitiesKeychain.saveKey,
 
   read: actionsForItems.read,
   blankifyLinks: actionsForItems.blankifyLinks,
