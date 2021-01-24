@@ -22,6 +22,9 @@
 </template>
 
 <script>
+import { reactive, computed } from 'vue'
+import { Superstore } from 'vue-superstore'
+import models from '@/models'
 import localForage from 'localforage'
 import PopoutPlayer from '@/components/popout-player/component.vue'
 import methods from '@/components/app/methods'
@@ -45,6 +48,7 @@ export default {
       store: localForage.createInstance({
         name: 'commmunity'
       }),
+      models: new Superstore(reactive, computed, models),
       loading: true,
       identities: [],
       keychain: {},
@@ -64,10 +68,7 @@ export default {
     newsfeed () {
       if (!this.app.identity) return []
 
-      return (this.app.identity.items || []).filter((item) => {
-        this.setMediaVerb(item)
-        return true
-      }).sort(sorter(this.app.identity))
+      return (this.app.identity.items).sort(sorter(this.app.identity))
     },
     saved () {
       return this.newsfeed.filter(function (item) {

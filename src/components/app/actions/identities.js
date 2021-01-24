@@ -173,8 +173,10 @@ export default {
     feed.paused = false
     feed.loading = false
 
+    _.app.prepIdentityFeed(identity, feed)
     identity.feeds.push(feed)
-    identity.items.push.apply(identity.items, items)
+
+    _.app.addItems(identity, feed, items)
 
     _.app.save(identity)
 
@@ -199,6 +201,26 @@ export default {
       if (redirect) {
         _.app.$router.push('/')
       }
+    })
+  },
+
+  prepIdentityFeed (identity, feed) {
+    feed.save = () => {
+      identity.save()
+    }
+  },
+
+  addItems (identity, feed, items) {
+    return items.map((item) => {
+      item.feed = feed || identity.feeds.find(function (feed) {
+        return item.feedURL === feed.url
+      })
+
+      const newItem = this.app.models.item.build(item)
+
+      identity.items.push(newItem)
+
+      return newItem
     })
   }
 }

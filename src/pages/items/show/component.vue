@@ -4,7 +4,7 @@
     class="single-item"
   >
     <MediaPlayer
-      v-if="app.hasMedia(item)"
+      v-if="item.hasMedia"
       :item="item"
       :app="app"
       :autoplay="true"
@@ -61,7 +61,7 @@
         <a
           href="javascript:;"
           :class="'button' + (item.isSaved ? '' : ' button-gray')"
-          @click="app.saveForLater(item)"
+          @click="item.saveForLater()"
         >
           Save<span v-if="item.isSaved">d</span>
         </a>
@@ -71,7 +71,7 @@
         <a
           href="javascript:;"
           class="button button-gray"
-          @click="app.read(item)"
+          @click="item.read()"
         >
           Mark As <span v-if="item.isRead">Unread</span><span v-else>Read</span>
         </a>
@@ -100,7 +100,7 @@ export default {
     item () {
       var _ = this
 
-      return (_.app.identity.items || []).find(function (item) {
+      return _.app.identity.items.find(function (item) {
         return item.guid + '' === _.$route.params.guid + ''
       })
     }
@@ -110,7 +110,7 @@ export default {
       var _ = this
 
       if (_.item) {
-        _.app.read(_.item, true)
+        _.item.read(true)
       }
     }
   },
@@ -118,7 +118,7 @@ export default {
     var _ = this
 
     if (_.item) {
-      _.app.read(_.item, true)
+      _.item.read(true)
     }
   }
 }

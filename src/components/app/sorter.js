@@ -4,24 +4,6 @@ function sorter (identity, date, feed) {
   }
 
   return function sorter (a, b) {
-    if (typeof a.feed === 'undefined') {
-      Object.defineProperty(a, 'feed', {
-        value: feed || identity.feeds.find(function (feed) {
-          return a.feedURL === feed.url
-        }),
-        enumerable: false
-      })
-    }
-
-    if (typeof b.feed === 'undefined') {
-      Object.defineProperty(b, 'feed', {
-        value: feed || identity.feeds.find(function (feed) {
-          return b.feedURL === feed.url
-        }),
-        enumerable: false
-      })
-    }
-
     if (date !== '_updatedAt') {
       if (!a.isRead && b.isRead) return -1
       if (a.isRead && !b.isRead) return 1

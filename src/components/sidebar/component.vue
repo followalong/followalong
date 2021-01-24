@@ -159,19 +159,13 @@ export default {
   },
   computed: {
     unreadWatches () {
-      return this.app.unread.filter((item) => {
-        return item._mediaVerb === 'watch'
-      })
+      return this.app.unread.filter((item) => item.mediaVerb === 'watch')
     },
     unreadListens () {
-      return this.app.unread.filter((item) => {
-        return item._mediaVerb === 'listen'
-      })
+      return this.app.unread.filter((item) => item.mediaVerb === 'listen')
     },
     unreadReads () {
-      return this.app.unread.filter((item) => {
-        return item._mediaVerb === 'read'
-      })
+      return this.app.unread.filter((item) => item.mediaVerb === 'read')
     }
   },
   watch: {
