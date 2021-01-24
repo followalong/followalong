@@ -65,7 +65,7 @@ export default {
       if (this.app.playing === item) {
         this.app.playing = undefined
       } else {
-        this.app.useCases.markAsRead(item, true)
+        this.app.useCases.markItemAsRead(item, true)
         this.app.playing = item
       }
     }

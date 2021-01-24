@@ -1,5 +1,5 @@
-import markAsRead from './mark-as-read.js'
+import markItemAsRead from './mark-item-as-read.js'
 
 export default {
-  markAsRead
+  markItemAsRead
 }
