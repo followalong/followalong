@@ -25,6 +25,7 @@ export default function (identity, remoteData) {
         localFeed.paused = remoteFeed.paused
       }
     } else {
+      // TODO: Should use identity.addFeed
       localFeeds.push(remoteFeed)
     }
   }

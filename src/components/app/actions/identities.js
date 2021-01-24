@@ -173,7 +173,8 @@ export default {
     feed.paused = false
     feed.loading = false
 
-    identity.feeds.push(feed)
+    _.app.addFeedToIdentity(identity, feed)
+
     identity.items.push.apply(identity.items, items)
 
     _.app.save(identity)
@@ -200,5 +201,13 @@ export default {
         _.app.$router.push('/')
       }
     })
+  },
+
+  addFeedToIdentity (identity, feed) {
+    feed.save = () => {
+      identity.save()
+    }
+
+    identity.feeds.push(feed)
   }
 }

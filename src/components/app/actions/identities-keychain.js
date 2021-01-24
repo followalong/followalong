@@ -29,7 +29,11 @@ export default {
         return
       }
 
-      utils.copyAttrs(state, identity, ['name', 'local', 'items', 'feeds', 'services'])
+      utils.copyAttrs(state, identity, ['name', 'local', 'items', 'services'])
+
+      state.feeds.forEach((feed) => {
+        this.app.addFeedToIdentity(identity, feed)
+      })
 
       identity._decrypted = true
 
