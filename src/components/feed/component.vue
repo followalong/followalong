@@ -21,7 +21,7 @@
       <a
         href="javascript:;"
         class="hint remove"
-        @click="app.unsubscribeFeed(feed)"
+        @click="app.unsubscribeFeed(app.identity, feed)"
       >
         Unsubscribe
       </a>

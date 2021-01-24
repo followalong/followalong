@@ -153,7 +153,7 @@ export default {
 
     feed.loading = true
 
-    getFeed(_.app.findService(_.app.identity, 'rss', true), identity.items, feed, updatedAt, function () {
+    getFeed(_.app.findService(identity, 'rss', true), identity.items, feed, updatedAt, function () {
       feed.loading = false
 
       if (typeof done === 'function') {
@@ -162,36 +162,36 @@ export default {
     })
   },
 
-  subscribe (feed, items) {
+  subscribe (identity, feed, items) {
     var _ = this
 
-    feed.identityId = _.app.identity.id
+    feed.identityId = identity.id
     feed.paused = false
     feed.loading = false
 
-    _.app.identity.feeds.push(feed)
-    _.app.identity.items.push.apply(_.app.identity.items, items)
+    identity.feeds.push(feed)
+    identity.items.push.apply(identity.items, items)
 
-    _.app.save(_.app.identity)
+    _.app.save(identity)
 
     _.app.q = ''
     _.$router.push({ name: 'feed', params: { feed_url: feed.url } })
   },
 
-  unsubscribeFeed (feed, redirect) {
+  unsubscribeFeed (identity, feed, redirect) {
     if (!confirm('Are you sure you want to unsubscribe from this feed?')) return
 
     var _ = this
-    var index = _.app.identity.feeds.indexOf(feed)
+    var index = identity.feeds.indexOf(feed)
 
-    _.app.identity.items.filter(function (item) {
+    identity.items.filter(function (item) {
       return item.feedURL === feed.url
     }).forEach(function (item) {
-      _.app.identity.items.splice(_.app.identity.items.indexOf(item), 1)
+      identity.items.splice(identity.items.indexOf(item), 1)
     })
 
-    _.app.identity.feeds.splice(index, 1)
-    _.app.save(_.app.identity, function () {
+    identity.feeds.splice(index, 1)
+    _.app.save(identity, function () {
       if (redirect) {
         _.app.$router.push('/')
       }

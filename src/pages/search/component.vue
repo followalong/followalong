@@ -28,7 +28,7 @@
           >
             <button
               class="float-right"
-              @click="subscribe(feed)"
+              @click="subscribe(app.identity, feed)"
             >
               Subscribe
             </button>
@@ -105,7 +105,7 @@ export default {
     },
     subscribe (feed) {
       this.app.fetchFeed(this.app.identity, feed, Date.now(), true, () => {
-        this.app.subscribe(feed, feed.items)
+        this.app.subscribe(this.app.identity, feed, feed.items)
       })
     }
   }
