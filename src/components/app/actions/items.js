@@ -1,5 +1,3 @@
-import utils from '../utils'
-
 export default {
   read (item, val) {
     var _ = this
@@ -14,10 +12,6 @@ export default {
     item._updatedAt = Date.now()
     item.isRead = val
     _.app.save(_.app.identity)
-  },
-
-  hasMedia (item) {
-    return utils.getVideoSrc(item) || utils.getAudioSrc(item)
   },
 
   saveForLater (item) {

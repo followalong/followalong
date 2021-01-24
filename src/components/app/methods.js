@@ -28,7 +28,6 @@ var methods = {
   getAskSecretKey: actionsForIdentitiesKeychain.getAskSecretKey,
   saveKey: actionsForIdentitiesKeychain.saveKey,
 
-  hasMedia: actionsForItems.hasMedia,
   read: actionsForItems.read,
   saveForLater: actionsForItems.saveForLater,
 

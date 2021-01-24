@@ -62,6 +62,9 @@ export default {
       } else {
         return 'read'
       }
+    },
+    hasMedia () {
+      return utils.getVideoSrc(this) || utils.getAudioSrc(this)
     }
   }
 }

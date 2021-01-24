@@ -4,7 +4,7 @@
     class="single-item"
   >
     <MediaPlayer
-      v-if="app.hasMedia(item)"
+      v-if="item.hasMedia"
       :item="item"
       :app="app"
       :autoplay="true"
