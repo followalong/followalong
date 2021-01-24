@@ -65,7 +65,7 @@ export default {
       if (this.app.playing === item) {
         this.app.playing = undefined
       } else {
-        item.read(true)
+        this.app.read(item, true)
         this.app.playing = item
       }
     }

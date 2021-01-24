@@ -6,13 +6,12 @@
     <a
       href="javascript:;"
       class="check"
-      @click="item.read()"
+      @click="app.read(item)"
     >&check;</a>
 
     <h3>
       <router-link :to="{ name: 'item', params: { feed_url: item.feed.url, guid: item.guid } }">
         {{ item.title }}
-        ({{ item.isRead }})
       </router-link>
     </h3>
 
@@ -40,7 +39,7 @@
       v-if="showContent"
     >
       <MediaPlayer
-        v-if="item.hasMedia"
+        v-if="app.hasMedia(item)"
         :item="item"
         :app="app"
       />
@@ -66,7 +65,7 @@
       <p class="hint float-right">
         <a
           href="javascript:;"
-          @click="item.saveForLater()"
+          @click="app.saveForLater(item)"
         >
           <font-awesome-icon
             icon="save"
@@ -77,7 +76,7 @@
         <a
           :href="item.link"
           target="_blank"
-          @click="item.read(true)"
+          @click="app.read(item, true)"
         >
           <font-awesome-icon icon="link" />
         </a>

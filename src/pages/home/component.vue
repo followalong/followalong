@@ -62,7 +62,7 @@ export default {
       var _ = this
 
       return _.app.newsfeed.filter(function (item) {
-        return !_.mediaVerb || item.mediaVerb === _.mediaVerb
+        return !_.mediaVerb || item._mediaVerb === _.mediaVerb
       }).slice(0, _.limit)
     },
     unreadItems () {
@@ -113,7 +113,7 @@ export default {
       var _ = this
 
       _.app.newsfeed.filter(function (item) {
-        return !_.mediaVerb || item.mediaVerb === _.mediaVerb
+        return !_.mediaVerb || item._mediaVerb === _.mediaVerb
       }).forEach(function (item) {
         item.isRead = true
       })

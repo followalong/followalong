@@ -3,6 +3,7 @@ import seed from '@/components/app/seed'
 import utils from './utils'
 import actionsForIdentities from './actions/identities'
 import actionsForIdentitiesKeychain from './actions/identities-keychain'
+import actionsForItems from './actions/items'
 
 const ONE_MINUTE = 1000 * 60 * 1
 
@@ -17,15 +18,18 @@ var methods = {
   findService: actionsForIdentities.findService,
   hideHint: actionsForIdentities.hideHint,
   hintIsShown: actionsForIdentities.hintIsShown,
-  prepIdentityFeed: actionsForIdentities.prepIdentityFeed,
   save: actionsForIdentities.save,
   saveLocal: actionsForIdentities.saveLocal,
   sync: actionsForIdentities.sync,
-  addItems: actionsForIdentities.addItems,
 
   decryptIdentity: actionsForIdentitiesKeychain.decryptIdentity,
   getAskSecretKey: actionsForIdentitiesKeychain.getAskSecretKey,
   saveKey: actionsForIdentitiesKeychain.saveKey,
+
+  hasMedia: actionsForItems.hasMedia,
+  read: actionsForItems.read,
+  saveForLater: actionsForItems.saveForLater,
+  setMediaVerb: actionsForItems.setMediaVerb,
 
   setIdentity (identity, override) {
     var _ = this
