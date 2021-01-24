@@ -181,8 +181,10 @@ export default {
     profileSize (identity, type) {
       if (!identity || !identity.items) return 'N/A'
 
+      const content = utils.mappers[`IDENTITY_${type.toUpperCase()}`](this.app.identity)
+
       let unit = 'b'
-      let size = JSON.stringify(this.app['to' + type](identity)).length
+      let size = JSON.stringify(content).length
 
       if (size > 1000000) {
         size = size / 1000000
