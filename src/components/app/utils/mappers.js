@@ -20,6 +20,7 @@ export default {
     return {
       id: identity.id,
       name: identity.name,
+      hints: identity.hints,
       feeds: identity.feeds.map(function (feed) {
         return {
           url: feed.url,
@@ -38,6 +39,7 @@ export default {
     return {
       id: identity.id,
       name: identity.name,
+      hints: identity.hints,
       feeds: identity.feeds.map(function (feed) {
         return {
           url: feed.url,

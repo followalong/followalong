@@ -81,5 +81,19 @@ export default {
     if (typeof done === 'function') {
       done()
     }
+  },
+
+  hideHint (identity, hint) {
+    var _ = this
+
+    if (identity.hints.indexOf(hint) === -1) {
+      identity.hints.push(hint)
+    }
+
+    _.app.save(identity)
+  },
+
+  hintIsShown (identity, hint) {
+    return identity.hints.indexOf(hint) === -1
   }
 }

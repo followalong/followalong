@@ -2,7 +2,6 @@ import { reactive } from 'vue'
 import seed from '@/components/app/seed'
 import utils from './utils'
 import actionsForFeeds from './actions/feeds'
-import actionsForHints from './actions/hints'
 import actionsForIdentities from './actions/identities'
 import actionsForIdentitiesKeychain from './actions/identities-keychain'
 import actionsForItems from './actions/items'
@@ -19,9 +18,8 @@ var methods = {
   subscribe: actionsForFeeds.subscribe,
   unsubscribeFeed: actionsForFeeds.unsubscribeFeed,
 
-  hideHint: actionsForHints.hideHint,
-  hintIsShown: actionsForHints.hintIsShown,
-
+  hideHint: actionsForIdentities.hideHint,
+  hintIsShown: actionsForIdentities.hintIsShown,
   findService: actionsForIdentities.findService,
   sync: actionsForIdentities.sync,
   save: actionsForIdentities.save,

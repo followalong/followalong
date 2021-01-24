@@ -1,7 +1,7 @@
 <template>
   <div :class="'sidebar ' + app.sidebarClass">
     <div
-      v-if="app.hintIsShown('sidebar-about')"
+      v-if="app.hintIsShown(app.identity, 'sidebar-about')"
       class="section info-section"
     >
       <h3>
@@ -9,7 +9,7 @@
         <a
           href="javascript:;"
           class="float-right close-hint"
-          @click="app.hideHint('sidebar-about')"
+          @click="app.hideHint(app.identity, 'sidebar-about')"
         >&times;</a>
       </h3>
       <p>

@@ -4,6 +4,7 @@ export default function (generateId) {
     identity.name = identity.name || '...'
     identity.feeds = identity.feeds || []
     identity.items = identity.items || []
+    identity.hints = identity.hints || []
 
     identity.services = identity.services || {}
     identity.services.custom = identity.services.custom || []
