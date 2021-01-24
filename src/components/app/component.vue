@@ -22,6 +22,9 @@
 </template>
 
 <script>
+import { reactive, computed } from 'vue'
+import { Superstore } from 'vue-superstore'
+import models from '@/models'
 import localForage from 'localforage'
 import PopoutPlayer from '@/components/popout-player/component.vue'
 import methods from '@/components/app/methods'
@@ -46,6 +49,7 @@ export default {
         name: 'commmunity'
       }),
       loading: true,
+      models: new Superstore(reactive, computed, models),
       identities: [],
       keychain: {},
       identity: null,

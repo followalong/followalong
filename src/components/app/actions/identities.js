@@ -216,6 +216,8 @@ export default {
         return item.feedURL === feed.url
       })
 
+      item = this.app.models.item.create(item)
+
       identity.items.push(item)
 
       return item
