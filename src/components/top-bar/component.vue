@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import AccountDropdown from '@/components/account-dropdown/component.vue'
-import Logo from '@/components/logo/component.vue'
-import SearchForm from '@/components/search-form/component.vue'
+import AccountDropdown from '@/components/top-bar/account-dropdown/component.vue'
+import Logo from '@/components/top-bar/logo/component.vue'
+import SearchForm from '@/components/top-bar/search-form/component.vue'
 
 export default {
   components: {

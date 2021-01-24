@@ -49,6 +49,7 @@
         <ul
           v-if="showMenu"
           class="actions"
+          @click="showMenu = false"
         >
           <li v-if="unreadItems.length">
             <a

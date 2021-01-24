@@ -32,9 +32,9 @@
 
 <script>
 import utils from '@/components/app/utils'
-import AudioPlayer from '@/components/audio-player/component.vue'
-import MediaPreview from '@/components/media-preview/component.vue'
-import VideoPlayer from '@/components/video-player/component.vue'
+import AudioPlayer from '@/components/media-player/audio-player/component.vue'
+import MediaPreview from '@/components/media-player/media-preview/component.vue'
+import VideoPlayer from '@/components/media-player/video-player/component.vue'
 
 export default {
   components: {

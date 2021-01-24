@@ -24,7 +24,7 @@
                 class="reset"
                 @click="reset()"
               >
-                &times;
+                Change
               </a>
 
               <h3>
@@ -280,10 +280,10 @@ import utils from '@/components/app/utils'
 import CreditCard from '@/components/credit-card/component.vue'
 
 export default {
-
   components: {
     CreditCard
   },
+
   props: ['app', 'serverType', 'serverTypeKey'],
 
   data () {
