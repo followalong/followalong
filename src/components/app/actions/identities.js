@@ -139,11 +139,7 @@ export default {
     proxy.request(proxy.app, proxy.app.identity, {
       action: 'sync',
       identity: utils.mappers.IDENTITY_REMOTE(this.app.identity)
-    }, function (err, data) {
-      if (typeof done === 'function') {
-        done(err, data)
-      }
-    })
+    }, done)
   },
 
   save (done) {
