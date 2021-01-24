@@ -3,7 +3,7 @@
     <TopBar :app="app" />
 
     <div class="content">
-      <div v-if="identity">
+      <div v-if="app.identity">
         <Sidebar :app="app" />
         <router-view :app="app" />
       </div>
@@ -69,16 +69,16 @@ export default {
   computed: {
     nonIdentities () {
       return this.app.identities.filter((i) => {
-        return i.id !== this.identity.id
+        return i.id !== this.app.identity.id
       })
     },
     newsfeed () {
-      if (!this.identity) return []
+      if (!this.app.identity) return []
 
-      return (this.identity.items || []).filter((item) => {
+      return (this.app.identity.items || []).filter((item) => {
         this.setMediaVerb(item)
         return true
-      }).sort(sorter(this.identity))
+      }).sort(sorter(this.app.identity))
     },
     saved () {
       return this.newsfeed.filter(function (item) {
