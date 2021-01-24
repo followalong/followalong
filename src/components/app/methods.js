@@ -28,7 +28,6 @@ var methods = {
   getAskSecretKey: actionsForIdentitiesKeychain.getAskSecretKey,
   saveKey: actionsForIdentitiesKeychain.saveKey,
 
-  read: actionsForItems.read,
   saveForLater: actionsForItems.saveForLater,
 
   setIdentity (identity, override) {
@@ -43,6 +42,10 @@ var methods = {
 
     _.decryptIdentity(identity, function () {
       utils.setIdentityDefaults(identity)
+
+      identity.save = () => {
+        _.app.save(identity)
+      }
 
       _.app.saveLocal(identity)
 

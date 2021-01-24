@@ -43,10 +43,7 @@ export default {
       default: ''
     },
     feed: {
-      type: Object,
-      default () {
-        return {}
-      }
+      type: Object
     },
     _mediaVerb: {
       type: String,
@@ -65,6 +62,11 @@ export default {
     },
     hasMedia () {
       return utils.getVideoSrc(this) || utils.getAudioSrc(this)
+    }
+  },
+  methods: {
+    save () {
+      this.feed.save()
     }
   }
 }

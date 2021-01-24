@@ -6,7 +6,7 @@
     <a
       href="javascript:;"
       class="check"
-      @click="app.read(item)"
+      @click="app.useCases.markAsRead(item)"
     >&check;</a>
 
     <h3>
@@ -76,7 +76,7 @@
         <a
           :href="item.link"
           target="_blank"
-          @click="app.read(item, true)"
+          @click="app.useCases.markAsRead(item, true)"
         >
           <font-awesome-icon icon="link" />
         </a>

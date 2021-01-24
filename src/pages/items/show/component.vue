@@ -71,7 +71,7 @@
         <a
           href="javascript:;"
           class="button button-gray"
-          @click="app.read(item)"
+          @click="app.useCases.markAsRead(item)"
         >
           Mark As <span v-if="item.isRead">Unread</span><span v-else>Read</span>
         </a>
@@ -110,7 +110,7 @@ export default {
       var _ = this
 
       if (_.item) {
-        _.app.read(_.item, true)
+        _.app.useCases.markAsRead(_.item, true)
       }
     }
   },
@@ -118,7 +118,7 @@ export default {
     var _ = this
 
     if (_.item) {
-      _.app.read(_.item, true)
+      _.app.useCases.markAsRead(_.item, true)
     }
   }
 }
