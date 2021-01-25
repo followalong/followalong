@@ -81,9 +81,7 @@ export default {
 
       delete newIdentity.id
 
-      utils.setIdentityDefaults(newIdentity)
-
-      _.app.addIdentity(_.app, newIdentity)
+      newIdentity = _.app.addIdentity(_.app, newIdentity)
       _.app.setIdentity(_.app, newIdentity)
 
       _.$router.push('/')
@@ -138,7 +136,7 @@ export default {
           existingIdentity = utils.mappers.IDENTITY_REMOTE(newIdentity)
           existingIdentity._decrypted = true
 
-          _.app.addIdentity(_.app, existingIdentity)
+          existingIdentity = _.app.addIdentity(_.app, existingIdentity)
         }
 
         for (i = newIdentity.feeds.length - 1; i >= 0; i--) {

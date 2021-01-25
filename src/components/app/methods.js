@@ -35,8 +35,6 @@ var methods = {
     app.loading = true
 
     app.decryptIdentity(identity, function () {
-      utils.setIdentityDefaults(identity)
-
       identity.save = (done) => {
         app.saveLocal(identity, () => {
           app.sync(identity, done)
@@ -78,7 +76,11 @@ var methods = {
   },
 
   addIdentity (app, identity) {
+    utils.setIdentityDefaults(identity)
+
     app.identities.push(identity)
+
+    return identity
   },
 
   setupApp (app) {
@@ -89,20 +91,18 @@ var methods = {
 
       if (identities && identities.length) {
         identities.forEach((identity) => {
-          utils.setIdentityDefaults(identity)
           app.addIdentity(app, identity)
         })
 
-        app.setIdentity(app, identities[0])
+        app.setIdentity(app, app.identities[0])
       } else {
-        utils.setIdentityDefaults(seedIdentity)
+        const newIdentity = app.addIdentity(app, seedIdentity)
 
-        seedIdentity._feeds.forEach((feed) => {
-          app.addFeedToIdentity(seedIdentity, feed)
+        newIdentity._feeds.forEach((feed) => {
+          app.addFeedToIdentity(newIdentity, feed)
         })
 
-        app.addIdentity(app, seedIdentity)
-        app.setIdentity(app, seedIdentity)
+        app.setIdentity(app, newIdentity)
         app.$router.push('/splash')
       }
     })
