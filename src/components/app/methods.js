@@ -79,12 +79,6 @@ var methods = {
     )
   },
 
-  updateNow () {
-    setInterval(() => {
-      this.now = new Date()
-    }, ONE_MINUTE)
-  },
-
   setupApp (app) {
     app.loading = true
 
@@ -102,7 +96,6 @@ var methods = {
 
       app.identities = identities
       app.setIdentity(identities[0])
-      app.updateNow()
     })
   }
 }
