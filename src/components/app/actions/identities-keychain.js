@@ -29,7 +29,7 @@ export default {
         return
       }
 
-      utils.copyAttrs(state, identity, ['name', 'local', 'services'])
+      utils.copyAttrs(state, identity, ['name', 'local', 'services', 'hints'])
 
       state.feeds.forEach((feed) => {
         this.app.addFeedToIdentity(identity, feed)
