@@ -29,7 +29,9 @@ var methods = {
   setIdentity (app, identity, override) {
     identity = reactive(identity)
 
-    utils.setIdentityDefaults(identity)
+    if (identity.constructor.name !== 'Instance') {
+      throw new Error('Identity is not an Instance')
+    }
 
     app.identity = identity
     app.loading = true
@@ -77,6 +79,10 @@ var methods = {
 
   addIdentity (app, identity) {
     utils.setIdentityDefaults(identity)
+
+    if (identity.constructor.name !== 'Instance') {
+      identity = app.models.identity.create(identity)
+    }
 
     app.identities.push(identity)
 
