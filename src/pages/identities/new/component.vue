@@ -83,8 +83,8 @@ export default {
 
       utils.setIdentityDefaults(newIdentity)
 
-      _.app.addIdentity(newIdentity)
-      _.app.setIdentity(newIdentity)
+      _.app.addIdentity(_.app, newIdentity)
+      _.app.setIdentity(_.app, newIdentity)
 
       _.$router.push('/')
     },
@@ -138,7 +138,7 @@ export default {
           existingIdentity = utils.mappers.IDENTITY_REMOTE(newIdentity)
           existingIdentity._decrypted = true
 
-          _.app.addIdentity(existingIdentity)
+          _.app.addIdentity(_.app, existingIdentity)
         }
 
         for (i = newIdentity.feeds.length - 1; i >= 0; i--) {
@@ -159,7 +159,7 @@ export default {
           }
         }
 
-        _.app.setIdentity(existingIdentity, true)
+        _.app.setIdentity(_.app, existingIdentity, true)
         _.$router.push('/')
       } catch (e) {
         // console.log(e);

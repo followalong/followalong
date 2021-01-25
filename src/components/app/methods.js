@@ -26,34 +26,32 @@ var methods = {
   getAskSecretKey: actionsForIdentitiesKeychain.getAskSecretKey,
   saveKey: actionsForIdentitiesKeychain.saveKey,
 
-  setIdentity (identity, override) {
-    var _ = this
-
+  setIdentity (app, identity, override) {
     identity = reactive(identity)
 
     utils.setIdentityDefaults(identity)
 
-    _.app.identity = identity
-    _.app.loading = true
+    app.identity = identity
+    app.loading = true
 
-    _.decryptIdentity(identity, function () {
+    app.decryptIdentity(identity, function () {
       utils.setIdentityDefaults(identity)
 
       identity.save = (done) => {
-        _.app.saveLocal(identity, () => {
-          _.app.sync(identity, done)
+        app.saveLocal(identity, () => {
+          app.sync(identity, done)
         })
       }
 
-      _.app.saveLocal(identity)
+      app.saveLocal(identity)
 
       clearTimeout(nextFeedFetcher)
 
-      _.app.loading = false
+      app.loading = false
 
-      _.fetchAllFeeds(identity, override, function () {
+      app.fetchAllFeeds(identity, override, function () {
         nextFeedFetcher = setTimeout(function () {
-          _.fetchNextFeed(_.app.identity)
+          app.fetchNextFeed(app.identity)
         }, ONE_MINUTE)
       })
     })
@@ -79,8 +77,8 @@ var methods = {
     )
   },
 
-  addIdentity (identity) {
-    this.app.identities.push(identity)
+  addIdentity (app, identity) {
+    app.identities.push(identity)
   },
 
   setupApp (app) {
@@ -92,10 +90,10 @@ var methods = {
       if (identities && identities.length) {
         identities.forEach((identity) => {
           utils.setIdentityDefaults(identity)
-          app.addIdentity(identity)
+          app.addIdentity(app, identity)
         })
 
-        app.setIdentity(identities[0])
+        app.setIdentity(app, identities[0])
       } else {
         utils.setIdentityDefaults(seedIdentity)
 
@@ -103,8 +101,8 @@ var methods = {
           app.addFeedToIdentity(seedIdentity, feed)
         })
 
-        app.addIdentity(seedIdentity)
-        app.setIdentity(seedIdentity)
+        app.addIdentity(app, seedIdentity)
+        app.setIdentity(app, seedIdentity)
         app.$router.push('/splash')
       }
     })
