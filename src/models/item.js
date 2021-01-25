@@ -3,8 +3,8 @@ import utils from '../components/app/utils'
 export default {
   props: {
     _updatedAt: {
-      type: Date,
-      default: ''
+      type: Number,
+      default: 1
     },
     author: {
       type: String,

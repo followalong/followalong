@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import seed from '@/components/app/seed'
+import seedIdentity from '@/components/app/seed'
 import utils from './utils'
 import actionsForIdentities from './actions/identities'
 import actionsForIdentitiesKeychain from './actions/identities-keychain'
@@ -85,17 +85,26 @@ var methods = {
     utils.constructIdentities(app, (identities, keychain) => {
       app.keychain = keychain
 
-      if (!identities || !identities.length) {
-        identities = seed
+      if (identities && identities.length) {
+        for (var i = identities.length - 1; i >= 0; i--) {
+          utils.setIdentityDefaults(identities[i])
+        }
+
+        app.identities = identities
+        app.setIdentity(identities[0])
+      } else {
+        utils.setIdentityDefaults(seedIdentity)
+
+        identities.push(seedIdentity)
+
+        seedIdentity._feeds.forEach((feed) => {
+          app.addFeedToIdentity(seedIdentity, feed)
+        })
+
+        app.identities.push(seedIdentity)
+        app.setIdentity(seedIdentity)
         app.$router.push('/splash')
       }
-
-      for (var i = identities.length - 1; i >= 0; i--) {
-        utils.setIdentityDefaults(identities[i])
-      }
-
-      app.identities = identities
-      app.setIdentity(identities[0])
     })
   }
 }

@@ -9,6 +9,7 @@ export default {
 
     this.store.getItem(identity.id, (err, state) => {
       if (!state) {
+        identity._decrypted = true
         return done()
       }
 

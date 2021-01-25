@@ -6,9 +6,7 @@ export default {
   props: {
     _updatedAt: {
       type: Number,
-      default () {
-        return Date.now()
-      }
+      default: 1
     },
     loading: {
       type: Boolean,
@@ -21,6 +19,12 @@ export default {
     name: {
       type: String,
       default: ''
+    },
+    unreads: {
+      type: Array,
+      default () {
+        return []
+      }
     }
   },
   relationships: {
