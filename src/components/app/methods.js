@@ -79,6 +79,10 @@ var methods = {
     )
   },
 
+  addIdentity (identity) {
+    this.app.identities.push(identity)
+  },
+
   setupApp (app) {
     app.loading = true
 
@@ -86,22 +90,20 @@ var methods = {
       app.keychain = keychain
 
       if (identities && identities.length) {
-        for (var i = identities.length - 1; i >= 0; i--) {
-          utils.setIdentityDefaults(identities[i])
-        }
+        identities.forEach((identity) => {
+          utils.setIdentityDefaults(identity)
+          app.addIdentity(identity)
+        })
 
-        app.identities = identities
         app.setIdentity(identities[0])
       } else {
         utils.setIdentityDefaults(seedIdentity)
-
-        identities.push(seedIdentity)
 
         seedIdentity._feeds.forEach((feed) => {
           app.addFeedToIdentity(seedIdentity, feed)
         })
 
-        app.identities.push(seedIdentity)
+        app.addIdentity(seedIdentity)
         app.setIdentity(seedIdentity)
         app.$router.push('/splash')
       }
