@@ -32,6 +32,7 @@
 
 <script>
 import utils from '@/components/app/utils'
+import useCases from '@/use-cases/index.js'
 import AudioPlayer from '@/components/media-player/audio-player/component.vue'
 import MediaPreview from '@/components/media-player/media-preview/component.vue'
 import VideoPlayer from '@/components/media-player/video-player/component.vue'
@@ -65,7 +66,7 @@ export default {
       if (this.app.playing === item) {
         this.app.playing = undefined
       } else {
-        this.app.useCases.markItemAsRead(item, true)
+        useCases.markItemAsRead(item, true)
         this.app.playing = item
       }
     }

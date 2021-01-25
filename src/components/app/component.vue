@@ -25,7 +25,6 @@
 import { reactive, computed } from 'vue'
 import { Superstore } from 'vue-superstore'
 import models from '@/models'
-import useCases from '@/use-cases'
 import localForage from 'localforage'
 import PopoutPlayer from '@/components/popout-player/component.vue'
 import methods from '@/components/app/methods'
@@ -51,7 +50,6 @@ export default {
       }),
       loading: true,
       models: new Superstore(reactive, computed, models),
-      useCases: useCases,
       identities: [],
       keychain: {},
       identity: null,

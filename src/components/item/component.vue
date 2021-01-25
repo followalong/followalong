@@ -6,7 +6,7 @@
     <a
       href="javascript:;"
       class="check"
-      @click="app.useCases.markItemAsRead(item)"
+      @click="useCases.markItemAsRead(item)"
     >&check;</a>
 
     <h3>
@@ -65,7 +65,7 @@
       <p class="hint float-right">
         <a
           href="javascript:;"
-          @click="app.useCases.saveItemForLater(item)"
+          @click="useCases.saveItemForLater(item)"
         >
           <font-awesome-icon
             icon="save"
@@ -76,7 +76,7 @@
         <a
           :href="item.link"
           target="_blank"
-          @click="app.useCases.markItemAsRead(item, true)"
+          @click="useCases.markItemAsRead(item, true)"
         >
           <font-awesome-icon icon="link" />
         </a>
@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import useCases from '@/use-cases/index.js'
 import truncate from 'trunc-html'
 import MediaPlayer from '@/components/media-player/component.vue'
 
@@ -107,6 +108,7 @@ export default {
   props: ['app', 'item', 'showContent'],
   data () {
     return {
+      useCases: useCases,
       characterLimit: 450,
       isExpanded: false
     }

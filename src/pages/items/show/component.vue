@@ -61,7 +61,7 @@
         <a
           href="javascript:;"
           :class="'button' + (item.isSaved ? '' : ' button-gray')"
-          @click="app.useCases.saveItemForLater(item)"
+          @click="useCases.saveItemForLater(item)"
         >
           Save<span v-if="item.isSaved">d</span>
         </a>
@@ -71,7 +71,7 @@
         <a
           href="javascript:;"
           class="button button-gray"
-          @click="app.useCases.markItemAsRead(item)"
+          @click="useCases.markItemAsRead(item)"
         >
           Mark As <span v-if="item.isRead">Unread</span><span v-else>Read</span>
         </a>
@@ -81,6 +81,7 @@
 </template>
 
 <script>
+import useCases from '@/use-cases/index.js'
 import MediaPlayer from '@/components/media-player/component.vue'
 
 export default {
@@ -88,6 +89,11 @@ export default {
     MediaPlayer
   },
   props: ['app'],
+  data () {
+    return {
+      useCases
+    }
+  },
   computed: {
     related () {
       var _ = this
@@ -110,7 +116,7 @@ export default {
       var _ = this
 
       if (_.item) {
-        _.app.useCases.markItemAsRead(_.item, true)
+        _.useCases.markItemAsRead(_.item, true)
       }
     }
   },
@@ -118,7 +124,7 @@ export default {
     var _ = this
 
     if (_.item) {
-      _.app.useCases.markItemAsRead(_.item, true)
+      _.useCases.markItemAsRead(_.item, true)
     }
   }
 }
