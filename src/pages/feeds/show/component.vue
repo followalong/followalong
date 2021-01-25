@@ -159,7 +159,7 @@ export default {
     fetch () {
       var _ = this
 
-      _.app.fetchFeed(_.app.identity, _.feed, Date.now(), true, function () {
+      _.feed.fetch(_.app, Date.now(), true, function () {
         _.app.save(_.app.identity)
       })
     }

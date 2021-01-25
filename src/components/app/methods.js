@@ -9,7 +9,6 @@ const ONE_MINUTE = 1000 * 60 * 1
 let nextFeedFetcher
 
 var methods = {
-  fetchFeed: actionsForIdentities.fetchFeed,
   subscribe: actionsForIdentities.subscribe,
   unsubscribeFeed: actionsForIdentities.unsubscribeFeed,
   fetchAllFeeds: actionsForIdentities.fetchAllFeeds,

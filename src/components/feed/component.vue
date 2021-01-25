@@ -9,7 +9,7 @@
     </button>
     <button
       :class="feed.paused ? 'button-gray' : ''"
-      @click="pause()"
+      @click="togglePause()"
     >
       <span v-if="feed.paused">&#10074;&#10074;</span>
       <span v-else>&#9658;</span>
@@ -54,17 +54,17 @@ export default {
     fetch () {
       var _ = this
 
-      _.app.fetchFeed(_.app.identity, _.feed, Date.now(), true, function () {
-        _.app.save(_.app.identity)
+      _.feed.fetch(_.app, Date.now(), true, () => {
+        _.feed.save()
       })
     },
 
-    pause () {
+    togglePause () {
       var _ = this
 
       _.feed._updatedAt = Date.now()
-      _.feed.paused = false
-      _.app.save(_.app.identity)
+      _.feed.paused = !_.feed.paused
+      _.feed.save()
     }
   }
 }

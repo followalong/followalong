@@ -2,7 +2,6 @@ import crypt from '../crypt'
 import utils from '../utils'
 import SERVICES from '@/components/app/services'
 import async from 'no-async'
-import { getFeed } from '@/components/app/fetcher'
 
 export default {
   findService (identity, type, forceResult) {
@@ -110,7 +109,7 @@ export default {
     _.app.loading = true
 
     async.eachParallel(identity.feeds.filter(utils.filters.UNPAUSED), function (feed, next) {
-      _.fetchFeed(identity, feed, updatedAt, override, next)
+      feed.fetch(_.app, updatedAt, override, next)
     }, function () {
       _.app.loading = false
       _.app.save(identity)
@@ -135,32 +134,12 @@ export default {
       return
     }
 
-    _.fetchFeed(identity, feed, updatedAt, true, function () {
+    feed.fetch(_.app, updatedAt, true, function () {
       _.app.save(identity)
 
       setTimeout(function () {
         _.fetchNextFeed(identity)
       }, utils.feedFetcherDuration(identity))
-    })
-  },
-
-  fetchFeed (identity, feed, updatedAt, override, done) {
-    var _ = this
-
-    updatedAt = updatedAt || Date.now()
-
-    if (!override && feed._updatedAt && feed._updatedAt > updatedAt - utils.HALF_HOUR) {
-      return done()
-    }
-
-    feed.loading = true
-
-    getFeed(_.app.findService(identity, 'rss', true), identity.items, feed, updatedAt, function () {
-      feed.loading = false
-
-      if (typeof done === 'function') {
-        done()
-      }
     })
   },
 

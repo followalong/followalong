@@ -1,3 +1,5 @@
+import utils from '../components/app/utils'
+import { getFeed } from '@/components/app/fetcher'
 
 export default {
   primaryKey: 'url',
@@ -31,6 +33,23 @@ export default {
   methods: {
     save () {
       this.identity.save()
+    },
+    fetch (app, updatedAt, override, done) {
+      updatedAt = updatedAt || Date.now()
+
+      if (!override && this._updatedAt && this._updatedAt > updatedAt - utils.HALF_HOUR) {
+        return done()
+      }
+
+      this.loading = true
+
+      getFeed(app.findService(this.identity, 'rss', true), this.identity.items, this, updatedAt, () => {
+        this.loading = false
+
+        if (typeof done === 'function') {
+          done()
+        }
+      })
     }
   }
 }

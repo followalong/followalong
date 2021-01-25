@@ -104,7 +104,7 @@ export default {
       })
     },
     subscribe (feed) {
-      this.app.fetchFeed(this.app.identity, feed, Date.now(), true, () => {
+      feed.fetch(this.app, Date.now(), true, () => {
         this.app.subscribe(this.app.identity, feed, feed.items)
       })
     }
