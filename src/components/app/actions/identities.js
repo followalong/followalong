@@ -212,10 +212,6 @@ export default {
 
   addItemsToIdentity (identity, feed, items) {
     return items.map((item) => {
-      item.feed = feed || identity.feeds.find(function (feed) {
-        return item.feedURL === feed.url
-      })
-
       item = this.app.models.item.create(item)
 
       identity.items.push(item)
