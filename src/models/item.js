@@ -42,12 +42,16 @@ export default {
       type: String,
       default: ''
     },
-    feed: {
-      type: Object
-    },
     _mediaVerb: {
       type: String,
       default: ''
+    }
+  },
+  relationships: {
+    feed: {
+      type: 'BelongsTo',
+      foreignModel: 'feed',
+      primaryKey: 'feedURL'
     }
   },
   computed: {
@@ -69,7 +73,7 @@ export default {
   },
   methods: {
     save () {
-      this.feed.save()
+      this.feed.value.save()
     }
   }
 }

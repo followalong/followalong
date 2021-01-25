@@ -1,6 +1,10 @@
 <template>
+  <li v-if="!item.feed">
+    <p>Feed not found – try adding it:</p>
+    <p>{{ item.feedURL }}</p>
+  </li>
   <li
-    v-if="item && item.feed"
+    v-else
     :class="item.isRead ? 'read' : ''"
   >
     <a

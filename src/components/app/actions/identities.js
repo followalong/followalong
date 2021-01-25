@@ -203,9 +203,9 @@ export default {
   },
 
   addFeedToIdentity (identity, feed) {
-    feed.save = () => {
-      identity.save()
-    }
+    feed.identity = identity
+
+    feed = this.app.models.feed.create(feed)
 
     identity.feeds.push(feed)
   },
