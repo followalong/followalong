@@ -48,13 +48,9 @@
 </template>
 
 <script>
-import methods from '@/components/app/methods'
-
 export default {
   props: ['app', 'feed'],
   methods: {
-    save: methods.save,
-
     fetch () {
       var _ = this
 

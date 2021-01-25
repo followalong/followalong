@@ -40,8 +40,10 @@ var methods = {
     _.decryptIdentity(identity, function () {
       utils.setIdentityDefaults(identity)
 
-      identity.save = () => {
-        _.app.save(identity)
+      identity.save = (done) => {
+        _.app.saveLocal(identity, () => {
+          _.app.sync(identity, done)
+        })
       }
 
       _.app.saveLocal(identity)
