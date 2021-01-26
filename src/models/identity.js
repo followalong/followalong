@@ -62,7 +62,7 @@ export default {
       const proxy = this.findService('sync')
 
       if (!proxy) {
-        return
+        return done('No sync service configured.')
       }
 
       proxy.request(this, {
