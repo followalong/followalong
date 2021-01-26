@@ -2,7 +2,7 @@
   <div class="feed home-feed wide-feed">
     <div class="title-wrapper">
       <button
-        v-if="app.unread && app.unread.length"
+        v-if="unread.length"
         class="button-gray button-small float-right"
         @click="catchMeUp()"
       >
@@ -42,6 +42,7 @@
 
 <script>
 import Item from '@/components/item/component.vue'
+import sorter from '@/components/app/sorter'
 
 const VERBS = ['watch', 'read', 'listen']
 const DISTANCE_FROM_BOTTOM = 1000
@@ -58,10 +59,15 @@ export default {
     }
   },
   computed: {
+    allItems () {
+      if (!this.app.identity) return []
+
+      return this.app.identity.items.sort(sorter(this.app.identity))
+    },
     items () {
       var _ = this
 
-      return _.app.newsfeed.filter(function (item) {
+      return _.allItems.filter(function (item) {
         return !_.mediaVerb || item._mediaVerb === _.mediaVerb
       }).slice(0, _.limit)
     },
@@ -112,7 +118,7 @@ export default {
     catchMeUp () {
       var _ = this
 
-      _.app.newsfeed.filter(function (item) {
+      _.allItems.filter(function (item) {
         return !_.mediaVerb || item._mediaVerb === _.mediaVerb
       }).forEach(function (item) {
         item.isRead = true

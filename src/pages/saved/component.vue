@@ -18,6 +18,7 @@
 
 <script>
 import Item from '@/components/item/component.vue'
+import sorter from '@/components/app/sorter'
 
 export default {
   components: {
@@ -26,7 +27,9 @@ export default {
   props: ['app'],
   computed: {
     items () {
-      return this.app.saved
+      return this.app.identity.items.filter((item) => {
+        return item.isSaved
+      }).sort(sorter(this.app.identity))
     }
   }
 }

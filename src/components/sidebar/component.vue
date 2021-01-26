@@ -28,7 +28,7 @@
         <router-link to="/">
           <font-awesome-icon icon="igloo" /> What's New?
           <span class="hint counter">
-            <span v-if="app.unread.length">({{ app.unread.length }})</span>
+            <span v-if="unread.length">({{ unread.length }})</span>
           </span>
         </router-link>
       </li>
@@ -62,12 +62,12 @@
         </router-link>
       </li>
 
-      <li v-if="app.saved.length">
+      <li v-if="saved.length">
         <router-link to="/saved">
           <font-awesome-icon icon="save" />
           Saved
           <span class="hint counter">
-            ({{ app.saved.length }})
+            ({{ saved.length }})
           </span>
         </router-link>
       </li>
@@ -159,13 +159,19 @@ export default {
   },
   computed: {
     unreadWatches () {
-      return this.app.unread.filter((item) => item._mediaVerb === 'watch')
+      return this.unread.filter((item) => item._mediaVerb === 'watch')
     },
     unreadListens () {
-      return this.app.unread.filter((item) => item._mediaVerb === 'listen')
+      return this.unread.filter((item) => item._mediaVerb === 'listen')
     },
     unreadReads () {
-      return this.app.unread.filter((item) => item._mediaVerb === 'read')
+      return this.unread.filter((item) => item._mediaVerb === 'read')
+    },
+    saved () {
+      return this.app.identity.items.filter((item) => item.isSaved)
+    },
+    unread () {
+      return this.app.identity.items.filter((item) => !item.isRead)
     }
   },
   watch: {

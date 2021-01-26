@@ -27,7 +27,6 @@ import localForage from 'localforage'
 import PopoutPlayer from '@/components/popout-player/component.vue'
 import methods from '@/components/app/methods'
 import Sidebar from '@/components/sidebar/component.vue'
-import sorter from '@/components/app/sorter'
 import TopBar from '@/components/top-bar/component.vue'
 
 export default {
@@ -61,21 +60,6 @@ export default {
     nonIdentities () {
       return this.app.identities.filter((i) => {
         return i.id !== this.app.identity.id
-      })
-    },
-    newsfeed () {
-      if (!this.app.identity) return []
-
-      return this.app.identity.items.sort(sorter(this.app.identity))
-    },
-    saved () {
-      return this.newsfeed.filter(function (item) {
-        return !!item.isSaved
-      })
-    },
-    unread () {
-      return this.newsfeed.filter(function (item) {
-        return !item.isRead
       })
     }
   },
