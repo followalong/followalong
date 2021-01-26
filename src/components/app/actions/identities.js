@@ -1,45 +1,10 @@
 import utils from '../utils'
-import SERVICES from '@/components/app/services'
 import async from 'no-async'
 import models from '@/models/index.js'
 
 export default {
-  findService (services, type, forceResult) {
-    if (!services) {
-      return
-    }
-
-    var service = services[type]
-
-    if (!service && forceResult) {
-      service = services[type] = { symlink: 'followalong-free' }
-    }
-
-    if (service && service.symlink) {
-      service = SERVICES.concat(services.custom).find(function (s) {
-        return s.id === service.symlink
-      })
-    }
-
-    if (service) {
-      var template = SERVICES.find(function (s) {
-        return s.id === service.template
-      })
-
-      if (template) {
-        var items = ['fields', 'pricing', 'description', 'request']
-
-        for (var i = items.length - 1; i >= 0; i--) {
-          service[items[i]] = service[items[i]] || template[items[i]]
-        }
-      }
-    }
-
-    return service
-  },
-
   sync (identity, done) {
-    const proxy = this.app.findService(identity.services, 'sync')
+    const proxy = identity.findService('sync')
 
     if (!proxy) {
       return

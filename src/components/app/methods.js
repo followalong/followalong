@@ -15,7 +15,6 @@ var methods = {
   unsubscribeFeed: actionsForIdentities.unsubscribeFeed,
   fetchAllFeeds: actionsForIdentities.fetchAllFeeds,
   fetchNextFeed: actionsForIdentities.fetchNextFeed,
-  findService: actionsForIdentities.findService,
   hideHint: actionsForIdentities.hideHint,
   hintIsShown: actionsForIdentities.hintIsShown,
   sync: actionsForIdentities.sync,

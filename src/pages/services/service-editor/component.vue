@@ -313,7 +313,7 @@ export default {
 
     service () {
       var _ = this
-      return _.app.findService(_.app.identity.services, _.serverTypeKey)
+      return _.app.identity.findService(_.serverTypeKey)
     }
   },
 
