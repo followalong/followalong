@@ -50,7 +50,7 @@
                       :type="field.type"
                       :disabled="field.disabled"
                       :name="key"
-                      @blur="app.save(app.identity)"
+                      @blur="app.identity.save()"
                     >
                   </div>
                 </div>
@@ -338,7 +338,7 @@ export default {
         _.paidServiceModal = s
       }
 
-      _.app.save(_.app.identity)
+      _.app.identity.save()
     },
 
     importService () {
@@ -395,7 +395,7 @@ export default {
       }
 
       _.loading = false
-      _.app.save(_.app.identity)
+      _.app.identity.save()
     },
 
     error (msg) {
@@ -426,7 +426,7 @@ export default {
         arr.splice(arr.indexOf(service), 1)
       }
 
-      this.app.save(identity)
+      identity.save()
     },
 
     downloadService (service) {

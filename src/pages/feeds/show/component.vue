@@ -145,7 +145,7 @@ export default {
         _.items[i].isRead = true
       }
 
-      _.app.save(_.app.identity)
+      _.app.identity.save()
     },
 
     pause () {
@@ -153,14 +153,14 @@ export default {
 
       _.feed._updatedAt = Date.now()
       _.feed.paused = !_.feed.paused
-      _.app.save(_.app.identity)
+      _.app.identity.save()
     },
 
     fetch () {
       var _ = this
 
       _.feed.fetch(_.app, Date.now(), true, function () {
-        _.app.save(_.app.identity)
+        _.app.identity.save()
       })
     }
   }

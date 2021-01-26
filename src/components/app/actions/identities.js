@@ -63,10 +63,6 @@ export default {
     })
   },
 
-  save (identity, done) {
-    identity.save(done)
-  },
-
   saveLocal (app, identity, done) {
     utils.trimItems(identity)
 
@@ -108,7 +104,7 @@ export default {
       feed.fetch(_.app, updatedAt, override, next)
     }, function () {
       _.app.loading = false
-      _.app.save(identity)
+      identity.save()
 
       if (typeof done === 'function') {
         done()
@@ -131,7 +127,7 @@ export default {
     }
 
     feed.fetch(_.app, updatedAt, true, function () {
-      _.app.save(identity)
+      identity.save()
 
       setTimeout(function () {
         _.fetchNextFeed(identity)
@@ -149,7 +145,7 @@ export default {
     _.app.addFeedToIdentity(_.app, identity, feed)
     _.app.addItemsToIdentity(_.app, identity, feed, items)
 
-    _.app.save(identity)
+    identity.save()
 
     _.app.q = ''
     _.$router.push({ name: 'feed', params: { feed_url: feed.url } })
@@ -168,7 +164,7 @@ export default {
 
     identity.feeds.splice(index, 1)
 
-    app.save(identity, function () {
+    identity.save(function () {
       if (redirect) {
         app.$router.push('/')
       }

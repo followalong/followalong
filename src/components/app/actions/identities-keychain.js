@@ -63,7 +63,7 @@ export default {
     }
 
     if (reset) {
-      _.app.save(identity)
+      identity.save()
     }
 
     return _.app.keychain[identity.id]
@@ -89,7 +89,7 @@ export default {
     }
 
     if (!ignoreSave) {
-      _.app.save(identity)
+      identity.save()
     }
   }
 }

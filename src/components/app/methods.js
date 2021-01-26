@@ -17,7 +17,6 @@ var methods = {
   findService: actionsForIdentities.findService,
   hideHint: actionsForIdentities.hideHint,
   hintIsShown: actionsForIdentities.hintIsShown,
-  save: actionsForIdentities.save,
   saveLocal: actionsForIdentities.saveLocal,
   sync: actionsForIdentities.sync,
   addFeedToIdentity: actionsForIdentities.addFeedToIdentity,
