@@ -36,7 +36,7 @@ const decryptIdentity = function (keychain, store, identity, done) {
       identity.addFeed(feed)
     })
 
-    identitiesActions.addItemsToIdentity(identity, undefined, state.items)
+    identitiesActions.addItemsToIdentity(identity, state.items)
 
     identity._decrypted = true
 

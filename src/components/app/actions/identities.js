@@ -62,7 +62,7 @@ export default {
     var _ = this
 
     identity.addFeed(feed)
-    _.app.addItemsToIdentity(identity, feed, items)
+    _.app.addItemsToIdentity(identity, items)
 
     identity.save()
 
@@ -90,7 +90,7 @@ export default {
     })
   },
 
-  addItemsToIdentity (identity, feed, items) {
+  addItemsToIdentity (identity, items) {
     return items.map((item) => {
       if (item.constructor.name !== 'Instance') {
         item = models.item.create(item)
