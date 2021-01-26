@@ -38,12 +38,12 @@ var methods = {
 
     app.decryptIdentity(app.keychain, app.store, identity, function () {
       identity.save = (done) => {
-        app.saveLocal(app, identity, () => {
+        app.saveLocal(app.keychain, app.store, identity, () => {
           app.sync(identity, done)
         })
       }
 
-      app.saveLocal(app, identity)
+      app.saveLocal(app.keychain, app.store, identity)
 
       clearTimeout(nextFeedFetcher)
 

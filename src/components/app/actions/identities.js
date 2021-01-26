@@ -63,14 +63,14 @@ export default {
     })
   },
 
-  saveLocal (app, identity, done) {
+  saveLocal (keychain, store, identity, done) {
     utils.trimItems(identity)
 
-    app.store.setItem(
+    store.setItem(
       identity.id,
       crypt.en(
-        app.keychain,
-        app.store,
+        keychain,
+        store,
         identity,
         utils.mappers.IDENTITY_LOCAL(identity)
       )
