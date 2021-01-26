@@ -7,12 +7,12 @@ var parser = new Parser({
   }
 })
 
-function getContent (service, url, done) {
+function getContent (app, identity, service, url, done) {
   if (!service) {
     return done()
   }
 
-  service.request(service.app.identity, {
+  service.request(identity, {
     action: 'rss',
     url: url
   }, function (err, data) {
@@ -24,7 +24,7 @@ function getContent (service, url, done) {
   })
 }
 
-function parseItems (app, feed, data, items, updatedAt, done) {
+function parseItems (app, identity, feed, data, items, updatedAt, done) {
   var lastUpdate = feed._updatedAt || new Date(0)
 
   parser.parseString(data, function (err, data) {
@@ -76,7 +76,7 @@ function parseItems (app, feed, data, items, updatedAt, done) {
           newItem.isRead = false
         }
 
-        newItem = app.addItemsToIdentity(app.identity, feed, [newItem])[0]
+        newItem = app.addItemsToIdentity(identity, feed, [newItem])[0]
       }
 
       newItem.pubDate = newItem.pubDate || newItem.pubdate || newItem.date
@@ -96,12 +96,12 @@ function parseItems (app, feed, data, items, updatedAt, done) {
   })
 }
 
-function getFeed (service, items, feed, updatedAt, callback, forEachCallback) {
+function getFeed (app, identity, service, items, feed, updatedAt, callback, forEachCallback) {
   if (!service) {
     return callback()
   }
 
-  getContent(service, feed.url, function (err, data) {
+  getContent(app, identity, service, feed.url, function (err, data) {
     if (err || !data) {
       feed.error = err || 'Feed has no data'
       console.error(feed.error)
@@ -111,7 +111,7 @@ function getFeed (service, items, feed, updatedAt, callback, forEachCallback) {
       delete feed.error
     }
 
-    parseItems(service.app, feed, data, items, updatedAt, callback)
+    parseItems(app, identity, feed, data, items, updatedAt, callback)
   })
 }
 
