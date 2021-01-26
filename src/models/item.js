@@ -50,7 +50,6 @@ export default {
   relationships: {
     feed: {
       type: 'BelongsTo',
-      foreignModel: 'feed',
       primaryKey: 'feedURL'
     }
   },

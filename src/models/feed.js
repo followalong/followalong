@@ -30,7 +30,6 @@ export default {
   relationships: {
     items: {
       type: 'HasMany',
-      foreignModel: 'item',
       foreignKey: 'feedURL'
     }
   },

@@ -80,13 +80,7 @@ var methods = {
   addIdentity (app, identity) {
     utils.setIdentityDefaults(identity)
 
-    if (identity.constructor.name !== 'Instance') {
-      identity = app.models.identity.create(identity)
-    }
-
-    app.identities.push(identity)
-
-    return identity
+    return app.models.identity.create(identity)
   },
 
   setupApp (app) {

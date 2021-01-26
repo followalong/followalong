@@ -32,6 +32,8 @@ import Sidebar from '@/components/sidebar/component.vue'
 import sorter from '@/components/app/sorter'
 import TopBar from '@/components/top-bar/component.vue'
 
+const superstore = new Superstore(reactive, computed, models)
+
 export default {
   components: {
     PopoutPlayer,
@@ -49,8 +51,8 @@ export default {
         name: 'commmunity'
       }),
       loading: true,
-      models: new Superstore(reactive, computed, models),
-      identities: [],
+      models: superstore,
+      identities: superstore.identity.data,
       keychain: {},
       identity: null,
       sidebarClass: '',
