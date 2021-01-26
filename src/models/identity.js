@@ -74,7 +74,6 @@ export default {
         }
       })
     },
-
     addFeed (feed) {
       feed.identity = this
 

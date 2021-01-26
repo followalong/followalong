@@ -41,6 +41,7 @@ export default {
 
     var feed = identity.feeds.filter(utils.filters.UNPAUSED).sort(utils.sorters.LAST_UPDATED)[0]
 
+    // TODO: identity.loading
     if (_.app.loading || !feed) {
       setTimeout(function () {
         _.fetchNextFeed(identity)
@@ -96,6 +97,7 @@ export default {
         item = models.item.create(item)
       }
 
+      // TODO: identity.items relationship
       identity.items.push(item)
 
       return item
