@@ -1,9 +1,10 @@
 import aes256 from 'aes256'
 import utils from './utils'
+import identitiesKeychain from '../../components/app/actions/identities-keychain.js'
 
 export default {
-  en (app, identity, json) {
-    var key = app.keychain[identity.id]
+  en (keychain, store, identity, json) {
+    var key = keychain[identity.id]
     var encrypted = json
 
     encrypted = typeof json === 'string' ? json : JSON.stringify(json)
@@ -12,13 +13,13 @@ export default {
       return encrypted
     } else if (identity.services.local.strategy === 'rotate') {
       key = utils.generateId()
-      app.saveKey(app.keychain, app.store, identity, key, true)
+      identitiesKeychain.saveKey(keychain, store, identity, key, true)
     } else if (identity.services.local.strategy === 'ask') {
-      key = app.getAskSecretKey(app.keychain, app.store, identity, false)
+      key = identitiesKeychain.getAskSecretKey(keychain, store, identity, false)
     } else if (identity.services.local.strategy === 'store') {
-      if (typeof app.keychain[identity.id] === 'undefined') {
+      if (typeof keychain[identity.id] === 'undefined') {
         key = utils.generateId()
-        app.saveKey(app.keychain, app.store, identity, key, true)
+        identitiesKeychain.saveKey(keychain, store, identity, key, true)
       }
     }
 
@@ -41,13 +42,13 @@ export default {
         str = JSON.parse(str)
       } catch (e) {
         try {
-          key = app.getAskSecretKey(app.keychain, app.store, identity)
+          key = identitiesKeychain.getAskSecretKey(app.keychain, app.store, identity)
 
           if (key !== null) {
             str = JSON.parse(aes256.decrypt(key, str))
 
             if (typeof str === 'object' && str.services.local.strategy === 'store') {
-              app.saveKey(app.keychain, app.store, identity, key, true)
+              identitiesKeychain.saveKey(app.keychain, app.store, identity, key, true)
               app.keychain[identity.id] = key
             }
           }

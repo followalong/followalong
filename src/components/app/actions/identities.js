@@ -69,7 +69,8 @@ export default {
     app.store.setItem(
       identity.id,
       crypt.en(
-        app,
+        app.keychain,
+        app.store,
         identity,
         utils.mappers.IDENTITY_LOCAL(identity)
       )
