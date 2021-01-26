@@ -245,7 +245,6 @@ export default {
   props: ['app'],
   data () {
     return {
-      loading: false,
       membership: undefined
     }
   },

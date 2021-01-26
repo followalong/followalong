@@ -14,7 +14,7 @@
     </p>
 
     <div v-else>
-      <p v-if="loading">
+      <p v-if="isLoading">
         Loading...
       </p>
       <div v-else>
@@ -58,7 +58,7 @@ export default {
   data: function () {
     return {
       error: '',
-      loading: true,
+      isLoading: true,
       q: this.$route.query.q || '',
       feeds: []
     }
@@ -77,13 +77,13 @@ export default {
   methods: {
     search (q) {
       this.q = q
-      this.loading = true
+      this.isLoading = true
       this.error = ''
 
       const service = this.app.identity.findService('search', true)
 
       if (!service) {
-        this.loading = false
+        this.isLoading = false
         this.error = 'You don\'t have a Search Service configured.'
         this.feeds = []
         return
@@ -93,7 +93,7 @@ export default {
         action: 'search',
         q: this.q
       }, (err, feeds) => {
-        this.loading = false
+        this.isLoading = false
 
         if (!feeds) {
           this.error = err || 'Could not search. Perhaps it\'s a problem with your Search Service?'

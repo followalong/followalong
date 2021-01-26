@@ -8,7 +8,7 @@ export default {
       type: Number,
       default: 1
     },
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false
     },
@@ -44,10 +44,10 @@ export default {
         return done()
       }
 
-      this.loading = true
+      this.isLoading = true
 
       getFeed(app.identity, this.identity.findService('rss', true), this.identity.items, this, updatedAt, () => {
-        this.loading = false
+        this.isLoading = false
 
         if (typeof done === 'function') {
           done()

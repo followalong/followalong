@@ -45,11 +45,10 @@ export default {
       store: localForage.createInstance({
         name: 'commmunity'
       }),
-      loading: true,
       models: models,
       identities: models.identity.data,
       keychain: {},
-      identity: null,
+      identity: models.identity.data[0],
       sidebarClass: '',
       hints: [],
       now: new Date(),

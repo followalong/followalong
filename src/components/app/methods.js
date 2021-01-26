@@ -31,7 +31,7 @@ var methods = {
     }
 
     app.identity = identity
-    app.loading = true
+    app.identity.isLoading = true
 
     app.decryptIdentity(app.keychain, app.store, identity, function () {
       identity.save = (done) => {
@@ -62,7 +62,7 @@ var methods = {
 
       clearTimeout(nextFeedFetcher)
 
-      app.loading = false
+      app.identity.isLoading = false
 
       app.fetchAllFeeds(identity, override, function () {
         nextFeedFetcher = setTimeout(function () {
@@ -99,8 +99,6 @@ var methods = {
   },
 
   setupApp (app) {
-    app.loading = true
-
     utils.constructIdentities(app, (identities, keychain) => {
       app.keychain = keychain
 

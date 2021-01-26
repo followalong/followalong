@@ -4,19 +4,15 @@
     @click="fetchAll"
   >
     <font-awesome-icon
-      v-if="app.loading"
+      v-if="!app.identity || app.identity.isLoading"
       icon="spinner"
       spin
       class="loader"
     />
-    <img
-      v-if="!app.loading"
-      :src="logo"
-    >
-    <img
-      v-if="!app.loading"
-      :src="mobileLogo"
-    >
+    <span v-else>
+      <img :src="logo">
+      <img :src="mobileLogo">
+    </span>
   </a>
 </template>
 

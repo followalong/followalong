@@ -7,7 +7,7 @@
     </div>
 
     <p class="highlight">
-      <span v-if="app.loading">FollowAlong is preparing "What's New?" &mdash; just for you!</span>
+      <span v-if="app.identity.isLoading">FollowAlong is preparing "What's New?" &mdash; just for you!</span>
       <span v-else>All feeds are up-to-date!</span>
     </p>
 
@@ -19,9 +19,9 @@
       <router-link
         to="/"
         class="button button-large"
-        :disabled="app.loading"
+        :disabled="app.identity.isLoading"
       >
-        <span v-if="app.loading">Loading Feeds...</span>
+        <span v-if="app.identity.isLoading">Loading Feeds...</span>
         <span v-else>Continue to FollowAlong! &nbsp; &raquo;</span>
       </router-link>
     </div>

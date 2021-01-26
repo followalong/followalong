@@ -19,7 +19,7 @@
           </router-link>
 
           <font-awesome-icon
-            v-if="feed.loading"
+            v-if="feed.isLoading"
             icon="spinner"
             spin
             class="i"
@@ -58,7 +58,7 @@
               href="javascript:;"
               @click="fetch()"
             >
-              <span v-if="feed.loading">Fetching...</span>
+              <span v-if="feed.isLoading">Fetching...</span>
               <span v-else>Fetch Now</span>
             </a>
           </li>
@@ -158,6 +158,7 @@ export default {
       var _ = this
 
       _.feed.fetch(_.app, Date.now(), true, function () {
+        _.feed.isLoading = false
         _.app.identity.save()
       })
     }

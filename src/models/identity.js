@@ -19,6 +19,10 @@ export default {
         return []
       }
     },
+    isLoading: {
+      type: Boolean,
+      default: false
+    },
     _decrypted: {
       type: Boolean,
       default: false

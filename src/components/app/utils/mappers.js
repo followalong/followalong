@@ -26,8 +26,7 @@ export default {
           url: feed.url,
           name: feed.name,
           _updatedAt: feed._updatedAt,
-          paused: feed.paused,
-          loading: false
+          paused: feed.paused
         }
       }),
       items: identity.items.map(this.MAPPER_ITEM),
@@ -46,7 +45,6 @@ export default {
           name: feed.name,
           _updatedAt: feed._updatedAt,
           paused: feed.paused,
-          loading: false,
           unreads: identity.items.filter(function (item) {
             return !item.isRead && item.feedURL === feed.url
           }).map(function (item) {

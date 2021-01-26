@@ -1,10 +1,10 @@
 <template>
   <li>
     <button
-      :class="feed.loading ? 'loading' : ''"
+      :class="feed.isLoading ? 'loading' : ''"
       @click="fetch()"
     >
-      <span v-if="feed.loading">Loading...</span>
+      <span v-if="feed.isLoading">Loading...</span>
       <span v-else>Fetch Now</span>
     </button>
     <button

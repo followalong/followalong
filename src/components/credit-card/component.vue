@@ -1,6 +1,6 @@
 <template>
   <form
-    :disabled="handler.loading"
+    :disabled="handler.isLoading"
     @submit.prevent="purchase"
   >
     <div class="field">
@@ -66,7 +66,7 @@ export default {
       var _ = this
 
       _.handler.error(undefined)
-      _.handler.loading = true
+      _.handler.isLoading = true
 
       stripe.createToken(card).then(function (result) {
         if (result.error) {
