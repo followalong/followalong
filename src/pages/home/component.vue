@@ -24,7 +24,7 @@
     >
       <Item
         v-for="item in items"
-        :key="item.guid"
+        :key="item.id"
         :item="item"
         :app="app"
         show-content="true"

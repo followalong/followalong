@@ -61,10 +61,6 @@ export default {
   subscribe (identity, feed, items) {
     var _ = this
 
-    feed.identityId = identity.id
-    feed.paused = false
-    feed.loading = false
-
     _.app.addFeedToIdentity(identity, feed)
     _.app.addItemsToIdentity(identity, feed, items)
 
@@ -97,14 +93,22 @@ export default {
   addFeedToIdentity (identity, feed) {
     feed.identity = identity
 
-    feed = models.feed.create(feed)
+    if (feed.constructor.name === 'Instance') {
+      feed.save()
+    } else {
+      feed = models.feed.create(feed)
+    }
 
     identity.feeds.push(feed)
+
+    return feed
   },
 
   addItemsToIdentity (identity, feed, items) {
     return items.map((item) => {
-      item = models.item.create(item)
+      if (item.constructor.name !== 'Instance') {
+        item = models.item.create(item)
+      }
 
       identity.items.push(item)
 
