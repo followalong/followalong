@@ -4,12 +4,11 @@ import SERVICES from '@/components/app/services'
 import async from 'no-async'
 
 export default {
-  findService (identity, type, forceResult) {
+  findService (app, identity, type, forceResult) {
     if (!identity || !identity.services) {
       return
     }
 
-    var _ = this
     var service = identity.services[type]
 
     if (!service && forceResult) {
@@ -37,7 +36,7 @@ export default {
 
       if (!service.app) {
         Object.defineProperty(service, 'app', {
-          value: _.app,
+          value: app,
           enumerable: false
         })
       }
@@ -47,7 +46,7 @@ export default {
   },
 
   sync (identity, done) {
-    const proxy = this.app.findService(identity, 'sync')
+    const proxy = this.app.findService(this.app, identity, 'sync')
 
     if (!proxy) {
       return
@@ -67,15 +66,13 @@ export default {
     identity.save(done)
   },
 
-  saveLocal (identity, done) {
-    var _ = this
-
+  saveLocal (app, identity, done) {
     utils.trimItems(identity)
 
-    _.app.store.setItem(
+    app.store.setItem(
       identity.id,
       crypt.en(
-        _.app,
+        app,
         identity,
         utils.mappers.IDENTITY_LOCAL(identity)
       )
@@ -87,13 +84,11 @@ export default {
   },
 
   hideHint (identity, hint) {
-    var _ = this
-
     if (identity.hints.indexOf(hint) === -1) {
       identity.hints.push(hint)
     }
 
-    _.app.save(identity)
+    identity.save()
   },
 
   hintIsShown (identity, hint) {
@@ -150,8 +145,8 @@ export default {
     feed.paused = false
     feed.loading = false
 
-    _.app.addFeedToIdentity(identity, feed)
-    _.app.addItemsToIdentity(identity, feed, items)
+    _.app.addFeedToIdentity(_.app, identity, feed)
+    _.app.addItemsToIdentity(_.app, identity, feed, items)
 
     _.app.save(identity)
 
@@ -159,10 +154,9 @@ export default {
     _.$router.push({ name: 'feed', params: { feed_url: feed.url } })
   },
 
-  unsubscribeFeed (identity, feed, redirect) {
+  unsubscribeFeed (app, identity, feed, redirect) {
     if (!confirm('Are you sure you want to unsubscribe from this feed?')) return
 
-    var _ = this
     var index = identity.feeds.indexOf(feed)
 
     identity.items.filter(function (item) {
@@ -172,24 +166,25 @@ export default {
     })
 
     identity.feeds.splice(index, 1)
-    _.app.save(identity, function () {
+
+    app.save(identity, function () {
       if (redirect) {
-        _.app.$router.push('/')
+        app.$router.push('/')
       }
     })
   },
 
-  addFeedToIdentity (identity, feed) {
+  addFeedToIdentity (app, identity, feed) {
     feed.identity = identity
 
-    feed = this.app.models.feed.create(feed)
+    feed = app.models.feed.create(feed)
 
     identity.feeds.push(feed)
   },
 
-  addItemsToIdentity (identity, feed, items) {
+  addItemsToIdentity (app, identity, feed, items) {
     return items.map((item) => {
-      item = this.app.models.item.create(item)
+      item = app.models.item.create(item)
 
       identity.items.push(item)
 

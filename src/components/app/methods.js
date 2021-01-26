@@ -38,12 +38,12 @@ var methods = {
 
     app.decryptIdentity(identity, function () {
       identity.save = (done) => {
-        app.saveLocal(identity, () => {
+        app.saveLocal(app, identity, () => {
           app.sync(identity, done)
         })
       }
 
-      app.saveLocal(identity)
+      app.saveLocal(app, identity)
 
       clearTimeout(nextFeedFetcher)
 
@@ -99,7 +99,7 @@ var methods = {
         const newIdentity = app.addIdentity(app, seedIdentity)
 
         newIdentity._feeds.forEach((feed) => {
-          app.addFeedToIdentity(newIdentity, feed)
+          app.addFeedToIdentity(app, newIdentity, feed)
         })
 
         app.setIdentity(app, newIdentity)
