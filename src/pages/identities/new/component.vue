@@ -153,7 +153,7 @@ export default {
               existingFeed[key] = feed[key]
             }
           } else {
-            _.app.addFeedToIdentity(existingIdentity, feed)
+            existingIdentity.addFeed(feed)
           }
         }
 

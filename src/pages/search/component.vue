@@ -104,7 +104,7 @@ export default {
       })
     },
     subscribe (feed) {
-      feed = this.app.addFeedToIdentity(this.app.identity, feed)
+      feed = this.app.identity.addFeed(feed)
 
       feed.fetch(this.app, Date.now(), true, () => {
         this.app.q = ''

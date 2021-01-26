@@ -73,6 +73,20 @@ export default {
           done(err, data)
         }
       })
+    },
+
+    addFeed (feed) {
+      feed.identity = this
+
+      if (feed.constructor.name === 'Instance') {
+        feed.save()
+      } else {
+        feed = this.model.models.feed.create(feed)
+      }
+
+      this.feeds.push(feed)
+
+      return feed
     }
   }
 }

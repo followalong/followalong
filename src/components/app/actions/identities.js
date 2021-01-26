@@ -61,7 +61,7 @@ export default {
   subscribe (identity, feed, items) {
     var _ = this
 
-    _.app.addFeedToIdentity(identity, feed)
+    identity.addFeed(feed)
     _.app.addItemsToIdentity(identity, feed, items)
 
     identity.save()
@@ -88,20 +88,6 @@ export default {
         app.$router.push('/')
       }
     })
-  },
-
-  addFeedToIdentity (identity, feed) {
-    feed.identity = identity
-
-    if (feed.constructor.name === 'Instance') {
-      feed.save()
-    } else {
-      feed = models.feed.create(feed)
-    }
-
-    identity.feeds.push(feed)
-
-    return feed
   },
 
   addItemsToIdentity (identity, feed, items) {

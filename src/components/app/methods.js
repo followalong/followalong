@@ -17,7 +17,6 @@ var methods = {
   fetchNextFeed: actionsForIdentities.fetchNextFeed,
   hideHint: actionsForIdentities.hideHint,
   hintIsShown: actionsForIdentities.hintIsShown,
-  addFeedToIdentity: actionsForIdentities.addFeedToIdentity,
   addItemsToIdentity: actionsForIdentities.addItemsToIdentity,
 
   decryptIdentity: actionsForIdentitiesKeychain.decryptIdentity,
@@ -115,7 +114,7 @@ var methods = {
         const newIdentity = app.addIdentity(app, seedIdentity)
 
         newIdentity._feeds.forEach((feed) => {
-          app.addFeedToIdentity(newIdentity, feed)
+          newIdentity.addFeed(feed)
         })
 
         app.setIdentity(app, newIdentity)
