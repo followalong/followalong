@@ -12,11 +12,11 @@ const decryptIdentity = function (identity, done) {
       return done()
     }
 
-    state = crypt.de(this.app, identity, state)
+    state = crypt.de(this.app.keychain, this.app.store, identity, state)
 
     if (identity.services.local.strategy === 'ask') {
       delete this.app.keychain[identity.id]
-      state = crypt.de(this.app, identity, state)
+      state = crypt.de(this.app.keychain, this.app.store, identity, state)
     }
 
     if (!state) {

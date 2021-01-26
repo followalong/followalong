@@ -32,8 +32,8 @@ export default {
     return encrypted
   },
 
-  de (app, identity, str) {
-    var key = app.keychain[identity.id]
+  de (keychain, store, identity, str) {
+    var key = keychain[identity.id]
 
     if (str && typeof str !== 'string') {
       return str
@@ -42,14 +42,14 @@ export default {
         str = JSON.parse(str)
       } catch (e) {
         try {
-          key = identitiesKeychain.getAskSecretKey(app.keychain, app.store, identity)
+          key = identitiesKeychain.getAskSecretKey(keychain, store, identity)
 
           if (key !== null) {
             str = JSON.parse(aes256.decrypt(key, str))
 
             if (typeof str === 'object' && str.services.local.strategy === 'store') {
-              identitiesKeychain.saveKey(app.keychain, app.store, identity, key, true)
-              app.keychain[identity.id] = key
+              identitiesKeychain.saveKey(keychain, store, identity, key, true)
+              keychain[identity.id] = key
             }
           }
         } catch (e) {
