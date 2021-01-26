@@ -2,7 +2,7 @@
   <div class="feed home-feed wide-feed">
     <div class="title-wrapper">
       <button
-        v-if="unread.length"
+        v-if="hasUnreadItems"
         class="button-gray button-small float-right"
         @click="catchMeUp()"
       >
@@ -12,7 +12,7 @@
     </div>
 
     <p
-      v-if="items.length && !unreadItems.length"
+      v-if="items.length && !hasUnreadItems"
       class="highlight"
     >
       You're all caught up!
@@ -67,14 +67,12 @@ export default {
     items () {
       var _ = this
 
-      return _.allItems.filter(function (item) {
+      return _.allItems.filter((item) => {
         return !_.mediaVerb || item._mediaVerb === _.mediaVerb
       }).slice(0, _.limit)
     },
-    unreadItems () {
-      return this.items.filter(function (item) {
-        return !item.isRead
-      })
+    hasUnreadItems () {
+      return this.items.filter((item) => !item.isRead).length
     },
     mediaVerb () {
       var verb = this.$route.params.media_verb
@@ -118,7 +116,7 @@ export default {
     catchMeUp () {
       var _ = this
 
-      _.allItems.filter(function (item) {
+      _.allItems.filter((item) => {
         return !_.mediaVerb || item._mediaVerb === _.mediaVerb
       }).forEach(function (item) {
         item.isRead = true
