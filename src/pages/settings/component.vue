@@ -60,7 +60,7 @@
         <select
           id="secretStrategy"
           v-model="app.identity.services.local.strategy"
-          @change="app.saveKey(app.identity, secretKey)"
+          @change="app.saveKey(app.keychain, app.store, app.identity, secretKey)"
         >
           <option value="ask">
             Ask Every Page Load (best, most secure, slightly annoying)
@@ -93,7 +93,7 @@
             id="secretKey"
             v-model="app.keychain[app.identity.id]"
             type="password"
-            @blur="app.saveKey(app.identity, app.keychain[app.identity.id])"
+            @blur="app.saveKey(app.keychain, app.store, app.identity, app.keychain[app.identity.id])"
           >
           <span
             v-if="!app.keychain[app.identity.id] || !app.keychain[app.identity.id].length"

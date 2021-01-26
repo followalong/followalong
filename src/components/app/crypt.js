@@ -12,13 +12,13 @@ export default {
       return encrypted
     } else if (identity.services.local.strategy === 'rotate') {
       key = utils.generateId()
-      app.saveKey(identity, key, true)
+      app.saveKey(app.keychain, app.store, identity, key, true)
     } else if (identity.services.local.strategy === 'ask') {
       key = app.getAskSecretKey(identity, false)
     } else if (identity.services.local.strategy === 'store') {
       if (typeof app.keychain[identity.id] === 'undefined') {
         key = utils.generateId()
-        app.saveKey(identity, key, true)
+        app.saveKey(app.keychain, app.store, identity, key, true)
       }
     }
 
@@ -47,7 +47,7 @@ export default {
             str = JSON.parse(aes256.decrypt(key, str))
 
             if (typeof str === 'object' && str.services.local.strategy === 'store') {
-              app.saveKey(identity, key, true)
+              app.saveKey(app.keychain, app.store, identity, key, true)
               app.keychain[identity.id] = key
             }
           }

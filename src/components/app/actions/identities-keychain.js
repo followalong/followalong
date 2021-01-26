@@ -57,7 +57,7 @@ export default {
       if (_.app.keychain[identity.id] === null && reset) {
         identity.services.local.strategy = 'rotate'
         var key = utils.generateId()
-        _.app.saveKey(identity, key, true)
+        _.app.saveKey(_.app.keychain, _.app.store, identity, key, true)
         return key
       }
     }
@@ -69,23 +69,21 @@ export default {
     return _.app.keychain[identity.id]
   },
 
-  saveKey (identity, key, ignoreSave) {
-    var _ = this
-
+  saveKey (keychain, store, identity, key, ignoreSave) {
     if (identity.services.local.strategy === 'ask') {
-      delete _.app.keychain[identity.id]
+      delete keychain[identity.id]
       key = undefined
     }
 
     if (identity.services.local.strategy === 'store' && !key) {
       key = utils.generateId()
-      _.app.keychain[identity.id] = key
+      keychain[identity.id] = key
     }
 
     if (key) {
-      _.store.setItem('key-' + identity.id, key)
+      store.setItem('key-' + identity.id, key)
     } else {
-      _.store.removeItem('key-' + identity.id)
+      store.removeItem('key-' + identity.id)
     }
 
     if (!ignoreSave) {
