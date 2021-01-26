@@ -1,7 +1,7 @@
 import AWS from 'aws-sdk'
 import utils from './utils'
 
-function xmlRequest (app, identity, data, done) {
+function xmlRequest (identity, data, done) {
   if (!data.url) return done('No URL supplied.')
 
   var _ = this
@@ -27,7 +27,7 @@ function xmlRequest (app, identity, data, done) {
 function lambdaPassthrough (override) {
   override = override || {}
 
-  return function lambdaPassthroughFunc (app, identity, data, done) {
+  return function lambdaPassthroughFunc (identity, data, done) {
     var _ = this
 
     if (override.obfuscateUrl && data.url) {
@@ -55,7 +55,7 @@ function lambdaPassthrough (override) {
   }
 }
 
-function s3Sync (app, identity, data, done) {
+function s3Sync (identity, data, done) {
   if (!this.data || !this.data.key || !this.data.bucket || !this.data.accessKeyId || !this.data.secretAccessKey || !this.data.endpoint) {
     return
   }
@@ -286,7 +286,7 @@ var SERVICES = [{
   name: 'None',
   description: 'No service will be used.',
   supports: 'rss,sync,search',
-  request (app, identity, data, done) {
+  request (identity, data, done) {
     done()
   }
 }]

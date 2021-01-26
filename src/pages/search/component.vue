@@ -89,7 +89,7 @@ export default {
         return
       }
 
-      service.request(this.app, this.app.identity, {
+      service.request(this.app.identity, {
         action: 'search',
         q: this.q
       }, (err, feeds) => {

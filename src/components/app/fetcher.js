@@ -12,7 +12,7 @@ function getContent (service, url, done) {
     return done()
   }
 
-  service.request(service.app, service.app.identity, {
+  service.request(service.app.identity, {
     action: 'rss',
     url: url
   }, function (err, data) {

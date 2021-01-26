@@ -52,7 +52,7 @@ export default {
       return
     }
 
-    proxy.request(proxy.app, identity, {
+    proxy.request(identity, {
       action: 'sync',
       identity: utils.mappers.IDENTITY_REMOTE(identity)
     }, function (err, data) {
