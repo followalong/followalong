@@ -3,7 +3,7 @@
     <TopBar :app="app" />
 
     <div class="content">
-      <div v-if="app.identity">
+      <div v-if="app.identity && app.identity._decrypted">
         <Sidebar :app="app" />
         <router-view :app="app" />
       </div>
