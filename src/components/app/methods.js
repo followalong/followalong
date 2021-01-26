@@ -1,4 +1,5 @@
 import { reactive } from 'vue'
+import models from '@/models/index.js'
 import seedIdentity from '@/components/app/seed'
 import utils from './utils'
 import actionsForIdentities from './actions/identities'
@@ -80,7 +81,7 @@ var methods = {
   addIdentity (app, identity) {
     utils.setIdentityDefaults(identity)
 
-    return app.models.identity.create(identity)
+    return models.identity.create(identity)
   },
 
   setupApp (app) {

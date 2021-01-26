@@ -2,6 +2,7 @@ import crypt from '../crypt'
 import utils from '../utils'
 import SERVICES from '@/components/app/services'
 import async from 'no-async'
+import models from '@/models/index.js'
 
 export default {
   findService (app, identity, type, forceResult) {
@@ -177,14 +178,14 @@ export default {
   addFeedToIdentity (app, identity, feed) {
     feed.identity = identity
 
-    feed = app.models.feed.create(feed)
+    feed = models.feed.create(feed)
 
     identity.feeds.push(feed)
   },
 
   addItemsToIdentity (app, identity, feed, items) {
     return items.map((item) => {
-      item = app.models.item.create(item)
+      item = models.item.create(item)
 
       identity.items.push(item)
 
