@@ -4,19 +4,19 @@ import async from 'no-async'
 import models from '@/models/index.js'
 
 export default {
-  findService (identity, type, forceResult) {
-    if (!identity || !identity.services) {
+  findService (services, type, forceResult) {
+    if (!services) {
       return
     }
 
-    var service = identity.services[type]
+    var service = services[type]
 
     if (!service && forceResult) {
-      service = identity.services[type] = { symlink: 'followalong-free' }
+      service = services[type] = { symlink: 'followalong-free' }
     }
 
     if (service && service.symlink) {
-      service = SERVICES.concat(identity.services.custom).find(function (s) {
+      service = SERVICES.concat(services.custom).find(function (s) {
         return s.id === service.symlink
       })
     }
@@ -39,7 +39,7 @@ export default {
   },
 
   sync (identity, done) {
-    const proxy = this.app.findService(identity, 'sync')
+    const proxy = this.app.findService(identity.services, 'sync')
 
     if (!proxy) {
       return
