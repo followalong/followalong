@@ -4,7 +4,7 @@ import async from 'no-async'
 import models from '@/models/index.js'
 
 export default {
-  findService (app, identity, type, forceResult) {
+  findService (identity, type, forceResult) {
     if (!identity || !identity.services) {
       return
     }
@@ -39,7 +39,7 @@ export default {
   },
 
   sync (identity, done) {
-    const proxy = this.app.findService(this.app, identity, 'sync')
+    const proxy = this.app.findService(identity, 'sync')
 
     if (!proxy) {
       return

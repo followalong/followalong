@@ -46,7 +46,7 @@ export default {
 
       this.loading = true
 
-      getFeed(app.identity, app.findService(app, this.identity, 'rss', true), this.identity.items, this, updatedAt, () => {
+      getFeed(app.identity, app.findService(this.identity, 'rss', true), this.identity.items, this, updatedAt, () => {
         this.loading = false
 
         if (typeof done === 'function') {
