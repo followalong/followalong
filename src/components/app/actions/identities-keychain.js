@@ -1,22 +1,23 @@
 import crypt from '../crypt'
 import utils from '../utils'
+import identitiesActions from '../actions/identities.js'
 
-const decryptIdentity = function (identity, done) {
+const decryptIdentity = function (keychain, store, identity, done) {
   if (identity._decrypted) {
     return done()
   }
 
-  this.store.getItem(identity.id, (err, state) => {
+  store.getItem(identity.id, (err, state) => {
     if (!state) {
       identity._decrypted = true
       return done()
     }
 
-    state = crypt.de(this.app.keychain, this.app.store, identity, state)
+    state = crypt.de(keychain, store, identity, state)
 
     if (identity.services.local.strategy === 'ask') {
-      delete this.app.keychain[identity.id]
-      state = crypt.de(this.app.keychain, this.app.store, identity, state)
+      delete keychain[identity.id]
+      state = crypt.de(keychain, store, identity, state)
     }
 
     if (!state) {
@@ -32,10 +33,10 @@ const decryptIdentity = function (identity, done) {
     utils.copyAttrs(state, identity, ['name', 'services', 'hints'])
 
     state.feeds.forEach((feed) => {
-      this.app.addFeedToIdentity(identity, feed)
+      identitiesActions.addFeedToIdentity(identity, feed)
     })
 
-    this.app.addItemsToIdentity(identity, undefined, state.items)
+    identitiesActions.addItemsToIdentity(identity, undefined, state.items)
 
     identity._decrypted = true
 

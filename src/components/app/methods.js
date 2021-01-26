@@ -36,7 +36,7 @@ var methods = {
     app.identity = identity
     app.loading = true
 
-    app.decryptIdentity(identity, function () {
+    app.decryptIdentity(app.keychain, app.store, identity, function () {
       identity.save = (done) => {
         app.saveLocal(app, identity, () => {
           app.sync(identity, done)
