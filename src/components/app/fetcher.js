@@ -1,5 +1,6 @@
 import Parser from 'rss-parser'
 import utils from './utils'
+import identitiesActions from './actions/identities.js'
 
 var parser = new Parser({
   customFields: {
@@ -7,7 +8,7 @@ var parser = new Parser({
   }
 })
 
-function getContent (app, identity, service, url, done) {
+function getContent (identity, service, url, done) {
   if (!service) {
     return done()
   }
@@ -24,7 +25,7 @@ function getContent (app, identity, service, url, done) {
   })
 }
 
-function parseItems (app, identity, feed, data, items, updatedAt, done) {
+function parseItems (identity, feed, data, items, updatedAt, done) {
   var lastUpdate = feed._updatedAt || new Date(0)
 
   parser.parseString(data, function (err, data) {
@@ -76,7 +77,7 @@ function parseItems (app, identity, feed, data, items, updatedAt, done) {
           newItem.isRead = false
         }
 
-        newItem = app.addItemsToIdentity(identity, feed, [newItem])[0]
+        newItem = identitiesActions.addItemsToIdentity(identity, feed, [newItem])[0]
       }
 
       newItem.pubDate = newItem.pubDate || newItem.pubdate || newItem.date
@@ -96,12 +97,12 @@ function parseItems (app, identity, feed, data, items, updatedAt, done) {
   })
 }
 
-function getFeed (app, identity, service, items, feed, updatedAt, callback, forEachCallback) {
+function getFeed (identity, service, items, feed, updatedAt, callback, forEachCallback) {
   if (!service) {
     return callback()
   }
 
-  getContent(app, identity, service, feed.url, function (err, data) {
+  getContent(identity, service, feed.url, function (err, data) {
     if (err || !data) {
       feed.error = err || 'Feed has no data'
       console.error(feed.error)
@@ -111,7 +112,7 @@ function getFeed (app, identity, service, items, feed, updatedAt, callback, forE
       delete feed.error
     }
 
-    parseItems(app, identity, feed, data, items, updatedAt, callback)
+    parseItems(identity, feed, data, items, updatedAt, callback)
   })
 }
 

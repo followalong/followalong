@@ -33,13 +33,6 @@ export default {
           service[items[i]] = service[items[i]] || template[items[i]]
         }
       }
-
-      if (!service.app) {
-        Object.defineProperty(service, 'app', {
-          value: app,
-          enumerable: false
-        })
-      }
     }
 
     return service
