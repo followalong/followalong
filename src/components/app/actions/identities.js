@@ -3,23 +3,6 @@ import async from 'no-async'
 import models from '@/models/index.js'
 
 export default {
-  sync (identity, done) {
-    const proxy = identity.findService('sync')
-
-    if (!proxy) {
-      return
-    }
-
-    proxy.request(identity, {
-      action: 'sync',
-      identity: utils.mappers.IDENTITY_REMOTE(identity)
-    }, function (err, data) {
-      if (typeof done === 'function') {
-        done(err, data)
-      }
-    })
-  },
-
   hideHint (identity, hint) {
     if (identity.hints.indexOf(hint) === -1) {
       identity.hints.push(hint)

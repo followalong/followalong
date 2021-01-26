@@ -17,7 +17,6 @@ var methods = {
   fetchNextFeed: actionsForIdentities.fetchNextFeed,
   hideHint: actionsForIdentities.hideHint,
   hintIsShown: actionsForIdentities.hintIsShown,
-  sync: actionsForIdentities.sync,
   addFeedToIdentity: actionsForIdentities.addFeedToIdentity,
   addItemsToIdentity: actionsForIdentities.addItemsToIdentity,
 
@@ -38,7 +37,7 @@ var methods = {
     app.decryptIdentity(app.keychain, app.store, identity, function () {
       identity.save = (done) => {
         identity.saveLocal(() => {
-          app.sync(identity, done)
+          identity.sync(done)
         })
       }
 

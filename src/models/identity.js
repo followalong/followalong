@@ -1,4 +1,5 @@
 import SERVICES from '@/components/app/services'
+import utils from '@/components/app/utils/index.js'
 
 export default {
   props: {
@@ -56,6 +57,22 @@ export default {
       }
 
       return service
+    },
+    sync (done) {
+      const proxy = this.findService('sync')
+
+      if (!proxy) {
+        return
+      }
+
+      proxy.request(this, {
+        action: 'sync',
+        identity: utils.mappers.IDENTITY_REMOTE(this)
+      }, function (err, data) {
+        if (typeof done === 'function') {
+          done(err, data)
+        }
+      })
     }
   }
 }
