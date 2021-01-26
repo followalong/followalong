@@ -1,4 +1,5 @@
 import { reactive } from 'vue'
+import crypt from './crypt.js'
 import models from '@/models/index.js'
 import seedIdentity from '@/components/app/seed'
 import utils from './utils'
@@ -17,7 +18,6 @@ var methods = {
   findService: actionsForIdentities.findService,
   hideHint: actionsForIdentities.hideHint,
   hintIsShown: actionsForIdentities.hintIsShown,
-  saveLocal: actionsForIdentities.saveLocal,
   sync: actionsForIdentities.sync,
   addFeedToIdentity: actionsForIdentities.addFeedToIdentity,
   addItemsToIdentity: actionsForIdentities.addItemsToIdentity,
@@ -38,12 +38,30 @@ var methods = {
 
     app.decryptIdentity(app.keychain, app.store, identity, function () {
       identity.save = (done) => {
-        app.saveLocal(app.keychain, app.store, identity, () => {
+        identity.saveLocal(() => {
           app.sync(identity, done)
         })
       }
 
-      app.saveLocal(app.keychain, app.store, identity)
+      identity.saveLocal = (done) => {
+        utils.trimItems(identity)
+
+        app.store.setItem(
+          identity.id,
+          crypt.en(
+            app.keychain,
+            app.store,
+            identity,
+            utils.mappers.IDENTITY_LOCAL(identity)
+          )
+        )
+
+        if (typeof done === 'function') {
+          done()
+        }
+      }
+
+      identity.saveLocal()
 
       clearTimeout(nextFeedFetcher)
 

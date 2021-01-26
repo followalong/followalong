@@ -1,4 +1,3 @@
-import crypt from '../crypt'
 import utils from '../utils'
 import SERVICES from '@/components/app/services'
 import async from 'no-async'
@@ -61,24 +60,6 @@ export default {
         done(err, data)
       }
     })
-  },
-
-  saveLocal (keychain, store, identity, done) {
-    utils.trimItems(identity)
-
-    store.setItem(
-      identity.id,
-      crypt.en(
-        keychain,
-        store,
-        identity,
-        utils.mappers.IDENTITY_LOCAL(identity)
-      )
-    )
-
-    if (typeof done === 'function') {
-      done()
-    }
   },
 
   hideHint (identity, hint) {
