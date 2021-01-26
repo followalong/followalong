@@ -80,7 +80,7 @@
           v-if="app.identity.services.local.strategy === 'ask'"
           href="javascript:;"
           class="hint"
-          @click="app.getAskSecretKey(app.identity, true)"
+          @click="app.getAskSecretKey(app.keychain, app.store, app.identity, true)"
         >
           Reset Secret Key
         </a>

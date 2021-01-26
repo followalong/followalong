@@ -14,7 +14,7 @@ export default {
       key = utils.generateId()
       app.saveKey(app.keychain, app.store, identity, key, true)
     } else if (identity.services.local.strategy === 'ask') {
-      key = app.getAskSecretKey(identity, false)
+      key = app.getAskSecretKey(app.keychain, app.store, identity, false)
     } else if (identity.services.local.strategy === 'store') {
       if (typeof app.keychain[identity.id] === 'undefined') {
         key = utils.generateId()
@@ -41,7 +41,7 @@ export default {
         str = JSON.parse(str)
       } catch (e) {
         try {
-          key = app.getAskSecretKey(identity)
+          key = app.getAskSecretKey(app.keychain, app.store, identity)
 
           if (key !== null) {
             str = JSON.parse(aes256.decrypt(key, str))
