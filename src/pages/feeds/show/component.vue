@@ -132,9 +132,7 @@ export default {
     items () {
       var _ = this
 
-      return (_.app.newsfeed || []).filter(function (item) {
-        return item.feedURL === _.feed.url
-      }).sort(sorter(_.app.identity))
+      return _.feed.items.sort(sorter(_.app.identity))
     }
   },
   methods: {

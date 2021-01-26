@@ -95,14 +95,6 @@ export default {
     }
   },
   computed: {
-    related () {
-      var _ = this
-
-      return _.app.newsfeed.filter(function (i) {
-        return i !== _.item
-      }).slice(0, 7)
-    },
-
     item () {
       var _ = this
 
