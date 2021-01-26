@@ -142,8 +142,8 @@ export default {
     feed.paused = false
     feed.loading = false
 
-    _.app.addFeedToIdentity(_.app, identity, feed)
-    _.app.addItemsToIdentity(_.app, identity, feed, items)
+    _.app.addFeedToIdentity(identity, feed)
+    _.app.addItemsToIdentity(identity, feed, items)
 
     identity.save()
 
@@ -171,7 +171,7 @@ export default {
     })
   },
 
-  addFeedToIdentity (app, identity, feed) {
+  addFeedToIdentity (identity, feed) {
     feed.identity = identity
 
     feed = models.feed.create(feed)
@@ -179,7 +179,7 @@ export default {
     identity.feeds.push(feed)
   },
 
-  addItemsToIdentity (app, identity, feed, items) {
+  addItemsToIdentity (identity, feed, items) {
     return items.map((item) => {
       item = models.item.create(item)
 

@@ -33,10 +33,10 @@ export default {
       utils.copyAttrs(state, identity, ['name', 'services', 'hints'])
 
       state.feeds.forEach((feed) => {
-        this.app.addFeedToIdentity(this.app, identity, feed)
+        this.app.addFeedToIdentity(identity, feed)
       })
 
-      this.app.addItemsToIdentity(this.app, identity, undefined, state.items)
+      this.app.addItemsToIdentity(identity, undefined, state.items)
 
       identity._decrypted = true
 

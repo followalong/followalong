@@ -99,7 +99,7 @@ var methods = {
         const newIdentity = app.addIdentity(app, seedIdentity)
 
         newIdentity._feeds.forEach((feed) => {
-          app.addFeedToIdentity(app, newIdentity, feed)
+          app.addFeedToIdentity(newIdentity, feed)
         })
 
         app.setIdentity(app, newIdentity)

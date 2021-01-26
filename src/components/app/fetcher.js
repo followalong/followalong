@@ -76,7 +76,7 @@ function parseItems (app, feed, data, items, updatedAt, done) {
           newItem.isRead = false
         }
 
-        newItem = app.addItemsToIdentity(app, app.identity, feed, [newItem])[0]
+        newItem = app.addItemsToIdentity(app.identity, feed, [newItem])[0]
       }
 
       newItem.pubDate = newItem.pubDate || newItem.pubdate || newItem.date
