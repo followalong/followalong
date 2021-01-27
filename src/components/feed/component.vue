@@ -54,7 +54,7 @@ export default {
     fetch () {
       var _ = this
 
-      _.feed.fetch(_.app, Date.now(), true, () => {
+      _.feed.fetch(Date.now(), true, () => {
         _.feed.save()
       })
     },

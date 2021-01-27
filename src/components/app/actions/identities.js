@@ -16,7 +16,6 @@ export default {
   },
 
   fetchAllFeeds (identity, override, done) {
-    var _ = this
     var updatedAt = Date.now()
 
     if (identity.isLoading) return
@@ -24,7 +23,7 @@ export default {
     identity.isLoading = true
 
     async.eachParallel(identity.feeds.filter(utils.filters.UNPAUSED), function (feed, next) {
-      feed.fetch(_.app, updatedAt, override, next)
+      feed.fetch(updatedAt, override, next)
     }, function () {
       identity.isLoading = false
       identity.save()
@@ -49,7 +48,7 @@ export default {
       return
     }
 
-    feed.fetch(_.app, updatedAt, true, function () {
+    feed.fetch(updatedAt, true, function () {
       identity.save()
 
       setTimeout(function () {

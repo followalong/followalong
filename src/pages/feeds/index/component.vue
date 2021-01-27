@@ -3,7 +3,7 @@
     <div class="title-wrapper">
       <button
         :class="'float-right ' + (app.identity.isLoading ? 'loading' : '')"
-        @click="app.fetchAllFeeds(app.identity, true)"
+        @click="app.fetchAllFeeds(app.identity, feeds, true)"
       >
         <span v-if="app.identity.isLoading">Loading...</span>
         <span v-else>Fetch All Feeds</span>

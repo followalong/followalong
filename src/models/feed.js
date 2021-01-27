@@ -45,7 +45,7 @@ export default {
     save () {
       this.identity.value.save()
     },
-    fetch (app, updatedAt, override, done) {
+    fetch (updatedAt, override, done) {
       updatedAt = updatedAt || Date.now()
 
       if (!override && this._updatedAt && this._updatedAt > updatedAt - utils.HALF_HOUR) {
@@ -54,7 +54,7 @@ export default {
 
       this.isLoading = true
 
-      getFeed(app.identity, this.identity.value.findService('rss', true), this.identity.value.items, this, updatedAt, () => {
+      getFeed(this.identity.value, this.identity.value.findService('rss', true), this.identity.value.items, this, updatedAt, () => {
         this.isLoading = false
 
         if (typeof done === 'function') {
