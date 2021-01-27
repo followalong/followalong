@@ -128,11 +128,11 @@
         </a>
       </li>
 
-      <li class="mobile-only">
+      <!-- <li class="mobile-only">
         <router-link to="/identities/new">
           + Add Identity
         </router-link>
-      </li>
+      </li> -->
 
       <li class="divider" />
     </ul>

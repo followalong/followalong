@@ -30,11 +30,11 @@
           <span v-else>{{ i.id.slice(0, 8) }} <span class="encrypted">(not yet decrypted)</span></span>
         </a>
       </li>
-      <li>
+      <!-- <li>
         <router-link to="/identities/new">
           + Add Identity
         </router-link>
-      </li>
+      </li> -->
     </ul>
   </div>
 </template>
