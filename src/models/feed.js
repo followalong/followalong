@@ -33,6 +33,11 @@ export default {
       foreignKey: 'feedURL'
     }
   },
+  computed: {
+    hasUnreadItems () {
+      return this.items.value.filter((item) => !item.isRead).length
+    }
+  },
   methods: {
     save () {
       this.identity.save()

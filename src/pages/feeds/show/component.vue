@@ -45,7 +45,7 @@
           class="actions"
           @click="showMenu = false"
         >
-          <li v-if="unreadItems.length">
+          <li v-if="feed.hasUnreadItems">
             <a
               href="javascript:;"
               @click="catchFeedUp()"
@@ -114,25 +114,10 @@ export default {
   },
   computed: {
     feed () {
-      var _ = this
-
-      if (!_.app.identity.feeds) return
-
-      return _.app.identity.feeds.find(function (feed) {
-        return feed.url + '' === _.$route.params.feed_url + ''
-      })
-    },
-    unreadItems () {
-      var _ = this
-
-      return _.items.filter(function (item) {
-        return !item.isRead
-      })
+      return this.app.models.feed.inMemory.find(this.$route.params.feed_url + '')
     },
     items () {
-      var _ = this
-
-      return _.feed.items.sort(sorter(_.app.identity))
+      return this.feed.items.sort(sorter(this.app.identity))
     }
   },
   methods: {
