@@ -34,12 +34,6 @@ var methods = {
     app.identity.isLoading = true
 
     app.decryptIdentity(app.keychain, app.store, identity, function () {
-      identity.save = (done) => {
-        identity.saveLocal(() => {
-          identity.sync(done)
-        })
-      }
-
       identity.saveLocal = (done) => {
         utils.trimItems(identity)
 

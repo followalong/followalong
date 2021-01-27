@@ -112,6 +112,11 @@ export default {
         items: this.items.filter((item) => item.isSaved).map((item) => item.toRemote()),
         services: this.services
       }
+    },
+    save (done) {
+      this.saveLocal(() => {
+        this.sync(done)
+      })
     }
   }
 }
