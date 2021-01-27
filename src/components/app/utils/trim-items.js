@@ -4,7 +4,7 @@ export default function (identity) {
   var limit = parseInt(identity.services.local.maxReadCount)
   var items = identity.items.filter(function (item) {
     return item.isRead && !item.isSaved && !item.isPlaying
-  }).sort(sorter(identity))
+  }).sort(sorter())
   var itemsLength = items.length
   var item; var i
 

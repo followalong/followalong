@@ -117,7 +117,7 @@ export default {
       return this.app.models.feed.inMemory.find(this.$route.params.feed_url + '')
     },
     items () {
-      return this.feed.items.sort(sorter(this.app.identity))
+      return this.feed.items.sort(sorter())
     }
   },
   methods: {

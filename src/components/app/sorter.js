@@ -1,4 +1,4 @@
-function sorter (identity, date, feed) {
+function sorter (date, feed) {
   if (!date) {
     date = 'pubDate'
   }

@@ -29,7 +29,7 @@ export default {
     items () {
       return this.app.identity.items.filter((item) => {
         return item.isSaved
-      }).sort(sorter(this.app.identity))
+      }).sort(sorter())
     }
   }
 }
