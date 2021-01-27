@@ -61,7 +61,6 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
 import { Base64 } from 'js-base64'
 import seed from '@/components/app/seed'
 import utils from '@/components/app/utils'
@@ -117,15 +116,13 @@ export default {
       try {
         var feed, newIdentity, existingIdentity, existingFeed, key, i
 
-        newIdentity = reactive(JSON.parse(paste))
+        newIdentity = JSON.parse(paste)
 
         _.paste = ''
 
         if (!newIdentity.id) throw new Error('No ID provided.')
 
-        existingIdentity = _.app.identities.find(function (i) {
-          return i.id === newIdentity.id
-        })
+        existingIdentity = _.app.models.identity.inMemory.find(newIdentity.id)
 
         if (existingIdentity) {
           for (key in newIdentity) {

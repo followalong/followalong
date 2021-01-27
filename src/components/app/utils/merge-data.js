@@ -3,7 +3,7 @@ export default function (identity, remoteData) {
     return
   }
 
-  var localFeeds = identity.feeds || []
+  var localFeeds = identity.feeds
   var localItems = identity.items || []
   var remoteFeeds = remoteData.feeds || []
   var remoteItems = remoteData.items || []

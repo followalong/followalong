@@ -73,15 +73,8 @@ export default {
   unsubscribeFeed (app, identity, feed, redirect) {
     if (!confirm('Are you sure you want to unsubscribe from this feed?')) return
 
-    var index = identity.feeds.indexOf(feed)
-
-    identity.items.filter(function (item) {
-      return item.feedURL === feed.url
-    }).forEach(function (item) {
-      identity.items.splice(identity.items.indexOf(item), 1)
-    })
-
-    identity.feeds.splice(index, 1)
+    feed.items.forEach((item) => item.destroy())
+    feed.destroy()
 
     identity.save(function () {
       if (redirect) {

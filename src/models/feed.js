@@ -31,6 +31,9 @@ export default {
     items: {
       type: 'HasMany',
       foreignKey: 'feedURL'
+    },
+    identity: {
+      type: 'BelongsTo'
     }
   },
   computed: {
@@ -40,7 +43,7 @@ export default {
   },
   methods: {
     save () {
-      this.identity.save()
+      this.identity.value.save()
     },
     fetch (app, updatedAt, override, done) {
       updatedAt = updatedAt || Date.now()
@@ -51,7 +54,7 @@ export default {
 
       this.isLoading = true
 
-      getFeed(app.identity, this.identity.findService('rss', true), this.identity.items, this, updatedAt, () => {
+      getFeed(app.identity, this.identity.value.findService('rss', true), this.identity.value.items, this, updatedAt, () => {
         this.isLoading = false
 
         if (typeof done === 'function') {

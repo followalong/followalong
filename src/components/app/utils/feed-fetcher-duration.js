@@ -1,5 +1,5 @@
-export default function (HALF_HOUR) {
+export default function (FETCH_INTERVAL) {
   return function (identity) {
-    return HALF_HOUR / identity.feeds.length
+    return FETCH_INTERVAL / identity.feeds.length
   }
 }

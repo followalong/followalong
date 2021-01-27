@@ -4,7 +4,6 @@ export default function (generateId) {
   return function (identity) {
     identity.id = identity.id || generateId()
     identity.name = identity.name || '...'
-    identity.feeds = identity.feeds || reactive([]) // TODO: Use vue-superstore
     identity.items = identity.items || reactive([]) // TODO: Use vue-superstore
     identity.hints = identity.hints || []
 

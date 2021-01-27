@@ -27,6 +27,11 @@ export default {
       default: false
     }
   },
+  relationships: {
+    feeds: {
+      type: 'HasMany'
+    }
+  },
   methods: {
     findService (type, forceResult) {
       if (!this.services) {
@@ -78,15 +83,13 @@ export default {
       })
     },
     addFeed (feed) {
-      feed.identity = this
+      feed.identityId = this.id
 
       if (feed.constructor.name === 'Instance') {
         feed.save()
       } else {
         feed = this.model.models.feed.create(feed)
       }
-
-      this.feeds.push(feed)
 
       return feed
     },
@@ -95,7 +98,7 @@ export default {
         id: this.id,
         name: this.name,
         hints: this.hints,
-        feeds: this.feeds.map((feed) => feed.toLocal()),
+        feeds: this.feeds.value.map((feed) => feed.toLocal()),
         items: this.items.map((item) => item.toLocal()),
         services: this.services
       }
@@ -105,7 +108,7 @@ export default {
         id: this.id,
         name: this.name,
         hints: this.hints,
-        feeds: this.feeds.map((feed) => feed.toRemote()),
+        feeds: this.feeds.value.map((feed) => feed.toRemote()),
         items: this.items.filter((item) => item.isSaved).map((item) => item.toRemote()),
         services: this.services
       }

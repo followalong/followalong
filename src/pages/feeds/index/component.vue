@@ -35,7 +35,7 @@ export default {
   computed: {
     feeds () {
       if (!this.app.identity) return []
-      return (this.app.identity.feeds || []).sort(utils.sorters.NAME)
+      return this.app.identity.feeds.sort(utils.sorters.NAME)
     }
   }
 }
