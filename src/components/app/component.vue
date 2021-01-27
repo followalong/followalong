@@ -50,7 +50,6 @@ export default {
       keychain: {},
       identity: models.identity.data[0],
       sidebarClass: '',
-      hints: [],
       now: new Date(),
       playing: undefined
     }
