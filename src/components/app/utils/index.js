@@ -6,7 +6,6 @@ import filters from './filters'
 import generateId from './generate-id'
 import getSrc from './get-src'
 import isBase64 from './is-base-64'
-import mappers from './mappers'
 import mergeData from './merge-data'
 import setIdentityDefaults from './set-identity-defaults'
 import sorters from './sorters'
@@ -25,7 +24,6 @@ export default {
   filters,
   generateId,
   isBase64,
-  mappers,
   mergeData,
   sorters,
   stripScriptsAndStyles,

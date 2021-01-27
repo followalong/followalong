@@ -49,7 +49,7 @@ var methods = {
             app.keychain,
             app.store,
             identity,
-            utils.mappers.IDENTITY_LOCAL(identity)
+            identity.toLocal()
           )
         )
 

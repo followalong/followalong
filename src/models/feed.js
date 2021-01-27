@@ -53,6 +53,23 @@ export default {
           done()
         }
       })
+    },
+    toLocal () {
+      return {
+        _updatedAt: this._updatedAt,
+        paused: this.paused,
+        name: this.name,
+        url: this.url
+      }
+    },
+    toRemote () {
+      return {
+        url: this.url,
+        name: this.name,
+        _updatedAt: this._updatedAt,
+        paused: this.paused,
+        unreads: this.items.value.filter((item) => !item.isRead).map((item) => item.guid)
+      }
     }
   }
 }

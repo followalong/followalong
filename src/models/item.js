@@ -22,6 +22,10 @@ export default {
       type: Object,
       default: ''
     },
+    enclosure: {
+      type: Object,
+      default: ''
+    },
     isRead: {
       type: Boolean,
       default: false
@@ -39,6 +43,10 @@ export default {
       default: ''
     },
     title: {
+      type: String,
+      default: ''
+    },
+    content: {
       type: String,
       default: ''
     },
@@ -73,6 +81,38 @@ export default {
   methods: {
     save () {
       this.feed.value.save()
+    },
+    toLocal () {
+      return {
+        author: this.author,
+        feedURL: this.feedURL,
+        guid: this.guid,
+        image: this.image,
+        isRead: this.isRead,
+        isSaved: this.isSaved,
+        link: this.link,
+        enclosure: this.enclosure,
+        pubDate: this.pubDate,
+        title: this.title,
+        content: this.content,
+        _updatedAt: this._updatedAt
+      }
+    },
+    toRemote () {
+      return {
+        author: this.author,
+        feedURL: this.feedURL,
+        guid: this.guid,
+        image: this.image,
+        isRead: this.isRead,
+        isSaved: this.isSaved,
+        link: this.link,
+        enclosure: this.enclosure,
+        pubDate: this.pubDate,
+        title: this.title,
+        content: this.content,
+        _updatedAt: this._updatedAt
+      }
     }
   }
 }

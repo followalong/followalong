@@ -174,7 +174,7 @@ export default {
   },
   methods: {
     copyConfig (identity) {
-      copy(Base64.encode(JSON.stringify(utils.mappers.IDENTITY_REMOTE(identity))))
+      copy(Base64.encode(JSON.stringify(identity.toRemote())))
       alert('Copied configuration to clipboard.')
     },
 
@@ -199,7 +199,7 @@ export default {
 
     downloadIdentity (identity) {
       const filename = window.location.host.replace(':', '.') + '.' + identity.id + '.json'
-      const str = JSON.stringify(utils.mappers.IDENTITY_REMOTE(identity))
+      const str = JSON.stringify(identity.toRemote())
       const blob = new Blob([str], { type: 'application/json;charset=utf-8' })
 
       saveAs(blob, filename)

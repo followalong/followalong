@@ -1,5 +1,4 @@
 import SERVICES from '@/components/app/services'
-import utils from '@/components/app/utils/index.js'
 
 export default {
   props: {
@@ -71,8 +70,8 @@ export default {
 
       proxy.request(this, {
         action: 'sync',
-        identity: utils.mappers.IDENTITY_REMOTE(this)
-      }, function (err, data) {
+        identity: this.toRemote()
+      }, (err, data) => {
         if (typeof done === 'function') {
           done(err, data)
         }
@@ -90,6 +89,26 @@ export default {
       this.feeds.push(feed)
 
       return feed
+    },
+    toLocal () {
+      return {
+        id: this.id,
+        name: this.name,
+        hints: this.hints,
+        feeds: this.feeds.map((feed) => feed.toLocal()),
+        items: this.items.map((item) => item.toLocal()),
+        services: this.services
+      }
+    },
+    toRemote () {
+      return {
+        id: this.id,
+        name: this.name,
+        hints: this.hints,
+        feeds: this.feeds.map((feed) => feed.toRemote()),
+        items: this.items.filter((item) => item.isSaved).map((item) => item.toRemote()),
+        services: this.services
+      }
     }
   }
 }
