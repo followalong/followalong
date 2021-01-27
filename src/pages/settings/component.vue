@@ -162,7 +162,6 @@
 import { Base64 } from 'js-base64'
 import copy from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
-import utils from '@/components/app/utils'
 
 export default {
   props: ['app'],
@@ -181,7 +180,7 @@ export default {
     profileSize (identity, type) {
       if (!identity || !identity.items) return 'N/A'
 
-      const content = utils.mappers[`IDENTITY_${type.toUpperCase()}`](this.app.identity)
+      const content = this.app.identity[`to${type}`]()
 
       let unit = 'b'
       let size = JSON.stringify(content).length
