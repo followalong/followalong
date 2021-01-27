@@ -40,13 +40,13 @@ export default {
       }
 
       if (service && service.symlink) {
-        service = SERVICES.concat(this.services.custom).find(function (s) {
+        service = SERVICES.concat(this.services.custom).find((s) => {
           return s.id === service.symlink
         })
       }
 
       if (service) {
-        var template = SERVICES.find(function (s) {
+        var template = SERVICES.find((s) => {
           return s.id === service.template
         })
 
