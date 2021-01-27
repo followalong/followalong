@@ -46,7 +46,7 @@
     <div class="field">
       <button
         v-if="tab === 'fresh'"
-        @click="startFresh()"
+        @click="app.addExampleIdentity(app, true)"
       >
         Start a Fresh Identity
       </button>
@@ -62,7 +62,6 @@
 
 <script>
 import { Base64 } from 'js-base64'
-import seed from '@/components/app/seed'
 import utils from '@/components/app/utils'
 
 export default {
@@ -74,18 +73,6 @@ export default {
     }
   },
   methods: {
-    startFresh () {
-      var _ = this
-      var newIdentity = seed[0]
-
-      delete newIdentity.id
-
-      newIdentity = _.app.addIdentity(_.app, newIdentity)
-      _.app.setIdentity(_.app, newIdentity)
-
-      _.$router.push('/')
-    },
-
     upload () {
       var _ = this
       var files = _.$refs.upload.files

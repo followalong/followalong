@@ -1,7 +1,4 @@
-import utils from './utils'
-
 export default {
-  id: utils.generateId(),
   name: 'My Account',
   _feeds: [
     {

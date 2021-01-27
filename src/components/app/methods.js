@@ -98,6 +98,19 @@ var methods = {
     return models.identity.create(identity)
   },
 
+  addExampleIdentity (app, leaveEmpty) {
+    const newIdentity = app.addIdentity(app, seedIdentity)
+
+    if (!leaveEmpty) {
+      newIdentity._feeds.forEach((feed) => {
+        newIdentity.addFeed(feed)
+      })
+    }
+
+    app.setIdentity(app, newIdentity)
+    app.$router.push('/splash')
+  },
+
   setupApp (app) {
     utils.constructIdentities(app, (identities, keychain) => {
       app.keychain = keychain
@@ -109,14 +122,7 @@ var methods = {
 
         app.setIdentity(app, app.identities[0])
       } else {
-        const newIdentity = app.addIdentity(app, seedIdentity)
-
-        newIdentity._feeds.forEach((feed) => {
-          newIdentity.addFeed(feed)
-        })
-
-        app.setIdentity(app, newIdentity)
-        app.$router.push('/splash')
+        app.addExampleIdentity(app)
       }
     })
   }
