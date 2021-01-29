@@ -1,10 +1,12 @@
-import Settings from '@/pages/settings/component.vue'
+import { mountApp } from '../../../spec/helper.js'
 
 describe('Use Case: Change encryption strategy', () => {
   describe('Simple encryption', () => {
-    it('saves the strategy', () => {
-      console.log(Settings)
-      expect(1).toEqual(1)
+    it('saves the strategy', async () => {
+      const app = await mountApp()
+      await app.vm.$router.push('/settings')
+
+      expect(app.text()).toContain('Local Data Encryption')
     })
 
     it.todo('does not save the strategy if no key is supplied')
