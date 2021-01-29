@@ -23,11 +23,11 @@
 
 <script>
 import models from '@/models/index.js'
-import localForage from 'localforage'
 import PopoutPlayer from '@/components/popout-player/component.vue'
 import methods from '@/components/app/methods'
 import Sidebar from '@/components/sidebar/component.vue'
 import TopBar from '@/components/top-bar/component.vue'
+import store from '@/store'
 
 export default {
   components: {
@@ -42,9 +42,7 @@ export default {
 
     return {
       app: _,
-      store: localForage.createInstance({
-        name: 'commmunity'
-      }),
+      store: store,
       models: models,
       identities: models.identity.data,
       keychain: {},
