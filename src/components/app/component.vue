@@ -60,8 +60,6 @@ export default {
     }
   },
   mounted () {
-    this.setupApp(this)
-
     if (process.env.NODE_ENV !== 'development') {
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -69,6 +67,8 @@ export default {
         })
       }
     }
+
+    return this.setupApp(this)
   },
   methods
 }

@@ -106,18 +106,20 @@ var methods = {
   },
 
   setupApp (app) {
-    utils.constructIdentities(app, (identities, keychain) => {
-      app.keychain = keychain
+    return new Promise((resolve) => {
+      utils.constructIdentities(app, (identities, keychain) => {
+        if (identities && identities.length) {
+          identities.forEach((identity) => {
+            app.addIdentity(app, identity)
+          })
 
-      if (identities && identities.length) {
-        identities.forEach((identity) => {
-          app.addIdentity(app, identity)
-        })
+          app.setIdentity(app, app.identities[0])
+        } else {
+          app.addExampleIdentity(app)
+        }
 
-        app.setIdentity(app, app.identities[0])
-      } else {
-        app.addExampleIdentity(app)
-      }
+        resolve()
+      })
     })
   }
 }
