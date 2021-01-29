@@ -37,6 +37,10 @@ const mountApp = async (options) => {
     }
   })
 
+  app.go = (path) => {
+    return router.push(path)
+  }
+
   await nextTick()
 
   return app

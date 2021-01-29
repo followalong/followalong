@@ -1,14 +1,15 @@
 import { mountApp } from '../../../spec/helper.js'
 
 describe('Use Case: Change encryption strategy', () => {
+  it('can visit the settings page', async () => {
+    const app = await mountApp()
+    await app.go('/settings')
+
+    expect(app.text()).toContain('Local Data Encryption')
+  })
+
   describe('Simple encryption', () => {
-    it('saves the strategy', async () => {
-      const app = await mountApp()
-      await app.vm.$router.push('/settings')
-
-      expect(app.text()).toContain('Local Data Encryption')
-    })
-
+    it.todo('saves the strategy')
     it.todo('does not save the strategy if no key is supplied')
     it.todo('asks for a new key')
     it.todo('does not save the new key')
