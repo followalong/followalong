@@ -36,12 +36,8 @@ export default {
     TopBar
   },
   data: function () {
-    var _ = this
-
-    window.app = _
-
     return {
-      app: _,
+      app: window.followAlong = this,
       store: store,
       models: models,
       identities: models.identity.data,
