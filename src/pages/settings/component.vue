@@ -10,12 +10,12 @@
 
       <div class="field">
         <p>
-          Thanks for using FollowAlong. Once you start using it, you'll realize how magical it is.
-          <span class="highlight">And your data stays safe with <em>you</em>.</span>
+          Thanks for using FollowAlong.
+          <span class="highlight">Your data stays only on <em>this device</em>, optionally encrypted and backed up to a service of your choice.</span>
         </p>
       </div>
       <div class="field">
-        <label for="name">Identity Nickname</label>
+        <label for="name">Account Name</label>
         <input
           id="name"
           v-model="app.identity.name"
