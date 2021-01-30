@@ -10,12 +10,10 @@ import models from '@/models/index.js'
 
 const mountApp = async (options) => {
   options = options || {}
-  options.identities = options.identities || [{
-    name: 'My Account'
-  }]
+  options.identities = options.identities || [{}]
 
   options.identities.forEach(async (identity) => {
-    identity.id = Math.random().toString()
+    identity.id = identity.id || Math.random().toString()
     identity.feeds = identity.feeds || []
     setIdentityDefaults(() => identity.id)(identity)
     await store.setItem(identity.id, identity)
