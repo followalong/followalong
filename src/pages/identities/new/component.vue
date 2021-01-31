@@ -90,7 +90,7 @@ export default {
       reader.readAsText(files[0])
     },
 
-    importConfig (type) {
+    async importConfig (type) {
       var _ = this
       var paste = _.paste.trim()
 
@@ -139,7 +139,8 @@ export default {
           }
         }
 
-        _.app.setIdentity(_.app, existingIdentity, true)
+        await _.app.setIdentity(_.app, existingIdentity, true)
+
         _.$router.push('/')
       } catch (e) {
         // console.log(e);

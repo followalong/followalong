@@ -33,36 +33,40 @@ var methods = {
     app.identity = identity
     app.identity.isLoading = true
 
-    app.decryptIdentity(app.keychain, app.store, identity, function () {
-      identity.saveLocal = (done) => {
-        utils.trimItems(identity)
+    return new Promise((resolve, reject) => {
+      app.decryptIdentity(app.keychain, app.store, identity).then(async () => {
+        identity.saveLocal = (done) => {
+          utils.trimItems(identity)
 
-        app.store.setItem(
-          identity.id,
-          crypt.en(
-            app.keychain,
-            app.store,
-            identity,
-            identity.toLocal()
+          app.store.setItem(
+            identity.id,
+            crypt.en(
+              app.keychain,
+              app.store,
+              identity,
+              identity.toLocal()
+            )
           )
-        )
 
-        if (typeof done === 'function') {
-          done()
+          if (typeof done === 'function') {
+            done()
+          }
         }
-      }
 
-      identity.saveLocal()
+        await identity.saveLocal()
 
-      clearTimeout(nextFeedFetcher)
+        clearTimeout(nextFeedFetcher)
 
-      app.identity.isLoading = false
+        app.identity.isLoading = false
 
-      app.fetchAllFeeds(identity, override, function () {
-        nextFeedFetcher = setTimeout(function () {
-          app.fetchNextFeed(app.identity)
-        }, ONE_MINUTE)
-      })
+        app.fetchAllFeeds(identity, override, () => {
+          nextFeedFetcher = setTimeout(() => {
+            app.fetchNextFeed(app.identity)
+          }, ONE_MINUTE)
+        })
+
+        resolve()
+      }).catch(reject)
     })
   },
 
@@ -93,32 +97,34 @@ var methods = {
   },
 
   addExampleIdentity (app, leaveEmpty) {
-    const newIdentity = app.addIdentity(app, seedIdentity)
+    return new Promise((resolve) => {
+      const newIdentity = app.addIdentity(app, seedIdentity)
 
-    if (!leaveEmpty) {
-      newIdentity._feeds.forEach((feed) => {
-        newIdentity.addFeed(feed)
+      if (!leaveEmpty) {
+        newIdentity._feeds.forEach((feed) => {
+          newIdentity.addFeed(feed)
+        })
+      }
+
+      app.setIdentity(app, newIdentity).then(() => {
+        app.$router.push('/splash')
+        resolve()
       })
-    }
-
-    app.setIdentity(app, newIdentity)
-    app.$router.push('/splash')
+    })
   },
 
   setupApp (app) {
-    return new Promise((resolve) => {
-      utils.constructIdentities(app, (identities, keychain) => {
+    return new Promise((resolve, reject) => {
+      utils.constructIdentities(app).then((identities, keychain) => {
         if (identities && identities.length) {
           identities.forEach((identity) => {
             app.addIdentity(app, identity)
           })
 
-          app.setIdentity(app, app.identities[0])
+          app.setIdentity(app, app.identities[0]).then(resolve).catch(reject)
         } else {
-          app.addExampleIdentity(app)
+          app.addExampleIdentity(app).then(resolve).catch(reject)
         }
-
-        resolve()
       })
     })
   }

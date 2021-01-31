@@ -35,6 +35,9 @@ const mountApp = async (options) => {
     }
   })
 
+  // TODO: Not tearing down correctly
+  app.vm.fetchAllFeeds = () => { }
+
   app.go = (path) => {
     return router.push(path)
   }

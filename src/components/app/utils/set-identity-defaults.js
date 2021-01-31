@@ -3,7 +3,7 @@ import { reactive } from 'vue'
 export default function (generateId) {
   return function (identity) {
     identity.id = identity.id || generateId()
-    identity.name = identity.name || '...'
+    identity.name = identity.name || 'My Account'
     identity.items = identity.items || reactive([]) // TODO: Use vue-superstore
     identity.hints = identity.hints || []
 
@@ -14,9 +14,7 @@ export default function (generateId) {
     identity.services.publish = identity.services.publish || { symlink: 'followalong-none' }
     identity.services.search = identity.services.search || { symlink: 'followalong-free' }
     identity.services.media = identity.services.media || { symlink: 'followalong-none' }
-    identity.services.local = identity.services.local || {
-      strategy: 'none'
-    }
+    identity.services.local = identity.services.local || { strategy: 'none' }
     identity.services.local.maxReadCount = typeof identity.services.local.maxReadCount === 'undefined' ? 150 : parseInt(identity.services.local.maxReadCount)
 
     if (typeof identity._decrypted === 'undefined') {

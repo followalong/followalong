@@ -2,45 +2,47 @@ import crypt from '../crypt'
 import utils from '../utils'
 import identitiesActions from '../actions/identities.js'
 
-const decryptIdentity = function (keychain, store, identity, done) {
-  if (identity._decrypted) {
-    return done()
-  }
-
-  store.getItem(identity.id, (err, state) => {
-    if (!state) {
-      identity._decrypted = true
-      return done()
+const decryptIdentity = function (keychain, store, identity) {
+  return new Promise((resolve, reject) => {
+    if (identity._decrypted) {
+      return resolve()
     }
 
-    state = crypt.de(keychain, store, identity, state)
-
-    if (identity.services.local.strategy === 'ask') {
-      delete keychain[identity.id]
-      state = crypt.de(keychain, store, identity, state)
-    }
-
-    if (!state) {
-      if (confirm('Unauthorized. Would you like to refresh this page?')) {
-        window.location.reload()
-      } else {
-        document.body.innerHTML = ''
+    store.getItem(identity.id).then((state) => {
+      if (!state) {
+        identity._decrypted = true
+        return resolve()
       }
 
-      return
-    }
+      state = crypt.de(keychain, store, identity, state)
 
-    utils.copyAttrs(state, identity, ['name', 'services', 'hints'])
+      if (identity.services.local.strategy === 'ask') {
+        delete keychain[identity.id]
+        state = crypt.de(keychain, store, identity, state)
+      }
 
-    state.feeds.forEach((feed) => {
-      identity.addFeed(feed)
-    })
+      if (!state) {
+        if (confirm('Unauthorized. Would you like to refresh this page?')) {
+          window.location.reload()
+        } else {
+          document.body.innerHTML = ''
+        }
 
-    identitiesActions.addItemsToIdentity(identity, state.items)
+        return resolve()
+      }
 
-    identity._decrypted = true
+      utils.copyAttrs(state, identity, ['name', 'services', 'hints'])
 
-    done()
+      state.feeds.forEach((feed) => {
+        identity.addFeed(feed)
+      })
+
+      identitiesActions.addItemsToIdentity(identity, state.items)
+
+      identity._decrypted = true
+
+      resolve()
+    }).catch(reject)
   })
 }
 
