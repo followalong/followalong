@@ -59,6 +59,7 @@
 
         <select
           id="secretStrategy"
+          aria-label="Select local data strategy"
           v-model="app.identity.services.local.strategy"
           @change="app.saveKey(app.keychain, app.store, app.identity, secretKey)"
         >

@@ -1,14 +1,24 @@
-import { mountApp } from '../../../spec/helper.js'
+import { mountApp, flushPromises } from '../../../spec/helper.js'
+
+const visitSettings = async (identity) => {
+  const app = await mountApp({
+    identities: [identity || {}]
+  })
+
+  await flushPromises()
+  await app.go('/settings')
+
+  return app
+}
 
 describe('Use Case: Change encryption strategy', () => {
   it('can visit the settings page', async () => {
-    const app = await mountApp()
-    await app.go('/settings')
+    const app = await visitSettings()
 
-    expect(app.text()).toContain('Local Data Encryption')
+    expect(app.text()).toContain('Account Name')
   })
 
-  describe('Simple encryption', () => {
+  describe('Ask every page load', () => {
     it.todo('saves the strategy')
     it.todo('does not save the strategy if no key is supplied')
     it.todo('asks for a new key')
@@ -32,8 +42,17 @@ describe('Use Case: Change encryption strategy', () => {
     it.todo('can decrypt the data when the page is reloaded')
   })
 
-  describe('Unencrypted', () => {
-    it.todo('saves the strategy')
+  describe('No encryption', () => {
+    it('saves the strategy', async () => {
+      const app = await visitSettings({ services: { local: { strategy: 'foo' } } })
+      app.vm.identity.save = jest.fn()
+
+      app.find('[aria-label="Select local data strategy"]').setValue('none')
+
+      expect(app.vm.identity.services.local.strategy).toEqual('none')
+      expect(app.vm.identity.save).toHaveBeenCalled()
+    })
+
     it.todo('saves data unencrypted')
     it.todo('can read the data when the page is reloaded')
   })
