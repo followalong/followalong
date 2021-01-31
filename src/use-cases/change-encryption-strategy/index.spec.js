@@ -6,6 +6,7 @@ const visitSettings = async (identity) => {
   })
 
   await flushPromises()
+
   await app.go('/settings')
 
   return app
@@ -18,7 +19,7 @@ describe('Use Case: Change encryption strategy', () => {
     expect(app.text()).toContain('Account Name')
   })
 
-  describe('Ask every page load', () => {
+  describe('ask every page load', () => {
     it.todo('saves the strategy')
     it.todo('does not save the strategy if no key is supplied')
     it.todo('asks for a new key')
@@ -26,14 +27,14 @@ describe('Use Case: Change encryption strategy', () => {
     it.todo('can decrypt the data when the page is reloaded')
   })
 
-  describe('Rotate keys', () => {
+  describe('rotate keys', () => {
     it.todo('saves the strategy')
     it.todo('saves the new key')
     it.todo('updates the key when the page is reloaded')
     it.todo('can decrypt the data when the page is reloaded')
   })
 
-  describe('Store the key', () => {
+  describe('store the key', () => {
     it.todo('saves the strategy')
     it.todo('does not save the strategy if no key is supplied')
     it.todo('asks for a new key')
@@ -42,7 +43,7 @@ describe('Use Case: Change encryption strategy', () => {
     it.todo('can decrypt the data when the page is reloaded')
   })
 
-  describe('No encryption', () => {
+  describe('no encryption', () => {
     it('saves the strategy', async () => {
       const app = await visitSettings({ services: { local: { strategy: 'foo' } } })
       app.vm.identity.save = jest.fn()
@@ -53,7 +54,18 @@ describe('Use Case: Change encryption strategy', () => {
       expect(app.vm.identity.save).toHaveBeenCalled()
     })
 
-    it.todo('saves data unencrypted')
+    it('saves data unencrypted', async () => {
+      const app = await visitSettings({ services: { local: { strategy: 'none' } } })
+      app.vm.identity.services.sync.request = jest.fn()
+
+      app.vm.identity.sync().then(() => {
+        expect(app.vm.identity.services.sync.request).toHaveBeenCalledWith(app.vm.identity, {
+          action: 'sync',
+          identity: app.vm.identity.toRemote()
+        })
+      })
+    })
+
     it.todo('can read the data when the page is reloaded')
   })
 })

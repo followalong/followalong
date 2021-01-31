@@ -67,19 +67,22 @@ export default {
       return service
     },
     sync (done) {
-      const proxy = this.findService('sync')
+      return new Promise((resolve) => {
+        const proxy = this.findService('sync')
 
-      if (!proxy) {
-        return done('No sync service configured.')
-      }
-
-      proxy.request(this, {
-        action: 'sync',
-        identity: this.toRemote()
-      }, (err, data) => {
-        if (typeof done === 'function') {
-          done(err, data)
+        if (!proxy) {
+          return done('No sync service configured.')
         }
+
+        proxy.request(this, {
+          action: 'sync',
+          identity: this.toRemote()
+        }, (err, data) => {
+          if (typeof done === 'function') {
+            done(err, data)
+            resolve()
+          }
+        })
       })
     },
     addFeed (feed) {

@@ -50,7 +50,7 @@
         </div>
 
         <label for="secretStrategy">
-          Local Data Encryption
+          Data Encryption
         </label>
 
         <span class="hint">
