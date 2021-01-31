@@ -23,15 +23,15 @@ describe('Use Case: Change encryption strategy', () => {
     it.todo('saves the strategy')
     it.todo('does not save the strategy if no key is supplied')
     it.todo('asks for a new key')
-    it.todo('does not save the new key')
-    it.todo('can decrypt the data when the page is reloaded')
+    it.todo('does not save the key')
+    it.todo('can restore the data')
   })
 
   describe('rotate keys', () => {
     it.todo('saves the strategy')
     it.todo('saves the new key')
-    it.todo('updates the key when the page is reloaded')
-    it.todo('can decrypt the data when the page is reloaded')
+    it.todo('updates the key upon every save')
+    it.todo('can restore the data')
   })
 
   describe('store the key', () => {
@@ -39,8 +39,7 @@ describe('Use Case: Change encryption strategy', () => {
     it.todo('does not save the strategy if no key is supplied')
     it.todo('asks for a new key')
     it.todo('saves the new key')
-    it.todo('remembers the key when the page is reloaded')
-    it.todo('can decrypt the data when the page is reloaded')
+    it.todo('can restore the data')
   })
 
   describe('no encryption', () => {
@@ -66,6 +65,6 @@ describe('Use Case: Change encryption strategy', () => {
       })
     })
 
-    it.todo('can read the data when the page is reloaded')
+    it.todo('can restore the data')
   })
 })
