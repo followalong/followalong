@@ -1,4 +1,5 @@
 import { mountApp, flushPromises } from '../../../spec/helper.js'
+import store from '@/store'
 
 const visitSettings = async (identity) => {
   const app = await mountApp({
@@ -13,10 +14,21 @@ const visitSettings = async (identity) => {
 }
 
 describe('Use Case: Change encryption strategy', () => {
-  it('can visit the settings page', async () => {
-    const app = await visitSettings()
+  describe('initializes the settings page', () => {
+    it('shows the correct account', async () => {
+      const expectedName = 'Foo Bar'
+      const app = await visitSettings({ name: expectedName })
 
-    expect(app.text()).toContain('Account Name')
+      expect(app.text()).toContain('Setup')
+      expect(app.text()).toContain(expectedName)
+    })
+
+    it('shows current strategy', async () => {
+      const expectedStrategy = 'rotate'
+      const app = await visitSettings({ services: { local: { strategy: expectedStrategy } } })
+
+      expect(app.find('[aria-label="Select local data strategy"]').element.value).toEqual(expectedStrategy)
+    })
   })
 
   describe('ask every page load', () => {
@@ -51,6 +63,15 @@ describe('Use Case: Change encryption strategy', () => {
 
       expect(app.vm.identity.services.local.strategy).toEqual('none')
       expect(app.vm.identity.save).toHaveBeenCalled()
+    })
+
+    it('saves the key to the keychain', async () => {
+      const identityId = '123'
+      const app = await visitSettings({ id: identityId, services: { local: { strategy: 'foo' } } })
+
+      app.find('[aria-label="Select local data strategy"]').setValue('none')
+
+      expect(await store.getItem(`key-${identityId}`)).toEqual('')
     })
 
     it('saves data unencrypted', async () => {

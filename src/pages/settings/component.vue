@@ -59,9 +59,9 @@
 
         <select
           id="secretStrategy"
-          v-model="app.identity.services.local.strategy"
+          v-model="strategy"
           aria-label="Select local data strategy"
-          @change="app.saveKey(app.keychain, app.store, app.identity, secretKey)"
+          @change="saveEncryptionStrategy(app, app.keychain, app.store, app.identity, strategy, secretKey)"
         >
           <option value="ask">
             Ask Every Page Load (best, most secure, slightly annoying)
@@ -169,8 +169,12 @@ export default {
   data () {
     return {
       secretKey: undefined,
+      strategy: undefined,
       hasStorageSupport: this.app.store.INDEXEDDB || this.app.store.LOCALSTORAGE
     }
+  },
+  mounted() {
+    this.strategy = this.app.identity.services.local.strategy
   },
   methods: {
     copyConfig (identity) {
@@ -203,6 +207,14 @@ export default {
       const blob = new Blob([str], { type: 'application/json;charset=utf-8' })
 
       saveAs(blob, filename)
+    },
+
+    saveEncryptionStrategy(app, keychain, store, identity, strategy, secretKey) {
+      if (strategy === 'none') {
+        secretKey = ''
+      }
+
+      app.saveKey(keychain, store, identity, secretKey)
     },
 
     reset (identity) {
