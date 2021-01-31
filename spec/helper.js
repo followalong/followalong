@@ -9,6 +9,8 @@ import addIcons from '@/add-icons.js'
 import models from '@/models/index.js'
 
 const mountApp = async (options) => {
+  await store.clear()
+
   options = options || {}
   options.identities = options.identities || [{}]
 
