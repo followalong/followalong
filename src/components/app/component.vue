@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import models from '@/models/index.js'
+import createModels from '@/models/index.js'
 import PopoutPlayer from '@/components/popout-player/component.vue'
 import methods from '@/components/app/methods'
 import Sidebar from '@/components/sidebar/component.vue'
@@ -36,8 +36,12 @@ export default {
     TopBar
   },
   data: function () {
+    const models = createModels()
+
+    window.followAlong = this
+
     return {
-      app: window.followAlong = this,
+      app: this,
       store: store,
       models: models,
       identities: models.identity.data,

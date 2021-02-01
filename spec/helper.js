@@ -3,54 +3,63 @@ import { mount, flushPromises } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
 import { routes } from '@/router'
 import setIdentityDefaults from '@/components/app/utils/set-identity-defaults.js'
+import generateId from '@/components/app/utils/generate-id.js'
 import App from '@/components/app/component.vue'
 import store from '@/store'
 import addIcons from '@/add-icons.js'
-import models from '@/models/index.js'
 
-const mountApp = async (options) => {
-  await store.clear()
+const storeIdentity = (identity) => {
+  return new Promise(async (resolve) => {
+    setIdentityDefaults(generateId)(identity)
 
-  options = options || {}
-  options.identities = options.identities || [{}]
-
-  options.identities.forEach(async (identity) => {
-    identity.id = identity.id || Math.random().toString()
     identity.feeds = identity.feeds || []
-    setIdentityDefaults(() => identity.id)(identity)
+
+    await store.setItem(`key-${identity.id}`, '')
     await store.setItem(identity.id, identity)
+
+    resolve(identity)
   })
+}
 
-  const router = createRouter({
-    history: createMemoryHistory(),
-    routes: routes
-  })
+const mountApp = (identity) => {
+  return new Promise(async (resolve) => {
+    await store.clear()
 
-  router.push('/')
-
-  await router.isReady()
-
-  const app = await mount(App, {
-    propsData: options.props,
-    global: {
-      plugins: [router, addIcons]
+    if (identity) {
+      await storeIdentity(identity)
     }
+
+    const router = createRouter({
+      history: createMemoryHistory(),
+      routes: routes
+    })
+
+    router.push('/')
+
+    await router.isReady()
+
+    const app = await mount(App, {
+      global: {
+        plugins: [router, addIcons]
+      }
+    })
+
+    // TODO: Not tearing down correctly
+    app.vm.fetchAllFeeds = () => { }
+
+    app.go = (path) => {
+      return router.push(path)
+    }
+
+    await nextTick()
+
+    resolve(app)
   })
-
-  // TODO: Not tearing down correctly
-  app.vm.fetchAllFeeds = () => { }
-
-  app.go = (path) => {
-    return router.push(path)
-  }
-
-  await nextTick()
-
-  return app
 }
 
 export {
   mountApp,
   flushPromises,
-  nextTick
+  nextTick,
+  storeIdentity
 }

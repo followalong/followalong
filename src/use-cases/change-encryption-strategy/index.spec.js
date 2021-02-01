@@ -1,12 +1,8 @@
-import { mountApp, flushPromises } from '../../../spec/helper.js'
+import { mountApp } from '../../../spec/helper.js'
 import store from '@/store'
 
 const visitSettings = async (identity) => {
-  const app = await mountApp({
-    identities: [identity || {}]
-  })
-
-  await flushPromises()
+  const app = await mountApp(identity)
 
   await app.go('/settings')
 
@@ -27,7 +23,7 @@ describe('Use Case: Change encryption strategy', () => {
       const expectedStrategy = 'rotate'
       const app = await visitSettings({ services: { local: { strategy: expectedStrategy } } })
 
-      expect(app.find('[aria-label="Select local data strategy"]').element.value).toEqual(expectedStrategy)
+      expect(app.find('[aria-label="Select data encryption strategy"]').element.value).toEqual(expectedStrategy)
     })
   })
 
@@ -59,33 +55,40 @@ describe('Use Case: Change encryption strategy', () => {
       const app = await visitSettings({ services: { local: { strategy: 'foo' } } })
       app.vm.identity.save = jest.fn()
 
-      app.find('[aria-label="Select local data strategy"]').setValue('none')
+      app.find('[aria-label="Select data encryption strategy"]').setValue('none')
 
-      expect(app.vm.identity.services.local.strategy).toEqual('none')
       expect(app.vm.identity.save).toHaveBeenCalled()
+      expect(app.vm.identity.services.local.strategy).toEqual('none')
     })
 
     it('saves the key to the keychain', async () => {
       const identityId = '123'
       const app = await visitSettings({ id: identityId, services: { local: { strategy: 'foo' } } })
 
-      app.find('[aria-label="Select local data strategy"]').setValue('none')
+      app.find('[aria-label="Select data encryption strategy"]').setValue('none')
 
-      expect(await store.getItem(`key-${identityId}`)).toEqual('')
+      expect(await store.getItem(`key-${identityId}`)).toEqual('none')
     })
 
     it('saves data unencrypted', async () => {
-      const app = await visitSettings({ services: { local: { strategy: 'none' } } })
-      app.vm.identity.services.sync.request = jest.fn()
-
-      app.vm.identity.sync().then(() => {
-        expect(app.vm.identity.services.sync.request).toHaveBeenCalledWith(app.vm.identity, {
-          action: 'sync',
-          identity: app.vm.identity.toRemote()
-        })
+      const app = await visitSettings({
+        services: {
+          local: { strategy: 'none' },
+          sync: { symlink: 'followalong-free' }
+        }
       })
+      app.vm.identity.sync = jest.fn(() => Promise.resolve())
+
+      await app.vm.identity.save()
+
+      expect(app.vm.identity.sync).toHaveBeenCalledWith(app.vm.identity.toRemote())
     })
 
-    it.todo('can restore the data')
+    it('can restore the data', async () => {
+      const expectedIdentity = { id: 'foo', name: 'Bar', services: { local: { strategy: 'none' } } }
+      const app = await visitSettings(expectedIdentity)
+
+      expect(app.vm.identity.id).toEqual(expectedIdentity.id)
+    })
   })
 })

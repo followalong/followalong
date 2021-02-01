@@ -4,8 +4,10 @@ import feed from './feed.js'
 import identity from './identity.js'
 import item from './item.js'
 
-export default new Superstore(reactive, computed, {
-  feed,
-  identity,
-  item
-})
+export default function () {
+  return new Superstore(reactive, computed, {
+    feed,
+    identity,
+    item
+  })
+}

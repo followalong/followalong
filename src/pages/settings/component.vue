@@ -60,7 +60,7 @@
         <select
           id="secretStrategy"
           v-model="strategy"
-          aria-label="Select local data strategy"
+          aria-label="Select data encryption strategy"
           @change="saveEncryptionStrategy(app, app.keychain, app.store, app.identity, strategy, secretKey)"
         >
           <option value="ask">
@@ -173,7 +173,7 @@ export default {
       hasStorageSupport: this.app.store.INDEXEDDB || this.app.store.LOCALSTORAGE
     }
   },
-  mounted() {
+  mounted () {
     this.strategy = this.app.identity.services.local.strategy
   },
   methods: {
@@ -209,10 +209,12 @@ export default {
       saveAs(blob, filename)
     },
 
-    saveEncryptionStrategy(app, keychain, store, identity, strategy, secretKey) {
+    saveEncryptionStrategy (app, keychain, store, identity, strategy, secretKey) {
       if (strategy === 'none') {
-        secretKey = ''
+        secretKey = 'none'
       }
+
+      identity.services.local.strategy = strategy
 
       app.saveKey(keychain, store, identity, secretKey)
     },

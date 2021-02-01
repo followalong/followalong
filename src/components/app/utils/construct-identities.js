@@ -1,11 +1,11 @@
 import async from 'no-async'
 
 export default function (app) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     var identities = []
     var keychain = {}
 
-    app.store.keys(function (err, keys) {
+    app.store.keys().then((keys) => {
       async.eachParallel(keys || [], function (id, next) {
         if (id.slice(0, 4) !== 'key-') {
           identities.push({ id: id })
@@ -19,6 +19,6 @@ export default function (app) {
       }, function () {
         resolve(identities, keychain)
       })
-    })
+    }).catch(reject)
   })
 }

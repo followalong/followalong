@@ -1,6 +1,5 @@
 import { reactive } from 'vue'
 import crypt from './crypt.js'
-import models from '@/models/index.js'
 import seedIdentity from '@/components/app/seed'
 import utils from './utils'
 import actionsForIdentities from './actions/identities'
@@ -36,21 +35,25 @@ var methods = {
     return new Promise((resolve, reject) => {
       app.decryptIdentity(app.keychain, app.store, identity).then(async () => {
         identity.saveLocal = (done) => {
-          utils.trimItems(identity)
+          return new Promise((resolve) => {
+            utils.trimItems(identity)
 
-          app.store.setItem(
-            identity.id,
-            crypt.en(
-              app.keychain,
-              app.store,
-              identity,
-              identity.toLocal()
+            app.store.setItem(
+              identity.id,
+              crypt.en(
+                app.keychain,
+                app.store,
+                identity,
+                identity.toLocal()
+              )
             )
-          )
 
-          if (typeof done === 'function') {
-            done()
-          }
+            if (typeof done === 'function') {
+              done()
+            }
+
+            resolve()
+          })
         }
 
         await identity.saveLocal()
@@ -93,7 +96,7 @@ var methods = {
   addIdentity (app, identity) {
     utils.setIdentityDefaults(identity)
 
-    return models.identity.create(identity)
+    return app.models.identity.create(identity)
   },
 
   addExampleIdentity (app, leaveEmpty) {
@@ -125,7 +128,7 @@ var methods = {
         } else {
           app.addExampleIdentity(app).then(resolve).catch(reject)
         }
-      })
+      }).catch(reject)
     })
   }
 }

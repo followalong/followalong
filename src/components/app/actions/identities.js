@@ -1,6 +1,5 @@
 import utils from '../utils'
 import async from 'no-async'
-import models from '@/models/index.js'
 
 export default {
   hideHint (identity, hint) {
@@ -94,7 +93,7 @@ export default {
   addItemsToIdentity (identity, items) {
     return items.map((item) => {
       if (item.constructor.name !== 'Instance') {
-        item = models.item.create(item)
+        item = identity.model.models.item.create(item)
       }
 
       // TODO: identity.items relationship

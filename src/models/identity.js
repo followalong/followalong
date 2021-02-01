@@ -66,22 +66,23 @@ export default {
 
       return service
     },
-    sync (done) {
-      return new Promise((resolve) => {
+    sync (data) {
+      return new Promise((resolve, reject) => {
         const proxy = this.findService('sync')
 
         if (!proxy) {
-          return done('No sync service configured.')
+          return resolve()
         }
 
         proxy.request(this, {
           action: 'sync',
-          identity: this.toRemote()
-        }, (err, data) => {
-          if (typeof done === 'function') {
-            done(err, data)
-            resolve()
+          identity: data
+        }, (err, result) => {
+          if (err) {
+            return reject(err)
           }
+
+          resolve(result)
         })
       })
     },
@@ -117,8 +118,16 @@ export default {
       }
     },
     save (done) {
-      this.saveLocal(() => {
-        this.sync(done)
+      return new Promise((resolve, reject) => {
+        this.saveLocal().then(() => {
+          this.sync(this.toRemote()).then(() => {
+            if (typeof done === 'function') {
+              done()
+            }
+
+            resolve()
+          }).catch(reject)
+        })
       })
     }
   }
