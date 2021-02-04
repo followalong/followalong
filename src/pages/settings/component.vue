@@ -61,7 +61,7 @@
           id="secretStrategy"
           v-model="strategy"
           aria-label="Select data encryption strategy"
-          @change="saveEncryptionStrategy(app, app.keychain, app.store, app.identity, strategy, secretKey)"
+          @change="useCases.changeEncryption(app, app.keychain, app.store, app.identity, strategy, secretKey, revert())"
         >
           <option value="ask">
             Ask Every Page Load (best, most secure, slightly annoying)
@@ -82,7 +82,7 @@
           href="javascript:;"
           class="hint"
           aria-label="Reset secret key"
-          @click="saveEncryptionStrategy(app, app.keychain, app.store, app.identity, 'ask')"
+          @click="useCases.changeEncryption(app, app.keychain, app.store, app.identity, 'ask', revert())"
         >
           Reset Secret Key
         </a>
@@ -165,6 +165,7 @@ import { Base64 } from 'js-base64'
 import copy from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
 import generateId from '@/components/app/utils/generate-id.js'
+import useCases from '@/use-cases/index.js'
 
 export default {
   props: ['app'],
@@ -172,7 +173,8 @@ export default {
     return {
       secretKey: undefined,
       strategy: undefined,
-      hasStorageSupport: this.app.store.INDEXEDDB || this.app.store.LOCALSTORAGE
+      hasStorageSupport: this.app.store.INDEXEDDB || this.app.store.LOCALSTORAGE,
+      useCases
     }
   },
   mounted () {
@@ -211,47 +213,9 @@ export default {
       saveAs(blob, filename)
     },
 
-    saveEncryptionStrategy (app, keychain, store, identity, strategy, key) {
-      if (strategy === 'none') {
-        app.saveToInMemoryKeychain(keychain, identity, 'none')
-        app.saveToInStoreKeychain(keychain, store, identity, 'none')
-
-        identity.services.local.strategy = strategy
-        identity.save()
-      } else if (strategy === 'ask') {
-        const newKey = prompt('Choose a password')
-
-        if (newKey === null) {
-          this.strategy = this.strategy = this.app.identity.services.local.strategy
-        } else {
-          identity.services.local.strategy = strategy
-
-          app.saveToInMemoryKeychain(keychain, identity, newKey)
-          app.saveToInStoreKeychain(keychain, store, identity, 'ask')
-
-          identity.save()
-        }
-      } else if (strategy === 'rotate') {
-        const rotateKey = generateId()
-
-        app.saveToInMemoryKeychain(keychain, identity, rotateKey)
-        app.saveToInStoreKeychain(keychain, store, identity, rotateKey)
-
-        identity.services.local.strategy = strategy
-        identity.save()
-      } else if (strategy === 'store') {
-        const newKey = prompt('Choose a password')
-
-        if (newKey === null) {
-          this.strategy = this.strategy = this.app.identity.services.local.strategy
-        } else {
-          identity.services.local.strategy = strategy
-
-          app.saveToInMemoryKeychain(keychain, identity, newKey)
-          app.saveToInStoreKeychain(keychain, store, identity, newKey)
-
-          identity.save()
-        }
+    revert() {
+      return () => {
+        this.strategy = this.app.identity.services.local.strategy
       }
     },
 
