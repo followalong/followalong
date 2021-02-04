@@ -10,6 +10,7 @@
     <a
       href="javascript:;"
       class="check"
+      :aria-label="'Mark as read: ' + item.title"
       @click="useCases.markItemAsRead(item)"
     >&check;</a>
 

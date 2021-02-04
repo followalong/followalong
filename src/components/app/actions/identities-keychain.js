@@ -28,9 +28,11 @@ const decryptIdentity = function (keychain, store, identity) {
 
       utils.copyAttrs(state, identity, ['name', 'services', 'hints'])
 
-      state.feeds.forEach((feed) => {
-        identity.addFeed(feed)
-      })
+      if (state.feeds) {
+        state.feeds.forEach((feed) => {
+          identity.addFeed(feed)
+        })
+      }
 
       identitiesActions.addItemsToIdentity(identity, state.items)
 

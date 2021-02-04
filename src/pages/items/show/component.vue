@@ -71,6 +71,7 @@
         <a
           href="javascript:;"
           class="button button-gray"
+          :aria-label="'Mark as read: ' + item.title"
           @click="useCases.markItemAsRead(item)"
         >
           Mark As <span v-if="item.isRead">Unread</span><span v-else>Read</span>

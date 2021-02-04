@@ -28,7 +28,6 @@ const mountApp = (identity, id, key) => {
       await storeIdentity(keychain, identity, id, key)
     } else if (typeof identity === 'object') {
       setIdentityDefaults(identity)
-      identity.feeds = identity.feeds || []
       await storeIdentity(keychain, identity, identity.id, key)
     }
 
@@ -61,9 +60,27 @@ const mountApp = (identity, id, key) => {
   })
 }
 
+const buildIdentityWithFeedAndItems = (items, feed, identity) => {
+  identity = identity || {}
+  feed = feed || {}
+
+  identity.feeds = [feed]
+  identity.items = items || []
+
+  feed.url = feed.url || `https://${Math.random()}.com/items.rss`
+
+  items.forEach((item) => {
+    item.guid = item.guid || Math.random().toString()
+    item.feedURL = item.feedURL || feed.url
+  })
+
+  return identity
+}
+
 export {
-  mountApp,
+  buildIdentityWithFeedAndItems,
   flushPromises,
+  mountApp,
   nextTick,
   storeIdentity
 }
