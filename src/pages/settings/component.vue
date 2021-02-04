@@ -209,14 +209,29 @@ export default {
       saveAs(blob, filename)
     },
 
-    saveEncryptionStrategy (app, keychain, store, identity, strategy, secretKey) {
+    saveEncryptionStrategy (app, keychain, store, identity, strategy, key) {
       if (strategy === 'none') {
-        secretKey = 'none'
+        app.saveToInMemoryKeychain(keychain, identity, 'none')
+        app.saveToInStoreKeychain(keychain, store, identity, 'none')
+        identity.services.local.strategy = strategy
+        identity.save()
+      } else if (strategy === 'ask') {
+        const newKey = prompt('Choose an encryption password')
+
+        if (newKey === null) {
+          this.strategy = this.strategy = this.app.identity.services.local.strategy
+        } else {
+          app.saveToInMemoryKeychain(keychain, identity, newKey)
+          app.saveToInStoreKeychain(keychain, store, identity, 'ask')
+          identity.services.local.strategy = strategy
+          identity.save()
+        }
+      } else {
+        app.saveToInMemoryKeychain(keychain, identity, key)
+        app.saveToInStoreKeychain(keychain, store, identity, key)
+        identity.services.local.strategy = strategy
+        identity.save()
       }
-
-      identity.services.local.strategy = strategy
-
-      app.saveKey(keychain, store, identity, secretKey)
     },
 
     reset (identity) {

@@ -1,5 +1,3 @@
 import uniqId from 'uniq-id'
 
-export default function () {
-  return uniqId.generateUUID('xxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxy', 32)()
-}
+export default uniqId.generateUUID('xxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxy', 32)

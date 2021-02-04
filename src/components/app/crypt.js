@@ -35,7 +35,24 @@ export default {
   de (keychain, store, identity, str) {
     var key = keychain[identity.id]
 
-    if (str && typeof str !== 'string') {
+    if (typeof str === 'object') {
+      return str
+    } else if (key === 'ask') {
+      key = prompt('What is your secret key?')
+
+      if (key === null) {
+        return false
+      }
+
+      try { str = JSON.parse(aes256.decrypt(key, str)) } catch (e) {}
+
+
+      if (typeof str !== 'object') {
+        return false
+      }
+
+      identitiesKeychain.saveToInMemoryKeychain(keychain, identity, key)
+
       return str
     } else if (typeof key === 'undefined') {
       try {

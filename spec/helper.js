@@ -8,25 +8,25 @@ import App from '@/components/app/component.vue'
 import store from '@/store'
 import addIcons from '@/add-icons.js'
 
-const storeIdentity = (identity) => {
+const storeIdentity = (identity, id, key) => {
   return new Promise(async (resolve) => {
-    setIdentityDefaults(generateId)(identity)
-
-    identity.feeds = identity.feeds || []
-
-    await store.setItem(`key-${identity.id}`, '')
-    await store.setItem(identity.id, identity)
+    await store.setItem(`key-${id}`, key || '')
+    await store.setItem(id, identity)
 
     resolve(identity)
   })
 }
 
-const mountApp = (identity) => {
+const mountApp = (identity, id, key) => {
   return new Promise(async (resolve) => {
     await store.clear()
 
-    if (identity) {
-      await storeIdentity(identity)
+    if (typeof identity === 'string') {
+      await storeIdentity(identity, id, key)
+    } else if (typeof identity === 'object') {
+      setIdentityDefaults(identity)
+      identity.feeds = identity.feeds || []
+      await storeIdentity(identity, identity.id)
     }
 
     const router = createRouter({

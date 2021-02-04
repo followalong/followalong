@@ -16,11 +16,6 @@ const decryptIdentity = function (keychain, store, identity) {
 
       state = crypt.de(keychain, store, identity, state)
 
-      if (identity.services.local.strategy === 'ask') {
-        delete keychain[identity.id]
-        state = crypt.de(keychain, store, identity, state)
-      }
-
       if (!state) {
         if (confirm('Unauthorized. Would you like to refresh this page?')) {
           window.location.reload()
@@ -69,22 +64,25 @@ const getAskSecretKey = (keychain, store, identity, reset) => {
   return keychain[identity.id]
 }
 
-const saveKey = (keychain, store, identity, key, ignoreSave) => {
-  if (identity.services.local.strategy === 'ask') {
-    delete keychain[identity.id]
-    key = undefined
-  }
+const saveToInMemoryKeychain = (keychain, identity, key) => {
+  keychain[identity.id] = key
+}
 
+const saveToInStoreKeychain = (keychain, store, identity, key) => {
+  if (key) {
+    return store.setItem('key-' + identity.id, key)
+  } else {
+    return store.removeItem('key-' + identity.id)
+  }
+}
+
+const saveKey = (keychain, store, identity, key, ignoreSave) => {
   if (identity.services.local.strategy === 'store' && !key) {
     key = utils.generateId()
-    keychain[identity.id] = key
   }
 
-  if (key) {
-    store.setItem('key-' + identity.id, key)
-  } else {
-    store.removeItem('key-' + identity.id)
-  }
+  saveToInMemoryKeychain(keychain, identity, key)
+  saveToInStoreKeychain(keychain, store, identity, key)
 
   if (!ignoreSave) {
     identity.save()
@@ -94,5 +92,7 @@ const saveKey = (keychain, store, identity, key, ignoreSave) => {
 export default {
   decryptIdentity,
   getAskSecretKey,
+  saveToInMemoryKeychain,
+  saveToInStoreKeychain,
   saveKey
 }

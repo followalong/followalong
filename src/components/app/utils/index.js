@@ -31,7 +31,7 @@ export default {
   trimItems,
 
   feedFetcherDuration: feedFetcherDuration(HALF_HOUR),
-  setIdentityDefaults: setIdentityDefaults(generateId),
+  setIdentityDefaults,
 
   getAudioSrc: getSrc.audio,
   getVideoSrc: getSrc.video

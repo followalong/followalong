@@ -7,17 +7,17 @@ export default function (app) {
 
     app.store.keys().then((keys) => {
       async.eachParallel(keys || [], function (id, next) {
-        if (id.slice(0, 4) !== 'key-') {
-          identities.push({ id: id })
-          next()
-        } else {
+        if (id.slice(0, 4) === 'key-') {
           app.store.getItem(id, function (err, value) {
             keychain[id.slice(4)] = value
             next()
           })
+        } else {
+          identities.push({ id: id })
+          next()
         }
       }, function () {
-        resolve(identities, keychain)
+        resolve({ identities, keychain })
       })
     }).catch(reject)
   })

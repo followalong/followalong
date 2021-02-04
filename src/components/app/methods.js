@@ -21,6 +21,8 @@ var methods = {
   decryptIdentity: actionsForIdentitiesKeychain.decryptIdentity,
   getAskSecretKey: actionsForIdentitiesKeychain.getAskSecretKey,
   saveKey: actionsForIdentitiesKeychain.saveKey,
+  saveToInMemoryKeychain: actionsForIdentitiesKeychain.saveToInMemoryKeychain,
+  saveToInStoreKeychain: actionsForIdentitiesKeychain.saveToInStoreKeychain,
 
   setIdentity (app, identity, override) {
     identity = reactive(identity)
@@ -118,9 +120,11 @@ var methods = {
 
   setupApp (app) {
     return new Promise((resolve, reject) => {
-      utils.constructIdentities(app).then((identities, keychain) => {
-        if (identities && identities.length) {
-          identities.forEach((identity) => {
+      utils.constructIdentities(app).then((result) => {
+        app.keychain = result.keychain
+
+        if (result.identities && result.identities.length) {
+          result.identities.forEach((identity) => {
             app.addIdentity(app, identity)
           })
 
