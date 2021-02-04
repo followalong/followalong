@@ -1,6 +1,6 @@
 import { mountApp, buildIdentityWithFeedAndItems } from '../../../spec/helper.js'
 
-describe('Use Case: Save item for later', () => {
+describe('Use Case: Save for later', () => {
   describe('from the home page', () => {
     it('can be marked as read', async () => {
       const expectedTitle = 'An Article'
