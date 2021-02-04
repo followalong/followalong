@@ -16,31 +16,28 @@ export default {
   de (keychain, store, identity, str) {
     var key = keychain.getKey(identity.id)
 
-    if (typeof str === 'object') {
-      return str
-    } else if (key === 'ask') {
-      key = prompt('What is your secret key?')
+    try {
+      if (typeof str === 'object') {
+        return str
+      } else if (key === 'none' || str[0] === '{') {
+        return JSON.parse(str)
+      } else if (key === 'ask') {
+        key = prompt('What is your secret key?')
 
-      if (key === null) {
-        return false
-      }
+        if (key === null) {
+          return false
+        }
 
-      try {
         str = JSON.parse(aes256.decrypt(key, str))
+
         identitiesKeychain.saveToInMemoryKeychain(keychain, identity, key)
-      } catch (e) { }
-    } else if (key) {
-      try {
-        str = JSON.parse(aes256.decrypt(key, str))
-      } catch (e) { }
-    }
 
-    try { str = JSON.parse(str) } catch (e) { }
-
-    if (typeof str !== 'object') {
+        return str
+      } else if (key) {
+        return JSON.parse(aes256.decrypt(key, str))
+      }
+    } catch (e) {
       return false
     }
-
-    return str
   }
 }

@@ -19,11 +19,11 @@ const decryptIdentity = function (keychain, store, identity) {
       if (!state) {
         if (confirm('Unauthorized. Would you like to refresh this page?')) {
           window.location.reload()
+          return reject(new Error('Unauthorized'))
         } else {
           document.body.innerHTML = ''
+          return reject(new Error('Unauthorized'))
         }
-
-        return resolve()
       }
 
       utils.copyAttrs(state, identity, ['name', 'services', 'hints'])
@@ -46,11 +46,7 @@ const saveToInMemoryKeychain = (keychain, identity, key) => {
 }
 
 const saveToInStoreKeychain = (keychain, store, identity, key) => {
-  if (key) {
-    return keychain.saveKeyInStore(identity.id, key)
-  } else {
-    return keychain.removeKey(identity.id)
-  }
+  return keychain.saveKeyInStore(identity.id, key)
 }
 
 const saveKey = (keychain, store, identity, key, ignoreSave) => {
