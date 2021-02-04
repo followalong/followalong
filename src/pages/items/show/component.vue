@@ -62,7 +62,7 @@
           href="javascript:;"
           :class="'button' + (item.isSaved ? '' : ' button-gray')"
           :aria-label="'Save for later: ' + item.title"
-          @click="useCases.saveItemForLater(item)"
+          @click="useCases.saveForLater(item)"
         >
           Save<span v-if="item.isSaved">d</span>
         </a>
@@ -73,7 +73,7 @@
           href="javascript:;"
           class="button button-gray"
           :aria-label="'Mark as read: ' + item.title"
-          @click="useCases.markItemAsRead(item)"
+          @click="useCases.markAsRead(item)"
         >
           Mark As <span v-if="item.isRead">Unread</span><span v-else>Read</span>
         </a>
@@ -110,7 +110,7 @@ export default {
       var _ = this
 
       if (_.item) {
-        _.useCases.markItemAsRead(_.item, true)
+        _.useCases.markAsRead(_.item, true)
       }
     }
   },
@@ -118,7 +118,7 @@ export default {
     var _ = this
 
     if (_.item) {
-      _.useCases.markItemAsRead(_.item, true)
+      _.useCases.markAsRead(_.item, true)
     }
   }
 }

@@ -11,7 +11,7 @@
       href="javascript:;"
       class="check"
       :aria-label="'Mark as read: ' + item.title"
-      @click="useCases.markItemAsRead(item)"
+      @click="useCases.markAsRead(item)"
     >&check;</a>
 
     <h3>
@@ -71,7 +71,7 @@
         <a
           href="javascript:;"
           :aria-label="'Save for later: ' + item.title"
-          @click="useCases.saveItemForLater(item)"
+          @click="useCases.saveForLater(item)"
         >
           <font-awesome-icon
             icon="save"
@@ -82,7 +82,7 @@
         <a
           :href="item.link"
           target="_blank"
-          @click="useCases.markItemAsRead(item, true)"
+          @click="useCases.markAsRead(item, true)"
         >
           <font-awesome-icon icon="link" />
         </a>
