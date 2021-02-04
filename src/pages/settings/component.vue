@@ -81,7 +81,8 @@
           v-if="app.identity.services.local.strategy === 'ask'"
           href="javascript:;"
           class="hint"
-          @click="app.getAskSecretKey(app.keychain, app.store, app.identity, true)"
+          aria-label="Reset secret key"
+          @click="saveEncryptionStrategy(app, app.keychain, app.store, app.identity, 'ask')"
         >
           Reset Secret Key
         </a>
@@ -218,7 +219,7 @@ export default {
         identity.services.local.strategy = strategy
         identity.save()
       } else if (strategy === 'ask') {
-        const newKey = prompt('Choose an encryption password')
+        const newKey = prompt('Choose a password')
 
         if (newKey === null) {
           this.strategy = this.strategy = this.app.identity.services.local.strategy
@@ -238,11 +239,19 @@ export default {
 
         identity.services.local.strategy = strategy
         identity.save()
-      } else {
-        app.saveToInMemoryKeychain(keychain, identity, key)
-        app.saveToInStoreKeychain(keychain, store, identity, key)
-        identity.services.local.strategy = strategy
-        identity.save()
+      } else if (strategy === 'store') {
+        const newKey = prompt('Choose a password')
+
+        if (newKey === null) {
+          this.strategy = this.strategy = this.app.identity.services.local.strategy
+        } else {
+          identity.services.local.strategy = strategy
+
+          app.saveToInMemoryKeychain(keychain, identity, newKey)
+          app.saveToInStoreKeychain(keychain, store, identity, newKey)
+
+          identity.save()
+        }
       }
     },
 

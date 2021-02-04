@@ -10,7 +10,10 @@ import addIcons from '@/add-icons.js'
 
 const storeIdentity = (identity, id, key) => {
   return new Promise(async (resolve) => {
-    await store.setItem(`key-${id}`, key || '')
+    if (key) {
+      await store.setItem(`key-${id}`, key)
+    }
+
     await store.setItem(id, identity)
 
     resolve(identity)
