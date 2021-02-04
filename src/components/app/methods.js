@@ -36,9 +36,15 @@ var methods = {
 
     return new Promise((resolve, reject) => {
       app.decryptIdentity(app.keychain, app.store, identity).then(async () => {
-        identity.saveLocal = (done) => {
+        identity.saveLocal = () => {
           return new Promise((resolve) => {
             utils.trimItems(identity)
+
+            if (identity.services.local.strategy === 'rotate') {
+              const key = utils.generateId()
+              actionsForIdentitiesKeychain.saveToInMemoryKeychain(app.keychain, identity, key)
+              actionsForIdentitiesKeychain.saveToInStoreKeychain(app.keychain, app.store, identity, key)
+            }
 
             app.store.setItem(
               identity.id,
@@ -49,10 +55,6 @@ var methods = {
                 identity.toLocal()
               )
             )
-
-            if (typeof done === 'function') {
-              done()
-            }
 
             resolve()
           })

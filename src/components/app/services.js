@@ -84,7 +84,7 @@ function s3Sync (identity, data, done) {
       Bucket: _.data.bucket,
       Key: key
     }, function (err) {
-      identity.saveLocal(() => {
+      identity.saveLocal().then(() => {
         done(err, err ? undefined : data.identity)
       })
     })

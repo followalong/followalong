@@ -163,6 +163,7 @@
 import { Base64 } from 'js-base64'
 import copy from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
+import generateId from '@/components/app/utils/generate-id.js'
 
 export default {
   props: ['app'],
@@ -213,6 +214,7 @@ export default {
       if (strategy === 'none') {
         app.saveToInMemoryKeychain(keychain, identity, 'none')
         app.saveToInStoreKeychain(keychain, store, identity, 'none')
+
         identity.services.local.strategy = strategy
         identity.save()
       } else if (strategy === 'ask') {
@@ -221,11 +223,21 @@ export default {
         if (newKey === null) {
           this.strategy = this.strategy = this.app.identity.services.local.strategy
         } else {
+          identity.services.local.strategy = strategy
+
           app.saveToInMemoryKeychain(keychain, identity, newKey)
           app.saveToInStoreKeychain(keychain, store, identity, 'ask')
-          identity.services.local.strategy = strategy
+
           identity.save()
         }
+      } else if (strategy === 'rotate') {
+        const rotateKey = generateId()
+
+        app.saveToInMemoryKeychain(keychain, identity, rotateKey)
+        app.saveToInStoreKeychain(keychain, store, identity, rotateKey)
+
+        identity.services.local.strategy = strategy
+        identity.save()
       } else {
         app.saveToInMemoryKeychain(keychain, identity, key)
         app.saveToInStoreKeychain(keychain, store, identity, key)

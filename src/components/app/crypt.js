@@ -4,32 +4,14 @@ import identitiesKeychain from '../../components/app/actions/identities-keychain
 
 export default {
   en (keychain, store, identity, json) {
-    var key = keychain[identity.id]
-    var encrypted = json
+    const key = keychain[identity.id]
+    const str = typeof json === 'string' ? json : JSON.stringify(json)
 
-    encrypted = typeof json === 'string' ? json : JSON.stringify(json)
-
-    if (identity.services.local.strategy === 'none') {
-      return encrypted
-    } else if (identity.services.local.strategy === 'rotate') {
-      key = utils.generateId()
-      identitiesKeychain.saveKey(keychain, store, identity, key, true)
-    } else if (identity.services.local.strategy === 'ask') {
-      key = identitiesKeychain.getAskSecretKey(keychain, store, identity, false)
-    } else if (identity.services.local.strategy === 'store') {
-      if (typeof keychain[identity.id] === 'undefined') {
-        key = utils.generateId()
-        identitiesKeychain.saveKey(keychain, store, identity, key, true)
-      }
+    if (key === 'none' || !key) {
+      return str
     }
 
-    if (!key || !key.length) {
-      return encrypted
-    }
-
-    encrypted = aes256.encrypt(key, encrypted)
-
-    return encrypted
+    return aes256.encrypt(key, str)
   },
 
   de (keychain, store, identity, str) {
@@ -44,45 +26,24 @@ export default {
         return false
       }
 
-      try { str = JSON.parse(aes256.decrypt(key, str)) } catch (e) {}
-
-
-      if (typeof str !== 'object') {
-        return false
-      }
-
-      identitiesKeychain.saveToInMemoryKeychain(keychain, identity, key)
-
-      return str
-    } else if (typeof key === 'undefined') {
       try {
-        str = JSON.parse(str)
+        str = JSON.parse(aes256.decrypt(key, str))
+        identitiesKeychain.saveToInMemoryKeychain(keychain, identity, key)
       } catch (e) {
-        try {
-          key = identitiesKeychain.getAskSecretKey(keychain, store, identity)
-
-          if (key !== null) {
-            str = JSON.parse(aes256.decrypt(key, str))
-
-            if (typeof str === 'object' && str.services.local.strategy === 'store') {
-              identitiesKeychain.saveKey(keychain, store, identity, key, true)
-              keychain[identity.id] = key
-            }
-          }
-        } catch (e) {
-          return false
-        }
+        str = JSON.parse(str)
       }
     } else {
       try {
         str = JSON.parse(aes256.decrypt(key, str))
-      } catch (e) { }
+      } catch (e) {
+        str = JSON.parse(str)
+      }
     }
 
-    if (typeof str === 'object') {
-      return str
-    } else {
+    if (typeof str !== 'object') {
       return false
     }
+
+    return str
   }
 }
