@@ -70,6 +70,7 @@
       <p class="hint float-right">
         <a
           href="javascript:;"
+          :aria-label="'Save for later: ' + item.title"
           @click="useCases.saveItemForLater(item)"
         >
           <font-awesome-icon

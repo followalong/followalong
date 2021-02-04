@@ -61,6 +61,7 @@
         <a
           href="javascript:;"
           :class="'button' + (item.isSaved ? '' : ' button-gray')"
+          :aria-label="'Save for later: ' + item.title"
           @click="useCases.saveItemForLater(item)"
         >
           Save<span v-if="item.isSaved">d</span>
