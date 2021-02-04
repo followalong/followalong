@@ -1,5 +1,5 @@
 import crypt from '../crypt'
-import utils from '../utils'
+import utils from '@/components/app/utils/index.js'
 import identitiesActions from '../actions/identities.js'
 
 const decryptIdentity = function (keychain, store, identity) {
@@ -41,38 +41,15 @@ const decryptIdentity = function (keychain, store, identity) {
   })
 }
 
-const getAskSecretKey = (keychain, store, identity, reset) => {
-  if (reset) {
-    delete keychain[identity.id]
-  }
-
-  if (!keychain[identity.id]) {
-    keychain[identity.id] = prompt('What is your secret key?')
-
-    if (keychain[identity.id] === null && reset) {
-      identity.services.local.strategy = 'rotate'
-      var key = utils.generateId()
-      saveKey(keychain, store, identity, key, true)
-      return key
-    }
-  }
-
-  if (reset) {
-    identity.save()
-  }
-
-  return keychain[identity.id]
-}
-
 const saveToInMemoryKeychain = (keychain, identity, key) => {
-  keychain[identity.id] = key
+  keychain.saveKeyInMemory(identity.id, key)
 }
 
 const saveToInStoreKeychain = (keychain, store, identity, key) => {
   if (key) {
-    return store.setItem('key-' + identity.id, key)
+    return keychain.saveKeyInStore(identity.id, key)
   } else {
-    return store.removeItem('key-' + identity.id)
+    return keychain.removeKey(identity.id)
   }
 }
 
@@ -91,7 +68,6 @@ const saveKey = (keychain, store, identity, key, ignoreSave) => {
 
 export default {
   decryptIdentity,
-  getAskSecretKey,
   saveToInMemoryKeychain,
   saveToInStoreKeychain,
   saveKey

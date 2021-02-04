@@ -1,10 +1,9 @@
 import aes256 from 'aes256'
-import utils from './utils'
 import identitiesKeychain from '../../components/app/actions/identities-keychain.js'
 
 export default {
   en (keychain, store, identity, json) {
-    const key = keychain[identity.id]
+    const key = keychain.getKey(identity.id)
     const str = typeof json === 'string' ? json : JSON.stringify(json)
 
     if (key === 'none' || !key) {
@@ -15,7 +14,7 @@ export default {
   },
 
   de (keychain, store, identity, str) {
-    var key = keychain[identity.id]
+    var key = keychain.getKey(identity.id)
 
     if (typeof str === 'object') {
       return str
@@ -29,16 +28,14 @@ export default {
       try {
         str = JSON.parse(aes256.decrypt(key, str))
         identitiesKeychain.saveToInMemoryKeychain(keychain, identity, key)
-      } catch (e) {
-        str = JSON.parse(str)
-      }
-    } else {
+      } catch (e) { }
+    } else if (key) {
       try {
         str = JSON.parse(aes256.decrypt(key, str))
-      } catch (e) {
-        str = JSON.parse(str)
-      }
+      } catch (e) { }
     }
+
+    try { str = JSON.parse(str) } catch (e) { }
 
     if (typeof str !== 'object') {
       return false

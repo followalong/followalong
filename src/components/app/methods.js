@@ -19,7 +19,6 @@ var methods = {
   addItemsToIdentity: actionsForIdentities.addItemsToIdentity,
 
   decryptIdentity: actionsForIdentitiesKeychain.decryptIdentity,
-  getAskSecretKey: actionsForIdentitiesKeychain.getAskSecretKey,
   saveKey: actionsForIdentitiesKeychain.saveKey,
   saveToInMemoryKeychain: actionsForIdentitiesKeychain.saveToInMemoryKeychain,
   saveToInStoreKeychain: actionsForIdentitiesKeychain.saveToInStoreKeychain,
@@ -122,11 +121,9 @@ var methods = {
 
   setupApp (app) {
     return new Promise((resolve, reject) => {
-      utils.constructIdentities(app).then((result) => {
-        app.keychain = result.keychain
-
-        if (result.identities && result.identities.length) {
-          result.identities.forEach((identity) => {
+      utils.constructIdentities(app).then((identities) => {
+        if (identities && identities.length) {
+          identities.forEach((identity) => {
             app.addIdentity(app, identity)
           })
 

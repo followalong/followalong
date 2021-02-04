@@ -7,14 +7,13 @@ import generateId from '@/components/app/utils/generate-id.js'
 import App from '@/components/app/component.vue'
 import store from '@/store'
 import addIcons from '@/add-icons.js'
+import keychain from '@/keychain'
 
-const storeIdentity = (identity, id, key) => {
+const storeIdentity = (keychain, identity, id, key) => {
   return new Promise(async (resolve) => {
-    if (key) {
-      await store.setItem(`key-${id}`, key)
-    }
+    await keychain.saveKey(id, key || 'none')
 
-    await store.setItem(id, identity)
+    await store.setItem(id, typeof identity === 'object' ? JSON.stringify(identity) : identity)
 
     resolve(identity)
   })
@@ -23,13 +22,14 @@ const storeIdentity = (identity, id, key) => {
 const mountApp = (identity, id, key) => {
   return new Promise(async (resolve) => {
     await store.clear()
+    await keychain.clear()
 
     if (typeof identity === 'string') {
-      await storeIdentity(identity, id, key)
+      await storeIdentity(keychain, identity, id, key)
     } else if (typeof identity === 'object') {
       setIdentityDefaults(identity)
       identity.feeds = identity.feeds || []
-      await storeIdentity(identity, identity.id)
+      await storeIdentity(keychain, identity, identity.id, key)
     }
 
     const router = createRouter({
@@ -54,7 +54,8 @@ const mountApp = (identity, id, key) => {
       return router.push(path)
     }
 
-    await nextTick()
+    // await nextTick()
+    await flushPromises()
 
     resolve(app)
   })

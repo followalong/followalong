@@ -1,6 +1,7 @@
 import { mountApp } from '../../../spec/helper.js'
 import store from '@/store'
 import crypt from '@/components/app/crypt.js'
+import keychain from '@/keychain.js'
 
 const visitSettings = async (identity, identityId, identityKey) => {
   const app = await mountApp(identity, identityId, identityKey)
@@ -56,24 +57,24 @@ describe('Use Case: Change encryption strategy', () => {
     })
 
     it('saves the key in memory', async () => {
-      const expectedId = '567'
+      const expectedId = '78654'
       const expectedKey = '456789'
       const app = await visitSettings({ id: expectedId, services: { local: { strategy: 'foo' } } })
       global.prompt = jest.fn(() => expectedKey)
 
       await app.find('[aria-label="Select data encryption strategy"]').setValue('ask')
 
-      expect(app.vm.keychain[expectedId]).toEqual(expectedKey)
+      expect(keychain.getKey(expectedId)).toEqual(expectedKey)
     })
 
     it('does not save the key in store', async () => {
-      const expectedId = '567'
+      const expectedId = '8371'
       const app = await visitSettings({ id: expectedId, services: { local: { strategy: 'foo' } } })
       global.prompt = jest.fn(() => '8594')
 
       await app.find('[aria-label="Select data encryption strategy"]').setValue('ask')
 
-      expect(await store.getItem(`key-${expectedId}`)).toEqual('ask')
+      expect(await keychain.getKeyInStore(expectedId)).toEqual('ask')
     })
 
     it('can reset the key', async () => {
@@ -86,15 +87,15 @@ describe('Use Case: Change encryption strategy', () => {
       await app.find('[aria-label="Reset secret key"]').trigger('click')
 
       expect(global.prompt).toHaveBeenCalled()
-      expect(app.vm.keychain[expectedId]).toEqual(expectedKey)
+      expect(keychain.getKey(expectedId)).toEqual(expectedKey)
     })
 
     it('can restore the data', async () => {
       const expectedName = 'Bob'
-      const expectedId = '123'
+      const expectedId = '6889549'
       const expectedKey = '3049589'
       const identity = { id: expectedId, name: expectedName, feeds: [], items: [], hints: [], services: { local: { strategy: 'ask' } } }
-      const encryptedIdentity = crypt.en({ 123: expectedKey }, store, identity, identity)
+      const encryptedIdentity = crypt.en(keychain, store, identity, identity)
       global.prompt = jest.fn(() => expectedKey)
 
       const app = await visitSettings(encryptedIdentity, expectedId, 'ask')
@@ -120,7 +121,7 @@ describe('Use Case: Change encryption strategy', () => {
 
       await app.find('[aria-label="Select data encryption strategy"]').setValue('rotate')
 
-      expect(app.vm.keychain[app.vm.identity.id].length).toBeGreaterThan(10)
+      expect(keychain.getKey(app.vm.identity.id).length).toBeGreaterThan(10)
     })
 
     it('saves the new key in storage', async () => {
@@ -128,7 +129,7 @@ describe('Use Case: Change encryption strategy', () => {
 
       await app.find('[aria-label="Select data encryption strategy"]').setValue('rotate')
 
-      expect(await store.getItem(`key-${app.vm.identity.id}`)).toEqual(app.vm.keychain[app.vm.identity.id])
+      expect(await keychain.getKey(app.vm.identity.id)).toEqual(keychain.getKey(app.vm.identity.id))
     })
 
     it('uses the key to encrypt the stored the identity', async () => {
@@ -136,18 +137,19 @@ describe('Use Case: Change encryption strategy', () => {
 
       await app.find('[aria-label="Select data encryption strategy"]').setValue('rotate')
 
-      const encryptedIdentity = crypt.en(app.vm.keychain, store, app.vm.identity, app.vm.identity.toLocal())
-      const decryptedIdentity = crypt.de(app.vm.keychain, store, app.vm.identity, encryptedIdentity)
-      const decryptedStoredIdentity = crypt.de(app.vm.keychain, store, app.vm.identity, await store.getItem(app.vm.identity.id))
+      const encryptedIdentity = crypt.en(keychain, store, app.vm.identity, app.vm.identity.toLocal())
+      const decryptedIdentity = crypt.de(keychain, store, app.vm.identity, encryptedIdentity)
+      const decryptedStoredIdentity = crypt.de(keychain, store, app.vm.identity, await store.getItem(app.vm.identity.id))
       expect(decryptedStoredIdentity).toEqual(decryptedIdentity)
     })
 
     it('can restore the data', async () => {
       const expectedName = 'Bob'
-      const expectedId = '123'
+      const expectedId = '78678'
       const expectedKey = '89875'
       const identity = { id: expectedId, name: expectedName, feeds: [], items: [], hints: [], services: { local: { strategy: 'rotate' } } }
-      const encryptedIdentity = crypt.en({ 123: expectedKey }, store, identity, identity)
+      await keychain.saveKey(expectedId, expectedKey)
+      const encryptedIdentity = crypt.en(keychain, store, identity, identity)
       global.prompt = jest.fn(() => expectedKey)
 
       const app = await visitSettings(encryptedIdentity, expectedId, expectedKey)
@@ -181,33 +183,34 @@ describe('Use Case: Change encryption strategy', () => {
     })
 
     it('saves the key in memory', async () => {
-      const expectedId = '567'
+      const expectedId = '7664'
       const expectedKey = '456789'
       const app = await visitSettings({ id: expectedId, services: { local: { strategy: 'foo' } } })
       global.prompt = jest.fn(() => expectedKey)
 
       await app.find('[aria-label="Select data encryption strategy"]').setValue('store')
 
-      expect(app.vm.keychain[expectedId]).toEqual(expectedKey)
+      expect(keychain.getKey(expectedId)).toEqual(expectedKey)
     })
 
     it('saves the key in store', async () => {
-      const expectedId = '567'
+      const expectedId = '657453'
       const expectedKey = '985987'
       const app = await visitSettings({ id: expectedId, services: { local: { strategy: 'foo' } } })
       global.prompt = jest.fn(() => expectedKey)
 
       await app.find('[aria-label="Select data encryption strategy"]').setValue('store')
 
-      expect(await store.getItem(`key-${expectedId}`)).toEqual(expectedKey)
+      expect(await keychain.getKey(expectedId)).toEqual(expectedKey)
     })
 
     it('can restore the data', async () => {
       const expectedName = 'Bob'
-      const expectedId = '123'
+      const expectedId = '57654'
       const expectedKey = '3049589'
       const identity = { id: expectedId, name: expectedName, feeds: [], items: [], hints: [], services: { local: { strategy: 'ask' } } }
-      const encryptedIdentity = crypt.en({ 123: expectedKey }, store, identity, identity)
+      await keychain.saveKey(expectedId, expectedKey)
+      const encryptedIdentity = crypt.en(keychain, store, identity, identity)
       global.prompt = jest.fn(() => expectedKey)
 
       const app = await visitSettings(encryptedIdentity, expectedId, expectedKey)
@@ -229,12 +232,12 @@ describe('Use Case: Change encryption strategy', () => {
     })
 
     it('saves the key to the keychain', async () => {
-      const expectedId = '123'
+      const expectedId = '67576'
       const app = await visitSettings({ id: expectedId, services: { local: { strategy: 'foo' } } })
 
       app.find('[aria-label="Select data encryption strategy"]').setValue('none')
 
-      expect(await store.getItem(`key-${expectedId}`)).toEqual('none')
+      expect(await keychain.getKey(`${expectedId}`)).toEqual('none')
     })
 
     it('saves data unencrypted', async () => {
@@ -252,7 +255,7 @@ describe('Use Case: Change encryption strategy', () => {
     })
 
     it('can restore the data', async () => {
-      const expectedIdentity = { id: 'foo', name: 'Bar', services: { local: { strategy: 'none' } } }
+      const expectedIdentity = { id: '787435', name: 'Bar', services: { local: { strategy: 'none' } } }
       const app = await visitSettings(expectedIdentity)
 
       expect(app.vm.identity.id).toEqual(expectedIdentity.id)

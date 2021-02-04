@@ -93,12 +93,12 @@
           </label>
           <input
             id="secretKey"
-            v-model="app.keychain[app.identity.id]"
+            v-model="app.keychain.keys[app.identity.id]"
             type="password"
-            @blur="app.saveKey(app.keychain, app.store, app.identity, app.keychain[app.identity.id])"
+            @blur="app.saveKey(app.keychain, app.store, app.identity, app.keychain.keys[app.identity.id])"
           >
           <span
-            v-if="!app.keychain[app.identity.id] || !app.keychain[app.identity.id].length"
+            v-if="!app.keychain.keys[app.identity.id] || !app.keychain.keys[app.identity.id].length"
             class="notice red"
           >Your local data is NOT encrypted because you have not supplied a secret key!</span>
         </div>
