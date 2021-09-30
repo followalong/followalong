@@ -182,7 +182,7 @@ export default {
       if (!identity || !identity.items) return 'N/A'
 
       let unit = 'b'
-      let size = JSON.stringify(this.app['to' + type](identity)).length
+      let size = JSON.stringify(utils.mappers.IDENTITY_LOCAL(identity)).length
 
       if (size > 1000000) {
         size = size / 1000000
