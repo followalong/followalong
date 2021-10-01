@@ -1,13 +1,13 @@
 import { mount, flushPromises } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
-import { routes } from '@/router'
-import App from '@/components/app/component.vue'
+import { routes } from '../src/router'
+import App from '../src/components/app/component.vue'
 
 const mountApp = () => {
   return new Promise(async (resolve) => {
     const router = createRouter({
       history: createMemoryHistory(),
-      routes: routes
+      routes
     })
 
     router.push('/')
@@ -29,6 +29,5 @@ const mountApp = () => {
 
 export {
   flushPromises,
-  mountApp,
-  nextTick
+  mountApp
 }
