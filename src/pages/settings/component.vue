@@ -61,7 +61,7 @@
           id="secretStrategy"
           v-model="strategy"
           aria-label="Select data encryption strategy"
-          @change="useCases.changeEncryption(app, app.keychain, app.store, app.identity, strategy, secretKey, revert())"
+          @change="changeEncryption(app, app.keychain, app.store, app.identity, strategy, secretKey, revert())"
         >
           <option value="ask">
             Ask Every Page Load (best, most secure, slightly annoying)
@@ -82,7 +82,7 @@
           href="javascript:;"
           class="hint"
           aria-label="Reset secret key"
-          @click="useCases.changeEncryption(app, app.keychain, app.store, app.identity, 'ask', revert())"
+          @click="changeEncryption(app, app.keychain, app.store, app.identity, 'ask', revert())"
         >
           Reset Secret Key
         </a>
@@ -165,7 +165,7 @@ import { Base64 } from 'js-base64'
 import copy from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
 import generateId from '@/components/app/utils/generate-id.js'
-import useCases from '@/use-cases/index.js'
+import changeEncryption from '@/commands/identities/change-encryption.js'
 
 export default {
   props: ['app'],
@@ -174,7 +174,7 @@ export default {
       secretKey: undefined,
       strategy: undefined,
       hasStorageSupport: this.app.store.INDEXEDDB || this.app.store.LOCALSTORAGE,
-      useCases
+      changeEncryption
     }
   },
   mounted () {
@@ -213,7 +213,7 @@ export default {
       saveAs(blob, filename)
     },
 
-    revert() {
+    revert () {
       return () => {
         this.strategy = this.app.identity.services.local.strategy
       }

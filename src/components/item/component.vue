@@ -11,7 +11,7 @@
       href="javascript:;"
       class="check"
       :aria-label="'Mark as read: ' + item.title"
-      @click="useCases.markAsRead(item)"
+      @click="markAsRead(item)"
     >&check;</a>
 
     <h3>
@@ -71,7 +71,7 @@
         <a
           href="javascript:;"
           :aria-label="'Save for later: ' + item.title"
-          @click="useCases.saveForLater(item)"
+          @click="saveForLater(item)"
         >
           <font-awesome-icon
             icon="save"
@@ -82,7 +82,7 @@
         <a
           :href="item.link"
           target="_blank"
-          @click="useCases.markAsRead(item, true)"
+          @click="markAsRead(item, true)"
         >
           <font-awesome-icon icon="link" />
         </a>
@@ -96,7 +96,8 @@
 </template>
 
 <script>
-import useCases from '@/use-cases/index.js'
+import markAsRead from '@/commands/items/mark-as-read.js'
+import saveForLater from '@/commands/items/save-for-later.js'
 import truncate from 'trunc-html'
 import MediaPlayer from '@/components/media-player/component.vue'
 
@@ -114,7 +115,8 @@ export default {
   props: ['app', 'item', 'showContent'],
   data () {
     return {
-      useCases: useCases,
+      markAsRead,
+      saveForLater,
       characterLimit: 450,
       isExpanded: false
     }

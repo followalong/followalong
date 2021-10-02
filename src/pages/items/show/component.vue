@@ -62,7 +62,7 @@
           href="javascript:;"
           :class="'button' + (item.isSaved ? '' : ' button-gray')"
           :aria-label="'Save for later: ' + item.title"
-          @click="useCases.saveForLater(item)"
+          @click="saveForLater(item)"
         >
           Save<span v-if="item.isSaved">d</span>
         </a>
@@ -73,7 +73,7 @@
           href="javascript:;"
           class="button button-gray"
           :aria-label="'Mark as read: ' + item.title"
-          @click="useCases.markAsRead(item)"
+          @click="markAsRead(item)"
         >
           Mark As <span v-if="item.isRead">Unread</span><span v-else>Read</span>
         </a>
@@ -83,7 +83,8 @@
 </template>
 
 <script>
-import useCases from '@/use-cases/index.js'
+import markAsRead from '@/commands/items/mark-as-read.js'
+import saveForLater from '@/commands/items/save-for-later.js'
 import MediaPlayer from '@/components/media-player/component.vue'
 
 export default {
@@ -93,7 +94,8 @@ export default {
   props: ['app'],
   data () {
     return {
-      useCases
+      markAsRead,
+      saveForLater
     }
   },
   computed: {
@@ -110,7 +112,7 @@ export default {
       var _ = this
 
       if (_.item) {
-        _.useCases.markAsRead(_.item, true)
+        _.markAsRead(_.item, true)
       }
     }
   },
@@ -118,7 +120,7 @@ export default {
     var _ = this
 
     if (_.item) {
-      _.useCases.markAsRead(_.item, true)
+      _.markAsRead(_.item, true)
     }
   }
 }
