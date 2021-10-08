@@ -32,13 +32,11 @@
           </span>
         </router-link>
 
-        &mdash;
-
         <span
           v-if="item.pubDate"
           :title="item.pubDate"
           class="feed-name"
-        >{{ app.prettyDate(item.pubDate) }}</span>
+        >&mdash; {{ app.prettyDate(item.pubDate) }}</span>
       </h3>
 
       <div
