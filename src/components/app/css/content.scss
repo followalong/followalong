@@ -512,6 +512,8 @@
 }
 
 .description {
+    position: relative;
+
     textarea, blockquote {
         display: block;
         background: $light-gray;

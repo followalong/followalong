@@ -51,17 +51,17 @@
 
       <div v-if="hasContent">
         <div class="description">
-          <div v-if="!isExpanded && hasContent && item.content.length > characterLimit">
-            <div v-html="prepDescription(item, characterLimit, '...')" />
+          <div v-if="!isExpanded">
+            <div v-html="shortContent" />
             <button
-              class="button-gray"
+              class="button-gray button-small"
               @click="isExpanded = !isExpanded"
             >
               Read More
             </button>
           </div>
           <div
-            v-else-if="hasContent"
+            v-else
             v-html="app.blankifyLinks(item.content)"
           />
         </div>
@@ -96,15 +96,9 @@
 </template>
 
 <script>
-import truncate from 'trunc-html'
 import MediaPlayer from '@/components/media-player/component.vue'
 
-const ALLOWED_TAGS = [
-  'a', 'article', 'b', 'blockquote', 'br', 'caption', 'code', 'del', 'details', 'div', 'em',
-  'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'img', 'ins', 'kbd', 'li', 'main', 'ol',
-  'p', 'pre', 'section', 'span', 'strike', 'strong', 'sub', 'summary', 'sup', 'table',
-  'tbody', 'td', 'th', 'thead', 'tr', 'u', 'ul'
-]
+const WORD_LIMIT = 155
 
 export default {
   components: {
@@ -113,7 +107,6 @@ export default {
   props: ['app', 'item', 'showContent'],
   data () {
     return {
-      characterLimit: 450,
       isExpanded: false
     }
   },
@@ -123,23 +116,13 @@ export default {
     },
     feed () {
       return this.app.state.find('feeds', (f) => f.url === this.item.feedUrl)
-    }
-  },
-  methods: {
-    prepDescription (item, characterLimit, ellipsis) {
-      if (!this.hasContent) {
-        return ''
-      }
+    },
+    shortContent () {
+      const words = (this.item.summary || this.item.content).split(/\s+/)
+      const removeTags = (w) => w[0] !== '<'
+      const content = words.filter(removeTags).length > WORD_LIMIT ? `${words.slice(0, WORD_LIMIT).join(' ').trim()}...` : this.item.content
 
-      return this.app.blankifyLinks(truncate(
-        item.content,
-        characterLimit,
-        {
-          sanitizer: {
-            allowedTags: ALLOWED_TAGS
-          }
-        }
-      ).html)
+      return this.app.blankifyLinks(content)
     }
   }
 }

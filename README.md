@@ -12,4 +12,5 @@
 - Settings
 - Local Save
 - Remote Save
+- Specs
 - Remove legacy stuff

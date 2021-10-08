@@ -77,7 +77,7 @@
           <font-awesome-icon icon="database" />
           Feeds
           <span class="hint counter">
-            <span v-if="app.identityItems.length">({{ app.identityItems.length }})</span>
+            <span v-if="app.identityFeeds.length">({{ app.identityFeeds.length }})</span>
           </span>
         </router-link>
       </li>
