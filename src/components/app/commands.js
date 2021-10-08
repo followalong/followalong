@@ -150,6 +150,14 @@ class Commands {
     this.state.removeAll('feeds', this.queries.feedsForIdentity(identity))
     this.state.removeAll('items', this.queries.itemsForIdentity(identity))
   }
+
+  addIdentity (data, feeds) {
+    const identity = this.state.add('identities', [data])[0]
+
+    this.state.add('feeds', feeds || [], (f) => {
+      f.identityId = identity.id
+    })
+  }
 }
 
 export default Commands

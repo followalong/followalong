@@ -55,7 +55,18 @@
       </div>
 
       <ul class="items">
-        <li v-if="items.length === 0">
+        <li v-if="app.queries.isFetching(feed)">
+          <p>
+            <font-awesome-icon
+              v-if="app.queries.isFetching(feed)"
+              icon="spinner"
+              spin
+              class="i"
+            />
+            &nbsp; Loading...
+          </p>
+        </li>
+        <li v-else-if="items.length === 0">
           <h3>You're all caught up!</h3>
           <p>
             If you want to be able to see more "history", visit the <router-link

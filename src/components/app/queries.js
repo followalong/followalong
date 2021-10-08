@@ -141,6 +141,10 @@ class Queries {
   hintIsShown (identity, hint) {
     return (identity.hints || []).indexOf(hint) === -1
   }
+
+  findDefaultIdentity () {
+    return this.state.findAll('identities')[0]
+  }
 }
 
 export default Queries

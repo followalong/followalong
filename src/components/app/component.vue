@@ -73,40 +73,28 @@ export default {
       }
     }
 
-    return this.restoreIdentities().then(() => {
-      // this.commands.fetchAllFeeds(this.identity)
-    })
+    return this.restoreIdentities()
   },
   methods: {
     restoreIdentities () {
       return new Promise((resolve, reject) => {
         this.keychain.buildIdentities().then((identities) => {
-          identities.forEach((i) => this.addIdentity(i))
+          identities.forEach((i) => this.commands.addIdentity(i))
 
           if (!identities.length) {
-            this.addIdentity({ name: seedIdentity.name }, seedIdentity.feeds)
+            this.commands.addIdentity({ name: seedIdentity.name }, seedIdentity.feeds)
           }
 
-          this.setIdentity(this.state.findAll('identities')[0])
+          this.setIdentity(this.queries.findDefaultIdentity())
 
           resolve()
         }).catch(reject)
       })
     },
 
-    addIdentity (data, feeds) {
-      const identity = this.state.add('identities', [data])[0]
-      this.addFeeds(identity, feeds)
-    },
-
-    addFeeds (identity, feeds) {
-      this.state.add('feeds', feeds || [], (f) => {
-        f.identityId = identity.id
-      })
-    },
-
     setIdentity (identity) {
       this.identity = identity
+      // this.commands.fetchAllFeeds(identity)
     },
 
     toggleSidebar (forceHide) {

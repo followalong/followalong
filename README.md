@@ -8,8 +8,11 @@
 
 ## TODO
 
-- Services
+- Search
+- Specs
+- RSS Proxy
+- Search Proxy
 - Local Save
 - Remote Save
-- Specs
-- Remove legacy stuff
+- Scatter fetch all
+- Remove unused stuff
