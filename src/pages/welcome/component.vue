@@ -44,7 +44,7 @@
 
       <br><br><br><br><br>
 
-      <div class="first-loading">
+      <div class="faded-content first-loading">
         <router-link
           to="/"
           class="button button-large"

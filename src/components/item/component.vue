@@ -50,15 +50,19 @@
       />
 
       <div v-if="hasContent">
-        <div class="description">
-          <div v-if="!isExpanded">
+        <div :class="'description relativizer ' + (isExpanded ? 'expanded' : '')">
+          <div
+            v-if="!isExpanded"
+          >
             <div v-html="shortContent" />
-            <button
-              class="button-gray button-small"
-              @click="isExpanded = !isExpanded"
-            >
-              Read More
-            </button>
+            <div class="faded-content">
+              <button
+                class="button-gray button-large"
+                @click="isExpanded = !isExpanded"
+              >
+                Read More
+              </button>
+            </div>
           </div>
           <div
             v-else
@@ -98,7 +102,7 @@
 <script>
 import MediaPlayer from '@/components/media-player/component.vue'
 
-const WORD_LIMIT = 155
+const WORD_LIMIT = 125
 
 export default {
   components: {
