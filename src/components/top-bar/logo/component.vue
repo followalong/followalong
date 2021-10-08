@@ -4,7 +4,7 @@
     @click="fetchAll"
   >
     <font-awesome-icon
-      v-if="!app.identity || app.identity.isLoading"
+      v-if="!app.identity"
       icon="spinner"
       spin
       class="loader"
@@ -29,7 +29,7 @@ export default {
     fetchAll () {
       this.$router.push('/')
       this.app.toggleSidebar(true)
-      this.app.fetchAllFeeds(this.app.identity, true)
+      this.app.commands.fetchAllFeeds(this.app.identity)
     }
   }
 }

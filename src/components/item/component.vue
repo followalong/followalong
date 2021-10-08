@@ -44,7 +44,7 @@
       v-if="showContent"
     >
       <MediaPlayer
-        v-if="item.hasMedia"
+        v-if="app.queries.hasMedia(item)"
         :item="item"
         :app="app"
       />

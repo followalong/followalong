@@ -514,7 +514,7 @@
 .description {
     textarea, blockquote {
         display: block;
-        background: $medium-gray;
+        background: $light-gray;
         border-radius: 4px;
         padding: 1em;
         width: 100%;
@@ -589,7 +589,7 @@
         font-size: 90%;
 
         th, td {
-            border: 1px solid $medium-gray;
+            border: 1px solid $light-gray;
             padding: 5px;
         }
     }

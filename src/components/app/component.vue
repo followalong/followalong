@@ -116,6 +116,14 @@ class Queries {
     return !!feed.pausedAt
   }
 
+  isNotPaused (feed) {
+    if (!feed) {
+      return false
+    }
+
+    return !feed.pausedAt
+  }
+
   isFetching (feed) {
     if (!feed) {
       return false
@@ -190,6 +198,10 @@ class Queries {
     return service
   }
 
+  feedsForIdentity (identity) {
+    return this.state.findAll('feeds', (f) => f.identityId === identity.id)
+  }
+
   hintIsShown (identity, hint) {
     return (identity.hints || []).indexOf(hint) === -1
   }
@@ -250,6 +262,13 @@ class Commands {
     } else {
       delete item.savedAt
     }
+  }
+
+  fetchAllFeeds (identity) {
+    this.queries
+      .feedsForIdentity(identity)
+      .filter(this.queries.isNotPaused)
+      .forEach((feed) => this.fetchFeed(feed))
   }
 
   fetchFeed (feed) {
@@ -348,7 +367,7 @@ export default {
       return this.identityFeeds.reduce((items, f) => items.concat(this.queries.itemsForFeed(f)), [])
     },
     identityFeeds () {
-      return this.state.findAll('feeds', (f) => f.identityId === this.identity.id)
+      return this.queries.feedsForIdentity(this.identity)
     }
   },
   mounted () {
@@ -360,7 +379,9 @@ export default {
       }
     }
 
-    return this.restoreIdentities()
+    return this.restoreIdentities().then(() => {
+      // this.commands.fetchAllFeeds(this.identity)
+    })
   },
   methods: {
     restoreIdentities () {

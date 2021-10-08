@@ -172,12 +172,12 @@ export default {
     return {
       secretKey: undefined,
       strategy: undefined,
-      hasStorageSupport: this.app.store.INDEXEDDB || this.app.store.LOCALSTORAGE,
+      hasStorageSupport: window.indexedDB,
       changeEncryption
     }
   },
   mounted () {
-    this.strategy = this.app.identity.services.local.strategy
+    this.strategy = this.app.queries.serviceForIdentity(this.app.identity, 'local').strategy
   },
   methods: {
     copyConfig (identity) {

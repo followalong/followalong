@@ -65,7 +65,7 @@
           <li>
             <a
               href="javascript:;"
-              @click="showMenu = false; app.unsubscribeFeed(app, app.identity, feed, true)"
+              @click="showMenu = false; unsubscribe()"
             >
               Unsubscribe
             </a>
@@ -122,6 +122,12 @@ export default {
   mounted () {
     if (this.feed) {
       this.app.commands.fetchFeed(this.feed)
+    }
+  },
+  methods: {
+    unsubscribe () {
+      this.app.commands.unsubscribe(this.feed)
+      this.$router.push('/feeds')
     }
   }
 }
