@@ -22,7 +22,7 @@ export default function (identity, remoteData) {
         localFeed.url = remoteFeed.url
         localFeed.name = remoteFeed.name
         localFeed._remoteUpdatedAt = remoteFeed._updatedAt
-        localFeed.paused = remoteFeed.paused
+        localFeed.isPaused = remoteFeed.isPaused
       }
     } else {
       // TODO: Should use identity.addFeed

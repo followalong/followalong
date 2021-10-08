@@ -1,6 +1,5 @@
 import { reactive } from 'vue'
 import crypt from './crypt.js'
-import seedIdentity from '@/components/app/seed'
 import utils from './utils'
 import actionsForIdentities from './actions/identities'
 import actionsForIdentitiesKeychain from './actions/identities-keychain'
@@ -49,7 +48,6 @@ var methods = {
               identity.id,
               crypt.en(
                 app.keychain,
-                app.store,
                 identity,
                 identity.toLocal()
               )
@@ -99,41 +97,9 @@ var methods = {
   addIdentity (app, identity) {
     utils.setIdentityDefaults(identity)
 
-    return app.models.identity.create(identity)
-  },
-
-  addExampleIdentity (app, leaveEmpty) {
-    return new Promise((resolve) => {
-      const newIdentity = app.addIdentity(app, seedIdentity)
-
-      if (!leaveEmpty) {
-        newIdentity._feeds.forEach((feed) => {
-          newIdentity.addFeed(feed)
-        })
-      }
-
-      app.setIdentity(app, newIdentity).then(() => {
-        app.$router.push('/splash')
-        resolve()
-      })
-    })
-  },
-
-  setupApp (app) {
-    return new Promise((resolve, reject) => {
-      utils.constructIdentities(app).then((identities) => {
-        if (identities && identities.length) {
-          identities.forEach((identity) => {
-            app.addIdentity(app, identity)
-          })
-
-          app.setIdentity(app, app.identities[0]).then(resolve).catch(reject)
-        } else {
-          app.addExampleIdentity(app).then(resolve).catch(reject)
-        }
-      }).catch(reject)
-    })
+    return app.state.add('identities', identity)
   }
+
 }
 
 export default methods

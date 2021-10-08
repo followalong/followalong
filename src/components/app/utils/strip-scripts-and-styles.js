@@ -16,5 +16,13 @@ export default function (s) {
     scripts[i].parentNode.removeChild(scripts[i])
   }
 
+  const $els = div.querySelectorAll('*')
+
+  for (i = $els.length - 1; i >= 0; i--) {
+    $els[i].style = ''
+    $els[i].removeAttribute('width')
+    $els[i].removeAttribute('height')
+  }
+
   return div.innerHTML
 }

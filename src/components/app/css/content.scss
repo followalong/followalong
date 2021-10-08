@@ -558,10 +558,14 @@
         }
 
         figcaption {
-            margin-top: -1.25em;
             text-align: center;
             font-size: 80%;
         }
+    }
+
+    .button {
+        color: #fff !important;
+        text-decoration: none;
     }
 
     button {

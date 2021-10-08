@@ -12,18 +12,18 @@
     </div>
 
     <p
-      v-if="items.length && !hasUnreadItems"
+      v-if="itemsWithLimit.length && !hasUnreadItems"
       class="highlight"
     >
       You're all caught up!
     </p>
 
     <ul
-      v-if="items.length"
+      v-if="itemsWithLimit.length"
       class="items"
     >
       <Item
-        v-for="item in items"
+        v-for="item in itemsWithLimit"
         :key="item.id"
         :item="item"
         :app="app"
@@ -60,19 +60,24 @@ export default {
   },
   computed: {
     allItems () {
-      if (!this.app.identity) return []
-
-      return this.app.identity.items.sort(sorter())
+      return this.app.identityItems.sort(sorter())
     },
     items () {
-      var _ = this
-
-      return _.allItems.filter((item) => {
-        return !_.mediaVerb || item._mediaVerb === _.mediaVerb
-      }).slice(0, _.limit)
+      if (this.mediaVerb === 'watch') {
+        return this.allItems.filter(this.app.queries.isWatchable)
+      } else if (this.mediaVerb === 'listen') {
+        return this.allItems.filter(this.app.queries.isListenable)
+      } else if (this.mediaVerb === 'read') {
+        return this.allItems.filter(this.app.queries.isReadable)
+      } else {
+        return this.allItems
+      }
+    },
+    itemsWithLimit () {
+      return this.items.slice(0, this.limit)
     },
     hasUnreadItems () {
-      return this.items.filter((item) => !item.isRead).length
+      return this.items.filter(this.app.queries.isUnread).length
     },
     mediaVerb () {
       var verb = this.$route.params.media_verb
@@ -114,15 +119,7 @@ export default {
   },
   methods: {
     catchMeUp () {
-      var _ = this
-
-      _.allItems.filter((item) => {
-        return !_.mediaVerb || item._mediaVerb === _.mediaVerb
-      }).forEach(function (item) {
-        item.isRead = true
-      })
-
-      _.app.identity.save()
+      this.app.commands.catchMeUp(this.items)
     },
 
     capitalize (str) {

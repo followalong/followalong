@@ -1,4 +1,4 @@
-import { mountApp, buildIdentityWithFeedAndItems } from '../../../spec/helper.js'
+import { mountApp, buildIdentityWithFeedAndItems } from '../helper.js'
 
 describe('Use Case: Mark item as read', () => {
   describe('from the home page', () => {

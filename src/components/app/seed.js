@@ -1,6 +1,6 @@
 export default {
   name: 'My Account',
-  _feeds: [
+  feeds: [
     {
       name: 'Signal v. Noise',
       url: 'https://m.signalvnoise.com/feed/'

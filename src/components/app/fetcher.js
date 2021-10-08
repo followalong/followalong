@@ -1,6 +1,4 @@
 import Parser from 'rss-parser'
-import utils from './utils'
-import identitiesActions from './actions/identities.js'
 
 var parser = new Parser({
   customFields: {
@@ -26,8 +24,6 @@ function getContent (identity, service, url, done) {
 }
 
 function parseItems (identity, feed, data, items, updatedAt, done) {
-  var lastUpdate = feed._updatedAt || new Date(0)
-
   parser.parseString(data, function (err, data) {
     if (err) {
       feed.error = 'Could not parse feed. Feed does not seem to be formatted correctly.'
@@ -38,81 +34,31 @@ function parseItems (identity, feed, data, items, updatedAt, done) {
       delete feed.error
     }
 
-    feed.lastFetchCount = data.items.length
-    feed.name = data.title || data.name || feed.name
-    feed.description = feed.description || data.description
-
-    if (updatedAt) {
-      feed._updatedAt = updatedAt
-    }
-
-    data.items.forEach(function (newItem) {
-      newItem.guid = newItem.guid || newItem.id || utils.generateId()
-
-      try {
-        newItem.image = newItem['media:group']['media:thumbnail'][0].$
-        delete newItem['media:group']
-      } catch (e) { }
-
-      var oldItem = items.find(function (oldItem) {
-        return oldItem.guid === newItem.guid
-      })
-
-      if (oldItem) {
-        for (var key in newItem) {
-          oldItem[key] = newItem[key]
-        }
-
-        newItem = oldItem
-      } else {
-        newItem.guid = newItem.guid || utils.generateId()
-        newItem.isSaved = false
-        newItem._updatedAt = updatedAt
-
-        if (feed.unreads && feed.unreads.indexOf(newItem.guid) !== -1) {
-          newItem.isRead = false
-        } else if (new Date(newItem.pubDate) < lastUpdate) {
-          newItem.isRead = true
-        } else {
-          newItem.isRead = false
-        }
-
-        newItem = identitiesActions.addItemsToIdentity(identity, [newItem])[0]
-      }
-
-      newItem.pubDate = newItem.pubDate || newItem.pubdate || newItem.date
-      newItem.content = newItem['content:encoded'] || newItem.content || newItem.summary || newItem.description
-
-      if (newItem.content) {
-        newItem.content = newItem.content.replace('<![CDATA[', '').replace(']]>', '')
-      }
-
-      newItem.feedURL = feed.url
-    })
-
-    delete feed._remoteUpdatedAt
-    delete feed.unreads
-
-    done(undefined, data.items)
+    done(undefined, data)
   })
 }
 
-function getFeed (identity, service, items, feed, updatedAt, callback, forEachCallback) {
-  if (!service) {
-    return callback()
-  }
-
-  getContent(identity, service, feed.url, function (err, data) {
-    if (err || !data) {
-      feed.error = err || 'Feed has no data'
-      console.error(feed.error)
-      callback(feed.error)
-      return
-    } else {
-      delete feed.error
+function getFeed (identity, service, feed, updatedAt) {
+  return new Promise((resolve, reject) => {
+    if (!identity || !service || !feed || !updatedAt) {
+      return reject(new Error('Missing data'))
     }
 
-    parseItems(identity, feed, data, items, updatedAt, callback)
+    getContent(identity, service, feed.url, function (err, data) {
+      if (err || !data) {
+        return reject(err || 'Feed has no data')
+      } else {
+        delete feed.error
+      }
+
+      parseItems(identity, feed, data, [], updatedAt, (err, result) => {
+        if (err) {
+          return reject(err || 'Could not parse items')
+        }
+
+        resolve(result)
+      })
+    })
   })
 }
 

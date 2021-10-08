@@ -1,10 +1,10 @@
 <template>
   <div
-    v-if="item && item.feed"
+    v-if="item"
     class="single-item"
   >
     <MediaPlayer
-      v-if="item.hasMedia"
+      v-if="app.queries.hasMedia(item)"
       :item="item"
       :app="app"
       :autoplay="true"
@@ -21,14 +21,14 @@
 
       <h3>
         <router-link
-          :to="{ name: 'feed', params: { feed_url: item.feed.url } }"
+          :to="{ name: 'feed', params: { feed_url: feed.url } }"
           class="feed-name"
         >
-          <span v-if="item.author && item.author !== item.feed.name">
+          <span v-if="item.author && item.author !== feed.name">
             {{ item.author }} @
           </span>
           <span>
-            {{ item.feed.name }}
+            {{ feed.name }}
           </span>
         </router-link>
 
@@ -60,11 +60,11 @@
 
         <a
           href="javascript:;"
-          :class="'button' + (item.isSaved ? '' : ' button-gray')"
+          :class="'button' + (app.queries.isSaved(item) ? '' : ' button-gray')"
           :aria-label="'Save for later: ' + item.title"
-          @click="saveForLater(item)"
+          @click="app.commands.toggleSave(item)"
         >
-          Save<span v-if="item.isSaved">d</span>
+          Save<span v-if="app.queries.isSaved(item)">d</span>
         </a>
 
         &nbsp;
@@ -73,18 +73,22 @@
           href="javascript:;"
           class="button button-gray"
           :aria-label="'Mark as read: ' + item.title"
-          @click="markAsRead(item)"
+          @click="app.commands.toggleRead(item)"
         >
           Mark As <span v-if="item.isRead">Unread</span><span v-else>Read</span>
         </a>
       </div>
     </div>
   </div>
+  <font-awesome-icon
+    v-else-if="feed && app.queries.isFetching(feed)"
+    icon="spinner"
+    spin
+    class="i"
+  />
 </template>
 
 <script>
-import markAsRead from '@/commands/items/mark-as-read.js'
-import saveForLater from '@/commands/items/save-for-later.js'
 import MediaPlayer from '@/components/media-player/component.vue'
 
 export default {
@@ -92,35 +96,28 @@ export default {
     MediaPlayer
   },
   props: ['app'],
-  data () {
-    return {
-      markAsRead,
-      saveForLater
-    }
-  },
   computed: {
     item () {
-      var _ = this
-
-      return _.app.identity.items.find(function (item) {
-        return item.guid + '' === _.$route.params.guid + ''
-      })
+      return this.app.identityItems.find((item) => item.guid + '' === this.$route.params.guid + '')
+    },
+    feed () {
+      return this.app.state.find('feeds', (f) => f.url === this.$route.params.feed_url)
     }
   },
   watch: {
     'item.guid' () {
-      var _ = this
-
-      if (_.item) {
-        _.markAsRead(_.item, true)
+      if (this.item) {
+        this.app.commands.toggleRead(this.item, true)
       }
     }
   },
   mounted () {
-    var _ = this
+    if (this.item) {
+      this.app.commands.toggleRead(this.item, true)
+    }
 
-    if (_.item) {
-      _.markAsRead(_.item, true)
+    if (this.feed) {
+      this.app.commands.fetchFeed(this.feed)
     }
   }
 }

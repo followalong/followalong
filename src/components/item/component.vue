@@ -1,34 +1,34 @@
 <template>
-  <li v-if="!item.feed">
+  <li v-if="!feed">
     <p>Feed not found – try adding it:</p>
-    <p>{{ item.feedURL }}</p>
+    <p>{{ item.feedUrl }}</p>
   </li>
   <li
     v-else
-    :class="item.isRead ? 'read' : ''"
+    :class="app.queries.isRead(item) ? 'read' : ''"
   >
     <a
       href="javascript:;"
       class="check"
       :aria-label="'Mark as read: ' + item.title"
-      @click="markAsRead(item)"
+      @click="app.commands.toggleRead(item)"
     >&check;</a>
 
     <h3>
-      <router-link :to="{ name: 'item', params: { feed_url: item.feed.url, guid: item.guid } }">
+      <router-link :to="{ name: 'item', params: { feed_url: feed.url, guid: item.guid } }">
         {{ item.title }}
       </router-link>
     </h3>
 
     <div class="feed-meta">
       <router-link
-        :to="{ name: 'feed', params: { feed_url: item.feed.url } }"
+        :to="{ name: 'feed', params: { feed_url: feed.url } }"
         class="feed-name"
       >
-        <span v-if="item.author && item.author !== item.feed.name">
+        <span v-if="item.author && item.author !== feed.name">
           {{ item.author }} @
         </span>
-        {{ item.feed.name }}
+        {{ feed.name }}
       </router-link>
 
       &mdash;
@@ -71,18 +71,18 @@
         <a
           href="javascript:;"
           :aria-label="'Save for later: ' + item.title"
-          @click="saveForLater(item)"
+          @click="app.commands.toggleSave(item)"
         >
           <font-awesome-icon
             icon="save"
-            :class="item.isSaved ? 'selected' : ''"
+            :class="app.queries.isSaved(item) ? 'selected' : ''"
           />
         </a>
 
         <a
           :href="item.link"
           target="_blank"
-          @click="markAsRead(item, true)"
+          @click="app.commands.toggleRead(item, true)"
         >
           <font-awesome-icon icon="link" />
         </a>
@@ -96,8 +96,6 @@
 </template>
 
 <script>
-import markAsRead from '@/commands/items/mark-as-read.js'
-import saveForLater from '@/commands/items/save-for-later.js'
 import truncate from 'trunc-html'
 import MediaPlayer from '@/components/media-player/component.vue'
 
@@ -115,8 +113,6 @@ export default {
   props: ['app', 'item', 'showContent'],
   data () {
     return {
-      markAsRead,
-      saveForLater,
       characterLimit: 450,
       isExpanded: false
     }
@@ -124,6 +120,9 @@ export default {
   computed: {
     hasContent () {
       return this.item ? (this.item.content || '').trim().length : false
+    },
+    feed () {
+      return this.app.state.find('feeds', (f) => f.url === this.item.feedUrl)
     }
   },
   methods: {

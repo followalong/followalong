@@ -10,7 +10,6 @@
         </li>
         <li class="table-cell">
           <AccountDropdown
-            v-if="app.identity && app.identity._decrypted"
             :app="app"
             class="identities"
           />

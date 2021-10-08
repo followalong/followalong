@@ -1,7 +1,7 @@
 <template>
   <div :class="'sidebar ' + app.sidebarClass">
     <div
-      v-if="app.hintIsShown(app.identity, 'sidebar-about')"
+      v-if="app.queries.hintIsShown(app.identity, 'sidebar-about')"
       class="section info-section"
     >
       <h3>
@@ -9,7 +9,7 @@
         <a
           href="javascript:;"
           class="float-right close-hint"
-          @click="app.hideHint(app.identity, 'sidebar-about')"
+          @click="app.commands.hideHint(app.identity, 'sidebar-about')"
         >&times;</a>
       </h3>
       <p>
@@ -77,7 +77,7 @@
           <font-awesome-icon icon="database" />
           Feeds
           <span class="hint counter">
-            <span v-if="app.identity.feeds.length">({{ app.identity.feeds.length }})</span>
+            <span v-if="app.identityItems.length">({{ app.identityItems.length }})</span>
           </span>
         </router-link>
       </li>
@@ -159,19 +159,19 @@ export default {
   },
   computed: {
     unreadWatches () {
-      return this.unread.filter((item) => item._mediaVerb === 'watch')
+      return this.unread.filter(this.app.queries.isWatchable)
     },
     unreadListens () {
-      return this.unread.filter((item) => item._mediaVerb === 'listen')
+      return this.unread.filter(this.app.queries.isListenable)
     },
     unreadReads () {
-      return this.unread.filter((item) => item._mediaVerb === 'read')
+      return this.unread.filter(this.app.queries.isReadable)
     },
     saved () {
-      return this.app.identity.items.filter((item) => item.isSaved)
+      return this.app.identityItems.filter(this.app.queries.isSaved)
     },
     unread () {
-      return this.app.identity.items.filter((item) => !item.isRead)
+      return this.app.identityItems.filter(this.app.queries.isUnread)
     }
   },
   watch: {

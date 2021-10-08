@@ -5,8 +5,8 @@ function sorter (date, feed) {
 
   return function sorter (a, b) {
     if (date !== '_updatedAt') {
-      if (!a.isRead && b.isRead) return -1
-      if (a.isRead && !b.isRead) return 1
+      if (!a.readAt && b.readAt) return -1
+      if (a.readAt && !b.readAt) return 1
 
       if (typeof a[date] !== 'object') {
         a[date] = new Date(a[date])

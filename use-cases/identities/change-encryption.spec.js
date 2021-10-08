@@ -1,4 +1,4 @@
-import { mountApp } from '../../../spec/helper.js'
+import { mountApp } from '../helper.js'
 import store from '@/store'
 import crypt from '@/components/app/crypt.js'
 import keychain from '@/keychain.js'

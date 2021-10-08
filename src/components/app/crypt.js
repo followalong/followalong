@@ -2,7 +2,7 @@ import aes256 from 'aes256'
 import identitiesKeychain from '../../components/app/actions/identities-keychain.js'
 
 export default {
-  en (keychain, store, identity, json) {
+  en (keychain, identity, json) {
     const key = keychain.getKey(identity.id)
     const str = typeof json === 'string' ? json : JSON.stringify(json)
 
@@ -13,7 +13,7 @@ export default {
     return aes256.encrypt(key, str)
   },
 
-  de (keychain, store, identity, str) {
+  de (keychain, identity, str) {
     var key = keychain.getKey(identity.id)
 
     try {

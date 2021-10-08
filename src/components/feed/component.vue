@@ -1,17 +1,17 @@
 <template>
   <li>
     <button
-      :class="feed.isLoading ? 'loading' : ''"
-      @click="fetch()"
+      :class="app.queries.isFetching(feed) ? 'loading' : ''"
+      @click="app.commands.fetchFeed(feed)"
     >
-      <span v-if="feed.isLoading">Loading...</span>
+      <span v-if="app.queries.isFetching(feed)">Loading...</span>
       <span v-else>Fetch Now</span>
     </button>
     <button
-      :class="feed.paused ? 'button-gray' : ''"
-      @click="togglePause()"
+      :class="app.queries.isPaused(feed) ? 'button-gray' : ''"
+      @click="app.commands.togglePause(feed)"
     >
-      <span v-if="feed.paused">&#10074;&#10074;</span>
+      <span v-if="app.queries.isPaused(feed)">&#10074;&#10074;</span>
       <span v-else>&#9658;</span>
     </button>
     <h2>
@@ -21,7 +21,7 @@
       <a
         href="javascript:;"
         class="hint remove"
-        @click="app.unsubscribeFeed(app, app.identity, feed)"
+        @click="app.commands.unsubscribe(feed)"
       >
         Unsubscribe
       </a>
@@ -49,23 +49,6 @@
 
 <script>
 export default {
-  props: ['app', 'feed'],
-  methods: {
-    fetch () {
-      var _ = this
-
-      _.feed.fetch(Date.now(), true, () => {
-        _.feed.save()
-      })
-    },
-
-    togglePause () {
-      var _ = this
-
-      _.feed._updatedAt = Date.now()
-      _.feed.paused = !_.feed.paused
-      _.feed.save()
-    }
-  }
+  props: ['app', 'feed']
 }
 </script>

@@ -34,8 +34,7 @@ export default {
   props: ['app'],
   computed: {
     feeds () {
-      if (!this.app.identity) return []
-      return this.app.identity.feeds.sort(utils.sorters.NAME)
+      return this.app.identityFeeds.sort(utils.sorters.NAME)
     }
   }
 }

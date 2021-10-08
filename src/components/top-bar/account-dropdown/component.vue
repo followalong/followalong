@@ -1,6 +1,16 @@
 <template>
-  <div>
-    <a class="desktop-only">
+  <div v-if="app.identity">
+    <router-link
+      v-if="!otherIdentities.length"
+      to="/settings"
+      class="desktop-only"
+    >
+      Settings
+    </router-link>
+    <a
+      v-else
+      class="desktop-only"
+    >
       <strong>{{ app.identity.name }}</strong>
     </a>
 
@@ -12,22 +22,17 @@
       <font-awesome-icon icon="bars" />
     </a>
 
-    <ul>
-      <li v-if="!app.nonIdentities.length">
-        <router-link to="/settings">
-          Settings
-        </router-link>
-      </li>
+    <ul v-if="otherIdentities.length">
       <li
-        v-for="i in app.nonIdentities"
-        :key="i.id"
+        v-for="identity in otherIdentities"
+        :key="identity.id"
       >
         <a
           href="javascript:;"
-          @click="app.setIdentity(app, i);"
+          @click="app.setIdentity(identity);"
         >
-          <span v-if="i._decrypted">{{ i.name }}</span>
-          <span v-else>{{ i.id.slice(0, 8) }} <span class="encrypted">(not yet decrypted)</span></span>
+          <span v-if="identity._decrypted">{{ identity.name }}</span>
+          <span v-else>{{ identity.id.slice(0, 8) }} <span class="encrypted">(not yet decrypted)</span></span>
         </a>
       </li>
       <!-- <li>
@@ -41,6 +46,11 @@
 
 <script>
 export default {
-  props: ['app']
+  props: ['app'],
+  computed: {
+    otherIdentities () {
+      return this.app.state.findAll('identities', (i) => i.id !== this.app.identity.id)
+    }
+  }
 }
 </script>

@@ -14,7 +14,7 @@ const decryptIdentity = function (keychain, store, identity) {
         return resolve()
       }
 
-      state = crypt.de(keychain, store, identity, state)
+      state = crypt.de(keychain, identity, state)
 
       if (!state) {
         if (confirm('Unauthorized. Would you like to refresh this page?')) {

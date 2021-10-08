@@ -19,7 +19,7 @@
           </router-link>
 
           <font-awesome-icon
-            v-if="feed.isLoading"
+            v-if="app.queries.isFetching(feed)"
             icon="spinner"
             spin
             class="i"
@@ -29,9 +29,9 @@
             v-else
             href="javascript:;"
             class="i"
-            @click="pause()"
+            @click="app.commands.togglePause(feed)"
           >
-            <span v-if="feed.paused">&#10074;&#10074;</span>
+            <span v-if="app.queries.isPaused(feed)">&#10074;&#10074;</span>
             <span v-else>&#9658;</span>
           </a>
         </h1>
@@ -56,9 +56,9 @@
           <li>
             <a
               href="javascript:;"
-              @click="fetch()"
+              @click="app.commands.fetchFeed(feed)"
             >
-              <span v-if="feed.isLoading">Fetching...</span>
+              <span v-if="app.queries.isFetching(feed)">Fetching...</span>
               <span v-else>Fetch Now</span>
             </a>
           </li>
@@ -100,7 +100,6 @@
 
 <script>
 import Item from '@/components/item/component.vue'
-import sorter from '@/components/app/sorter'
 
 export default {
   components: {
@@ -114,38 +113,15 @@ export default {
   },
   computed: {
     feed () {
-      return this.app.models.feed.inMemory.find(this.$route.params.feed_url + '')
+      return this.app.state.find('feeds', (f) => f.url === this.$route.params.feed_url)
     },
     items () {
-      return this.feed.items.sort(sorter())
+      return this.app.queries.itemsForFeed(this.feed)
     }
   },
-  methods: {
-    catchFeedUp () {
-      var _ = this
-
-      for (var i = _.items.length - 1; i >= 0; i--) {
-        _.items[i].isRead = true
-      }
-
-      _.app.identity.save()
-    },
-
-    pause () {
-      var _ = this
-
-      _.feed._updatedAt = Date.now()
-      _.feed.paused = !_.feed.paused
-      _.app.identity.save()
-    },
-
-    fetch () {
-      var _ = this
-
-      _.feed.fetch(Date.now(), true, function () {
-        _.feed.isLoading = false
-        _.app.identity.save()
-      })
+  mounted () {
+    if (this.feed) {
+      this.app.commands.fetchFeed(this.feed)
     }
   }
 }

@@ -164,7 +164,6 @@
 import { Base64 } from 'js-base64'
 import copy from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
-import generateId from '@/components/app/utils/generate-id.js'
 import changeEncryption from '@/commands/identities/change-encryption.js'
 
 export default {
