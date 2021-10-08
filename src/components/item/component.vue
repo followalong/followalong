@@ -50,24 +50,25 @@
       />
 
       <div v-if="hasContent">
-        <div :class="'description relativizer ' + (isExpanded ? 'expanded' : '')">
-          <div
-            v-if="!isExpanded"
-          >
-            <div v-html="shortContent" />
-            <div class="faded-content">
-              <button
-                class="button-gray button-large"
-                @click="isExpanded = !isExpanded"
-              >
-                Read More
-              </button>
-            </div>
+        <div
+          v-if="isExpanded || !isTruncated"
+          class="description expanded"
+          v-html="app.blankifyLinks(item.content)"
+        />
+
+        <div
+          v-else-if="shortContent"
+          class="description relativizer"
+        >
+          <div v-html="app.blankifyLinks(shortContent)" />
+          <div class="faded-content">
+            <button
+              class="button-gray button-large"
+              @click="isExpanded = !isExpanded"
+            >
+              Read More
+            </button>
           </div>
-          <div
-            v-else
-            v-html="app.blankifyLinks(item.content)"
-          />
         </div>
       </div>
 
@@ -121,12 +122,14 @@ export default {
     feed () {
       return this.app.state.find('feeds', (f) => f.url === this.item.feedUrl)
     },
+    words () {
+      return this.item.content.split(/\s+/)
+    },
+    isTruncated () {
+      return this.words.length > WORD_LIMIT
+    },
     shortContent () {
-      const words = (this.item.summary || this.item.content).split(/\s+/)
-      const removeTags = (w) => w[0] !== '<'
-      const content = words.filter(removeTags).length > WORD_LIMIT ? `${words.slice(0, WORD_LIMIT).join(' ').trim()}...` : this.item.content
-
-      return this.app.blankifyLinks(content)
+      return `${this.words.slice(0, WORD_LIMIT).join(' ').trim()}...`
     }
   }
 }

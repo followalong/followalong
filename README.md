@@ -9,7 +9,6 @@
 ## TODO
 
 - Services
-- Settings
 - Local Save
 - Remote Save
 - Specs
