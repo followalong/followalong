@@ -110,10 +110,11 @@ export default {
   props: ['app'],
   computed: {
     feed () {
-      let feed = this.app.state.find('feeds', (f) => f.url === this.$route.params.feed_url)
+      let feed = this.app.queries.findFeedByUrl(this.$route.params.feed_url)
 
       if (!feed) {
-        feed = this.app.commands.addFeed({ url: this.$route.params.feed_url })
+        this.app.commands.addFeed({ url: this.$route.params.feed_url })
+        feed = this.app.queries.findFeedByUrl(this.$route.params.feed_url)
       }
 
       return feed

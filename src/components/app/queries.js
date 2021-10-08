@@ -149,6 +149,10 @@ class Queries {
   unreadItems (feed) {
     return this.itemsForFeed(feed).filter((item) => this.isUnread(item))
   }
+
+  findFeedByUrl (url) {
+    return this.state.find('feeds', (f) => f.url === url)
+  }
 }
 
 export default Queries
