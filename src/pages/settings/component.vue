@@ -113,7 +113,7 @@
             </span>
             <button
               class="button-gray"
-              @click="downloadIdentity(app.identity)"
+              @click="app.commands.downloadIdentity(app.identity)"
             >
               Download Identity
             </button>
@@ -126,7 +126,7 @@
             </span>
             <button
               class="button-gray"
-              @click="copyConfig(app.identity)"
+              @click="app.commands.copyConfig(app.identity)"
             >
               Copy Configuration
             </button>
@@ -161,9 +161,6 @@
 </template>
 
 <script>
-import { Base64 } from 'js-base64'
-import copy from 'copy-to-clipboard'
-import { saveAs } from 'file-saver'
 import changeEncryption from '@/commands/identities/change-encryption.js'
 
 export default {
@@ -180,11 +177,6 @@ export default {
     this.strategy = this.app.queries.serviceForIdentity(this.app.identity, 'local').strategy
   },
   methods: {
-    copyConfig (identity) {
-      copy(Base64.encode(JSON.stringify(identity.toRemote())))
-      alert('Copied configuration to clipboard.')
-    },
-
     profileSize (identity, type) {
       if (!identity || !identity.items) return 'N/A'
 
@@ -204,14 +196,6 @@ export default {
       return '~' + (Math.round(size * 10) / 10) + ' ' + unit
     },
 
-    downloadIdentity (identity) {
-      const filename = window.location.host.replace(':', '.') + '.' + identity.id + '.json'
-      const str = JSON.stringify(identity.toRemote())
-      const blob = new Blob([str], { type: 'application/json;charset=utf-8' })
-
-      saveAs(blob, filename)
-    },
-
     revert () {
       return () => {
         this.strategy = this.app.identity.services.local.strategy
@@ -220,11 +204,8 @@ export default {
 
     reset (identity) {
       if (confirm('Are you sure you want to forget this identity?')) {
-        this.app.store.removeItem(identity.id, () => {
-          this.app.store.removeItem('key-' + identity.id, () => {
-            window.location.href = '/'
-          })
-        })
+        this.app.commands.removeIdentity(identity)
+        window.location.href = '/'
       }
     }
   }

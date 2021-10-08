@@ -97,26 +97,6 @@ export default {
 
       return feed
     },
-    toLocal () {
-      return {
-        id: this.id,
-        name: this.name,
-        hints: this.hints,
-        feeds: this.feeds.value.map((feed) => feed.toLocal()),
-        items: this.items.map((item) => item.toLocal()),
-        services: this.services
-      }
-    },
-    toRemote () {
-      return {
-        id: this.id,
-        name: this.name,
-        hints: this.hints,
-        feeds: this.feeds.value.map((feed) => feed.toRemote()),
-        items: this.items.filter((item) => item.isSaved).map((item) => item.toRemote()),
-        services: this.services
-      }
-    },
     save (done) {
       return new Promise((resolve, reject) => {
         this.saveLocal().then(() => {
