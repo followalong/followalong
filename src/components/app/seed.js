@@ -13,13 +13,14 @@ export default {
       name: 'Glenn Greenwald',
       url: 'https://greenwald.substack.com/feed'
     },
-    // {
-    //     url: 'https://www.theatlantic.com/feed/channel/ideas/'
-    // },
-    // {
-    //     name: 'John Stossel',
-    //     url: 'https://reason.com/tag/john-stossel/feed/'
-    // },
+    {
+      name: 'Ideas | The Atlantic',
+      url: 'https://www.theatlantic.com/feed/channel/ideas/'
+    },
+    {
+      name: 'John Stossel',
+      url: 'https://reason.com/tag/john-stossel/feed/'
+    },
     {
       name: 'Dude Perfect',
       url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCRijo3ddMTht_IHyNSNXpNQ'

@@ -38,7 +38,7 @@
           v-if="item.pubDate"
           :title="item.pubDate"
           class="feed-name"
-        >{{ item.prettyDate }}</span>
+        >{{ app.prettyDate(item.pubDate) }}</span>
       </h3>
 
       <div

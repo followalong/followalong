@@ -128,6 +128,10 @@ export default {
           .replace(/target=['"]?[^"']+['"\s>]?/g, '')
           .replace(/<a([^>]+)>?/g, '<a$1 target="_blank">')
       )
+    },
+
+    prettyDate (date) {
+      return utils.timeAgo(new Date(date), new Date())
     }
   }
 }
