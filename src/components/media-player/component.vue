@@ -1,31 +1,48 @@
 <template>
-  <div class="embed-media">
-    <div class="relativizer">
-      <a
-        href="javascript:;"
-        class="expander"
-        @click="popout(item)"
+  <div :class="'embed-media ' + (isInline ? 'inline-player' : 'popout-player')">
+    <div class="media-player">
+      <div
+        v-if="!isInline"
+        class="header"
       >
-        <font-awesome-icon
-          icon="expand"
+        <a
+          href="javascript:;"
+          class="close"
+          @click="app.stop()"
+        >
+          <font-awesome-icon
+            icon="trash"
+          />
+        </a>
+
+        <h3>
+          <router-link
+            :to="{ name: 'item', params: { feed_url: feed.url, guid: item.guid } }"
+            :title="item.title"
+          >
+            {{ item.title }}
+          </router-link>
+        </h3>
+
+        <p>
+          <router-link
+            :to="{ name: 'feed', params: { feed_url: feed.url } }"
+            :title="feed.name"
+          >
+            {{ feed.name }}
+          </router-link>
+        </p>
+      </div>
+
+      <div
+        class="player-wrapper"
+      >
+        <component
+          :is="type + 'Player'"
+          v-if="type"
+          :item="item"
         />
-      </a>
-    </div>
-
-    <div v-if="type">
-      <a
-        v-if="!clicked"
-        href="javascript:;"
-        @click="clicked = true"
-      >
-        <MediaPreview :item="item" />
-      </a>
-
-      <component
-        :is="type + 'Player'"
-        v-else-if="type"
-        :item="item"
-      />
+      </div>
     </div>
   </div>
 </template>
@@ -42,14 +59,12 @@ export default {
     MediaPreview,
     VideoPlayer
   },
-  props: ['app', 'item', 'autoplay'],
-  data () {
-    return {
-      clicked: this.autoplay || false,
-      expanded: false
-    }
-  },
+  props: ['app', 'item'],
   computed: {
+    feed () {
+      return this.app.queries.feedForItem(this.item)
+    },
+
     type () {
       if (utils.getVideoSrc(this.item, true)) {
         return 'Video'
@@ -58,16 +73,10 @@ export default {
       } else {
         return ''
       }
-    }
-  },
-  methods: {
-    popout (item) {
-      if (this.app.playing === item) {
-        this.app.playing = undefined
-      } else {
-        this.app.commands.toggleRead(item, true)
-        this.app.playing = item
-      }
+    },
+
+    isInline () {
+      return this.$router.currentRoute.value.params.feed_url === this.feed.url && this.$router.currentRoute.value.params.guid === this.item.guid
     }
   }
 }

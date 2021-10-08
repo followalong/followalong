@@ -5,6 +5,11 @@
     <div class="content">
       <div v-if="identity">
         <Sidebar :app="app" />
+        <MediaPlayer
+          v-if="playing"
+          :app="app"
+          :item="playing"
+        />
         <router-view :app="app" />
       </div>
       <div v-else>
@@ -12,18 +17,12 @@
         <p>Securely loading your data...</p>
       </div>
     </div>
-
-    <PopoutPlayer
-      v-if="playing"
-      :app="app"
-      :playing="playing"
-    />
   </div>
 </template>
 
 <script>
 import utils from '@/components/app/utils/index.js'
-import PopoutPlayer from '@/components/popout-player/component.vue'
+import MediaPlayer from '@/components/media-player/component.vue'
 import Sidebar from '@/components/sidebar/component.vue'
 import TopBar from '@/components/top-bar/component.vue'
 import keychain from '@/keychain'
@@ -34,7 +33,7 @@ import Queries from '@/components/app/queries.js'
 
 export default {
   components: {
-    PopoutPlayer,
+    MediaPlayer,
     Sidebar,
     TopBar
   },
@@ -132,6 +131,14 @@ export default {
 
     prettyDate (date) {
       return utils.timeAgo(new Date(date), new Date())
+    },
+
+    play (item) {
+      this.playing = item
+    },
+
+    stop () {
+      this.playing = null
     }
   }
 }

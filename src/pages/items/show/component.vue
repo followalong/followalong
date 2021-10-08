@@ -3,17 +3,39 @@
     v-if="item"
     class="single-item"
   >
-    <MediaPlayer
-      v-if="app.queries.hasMedia(item)"
-      :item="item"
-      :app="app"
-      :autoplay="true"
-    />
-
-    <br>
-
     <div class="feed home-feed wide-feed">
       <div class="title-wrapper">
+        <Dropdown class="float-right">
+          <li>
+            <a
+              :href="item.link"
+              target="_blank"
+            >
+              View Source
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="javascript:;"
+              :aria-label="'Save for later: ' + item.title"
+              @click="app.commands.toggleSave(item)"
+            >
+              Save<span v-if="app.queries.isSaved(item)">d</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="javascript:;"
+              :aria-label="'Mark as read: ' + item.title"
+              @click="app.commands.toggleRead(item)"
+            >
+              Mark As <span v-if="item.isRead">Unread</span><span v-else>Read</span>
+            </a>
+          </li>
+        </Dropdown>
+
         <h1>
           <a :href="item.link">{{ item.title }}</a>
         </h1>
@@ -44,38 +66,6 @@
         class="description"
         v-html="app.blankifyLinks(item.content)"
       />
-
-      <div style="margin-top: 20px;">
-        <a
-          :href="item.link"
-          class="button"
-          target="_blank"
-        >
-          View Source
-        </a>
-
-        &nbsp;
-
-        <a
-          href="javascript:;"
-          :class="'button' + (app.queries.isSaved(item) ? '' : ' button-gray')"
-          :aria-label="'Save for later: ' + item.title"
-          @click="app.commands.toggleSave(item)"
-        >
-          Save<span v-if="app.queries.isSaved(item)">d</span>
-        </a>
-
-        &nbsp;
-
-        <a
-          href="javascript:;"
-          class="button button-gray"
-          :aria-label="'Mark as read: ' + item.title"
-          @click="app.commands.toggleRead(item)"
-        >
-          Mark As <span v-if="item.isRead">Unread</span><span v-else>Read</span>
-        </a>
-      </div>
     </div>
   </div>
   <font-awesome-icon
@@ -87,11 +77,11 @@
 </template>
 
 <script>
-import MediaPlayer from '@/components/media-player/component.vue'
+import Dropdown from '@/components/dropdown/component.vue'
 
 export default {
   components: {
-    MediaPlayer
+    Dropdown
   },
   props: ['app'],
   computed: {
@@ -104,18 +94,23 @@ export default {
   },
   watch: {
     'item.guid' () {
-      if (this.item) {
-        this.app.commands.toggleRead(this.item, true)
-      }
+      this.start()
     }
   },
   mounted () {
-    if (this.item) {
-      this.app.commands.toggleRead(this.item, true)
-    }
+    this.start()
+  },
+  methods: {
+    start () {
+      if (this.item) {
+        this.app.commands.toggleRead(this.item, true)
+      } else if (this.feed) {
+        this.app.commands.fetchFeed(this.feed)
+      }
 
-    if (this.feed) {
-      this.app.commands.fetchFeed(this.feed)
+      if (this.app.queries.hasMedia(this.item)) {
+        this.app.play(this.item)
+      }
     }
   }
 }

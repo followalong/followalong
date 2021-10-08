@@ -43,11 +43,12 @@
     <div
       v-if="showContent"
     >
-      <MediaPlayer
+      <router-link
         v-if="app.queries.hasMedia(item)"
-        :item="item"
-        :app="app"
-      />
+        :to="{ name: 'item', params: { feed_url: feed.url, guid: item.guid } }"
+      >
+        <MediaPreview :item="item" />
+      </router-link>
 
       <div v-if="hasContent">
         <div
@@ -101,13 +102,13 @@
 </template>
 
 <script>
-import MediaPlayer from '@/components/media-player/component.vue'
+import MediaPreview from '@/components/media-player/media-preview/component.vue'
 
 const WORD_LIMIT = 125
 
 export default {
   components: {
-    MediaPlayer
+    MediaPreview
   },
   props: ['app', 'item', 'showContent'],
   data () {

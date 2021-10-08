@@ -2,18 +2,35 @@
   <div v-if="feed">
     <div class="feed wide-feed">
       <div class="title-wrapper">
-        <h1>
-          <a
-            href="javascript:;"
-            class="float-right"
-            @click="showMenu = !showMenu"
-          >
-            <font-awesome-icon
-              icon="bars"
-              class="i"
-            />
-          </a>
+        <Dropdown class="float-right">
+          <li v-if="feed.hasUnreadItems">
+            <a
+              href="javascript:;"
+              @click="catchFeedUp()"
+            >
+              Catch Me Up!
+            </a>
+          </li>
+          <li>
+            <a
+              href="javascript:;"
+              @click="app.commands.fetchFeed(feed)"
+            >
+              <span v-if="app.queries.isFetching(feed)">Fetching...</span>
+              <span v-else>Fetch Now</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="javascript:;"
+              @click="unsubscribe()"
+            >
+              Unsubscribe
+            </a>
+          </li>
+        </Dropdown>
 
+        <h1>
           <router-link :to="{ name: 'feed', params: { feed_url: feed.url } }">
             {{ feed.name }}
           </router-link>
@@ -35,42 +52,6 @@
             <span v-else>&#9658;</span>
           </a>
         </h1>
-
-        <!-- <a :href="feed.url" class="hint">
-          {{feed.url}}
-        </a> -->
-
-        <ul
-          v-if="showMenu"
-          class="actions"
-          @click="showMenu = false"
-        >
-          <li v-if="feed.hasUnreadItems">
-            <a
-              href="javascript:;"
-              @click="catchFeedUp()"
-            >
-              Catch Me Up!
-            </a>
-          </li>
-          <li>
-            <a
-              href="javascript:;"
-              @click="app.commands.fetchFeed(feed)"
-            >
-              <span v-if="app.queries.isFetching(feed)">Fetching...</span>
-              <span v-else>Fetch Now</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href="javascript:;"
-              @click="showMenu = false; unsubscribe()"
-            >
-              Unsubscribe
-            </a>
-          </li>
-        </ul>
       </div>
 
       <ul class="items">
@@ -100,17 +81,14 @@
 
 <script>
 import Item from '@/components/item/component.vue'
+import Dropdown from '@/components/dropdown/component.vue'
 
 export default {
   components: {
-    Item
+    Item,
+    Dropdown
   },
   props: ['app'],
-  data () {
-    return {
-      showMenu: false
-    }
-  },
   computed: {
     feed () {
       return this.app.state.find('feeds', (f) => f.url === this.$route.params.feed_url)
