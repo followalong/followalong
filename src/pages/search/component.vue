@@ -28,7 +28,7 @@
           >
             <button
               class="float-right"
-              @click="subscribe(feed)"
+              @click="app.commands.addFeedToIdentity(app.identity, feed)"
             >
               Subscribe
             </button>
@@ -100,15 +100,11 @@ export default {
           return
         }
 
-        this.feeds = feeds
-      })
-    },
-    subscribe (feed) {
-      feed = this.app.identity.addFeed(feed)
+        if (feeds.length === 1) {
+          this.$router.push({ name: 'feed', params: { feed_url: feeds[0].url } })
+        }
 
-      feed.fetch(this.app, Date.now(), true, () => {
-        this.app.q = ''
-        this.$router.push({ name: 'feed', params: { feed_url: feed.url } })
+        this.feeds = feeds
       })
     }
   }
