@@ -42,7 +42,6 @@
 
 <script>
 import Item from '@/components/item/component.vue'
-import sorter from '@/components/app/sorter'
 
 const VERBS = ['watch', 'read', 'listen']
 const DISTANCE_FROM_BOTTOM = 1000
@@ -59,19 +58,18 @@ export default {
     }
   },
   computed: {
-    allItems () {
-      return this.app.identityItems.sort(sorter())
-    },
     items () {
+      let items = this.app.queries.itemsForIdentity(this.app.identity)
+
       if (this.mediaVerb === 'watch') {
-        return this.allItems.filter(this.app.queries.isWatchable)
+        items = items.filter(this.app.queries.isWatchable)
       } else if (this.mediaVerb === 'listen') {
-        return this.allItems.filter(this.app.queries.isListenable)
+        items = items.filter(this.app.queries.isListenable)
       } else if (this.mediaVerb === 'read') {
-        return this.allItems.filter(this.app.queries.isReadable)
-      } else {
-        return this.allItems
+        items = items.filter(this.app.queries.isReadable)
       }
+
+      return items
     },
     itemsWithLimit () {
       return this.items.slice(0, this.limit)

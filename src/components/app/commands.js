@@ -66,11 +66,10 @@ class Commands {
     this.queries
       .feedsForIdentity(identity)
       .filter(this.queries.isNotPaused)
-      .forEach((feed) => this.fetchFeed(feed))
+      .forEach((feed) => this.fetchFeed(feed, identity))
   }
 
-  fetchFeed (feed) {
-    const identity = this.queries.identityForFeed(feed)
+  fetchFeed (feed, identity) {
     const service = this.queries.serviceForIdentity(identity, 'rss')
     const updatedAt = Date.now()
 
@@ -107,9 +106,11 @@ class Commands {
       return true
     })
 
-    this.state.add('items', newItems, (i) => {
-      i.feedUrl = feed.url
-    })
+    this.state.add('items', newItems, (item) => this.addItemToFeed(feed, item))
+  }
+
+  addItemToFeed (feed, item) {
+    item.feedUrl = feed.url
   }
 
   parseRawFeedItem (item) {
@@ -154,9 +155,15 @@ class Commands {
   addIdentity (data, feeds) {
     const identity = this.state.add('identities', [data])[0]
 
-    this.state.add('feeds', feeds || [], (f) => {
-      f.identityId = identity.id
-    })
+    this.state.add('feeds', feeds || [], (f) => this.addFeedToIdentity(identity, f))
+  }
+
+  addFeed (feed) {
+    return this.state.add('feeds', [feed])[0]
+  }
+
+  addFeedToIdentity (identity, feed) {
+    feed.identityId = identity.id
   }
 }
 

@@ -56,14 +56,6 @@ export default {
       playing: undefined
     }
   },
-  computed: {
-    identityItems () {
-      return this.queries.itemsForIdentity(this.identity)
-    },
-    identityFeeds () {
-      return this.queries.feedsForIdentity(this.identity)
-    }
-  },
   mounted () {
     if (process.env.NODE_ENV !== 'development') {
       if ('serviceWorker' in navigator) {

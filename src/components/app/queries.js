@@ -130,7 +130,7 @@ class Queries {
   }
 
   feedsForIdentity (identity) {
-    return this.state.findAll('feeds', (f) => f.identityId === identity.id)
+    return this.state.findAll('feeds', (f) => f.identityId === identity.id).sort(utils.sorters.NAME)
   }
 
   itemsForIdentity (identity) {
@@ -144,6 +144,10 @@ class Queries {
 
   findDefaultIdentity () {
     return this.state.findAll('identities')[0]
+  }
+
+  unreadItems (feed) {
+    return this.itemsForFeed(feed).filter((item) => this.isUnread(item))
   }
 }
 

@@ -1,10 +1,5 @@
 <template>
-  <li v-if="!feed">
-    <p>Feed not found – try adding it:</p>
-    <p>{{ item.feedUrl }}</p>
-  </li>
   <li
-    v-else
     :class="app.queries.isRead(item) ? 'read' : ''"
   >
     <a

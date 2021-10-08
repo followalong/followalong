@@ -18,7 +18,6 @@
 
 <script>
 import Item from '@/components/item/component.vue'
-import sorter from '@/components/app/sorter'
 
 export default {
   components: {
@@ -27,7 +26,7 @@ export default {
   props: ['app'],
   computed: {
     items () {
-      return this.app.identityItems.filter(this.app.queries.isSaved).sort(sorter())
+      return this.app.queries.itemsForIdentity(this.app.identity).filter(this.app.queries.isSaved)
     }
   }
 }

@@ -2,7 +2,7 @@
   <li>
     <button
       :class="app.queries.isFetching(feed) ? 'loading' : ''"
-      @click="app.commands.fetchFeed(feed)"
+      @click="app.commands.fetchFeed(feed, app.identity)"
     >
       <span v-if="app.queries.isFetching(feed)">Loading...</span>
       <span v-else>Fetch Now</span>

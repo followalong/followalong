@@ -15,7 +15,7 @@
             </a>
           </li>
 
-          <li>
+          <li v-if="app.queries.identityForFeed(feed)">
             <a
               href="javascript:;"
               :aria-label="'Save for later: ' + item.title"
@@ -25,7 +25,7 @@
             </a>
           </li>
 
-          <li>
+          <li v-if="app.queries.identityForFeed(feed)">
             <a
               href="javascript:;"
               :aria-label="'Mark as read: ' + item.title"
@@ -86,10 +86,16 @@ export default {
   props: ['app'],
   computed: {
     item () {
-      return this.app.identityItems.find((item) => item.guid + '' === this.$route.params.guid + '')
+      return this.app.queries.itemsForFeed(this.feed).find((item) => item.guid + '' === this.$route.params.guid + '')
     },
     feed () {
-      return this.app.state.find('feeds', (f) => f.url === this.$route.params.feed_url)
+      let feed = this.app.state.find('feeds', (f) => f.url === this.$route.params.feed_url)
+
+      if (!feed) {
+        feed = this.app.commands.addFeed({ url: this.$route.params.feed_url })
+      }
+
+      return feed
     }
   },
   watch: {
@@ -105,7 +111,7 @@ export default {
       if (this.item) {
         this.app.commands.toggleRead(this.item, true)
       } else if (this.feed) {
-        this.app.commands.fetchFeed(this.feed)
+        this.app.commands.fetchFeed(this.feed, this.app.identity)
       }
 
       if (this.app.queries.hasMedia(this.item)) {

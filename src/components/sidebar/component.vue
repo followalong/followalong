@@ -77,7 +77,7 @@
           <font-awesome-icon icon="database" />
           Feeds
           <span class="hint counter">
-            <span v-if="app.identityFeeds.length">({{ app.identityFeeds.length }})</span>
+            <span v-if="feeds.length">({{ feeds.length }})</span>
           </span>
         </router-link>
       </li>
@@ -168,10 +168,13 @@ export default {
       return this.unread.filter(this.app.queries.isReadable)
     },
     saved () {
-      return this.app.identityItems.filter(this.app.queries.isSaved)
+      return this.app.queries.itemsForIdentity(this.app.identity).filter(this.app.queries.isSaved)
     },
     unread () {
-      return this.app.identityItems.filter(this.app.queries.isUnread)
+      return this.app.queries.itemsForIdentity(this.app.identity).filter(this.app.queries.isUnread)
+    },
+    feeds () {
+      return this.app.queries.feedsForIdentity(this.app.identity)
     }
   },
   watch: {

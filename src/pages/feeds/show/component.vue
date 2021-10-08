@@ -3,7 +3,7 @@
     <div class="feed wide-feed">
       <div class="title-wrapper">
         <Dropdown class="float-right">
-          <li v-if="feed.hasUnreadItems">
+          <li v-if="app.queries.identityForFeed(feed) && app.queries.unreadItems(feed).length">
             <a
               href="javascript:;"
               @click="catchFeedUp()"
@@ -11,21 +11,29 @@
               Catch Me Up!
             </a>
           </li>
-          <li>
+          <li v-if="app.queries.identityForFeed(feed)">
             <a
               href="javascript:;"
-              @click="app.commands.fetchFeed(feed)"
+              @click="app.commands.fetchFeed(feed, app.identity)"
             >
               <span v-if="app.queries.isFetching(feed)">Fetching...</span>
               <span v-else>Fetch Now</span>
             </a>
           </li>
-          <li>
+          <li v-if="app.queries.identityForFeed(feed)">
             <a
               href="javascript:;"
               @click="unsubscribe()"
             >
               Unsubscribe
+            </a>
+          </li>
+          <li v-if="!app.queries.identityForFeed(feed)">
+            <a
+              href="javascript:;"
+              @click="subscribe"
+            >
+              Subscribe
             </a>
           </li>
         </Dropdown>
@@ -43,7 +51,7 @@
           />
 
           <a
-            v-else
+            v-else-if="app.queries.identityForFeed(feed)"
             href="javascript:;"
             class="i"
             @click="app.commands.togglePause(feed)"
@@ -102,7 +110,13 @@ export default {
   props: ['app'],
   computed: {
     feed () {
-      return this.app.state.find('feeds', (f) => f.url === this.$route.params.feed_url)
+      let feed = this.app.state.find('feeds', (f) => f.url === this.$route.params.feed_url)
+
+      if (!feed) {
+        feed = this.app.commands.addFeed({ url: this.$route.params.feed_url })
+      }
+
+      return feed
     },
     items () {
       return this.app.queries.itemsForFeed(this.feed)
@@ -110,13 +124,17 @@ export default {
   },
   mounted () {
     if (this.feed) {
-      this.app.commands.fetchFeed(this.feed)
+      this.app.commands.fetchFeed(this.feed, this.app.identity)
     }
   },
   methods: {
     unsubscribe () {
       this.app.commands.unsubscribe(this.feed)
       this.$router.push('/feeds')
+    },
+
+    subscribe () {
+      this.app.commands.addFeedToIdentity(this.app.identity, this.feed)
     }
   }
 }

@@ -25,7 +25,6 @@
 
 <script>
 import Feed from '@/components/feed/component.vue'
-import utils from '@/components/app/utils'
 
 export default {
   components: {
@@ -34,7 +33,7 @@ export default {
   props: ['app'],
   computed: {
     feeds () {
-      return this.app.identityFeeds.sort(utils.sorters.NAME)
+      return this.app.queries.feedsForIdentity(this.app.identity)
     }
   }
 }

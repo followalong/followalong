@@ -2,10 +2,6 @@ export default {
   name: 'My Account',
   feeds: [
     {
-      name: 'Signal v. Noise',
-      url: 'https://m.signalvnoise.com/feed/'
-    },
-    {
       name: 'FiveThirtyEight',
       url: 'https://fivethirtyeight.com/contributors/nate-silver/feed/'
     },

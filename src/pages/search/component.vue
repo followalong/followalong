@@ -80,7 +80,7 @@ export default {
       this.isLoading = true
       this.error = ''
 
-      const service = this.app.identity.findService('search', true)
+      const service = this.app.queries.serviceForIdentity(this.app.identity, 'search')
 
       if (!service) {
         this.isLoading = false
