@@ -1,4 +1,4 @@
-import generateId from '@/components/app/utils/generate-id.js'
+import generateId from '@/lib/utils/generate-id.js'
 
 class State {
   constructor (data) {

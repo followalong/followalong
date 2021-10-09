@@ -1,5 +1,5 @@
 import aes256 from 'aes256'
-import identitiesKeychain from '../../components/app/actions/identities-keychain.js'
+import identitiesKeychain from '@/components/app/actions/identities-keychain.js'
 
 export default {
   en (keychain, identity, json) {

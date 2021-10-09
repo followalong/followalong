@@ -62,7 +62,7 @@
 
 <script>
 import { Base64 } from 'js-base64'
-import utils from '@/components/app/utils'
+import utils from '@/lib/utils'
 
 export default {
   props: ['app'],

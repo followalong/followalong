@@ -1,4 +1,4 @@
-import generateId from '@/components/app/utils/generate-id.js'
+import generateId from '@/lib/utils/generate-id.js'
 
 export default function (app, keychain, store, identity, strategy, key, revert) {
   if (strategy === 'none') {

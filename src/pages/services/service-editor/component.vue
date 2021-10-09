@@ -275,8 +275,8 @@
 import { Base64 } from 'js-base64'
 import { saveAs } from 'file-saver'
 import copy from 'copy-to-clipboard'
-import SERVICES from '@/components/app/services'
-import utils from '@/components/app/utils'
+import SERVICES from '@/lib/services'
+import utils from '@/lib/utils'
 import CreditCard from '@/components/credit-card/component.vue'
 
 export default {

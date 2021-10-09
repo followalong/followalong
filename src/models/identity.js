@@ -1,4 +1,4 @@
-import SERVICES from '@/components/app/services'
+import SERVICES from '@/lib/services'
 
 export default {
   props: {

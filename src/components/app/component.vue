@@ -21,15 +21,15 @@
 </template>
 
 <script>
-import utils from '@/components/app/utils/index.js'
+import utils from '@/lib/utils/index.js'
 import MediaPlayer from '@/components/media-player/component.vue'
 import Sidebar from '@/components/sidebar/component.vue'
 import TopBar from '@/components/top-bar/component.vue'
 import keychain from '@/keychain'
-import seedIdentity from '@/components/app/seed'
-import Commands from '@/components/app/commands.js'
-import State from '@/components/app/state.js'
-import Queries from '@/components/app/queries.js'
+import seedIdentity from '@/lib/seed'
+import Commands from '@/lib/commands.js'
+import State from '@/lib/state.js'
+import Queries from '@/lib/queries.js'
 
 export default {
   components: {

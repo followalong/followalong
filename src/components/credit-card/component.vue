@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import SERVICES from '@/components/app/services'
-import utils from '@/components/app/utils'
+import SERVICES from '@/lib/services'
+import utils from '@/lib/utils'
 
 var stripe; var elements; var card
 

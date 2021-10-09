@@ -1,6 +1,6 @@
-import utils from '@/components/app/utils/index.js'
-import SERVICES from '@/components/app/services'
-import sorter from '@/components/app/sorter'
+import utils from '@/lib/utils/index.js'
+import SERVICES from '@/lib/services'
+import sorter from '@/lib/sorter'
 
 class Queries {
   constructor (state) {

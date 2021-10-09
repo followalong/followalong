@@ -1,5 +1,5 @@
-import Formatters from '@/components/app/formatters.js'
-import { getFeed } from '@/components/app/fetcher'
+import Formatters from '@/lib/formatters.js'
+import { getFeed } from '@/lib/fetcher'
 import { Base64 } from 'js-base64'
 import copy from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'

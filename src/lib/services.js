@@ -1,5 +1,5 @@
 import AWS from 'aws-sdk'
-import utils from './utils'
+import utils from '@/lib/utils'
 
 function xmlRequest (identity, data, done) {
   if (!data.url) return done('No URL supplied.')

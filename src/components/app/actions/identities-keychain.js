@@ -1,6 +1,5 @@
-import crypt from '../crypt'
-import utils from '@/components/app/utils/index.js'
-import identitiesActions from '../actions/identities.js'
+import crypt from '@/lib/crypt'
+import utils from '@/lib/utils/index.js'
 
 const decryptIdentity = function (keychain, store, identity) {
   return new Promise((resolve, reject) => {
@@ -34,7 +33,7 @@ const decryptIdentity = function (keychain, store, identity) {
         })
       }
 
-      identitiesActions.addItemsToIdentity(identity, state.items)
+      // identitiesActions.addItemsToIdentity(identity, state.items)
 
       identity._decrypted = true
 

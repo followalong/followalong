@@ -9,6 +9,7 @@
 ## TODO
 
 - Specs
+- Change encryption
 - Save to local
 - Scatter fetch all
 - 3 Core Services
@@ -17,7 +18,7 @@
 - Documentation
   - Spinning up your own frontend
   - Spinning up your own backend
-- Comments
+- Interactions
 - Memberships
 
 ## Addons

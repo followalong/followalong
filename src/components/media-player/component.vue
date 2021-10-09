@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import utils from '@/components/app/utils'
+import utils from '@/lib/utils'
 import AudioPlayer from '@/components/media-player/audio-player/component.vue'
 import MediaPreview from '@/components/media-player/media-preview/component.vue'
 import VideoPlayer from '@/components/media-player/video-player/component.vue'
