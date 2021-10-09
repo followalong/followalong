@@ -1,14 +1,14 @@
-import Formatters from '@/lib/formatters.js'
+import Presenters from '@/lib/presenters.js'
 import { getFeed } from '@/lib/fetcher'
 import { Base64 } from 'js-base64'
 import copy from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
 
 class Commands {
-  constructor (state, queries, formatters) {
+  constructor (state, queries, presenters) {
     this.state = state
     this.queries = queries
-    this.formatters = new Formatters(queries)
+    this.presenters = new Presenters(queries)
   }
 
   unsubscribe (feed) {
@@ -132,13 +132,13 @@ class Commands {
   }
 
   copyConfig (identity) {
-    const data = this.formatters.identityToRemote(identity)
+    const data = this.presenters.identityToRemote(identity)
     copy(Base64.encode(JSON.stringify(data)))
     alert('Copied configuration to clipboard.')
   }
 
   downloadIdentity (identity) {
-    const data = this.formatters.identityToRemote(identity)
+    const data = this.presenters.identityToRemote(identity)
     const filename = window.location.host.replace(':', '.') + '.' + identity.id + '.json'
     const str = JSON.stringify(data)
     const blob = new Blob([str], { type: 'application/json;charset=utf-8' })

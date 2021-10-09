@@ -1,4 +1,4 @@
-class Formatters {
+class Presenters {
   constructor (queries) {
     this.queries = queries
   }
@@ -86,4 +86,4 @@ class Formatters {
   }
 }
 
-export default Formatters
+export default Presenters
