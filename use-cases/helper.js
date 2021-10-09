@@ -7,7 +7,7 @@ import { routes } from '@/router'
 import App from '@/components/app/component.vue'
 // import store from '@/store'
 import addIcons from '@/add-icons.js'
-// import keychain from '@/keychain'
+// import keychain from '@/lib/keychain'
 
 const storeIdentity = (keychain, identity, id, key) => {
   return new Promise(async (resolve) => {

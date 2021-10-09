@@ -1,7 +1,7 @@
 import { mountApp } from '../helper.js'
-import store from '@/store'
+import store from '@/lib/store'
 import crypt from '@/lib/crypt.js'
-import keychain from '@/keychain.js'
+import keychain from '@/lib/keychain.js'
 
 // const visitSettings = async (identity, identityId, identityKey) => {
 //   const app = await mountApp(identity, identityId, identityKey)
