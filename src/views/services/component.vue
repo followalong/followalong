@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import ServiceEditor from '@/pages/services/service-editor/component.vue'
+import ServiceEditor from '@/views/services/service-editor/component.vue'
 import SERVICE_TYPES from './types.js'
 
 export default {

@@ -5,19 +5,19 @@ import { routes } from '@/router'
 // import setIdentityDefaults from '@/lib/utils/set-identity-defaults.js'
 // import generateId from '@/lib/utils/generate-id.js'
 import App from '@/components/app/component.vue'
-// import store from '@/store'
+// import store from '@/lib/store'
 import addIcons from '@/add-icons.js'
 // import keychain from '@/lib/keychain'
 
-const storeIdentity = (keychain, identity, id, key) => {
-  return new Promise(async (resolve) => {
-    await keychain.saveKey(id, key || 'none')
-
-    await store.setItem(id, typeof identity === 'object' ? JSON.stringify(identity) : identity)
-
-    resolve(identity)
-  })
-}
+// const storeIdentity = (keychain, identity, id, key) => {
+//   return new Promise(async (resolve) => {
+//     await keychain.saveKey(id, key || 'none')
+//
+//     await store.setItem(id, typeof identity === 'object' ? JSON.stringify(identity) : identity)
+//
+//     resolve(identity)
+//   })
+// }
 
 // const mountApp = (identity, id, key) => {
 //   return new Promise(async (resolve) => {
