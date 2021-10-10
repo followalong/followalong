@@ -2,6 +2,7 @@
   <li>
     <button
       :class="app.queries.isFetching(feed) ? 'loading' : ''"
+      :aria-label="`Fetch ${feed.name}`"
       @click="app.commands.fetchFeed(feed, app.identity)"
     >
       <span v-if="app.queries.isFetching(feed)">Loading...</span>
@@ -15,7 +16,10 @@
       <span v-else>&#9658;</span>
     </button>
     <h2>
-      <router-link :to="{ name: 'feed', params: { feed_url: feed.url } }">
+      <router-link
+        :aria-label="`Visit ${feed.name}`"
+        :to="{ name: 'feed', params: { feed_url: feed.url } }"
+      >
         {{ feed.name }}
       </router-link>
       <a

@@ -78,13 +78,19 @@ const mountApp = () => {
     })
 
     app.click = async (el) => {
-      const $el = app.find(el)
+      const $el = await app.find(el)
+      if (!Object.keys($el).length) {
+        throw new Error(`Could not find element: ${el} in ${app.text()}`)
+      }
       await $el.trigger('click')
       await flushPromises()
     }
 
     app.submit = async (el) => {
-      const $el = app.find(el)
+      const $el = await app.find(el)
+      if (!Object.keys($el).length) {
+        throw new Error(`Could not find element: ${el} in ${app.text()}`)
+      }
       await $el.trigger('submit')
       await flushPromises()
     }
@@ -93,6 +99,72 @@ const mountApp = () => {
 
     resolve(app)
   })
+}
+
+const rawRSSResponse = (item) => {
+  return {
+    status: 200,
+    body: rawRSS(item)
+  }
+}
+
+const buildServiceToRespondWith = (result) => {
+  return jest.fn(() => {
+    return {
+      request (identity, data, done) {
+        done(undefined, result)
+      }
+    }
+  })
+}
+
+const rawRSS = (item) => {
+  return `
+  <?xml version="1.0" encoding="UTF-8"?>
+  <rss version="2.0"
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+    xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+    xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+
+    xmlns:georss="http://www.georss.org/georss"
+    xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+  >
+  <channel>
+    <title>Signal v. Noise</title>
+    <atom:link href="https://m.signalvnoise.com/feed/" rel="self" type="application/rss+xml" />
+    <link>https://m.signalvnoise.com</link>
+    <description>Strong opinions and shared thoughts on design, business, and tech. By the makers (and friends) of &#60;a href=&#34;https://www.basecamp.com&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&#62;Basecamp&#60;/a&#62;. Since 1999.</description>
+    <lastBuildDate>Tue, 09 Feb 2021 18:04:31 +0000</lastBuildDate>
+    <language>en-US</language>
+    <sy:updatePeriod>hourly</sy:updatePeriod>
+    <sy:updateFrequency>1</sy:updateFrequency>
+    <image>
+      <url>https://i1.wp.com/m.signalvnoise.com/wp-content/uploads/2019/01/cropped-svn-icon.gif?fit=32%2C32&#038;ssl=1</url>
+      <title>Signal v. Noise</title>
+      <link>https://m.signalvnoise.com</link>
+      <width>32</width>
+      <height>32</height>
+    </image>
+    <site xmlns="com-wordpress:feed-additions:1">156952158</site>
+    <item>
+      <title>${item.title}</title>
+      <link>https://m.signalvnoise.com/testimony-before-the-north-dakota-senate-industry-business-and-labor-committee/</link>
+      <dc:creator><![CDATA[DHH]]></dc:creator>
+      <pubDate>Tue, 09 Feb 2021 18:04:30 +0000</pubDate>
+      <category><![CDATA[Uncategorized]]></category>
+      <guid isPermaLink="false">https://m.signalvnoise.com/?p=13077</guid>
+      <description><![CDATA[Chairman Klein and members of the Senate Industry, Business and Labor Committee- My name is David Heinemeier Hansson, and I’m the CTO and co-founder of Basecamp, a small internet company from Chicago that sells project-management software and email services. I first testified on the topic of big tech monopolies at the House Antitrust Subcommittee&#8217;s field&#8230; <a class="read-more" href="https://m.signalvnoise.com/testimony-before-the-north-dakota-senate-industry-business-and-labor-committee/">keep reading</a>]]></description>
+      <content:encoded><![CDATA[
+        <p>Chairman Klein and members of the Senate Industry, Business and Labor Committee-</p>]]></content:encoded>
+        <slash:comments>11</slash:comments>
+        <post-id xmlns="com-wordpress:feed-additions:1">12956</post-id>
+      </item>
+    </channel>
+  </rss>
+  `
 }
 
 // const buildIdentityWithFeedAndItems = (items, feed, identity) => {
@@ -114,5 +186,7 @@ const mountApp = () => {
 
 export {
   flushPromises,
-  mountApp
+  mountApp,
+  buildServiceToRespondWith,
+  rawRSSResponse
 }

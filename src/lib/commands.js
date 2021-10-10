@@ -75,19 +75,23 @@ class Commands {
 
     feed.fetchingAt = Date.now()
 
-    getFeed(identity, service, feed, updatedAt)
-      .then((data) => {
-        feed.name = data.title || data.name || feed.name
-        feed.description = feed.description || data.description
-        feed.updatedAt = updatedAt
+    return new Promise((resolve, reject) => {
+      getFeed(identity, service, feed, updatedAt)
+        .then((data) => {
+          feed.name = data.title || data.name || feed.name
+          feed.description = feed.description || data.description
+          feed.updatedAt = updatedAt
 
-        const items = (data.items || []).map(this.parseRawFeedItem)
+          const items = (data.items || []).map(this.parseRawFeedItem)
 
-        this.addItemsForFeed(feed, items)
-      })
-      .finally(() => {
-        delete feed.fetchingAt
-      })
+          this.addItemsForFeed(feed, items)
+        })
+        .catch(reject)
+        .finally(() => {
+          delete feed.fetchingAt
+          resolve()
+        })
+    })
   }
 
   addItemsForFeed (feed, items) {

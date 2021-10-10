@@ -1,16 +1,10 @@
-import { mountApp, flushPromises } from '../helper.js'
+import { mountApp, flushPromises, buildServiceToRespondWith } from '../helper.js'
 
 describe('Feeds: Search', () => {
   describe('if multiple results', () => {
     it('shows a listing of feeds', async () => {
       const app = await mountApp()
-      app.vm.queries.serviceForIdentity = jest.fn(() => {
-        return {
-          request (identity, data, done) {
-            done(undefined, [{ name: 'Feed #1' }, { name: 'Feed #2' }])
-          }
-        }
-      })
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith([{ name: 'Feed #1' }, { name: 'Feed #2' }])
       const $form = app.find('[aria-label="Search form"]')
 
       await $form.trigger('submit')
@@ -23,13 +17,7 @@ describe('Feeds: Search', () => {
     it('can subscribe to a feed', async () => {
       const expectedFeed = { name: 'Feed #1' }
       const app = await mountApp()
-      app.vm.queries.serviceForIdentity = jest.fn(() => {
-        return {
-          request (identity, data, done) {
-            done(undefined, [expectedFeed, { name: 'Feed #2' }])
-          }
-        }
-      })
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith([expectedFeed, { name: 'Feed #2' }])
 
       await app.submit('[aria-label="Search form"]')
       await app.click(`[aria-label="Subscribe to ${expectedFeed.name}"]`)
@@ -45,13 +33,7 @@ describe('Feeds: Search', () => {
       const app = await mountApp()
       app.vm.commands.fetchFeed = jest.fn()
       app.vm.queries.findFeedByUrl = jest.fn(() => expectedFeed)
-      app.vm.queries.serviceForIdentity = jest.fn(() => {
-        return {
-          request (identity, data, done) {
-            done(undefined, [expectedFeed])
-          }
-        }
-      })
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith([expectedFeed])
 
       await app.submit('[aria-label="Search form"]')
 
@@ -62,13 +44,7 @@ describe('Feeds: Search', () => {
       const expectedFeed = { name: 'Feed #1', url: 'https://example.com/feed' }
       const app = await mountApp()
       app.vm.commands.fetchFeed = jest.fn()
-      app.vm.queries.serviceForIdentity = jest.fn(() => {
-        return {
-          request (identity, data, done) {
-            done(undefined, [expectedFeed])
-          }
-        }
-      })
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith([expectedFeed])
 
       await app.submit('[aria-label="Search form"]')
       await app.click('[aria-label="Toggle Menu"]')

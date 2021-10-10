@@ -14,6 +14,7 @@
           <li v-if="app.queries.identityForFeed(feed)">
             <a
               href="javascript:;"
+              :aria-label="`Fetch ${feed.name}`"
               @click="app.commands.fetchFeed(feed, app.identity)"
             >
               <span v-if="app.queries.isFetching(feed)">Fetching...</span>
