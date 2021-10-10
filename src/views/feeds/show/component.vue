@@ -6,7 +6,8 @@
           <li v-if="app.queries.identityForFeed(feed) && app.queries.unreadItems(feed).length">
             <a
               href="javascript:;"
-              @click="catchFeedUp()"
+              :aria-label="`Catch up on ${feed.name}`"
+              @click="app.commands.catchMeUp(items)"
             >
               Catch Me Up!
             </a>
@@ -21,9 +22,20 @@
               <span v-else>Fetch Now</span>
             </a>
           </li>
+          <li>
+            <a
+              href="javascript:;"
+              :aria-label="`Pause ${feed.name}`"
+              @click="app.commands.togglePause(feed)"
+            >
+              <span v-if="app.queries.isPaused(feed)">Unpause</span>
+              <span v-else>Pause</span>
+            </a>
+          </li>
           <li v-if="app.queries.identityForFeed(feed)">
             <a
               href="javascript:;"
+              aria-label="`Unsubscribe ${feed.name}`"
               @click="unsubscribe()"
             >
               Unsubscribe

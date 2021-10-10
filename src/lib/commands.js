@@ -12,7 +12,7 @@ class Commands {
   }
 
   unsubscribe (feed) {
-    if (!confirm('Are you sure you want to remove this feed?')) {
+    if (!window.confirm('Are you sure you want to remove this feed?')) {
       return
     }
 
@@ -21,7 +21,9 @@ class Commands {
   }
 
   catchMeUp (items) {
-    items.forEach((item) => this.toggleRead(item, true))
+    items
+      .filter((item) => this.queries.isUnread(item))
+      .forEach((item) => this.toggleRead(item, true))
   }
 
   hideHint (identity, hint) {

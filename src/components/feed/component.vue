@@ -10,6 +10,7 @@
     </button>
     <button
       :class="app.queries.isPaused(feed) ? 'button-gray' : ''"
+      :aria-label="`Pause ${feed.name}`"
       @click="app.commands.togglePause(feed)"
     >
       <span v-if="app.queries.isPaused(feed)">&#10074;&#10074;</span>
@@ -25,6 +26,7 @@
       <a
         href="javascript:;"
         class="hint remove"
+        :aria-label="`Unsubscribe ${feed.name}`"
         @click="app.commands.unsubscribe(feed)"
       >
         Unsubscribe
