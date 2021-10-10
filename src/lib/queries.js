@@ -136,6 +136,7 @@ class Queries {
   itemsForIdentity (identity) {
     return this.feedsForIdentity(identity)
       .reduce((items, f) => items.concat(this.itemsForFeed(f)), [])
+      .sort(sorter())
   }
 
   hintIsShown (identity, hint) {
