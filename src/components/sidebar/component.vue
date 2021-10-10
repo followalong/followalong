@@ -145,7 +145,7 @@
       <h3>
         <router-link
           to="/changelog"
-          aria-label="See what's new"
+          aria-label="See the changelog"
         >
           Version {{ version }}
         </router-link>
