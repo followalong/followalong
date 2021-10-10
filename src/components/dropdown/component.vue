@@ -2,6 +2,7 @@
   <div class="dropdown relativizer">
     <a
       href="javascript:;"
+      aria-label="Toggle Menu"
       @click="showMenu = !showMenu"
     >
       <font-awesome-icon

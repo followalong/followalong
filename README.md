@@ -9,6 +9,7 @@
 ## TODO
 
 - Specs
+- Dark mode
 - Change encryption
 - Save to local
 - Scatter fetch all

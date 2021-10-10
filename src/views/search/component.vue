@@ -28,6 +28,7 @@
           >
             <button
               class="float-right"
+              :aria-label="'Subscribe to ' + feed.name"
               @click="app.commands.addFeedToIdentity(app.identity, feed)"
             >
               Subscribe
@@ -100,11 +101,13 @@ export default {
           return
         }
 
+        this.feeds = feeds.map((feed) => {
+          return this.app.commands.addFeed(feed)
+        })
+
         if (feeds.length === 1) {
           return this.$router.push({ name: 'feed', params: { feed_url: feeds[0].url } })
         }
-
-        this.feeds = feeds
       })
     }
   }

@@ -74,7 +74,10 @@
       </li>
 
       <li>
-        <router-link to="/feeds">
+        <router-link
+          to="/feeds"
+          aria-label="Feeds"
+        >
           <font-awesome-icon icon="database" />
           Feeds
           <span class="hint counter">

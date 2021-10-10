@@ -78,7 +78,14 @@ const mountApp = () => {
     })
 
     app.click = async (el) => {
-      await app.find(el).trigger('click')
+      const $el = app.find(el)
+      await $el.trigger('click')
+      await flushPromises()
+    }
+
+    app.submit = async (el) => {
+      const $el = app.find(el)
+      await $el.trigger('submit')
       await flushPromises()
     }
 

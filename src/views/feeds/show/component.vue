@@ -31,7 +31,8 @@
           <li v-if="!app.queries.identityForFeed(feed)">
             <a
               href="javascript:;"
-              @click="subscribe"
+              :aria-label="'Subscribe to ' + feed.name"
+              @click="app.commands.addFeedToIdentity(app.identity, feed)"
             >
               Subscribe
             </a>
@@ -124,10 +125,6 @@ export default {
     unsubscribe () {
       this.app.commands.unsubscribe(this.feed)
       this.$router.push('/feeds')
-    },
-
-    subscribe () {
-      this.app.commands.addFeedToIdentity(this.app.identity, this.feed)
     }
   }
 }

@@ -164,6 +164,8 @@ class Commands {
 
   addFeedToIdentity (identity, feed) {
     feed.identityId = identity.id
+
+    return feed
   }
 }
 
