@@ -26,7 +26,10 @@
 
     <ul>
       <li>
-        <router-link to="/">
+        <router-link
+          to="/"
+          aria-label="What's new?"
+        >
           <font-awesome-icon icon="igloo" /> What's New?
           <span class="hint counter">
             <span v-if="unread.length">({{ unread.length }})</span>

@@ -1,6 +1,7 @@
 <template>
   <a
     href="javascript:;"
+    aria-label="FollowAlong"
     @click="fetchAll"
   >
     <font-awesome-icon

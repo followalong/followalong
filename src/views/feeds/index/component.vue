@@ -3,6 +3,7 @@
     <div class="title-wrapper">
       <button
         :class="'float-right ' + (app.identity.isLoading ? 'loading' : '')"
+        aria-label="Fetch all feeds"
         @click="app.commands.fetchAllFeeds(app.identity)"
       >
         <span v-if="app.identity.isLoading">Loading...</span>
