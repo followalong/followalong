@@ -77,8 +77,9 @@ const mountApp = () => {
       }
     })
 
-    app.go = (path) => {
-      return router.push(path)
+    app.click = async (el) => {
+      await app.find(el).trigger('click')
+      await flushPromises()
     }
 
     await flushPromises()

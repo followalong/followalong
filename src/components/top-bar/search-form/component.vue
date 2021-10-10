@@ -2,6 +2,7 @@
   <form
     method="GET"
     action="/search"
+    aria-label="Search form"
     @submit.prevent="search(q)"
   >
     <input
@@ -24,7 +25,7 @@ export default {
 
   methods: {
     search (q) {
-      this.$router.push({ path: '/search', query: { q: this.q } })
+      return this.$router.push({ path: '/search', query: { q: this.q } })
     }
   }
 }

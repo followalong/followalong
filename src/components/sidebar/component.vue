@@ -15,7 +15,8 @@
       <p>
         A place where you can connect <em>directly</em> to things you care about.
         <router-link
-          to="/splash"
+          aria-label="About FollowAlong"
+          to="/about"
           class="primary"
         >
           Read more &raquo;
@@ -106,7 +107,10 @@
       </li>
 
       <li>
-        <router-link to="/help">
+        <router-link
+          to="/help"
+          aria-label="Help"
+        >
           <font-awesome-icon icon="question-circle" />
           Help
         </router-link>
@@ -139,7 +143,10 @@
 
     <div class="section">
       <h3>
-        <router-link to="/changelog">
+        <router-link
+          to="/changelog"
+          aria-label="See what's new"
+        >
           Version {{ version }}
         </router-link>
       </h3>

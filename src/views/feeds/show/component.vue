@@ -75,15 +75,7 @@
           </p>
         </li>
         <li v-else-if="items.length === 0">
-          <h3>You're all caught up!</h3>
-          <p>
-            If you want to be able to see more "history", visit the <router-link
-              to="/settings"
-              class="link"
-            >
-              Settings
-            </router-link> page and increase the maximum number of items to keep.
-          </p>
+          <h3>You're all caught up on {{ feed.name }}!</h3>
         </li>
 
         <Item

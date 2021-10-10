@@ -1,9 +1,11 @@
-import { mountApp } from '../helper.js'
+import { mountApp, flushPromises } from '../helper.js'
 
 describe('App: Get help', () => {
-  it('runs', async () => {
+  it('shows an email address', async () => {
     const app = await mountApp()
 
-    expect(app.text()).toContain('What is FollowAlong?')
+    await app.click('[aria-label="Help"]')
+
+    expect(app.text()).toContain('followalong@protonmail.com')
   })
 })

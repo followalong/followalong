@@ -101,7 +101,7 @@ export default {
         }
 
         if (feeds.length === 1) {
-          this.$router.push({ name: 'feed', params: { feed_url: feeds[0].url } })
+          return this.$router.push({ name: 'feed', params: { feed_url: feeds[0].url } })
         }
 
         this.feeds = feeds
