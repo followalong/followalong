@@ -32,6 +32,10 @@ export default {
     {
       name: 'Earthling Ed',
       url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCVRrGAcUc7cblUzOhI1KfFg'
+    },
+    {
+      name: 'Human Events Daily with Jack Posobiec',
+      url: 'https://feeds.buzzsprout.com/1850247.rss'
     }
   ]
 }

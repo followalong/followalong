@@ -138,7 +138,7 @@ export default {
       if (this.isExpanded) {
         setTimeout(() => {
           window.scroll({
-            top: this.$refs.content.offsetTop - 150,
+            top: this.$refs.content.offsetTop - 85,
             left: 0,
             behavior: 'smooth'
           })
