@@ -297,8 +297,8 @@ var SERVICES = [{
   name: 'None',
   description: 'No service will be used.',
   supports: 'rss,sync,search',
-  request (identity, data, done) {
-    done()
+  request () {
+    return Promise.resolve()
   }
 }]
 

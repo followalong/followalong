@@ -18,7 +18,7 @@
           <li v-if="app.queries.identityForFeed(feed)">
             <a
               href="javascript:;"
-              :aria-label="'Save for later: ' + item.title"
+              :aria-label="`${app.queries.isSaved(item) ? 'Unsave' : 'Save'} ${item.title}`"
               @click="app.commands.toggleSave(item)"
             >
               Save<span v-if="app.queries.isSaved(item)">d</span>
@@ -28,7 +28,7 @@
           <li v-if="app.queries.identityForFeed(feed)">
             <a
               href="javascript:;"
-              :aria-label="'Mark as read: ' + item.title"
+              :aria-label="`${app.queries.isRead(item) ? 'Unread' : 'Read'} ${item.title}`"
               @click="app.commands.toggleRead(item)"
             >
               Mark As <span v-if="app.queries.isRead(item)">Unread</span><span v-else>Read</span>

@@ -33,7 +33,7 @@ export default {
       this.$router.push('/')
       this.app.toggleSidebar(true)
 
-      this.app.commands.fetchAllFeeds(this.app.identity)
+      return this.app.commands.fetchAllFeeds(this.app.identity)
         .finally(() => {
           this.isLoading = false
         })

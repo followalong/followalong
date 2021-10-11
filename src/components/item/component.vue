@@ -5,12 +5,15 @@
     <a
       href="javascript:;"
       class="check"
-      :aria-label="`Mark as read: ${item.title}`"
+      :aria-label="`${app.queries.isRead(item) ? 'Unread' : 'Read'} ${item.title}`"
       @click="app.commands.toggleRead(item)"
     >&check;</a>
 
     <h3>
-      <router-link :to="{ name: 'item', params: { feed_url: feed.url, guid: item.guid } }">
+      <router-link
+        :to="{ name: 'item', params: { feed_url: feed.url, guid: item.guid } }"
+        :aria-label="`Visit item ${item.title}`"
+      >
         {{ item.title }}
       </router-link>
     </h3>
@@ -63,6 +66,7 @@
           <div class="faded-content">
             <button
               class="button-gray button-large"
+              :aria-label="`Read more ${item.title}`"
               @click="toggleExpanded"
             >
               Read More
@@ -74,7 +78,7 @@
       <p class="hint float-right">
         <a
           href="javascript:;"
-          :aria-label="'Save for later: ' + item.title"
+          :aria-label="`${app.queries.isSaved(item) ? 'Unsave' : 'Save'} ${item.title}`"
           @click="app.commands.toggleSave(item)"
         >
           <font-awesome-icon
@@ -86,6 +90,7 @@
         <a
           :href="item.link"
           target="_blank"
+          :aria-label="`Visit source ${item.title}`"
           @click="app.commands.toggleRead(item, true)"
         >
           <font-awesome-icon icon="link" />

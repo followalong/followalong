@@ -1,70 +1,42 @@
-import { mountApp, buildIdentityWithFeedAndItems } from '../helper.js'
+import { mountApp, flushPromises, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
 
-describe('Use Case: Save for later', () => {
-  it('runs', () => {})
-//   describe('from the home page', () => {
-//     it('can be marked as read', async () => {
-//       const expectedTitle = 'An Article'
-//       const app = await mountApp(buildIdentityWithFeedAndItems([{ isSaved: false, title: expectedTitle }]))
-//       await app.go('/')
-//
-//       await app.find(`[aria-label="Save for later: ${expectedTitle}"]`).trigger('click')
-//
-//       expect(app.vm.identity.items[0].isSaved).toEqual(true)
-//     })
-//
-//     it('can be marked as unread', async () => {
-//       const expectedTitle = 'An Article'
-//       const app = await mountApp(buildIdentityWithFeedAndItems([{ isSaved: true, title: expectedTitle }]))
-//       await app.go('/')
-//
-//       await app.find(`[aria-label="Save for later: ${expectedTitle}"]`).trigger('click')
-//
-//       expect(app.vm.identity.items[0].isSaved).toEqual(false)
-//     })
-//   })
-//
-//   describe('from the feed page', () => {
-//     it('can be marked as read', async () => {
-//       const expectedTitle = 'An Article'
-//       const app = await mountApp(buildIdentityWithFeedAndItems([{ isSaved: false, title: expectedTitle }]))
-//       await app.go({ name: 'feed', params: { feed_url: app.vm.identity.feeds[0].url } })
-//
-//       await app.find(`[aria-label="Save for later: ${expectedTitle}"]`).trigger('click')
-//
-//       expect(app.vm.identity.items[0].isSaved).toEqual(true)
-//     })
-//
-//     it('can be marked as unread', async () => {
-//       const expectedTitle = 'An Article'
-//       const app = await mountApp(buildIdentityWithFeedAndItems([{ isSaved: true, title: expectedTitle }]))
-//       await app.go({ name: 'feed', params: { feed_url: app.vm.identity.feeds[0].url } })
-//
-//       await app.find(`[aria-label="Save for later: ${expectedTitle}"]`).trigger('click')
-//
-//       expect(app.vm.identity.items[0].isSaved).toEqual(false)
-//     })
-//   })
-//
-//   describe('from the item page', () => {
-//     it('can be marked as read', async () => {
-//       const expectedTitle = 'An Article'
-//       const app = await mountApp(buildIdentityWithFeedAndItems([{ isSaved: false, title: expectedTitle }]))
-//       await app.go({ name: 'item', params: { feed_url: app.vm.identity.feeds[0].url, guid: app.vm.identity.items[0].guid } })
-//
-//       await app.find(`[aria-label="Save for later: ${expectedTitle}"]`).trigger('click')
-//
-//       expect(app.vm.identity.items[0].isSaved).toEqual(true)
-//     })
-//
-//     it('can be marked as unread', async () => {
-//       const expectedTitle = 'An Article'
-//       const app = await mountApp(buildIdentityWithFeedAndItems([{ isSaved: true, title: expectedTitle }]))
-//       await app.go({ name: 'item', params: { feed_url: app.vm.identity.feeds[0].url, guid: app.vm.identity.items[0].guid } })
-//
-//       await app.find(`[aria-label="Save for later: ${expectedTitle}"]`).trigger('click')
-//
-//       expect(app.vm.identity.items[0].isSaved).toEqual(false)
-//     })
-//   })
+describe('Items: Save for later', () => {
+  describe('from the home page', () => {
+    it('can be toggled', async () => {
+      const app = await mountApp()
+      const item = { title: 'Foo bar' }
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
+
+      await app.click('[aria-label="Feeds"]')
+      await app.click('[aria-label="FollowAlong"]')
+      expect(app.findAll(`[aria-label="Unsave ${item.title}"]`).length).not.toEqual(1)
+
+      await app.click(`[aria-label="Save ${item.title}"]`)
+      expect(app.findAll(`[aria-label="Unsave ${item.title}"]`).length).toEqual(1)
+
+      await app.click(`[aria-label="Unsave ${item.title}"]`)
+      expect(app.findAll(`[aria-label="Save ${item.title}"]`).length).not.toEqual(1)
+    })
+  })
+
+  describe('from the item page', () => {
+    it('can be toggled', async () => {
+      const app = await mountApp()
+      const item = { title: 'Foo bar' }
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
+
+      await app.click('[aria-label="Feeds"]')
+      await app.click('[aria-label="FollowAlong"]')
+      await app.click('[aria-label^="Visit"]')
+      expect(app.findAll(`[aria-label="Unsave ${item.title}"]`).length).not.toEqual(1)
+
+      await app.click('[aria-label="Toggle Menu"]')
+      await app.click(`[aria-label="Save ${item.title}"]`)
+      await app.click('[aria-label="Toggle Menu"]')
+      expect(app.findAll(`[aria-label="Unsave ${item.title}"]`).length).toEqual(1)
+
+      await app.click(`[aria-label="Unsave ${item.title}"]`)
+      expect(app.findAll(`[aria-label="Save ${item.title}"]`).length).not.toEqual(1)
+    })
+  })
 })

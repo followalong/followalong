@@ -117,6 +117,20 @@ const buildServiceToRespondWith = (result) => {
 }
 
 const rawRSS = (item) => {
+  let enclosure = ''
+
+  if (item.videoUrl) {
+    enclosure = `<enclosure url="${item.videoUrl}"></enclosure>`
+  }
+
+  if (item.audioUrl) {
+    enclosure = `<enclosure url="${item.audioUrl}"></enclosure>`
+  }
+
+  item.content = item.content || 'This is some random content'
+  item.title = item.title || 'This is some random title'
+  item.link = item.link || 'https://example.com'
+
   return `
   <?xml version="1.0" encoding="UTF-8"?>
   <rss version="2.0"
@@ -149,16 +163,16 @@ const rawRSS = (item) => {
     <site xmlns="com-wordpress:feed-additions:1">156952158</site>
     <item>
       <title>${item.title}</title>
-      <link>https://m.signalvnoise.com/testimony-before-the-north-dakota-senate-industry-business-and-labor-committee/</link>
+      <link>${item.link}</link>
       <dc:creator><![CDATA[DHH]]></dc:creator>
       <pubDate>Tue, 09 Feb 2021 18:04:30 +0000</pubDate>
       <category><![CDATA[Uncategorized]]></category>
       <guid isPermaLink="false">https://m.signalvnoise.com/?p=13077</guid>
       <description><![CDATA[Chairman Klein and members of the Senate Industry, Business and Labor Committee- My name is David Heinemeier Hansson, and I’m the CTO and co-founder of Basecamp, a small internet company from Chicago that sells project-management software and email services. I first testified on the topic of big tech monopolies at the House Antitrust Subcommittee&#8217;s field&#8230; <a class="read-more" href="https://m.signalvnoise.com/testimony-before-the-north-dakota-senate-industry-business-and-labor-committee/">keep reading</a>]]></description>
-      <content:encoded><![CDATA[
-        <p>Chairman Klein and members of the Senate Industry, Business and Labor Committee-</p>]]></content:encoded>
-        <slash:comments>11</slash:comments>
-        <post-id xmlns="com-wordpress:feed-additions:1">12956</post-id>
+      <content:encoded><![CDATA[${item.content}]]></content:encoded>
+      <slash:comments>11</slash:comments>
+      <post-id xmlns="com-wordpress:feed-additions:1">12956</post-id>
+      ${enclosure}
       </item>
     </channel>
   </rss>

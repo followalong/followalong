@@ -1,3 +1,31 @@
+import { mountApp, flushPromises, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+
 describe('Items: Read more', () => {
-  it.todo('runs')
+  describe('from the home page', () => {
+    it('can show the full content', async () => {
+      window.scroll = () => {}
+      const app = await mountApp()
+      const item = { title: 'Foo bar', content: 'word '.repeat(1000) }
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
+
+      await app.click('[aria-label="Feeds"]')
+      await app.click('[aria-label="FollowAlong"]')
+      await app.click(`[aria-label="Read more ${item.title}"]`)
+
+      expect(app.text()).toContain(item.content)
+    })
+
+    it('scrolls to content', async () => {
+      window.scroll = jest.fn()
+      const app = await mountApp()
+      const item = { title: 'Foo bar', content: 'word '.repeat(1000) }
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
+
+      await app.click('[aria-label="Feeds"]')
+      await app.click('[aria-label="FollowAlong"]')
+      await app.click(`[aria-label="Read more ${item.title}"]`)
+
+      expect(window.scroll).toHaveBeenCalled()
+    })
+  })
 })
