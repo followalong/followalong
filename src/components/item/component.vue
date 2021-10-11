@@ -37,6 +37,7 @@
 
     <div
       v-if="showContent"
+      ref="content"
     >
       <router-link
         v-if="app.queries.hasMedia(item)"
@@ -45,7 +46,9 @@
         <MediaPreview :item="item" />
       </router-link>
 
-      <div v-if="hasContent">
+      <div
+        v-if="hasContent"
+      >
         <div
           v-if="isExpanded || !isTruncated"
           class="description expanded"
@@ -60,7 +63,7 @@
           <div class="faded-content">
             <button
               class="button-gray button-large"
-              @click="isExpanded = !isExpanded"
+              @click="toggleExpanded"
             >
               Read More
             </button>
@@ -126,6 +129,21 @@ export default {
     },
     shortContent () {
       return `${this.words.slice(0, WORD_LIMIT).join(' ').trim()}...`
+    }
+  },
+  methods: {
+    toggleExpanded () {
+      this.isExpanded = !this.isExpanded
+
+      if (this.isExpanded) {
+        setTimeout(() => {
+          window.scroll({
+            top: this.$refs.content.offsetTop - 150,
+            left: 0,
+            behavior: 'smooth'
+          })
+        }, 0)
+      }
     }
   }
 }

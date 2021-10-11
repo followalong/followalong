@@ -9,7 +9,6 @@
 ## TODO
 
 - Specs
-- Dark mode
 - Change encryption
 - Save to local
 - Specs should save to local
