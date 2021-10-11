@@ -2,19 +2,21 @@
   <div id="app">
     <TopBar :app="app" />
 
-    <div class="content">
-      <div v-if="identity">
-        <Sidebar :app="app" />
-        <MediaPlayer
-          v-if="playing"
-          :app="app"
-          :item="playing"
-        />
-        <router-view :app="app" />
-      </div>
-      <div v-else>
-        <div class="sidebar" />
-        <p>Securely loading your data...</p>
+    <div class="container">
+      <div class="content">
+        <div v-if="identity">
+          <Sidebar :app="app" />
+          <MediaPlayer
+            v-if="playing"
+            :app="app"
+            :item="playing"
+          />
+          <router-view :app="app" />
+        </div>
+        <div v-else>
+          <div class="sidebar" />
+          <p>Securely loading your data...</p>
+        </div>
       </div>
     </div>
   </div>

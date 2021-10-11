@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'net/https'
 require 'uri'
 
 module FollowAlong
   class RSS
     TIMEOUT = 5
-    USER_AGENT = 'Mozilla /5.0 (Compatible MSIE 9.0;Windows NT 6.1;WOW64; Trident/5.0)'.freeze
+    USER_AGENT = 'Mozilla /5.0 (Compatible MSIE 9.0;Windows NT 6.1;WOW64; Trident/5.0)'
 
     def perform(data = {})
       perform_request data
@@ -13,7 +15,7 @@ module FollowAlong
     private
 
     def perform_request(data = {}, limit = 5)
-      return { status: 400, body: 'HTTP redirect too deep' } if limit == 0
+      return { status: 400, body: 'HTTP redirect too deep' } if limit.zero?
 
       url = data['url']
       url = Base64.decode64 url if url[0..3] != 'http'
@@ -33,12 +35,11 @@ module FollowAlong
       end
 
       response = Net::HTTP.start(uri.hostname, uri.port,
-        use_ssl: uri.scheme == 'https',
-        open_timeout: TIMEOUT,
-        ssl_timeout: TIMEOUT,
-        read_timeout: TIMEOUT,
-        keep_alive_timeout: TIMEOUT
-      ) do |http|
+                                 use_ssl: uri.scheme == 'https',
+                                 open_timeout: TIMEOUT,
+                                 ssl_timeout: TIMEOUT,
+                                 read_timeout: TIMEOUT,
+                                 keep_alive_timeout: TIMEOUT) do |http|
         http.request(req)
       end
 
@@ -50,14 +51,14 @@ module FollowAlong
         {
           status: response.code,
           headers: response.to_hash,
-          body: response.body.force_encoding('utf-8'),
+          body: response.body.force_encoding('utf-8')
         }
       end
-    rescue => e
+    rescue StandardError => e
       {
         status: 401,
         headers: {},
-        body: e.message,
+        body: e.message
       }
     end
   end

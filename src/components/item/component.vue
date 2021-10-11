@@ -5,7 +5,7 @@
     <a
       href="javascript:;"
       class="check"
-      :aria-label="'Mark as read: ' + item.title"
+      :aria-label="`Mark as read: ${item.title}`"
       @click="app.commands.toggleRead(item)"
     >&check;</a>
 

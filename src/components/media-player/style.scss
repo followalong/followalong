@@ -6,16 +6,21 @@
     &.inline-player {
         position: relative;
         margin-bottom: 20px;
-        width: 100%;
+        margin-top: -$content-padding;
+        margin-left: -$content-padding;
+        margin-right: -$content-padding;
+        margin-bottom: $content-padding;
     }
 
     &.popout-player {
         position: fixed;
         bottom: -1px;
         right: -1px;
-        border: 1px solid var(--bg-emphasis);
+        border-top: 5px solid var(--secondary-color);
+        border-left: 5px solid var(--secondary-color);
         z-index: 99999;
         background: var(--bg-color);
+        border-top-left-radius: 20px;
 
         .player-wrapper {
             width: 500px;
@@ -41,12 +46,12 @@
         width: 100%;
     }
 
-    .header {
+    .title {
         padding: 12px;
 
         h3 {
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 0;
             font-size: 100%;
         }
 

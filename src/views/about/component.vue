@@ -1,30 +1,28 @@
 <template>
-  <div class="narrow-container">
-    <div class="title-wrapper">
-      <h1>
-        Our Story
-      </h1>
-    </div>
+  <div class="title-wrapper">
+    <h1>
+      Our Story
+    </h1>
+  </div>
 
-    <p class="highlight">
-      <span v-if="app.identity.isLoading">FollowAlong is preparing "What's New?" &mdash; just for you!</span>
-      <span v-else>All feeds are up-to-date!</span>
-    </p>
+  <p class="highlight">
+    <span v-if="app.identity.isLoading">FollowAlong is preparing "What's New?" &mdash; just for you!</span>
+    <span v-else>All feeds are up-to-date!</span>
+  </p>
 
-    <Info />
+  <Info />
 
-    <p><br></p>
+  <p><br></p>
 
-    <div class="faded-content first-loading">
-      <router-link
-        to="/"
-        class="button button-large"
-        :disabled="app.identity.isLoading"
-      >
-        <span v-if="app.identity.isLoading">Loading Feeds...</span>
-        <span v-else>Continue to FollowAlong! &nbsp; &raquo;</span>
-      </router-link>
-    </div>
+  <div class="faded-content first-loading">
+    <router-link
+      to="/"
+      class="button button-large"
+      :disabled="app.identity.isLoading"
+    >
+      <span v-if="app.identity.isLoading">Loading Feeds...</span>
+      <span v-else>Continue to FollowAlong! &nbsp; &raquo;</span>
+    </router-link>
   </div>
 </template>
 

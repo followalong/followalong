@@ -1,31 +1,29 @@
 <template>
-  <div class="narrow-container">
-    <div class="title-wrapper">
-      <h1>Services</h1>
+  <div class="title-wrapper">
+    <h1>Services</h1>
+  </div>
+
+  <p>
+    External services are not <em>required</em>, but they <em>can</em> improve load times, search results, cache images, allow for syncing and publishing, and much more.
+  </p>
+
+  <div
+    v-for="(serviceType, key) in serviceTypes"
+    :key="key"
+    :title="serviceType.shortName"
+  >
+    <div class="field">
+      <h2>{{ serviceType.name }}</h2>
+      <p v-html="serviceType.description" />
     </div>
 
-    <p>
-      External services are not <em>required</em>, but they <em>can</em> improve load times, search results, cache images, allow for syncing and publishing, and much more.
-    </p>
+    <ServiceEditor
+      :app="app"
+      :server-type="serviceType"
+      :server-type-key="key"
+    />
 
-    <div
-      v-for="(serviceType, key) in serviceTypes"
-      :key="key"
-      :title="serviceType.shortName"
-    >
-      <div class="field">
-        <h2>{{ serviceType.name }}</h2>
-        <p v-html="serviceType.description" />
-      </div>
-
-      <ServiceEditor
-        :app="app"
-        :server-type="serviceType"
-        :server-type-key="key"
-      />
-
-      <hr>
-    </div>
+    <hr>
   </div>
 </template>
 

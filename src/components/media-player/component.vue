@@ -3,7 +3,7 @@
     <div class="media-player">
       <div
         v-if="!isInline"
-        class="header"
+        class="title"
       >
         <a
           href="javascript:;"

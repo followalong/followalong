@@ -1,20 +1,22 @@
 <template>
   <div class="header">
-    <div class="nav table">
-      <ul class="table-row">
-        <li class="table-cell logo">
-          <Logo :app="app" />
-        </li>
-        <li class="table-cell search">
-          <SearchForm />
-        </li>
-        <li class="table-cell">
-          <AccountDropdown
-            :app="app"
-            class="identities"
-          />
-        </li>
-      </ul>
+    <div class="container">
+      <div class="nav table">
+        <ul class="table-row">
+          <li class="table-cell logo">
+            <Logo :app="app" />
+          </li>
+          <li class="table-cell search">
+            <SearchForm />
+          </li>
+          <li class="table-cell">
+            <AccountDropdown
+              :app="app"
+              class="identities"
+            />
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>

@@ -31,7 +31,7 @@
               :aria-label="'Mark as read: ' + item.title"
               @click="app.commands.toggleRead(item)"
             >
-              Mark As <span v-if="item.isRead">Unread</span><span v-else>Read</span>
+              Mark As <span v-if="app.queries.isRead(item)">Unread</span><span v-else>Read</span>
             </a>
           </li>
         </Dropdown>

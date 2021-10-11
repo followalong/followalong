@@ -1,11 +1,8 @@
 <template>
   <div class="settings">
-    <div
-      v-if="app.identity"
-      class="narrow-container"
-    >
+    <div v-if="app.identity">
       <div class="title-wrapper">
-        <h1>Setup</h1>
+        <h1>Settings</h1>
       </div>
 
       <div class="field">
