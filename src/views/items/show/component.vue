@@ -6,7 +6,7 @@
     <div class="feed home-feed wide-feed">
       <div class="title-wrapper">
         <Dropdown class="float-right">
-          <li>
+          <li v-if="item.link">
             <a
               :href="item.link"
               target="_blank"

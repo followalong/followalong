@@ -34,14 +34,6 @@
     clear: both;
   }
 
-  strong {
-    font-weight: bold;
-  }
-
-  em {
-    font-style: italic;
-  }
-
   .link {
     text-decoration: underline;
   }
@@ -536,7 +528,7 @@
 
   b, strong {
     font-weight: bold;
-    color: var(--light-text);
+    color: var(--bold-text);
   }
 
   i, em {
