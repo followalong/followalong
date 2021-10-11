@@ -22,7 +22,7 @@
               <span v-else>Fetch Now</span>
             </a>
           </li>
-          <li>
+          <li v-if="app.queries.identityForFeed(feed)">
             <a
               href="javascript:;"
               :aria-label="`Pause ${feed.name}`"
@@ -77,20 +77,22 @@
       </div>
 
       <ul class="items">
-        <li v-if="app.queries.isFetching(feed)">
-          <p>
-            <font-awesome-icon
-              v-if="app.queries.isFetching(feed)"
-              icon="spinner"
-              spin
-              class="i"
-            />
-            &nbsp; Loading...
-          </p>
-        </li>
-        <li v-else-if="items.length === 0">
-          <h3>You're all caught up on {{ feed.name }}!</h3>
-        </li>
+        <template v-if="items.length === 0">
+          <li v-if="app.queries.isFetching(feed)">
+            <p>
+              <font-awesome-icon
+                v-if="app.queries.isFetching(feed)"
+                icon="spinner"
+                spin
+                class="i"
+              />
+              &nbsp; Loading...
+            </p>
+          </li>
+          <li>
+            <h3>You're all caught up on {{ feed.name }}!</h3>
+          </li>
+        </template>
 
         <Item
           v-for="item in items"

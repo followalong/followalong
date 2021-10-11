@@ -9,7 +9,7 @@
   background: var(--bg-color);
   border-radius: 20px;
   min-height: 100vh;
-  max-width: 54rem;
+  max-width: 56rem;
 
   @media (max-width: 880px) {
     padding: $tablet-content-padding;
@@ -58,7 +58,6 @@
     h1 {
       font-weight: 500;
       font-size: 200%;
-      line-height: 1.4;
       margin: 0;
 
       .i {

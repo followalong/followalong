@@ -20,7 +20,6 @@
   z-index: 100;
   background: var(--primary-color);
   border-bottom: 1px solid var(--primary-color);
-  font-size: 16px;
   color: var(--primary-color-opposite);
   z-index: 99999;
 
@@ -89,6 +88,7 @@
       margin-top: -3px;
       margin-bottom: -3px;
       vertical-align: middle;
+      padding: 0 15px;
 
       &:first-child {
         @media (max-width: 640px) {

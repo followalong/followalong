@@ -39,27 +39,27 @@
         <h1>
           <a :href="item.link">{{ item.title }}</a>
         </h1>
+
+        <h3>
+          <router-link
+            :to="{ name: 'feed', params: { feed_url: feed.url } }"
+            class="feed-name"
+          >
+            <span v-if="item.author && item.author !== feed.name">
+              {{ item.author }} @
+            </span>
+            <span>
+              {{ feed.name }}
+            </span>
+          </router-link>
+
+          <span
+            v-if="item.pubDate"
+            :title="item.pubDate"
+            class="feed-name"
+          >&nbsp; &mdash; &nbsp;{{ app.prettyDate(item.pubDate) }}</span>
+        </h3>
       </div>
-
-      <h3>
-        <router-link
-          :to="{ name: 'feed', params: { feed_url: feed.url } }"
-          class="feed-name"
-        >
-          <span v-if="item.author && item.author !== feed.name">
-            {{ item.author }} @
-          </span>
-          <span>
-            {{ feed.name }}
-          </span>
-        </router-link>
-
-        <span
-          v-if="item.pubDate"
-          :title="item.pubDate"
-          class="feed-name"
-        >&mdash; {{ app.prettyDate(item.pubDate) }}</span>
-      </h3>
 
       <div
         v-if="item.content && item.content.length"
