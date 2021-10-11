@@ -65,17 +65,19 @@ class Commands {
   }
 
   fetchAllFeeds (identity) {
-    this.queries
+    const promises = this.queries
       .feedsForIdentity(identity)
       .filter(this.queries.isNotPaused)
-      .forEach((feed) => this.fetchFeed(feed, identity))
+      .map((feed) => this.fetchFeed(feed, identity))
+
+    return Promise.all(promises)
   }
 
   fetchFeed (feed, identity) {
     const service = this.queries.serviceForIdentity(identity, 'rss')
     const updatedAt = Date.now()
 
-    feed.fetchingAt = Date.now()
+    feed.fetchingAt = updatedAt
 
     return new Promise((resolve, reject) => {
       getFeed(identity, service, feed, updatedAt)

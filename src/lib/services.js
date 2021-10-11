@@ -1,61 +1,66 @@
 import AWS from 'aws-sdk'
 import utils from '@/lib/utils'
 
-function xmlRequest (identity, data, done) {
-  if (!data.url) return done('No URL supplied.')
-
+function xmlRequest (identity, data) {
   var _ = this
-  var url = _.data.url || ''
   var x = new XMLHttpRequest()
 
-  x.open('GET', url + data.url)
+  return new Promise((resolve, reject) => {
+    if (!data.url) return reject(new Error('No URL supplied.'))
 
-  x.onload = x.onerror = function () {
-    if (x.status === 200) {
-      done(undefined, {
-        status: x.status,
-        body: x.responseText
-      })
-    } else {
-      done(x.responseText)
+    var url = _.data.url || ''
+
+    x.open('GET', url + data.url)
+
+    x.onload = x.onerror = function () {
+      if (x.status === 200) {
+        resolve({
+          status: x.status,
+          body: x.responseText
+        })
+      } else {
+        reject(new Error(x.responseText))
+      }
     }
-  }
 
-  x.send()
+    x.send()
+  })
 }
 
 function lambdaPassthrough (override) {
   override = override || {}
 
-  return function lambdaPassthroughFunc (identity, data, done) {
+  return function lambdaPassthroughFunc (identity, data) {
     var _ = this
 
     if (override.obfuscateUrl && data.url) {
       data.url = btoa(data.url)
     }
 
-    new AWS.Lambda({
-      endpoint: new AWS.Endpoint(override.endpoint || _.data.endpoint),
-      accessKeyId: override.accessKeyId || _.data.accessKeyId,
-      secretAccessKey: override.secretAccessKey || _.data.secretAccessKey,
-      region: override.region || _.data.region,
-      apiVersion: 'latest'
-    }).invoke({
-      FunctionName: override.functionName || _.data.functionName,
-      InvocationType: 'RequestResponse',
-      LogType: 'None',
-      Payload: JSON.stringify(data)
-    }, function (err, data) {
-      try {
-        done(undefined, JSON.parse(data.Payload))
-      } catch (e) {
-        done(err)
-      }
+    return new Promise((resolve, reject) => {
+      new AWS.Lambda({
+        endpoint: new AWS.Endpoint(override.endpoint || _.data.endpoint),
+        accessKeyId: override.accessKeyId || _.data.accessKeyId,
+        secretAccessKey: override.secretAccessKey || _.data.secretAccessKey,
+        region: override.region || _.data.region,
+        apiVersion: 'latest'
+      }).invoke({
+        FunctionName: override.functionName || _.data.functionName,
+        InvocationType: 'RequestResponse',
+        LogType: 'None',
+        Payload: JSON.stringify(data)
+      }, function (err, data) {
+        try {
+          resolve(JSON.parse(data.Payload))
+        } catch (e) {
+          reject(err)
+        }
+      })
     })
   }
 }
 
-function s3Sync (identity, data, done) {
+function s3Sync (identity, data) {
   if (!this.data || !this.data.key || !this.data.bucket || !this.data.accessKeyId || !this.data.secretAccessKey || !this.data.endpoint) {
     return
   }
@@ -71,21 +76,27 @@ function s3Sync (identity, data, done) {
     maxRetries: 1
   })
 
-  s3.getObject({
-    Bucket: _.data.bucket,
-    Key: key
-  }, function (err, oldData) {
-    try {
-      utils.mergeData(identity, JSON.parse(oldData.Body.toString()))
-    } catch (e) { }
-
-    s3.putObject({
-      Body: JSON.stringify(data.identity),
+  return new Promise((resolve, reject) => {
+    s3.getObject({
       Bucket: _.data.bucket,
       Key: key
-    }, function (err) {
-      identity.saveLocal().then(() => {
-        done(err, err ? undefined : data.identity)
+    }, function (err, oldData) {
+      try {
+        utils.mergeData(identity, JSON.parse(oldData.Body.toString()))
+      } catch (e) { }
+
+      s3.putObject({
+        Body: JSON.stringify(data.identity),
+        Bucket: _.data.bucket,
+        Key: key
+      }, function (err) {
+        identity.saveLocal().then(() => {
+          if (err) {
+            return reject(err)
+          }
+
+          resolve(data.identity)
+        })
       })
     })
   })

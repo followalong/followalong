@@ -93,11 +93,9 @@ export default {
       service.request(this.app.identity, {
         action: 'search',
         q: this.q
-      }, (err, feeds) => {
-        this.isLoading = false
-
+      }).then((feeds) => {
         if (!feeds) {
-          this.error = err || 'Could not search. Perhaps it\'s a problem with your Search Service?'
+          this.error = 'Could not search. Perhaps it\'s a problem with your Search Service?'
           return
         }
 
@@ -109,6 +107,12 @@ export default {
           return this.$router.push({ name: 'feed', params: { feed_url: feeds[0].url } })
         }
       })
+        .catch(() => {
+          this.feeds = []
+        })
+        .finally(() => {
+          this.isLoading = false
+        })
     }
   }
 }

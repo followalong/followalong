@@ -5,7 +5,7 @@
     @click="fetchAll"
   >
     <font-awesome-icon
-      v-if="!app.identity"
+      v-if="isLoading"
       icon="spinner"
       spin
       class="loader"
@@ -23,14 +23,20 @@ export default {
   data () {
     return {
       logo: '/img/logo-white.svg',
-      mobileLogo: '/img/favicon-white.svg'
+      mobileLogo: '/img/favicon-white.svg',
+      isLoading: false
     }
   },
   methods: {
     fetchAll () {
+      this.isLoading = true
       this.$router.push('/')
       this.app.toggleSidebar(true)
+
       this.app.commands.fetchAllFeeds(this.app.identity)
+        .finally(() => {
+          this.isLoading = false
+        })
     }
   }
 }

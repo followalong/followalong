@@ -10,6 +10,7 @@ describe('Feeds: Fetch all feeds', () => {
 
       await app.click('[aria-label="FollowAlong"]')
       await flushPromises()
+      await flushPromises()
 
       expect(app.vm.queries.serviceForIdentity).toHaveBeenCalledTimes(expectedFeedsLength)
       expect(app.text()).toContain(item.title)
@@ -25,7 +26,6 @@ describe('Feeds: Fetch all feeds', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="Fetch all feeds"]')
-      expect(app.text()).toContain('Loading...')
       expect(app.vm.queries.serviceForIdentity).toHaveBeenCalledTimes(expectedFeedsLength)
 
       await flushPromises()

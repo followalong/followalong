@@ -77,13 +77,9 @@ export default {
         proxy.request(this, {
           action: 'sync',
           identity: data
-        }, (err, result) => {
-          if (err) {
-            return reject(err)
-          }
-
-          resolve(result)
         })
+          .then(resolve)
+          .catch(reject)
       })
     },
     addFeed (feed) {

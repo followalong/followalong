@@ -4,6 +4,7 @@
       <button
         v-if="hasUnreadItems"
         class="button-gray button-small float-right"
+        aria-label="Catch up on all"
         @click="catchMeUp()"
       >
         Catch Me Up!
@@ -117,7 +118,7 @@ export default {
   },
   methods: {
     catchMeUp () {
-      this.app.commands.catchMeUp(this.items)
+      return this.app.commands.catchMeUp(this.items)
     },
 
     capitalize (str) {

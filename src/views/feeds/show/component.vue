@@ -133,13 +133,13 @@ export default {
   },
   mounted () {
     if (this.feed) {
-      this.app.commands.fetchFeed(this.feed, this.app.identity)
+      return this.app.commands.fetchFeed(this.feed, this.app.identity)
     }
   },
   methods: {
     unsubscribe () {
-      this.app.commands.unsubscribe(this.feed)
-      this.$router.push('/feeds')
+      return this.app.commands.unsubscribe(this.feed)
+        .then(() => this.$router.push('/feeds'))
     }
   }
 }

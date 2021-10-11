@@ -111,9 +111,7 @@ const rawRSSResponse = (item) => {
 const buildServiceToRespondWith = (result) => {
   return jest.fn(() => {
     return {
-      request (identity, data, done) {
-        done(undefined, result)
-      }
+      request: () => Promise.resolve(result)
     }
   })
 }

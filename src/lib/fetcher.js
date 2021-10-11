@@ -7,34 +7,38 @@ var parser = new Parser({
 })
 
 function getContent (identity, service, url, done) {
-  if (!service) {
-    return done()
-  }
-
-  service.request(identity, {
-    action: 'rss',
-    url: url
-  }, function (err, data) {
-    if (data && parseInt(data.status) < 300) {
-      return done(undefined, data.body)
+  return new Promise((resolve, reject) => {
+    if (!service) {
+      return resolve()
     }
 
-    done(typeof data === 'object' ? data.body : 'Could not fetch feed. If you\'re not already, Try using a CORS proxy service (in Setup).')
+    service.request(identity, {
+      action: 'rss',
+      url: url
+    })
+      .then((data) => {
+        if (data && parseInt(data.status) < 300) {
+          return resolve(data.body)
+        }
+
+        reject(new Error(typeof data === 'object' ? data.body : 'Could not fetch feed. If you\'re not already, Try using a CORS proxy service (in Setup).'))
+      })
+      .catch(reject)
   })
 }
 
 function parseItems (identity, feed, data, items, updatedAt, done) {
-  parser.parseString(data, function (err, data) {
-    if (err) {
-      feed.error = 'Could not parse feed. Feed does not seem to be formatted correctly.'
-      console.error(err)
-      done(err)
-      return
-    } else {
-      delete feed.error
-    }
+  return new Promise((resolve, reject) => {
+    parser.parseString(data, function (err, data) {
+      if (err) {
+        feed.error = 'Could not parse feed. Feed does not seem to be formatted correctly.'
+        return reject(err)
+      } else {
+        delete feed.error
+      }
 
-    done(undefined, data)
+      resolve(data)
+    }).catch(reject)
   })
 }
 
@@ -44,21 +48,15 @@ function getFeed (identity, service, feed, updatedAt) {
       return reject(new Error('Missing data'))
     }
 
-    getContent(identity, service, feed.url, function (err, data) {
-      if (err || !data) {
-        return reject(err || 'Feed has no data')
-      } else {
+    getContent(identity, service, feed.url)
+      .then((data) => {
         delete feed.error
-      }
 
-      parseItems(identity, feed, data, [], updatedAt, (err, result) => {
-        if (err) {
-          return reject(err || 'Could not parse items')
-        }
-
-        resolve(result)
+        parseItems(identity, feed, data, [], updatedAt)
+          .then(resolve)
+          .catch((err) => reject(err || new Error('Could not parse items')))
       })
-    })
+      .catch((err) => reject(err || new Error('Feed has no data')))
   })
 }
 
