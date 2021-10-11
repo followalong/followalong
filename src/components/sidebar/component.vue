@@ -106,7 +106,10 @@
       </li>
 
       <li>
-        <router-link to="/settings">
+        <router-link
+          to="/settings"
+          aria-label="Settings"
+        >
           <font-awesome-icon icon="cog" />
           Settings
         </router-link>

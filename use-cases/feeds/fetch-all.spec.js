@@ -9,9 +9,9 @@ describe('Feeds: Fetch all feeds', () => {
       app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
 
       await app.click('[aria-label="FollowAlong"]')
-      await flushPromises()
-      await flushPromises()
 
+      await flushPromises()
+      await app.click('[aria-label="What\'s new?"]')
       expect(app.vm.queries.serviceForIdentity).toHaveBeenCalledTimes(expectedFeedsLength)
       expect(app.text()).toContain(item.title)
     })

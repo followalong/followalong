@@ -12,13 +12,13 @@
         </p>
       </div>
       <div class="field">
-        <label for="name">Account Name</label>
+        <label for="name">Identity Name</label>
         <input
           id="name"
           v-model="app.identity.name"
           type="text"
           placeholder="Your Name"
-          @blur="app.identity.save()"
+          aria-label="Identity name"
         >
       </div>
       <p
@@ -110,6 +110,7 @@
             </span>
             <button
               class="button-gray"
+              aria-label="Download identity"
               @click="app.commands.downloadIdentity(app.identity)"
             >
               Download Identity
@@ -123,6 +124,7 @@
             </span>
             <button
               class="button-gray"
+              aria-label="Copy configuration"
               @click="app.commands.copyConfig(app.identity)"
             >
               Copy Configuration
@@ -140,6 +142,7 @@
             </span>
             <button
               class="button-red"
+              aria-label="Forget identity"
               @click="reset(app.identity)"
             >
               Forget This Identity
@@ -202,7 +205,7 @@ export default {
     reset (identity) {
       if (confirm('Are you sure you want to forget this identity?')) {
         this.app.commands.removeIdentity(identity)
-        window.location.href = '/'
+        this.app.commands.reload()
       }
     }
   }

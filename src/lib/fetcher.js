@@ -6,7 +6,7 @@ var parser = new Parser({
   }
 })
 
-function getContent (identity, service, url, done) {
+function getContent (identity, service, url) {
   return new Promise((resolve, reject) => {
     if (!service) {
       return resolve()
@@ -27,7 +27,7 @@ function getContent (identity, service, url, done) {
   })
 }
 
-function parseItems (identity, feed, data, items, updatedAt, done) {
+function parseItems (identity, feed, data, items, updatedAt) {
   return new Promise((resolve, reject) => {
     parser.parseString(data, function (err, data) {
       if (err) {

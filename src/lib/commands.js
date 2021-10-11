@@ -1,14 +1,16 @@
 import Presenters from '@/lib/presenters.js'
 import { getFeed } from '@/lib/fetcher'
 import { Base64 } from 'js-base64'
-import copy from 'copy-to-clipboard'
+import copyToClipboard from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
 
 class Commands {
-  constructor (state, queries, presenters) {
+  constructor (state, queries, presenters, deps) {
     this.state = state
     this.queries = queries
     this.presenters = new Presenters(queries)
+    this._copyToClipboard = copyToClipboard
+    this._saveAs = saveAs
   }
 
   unsubscribe (feed) {
@@ -141,7 +143,7 @@ class Commands {
 
   copyConfig (identity) {
     const data = this.presenters.identityToRemote(identity)
-    copy(Base64.encode(JSON.stringify(data)))
+    this._copyToClipboard(Base64.encode(JSON.stringify(data)))
     alert('Copied configuration to clipboard.')
   }
 
@@ -151,7 +153,7 @@ class Commands {
     const str = JSON.stringify(data)
     const blob = new Blob([str], { type: 'application/json;charset=utf-8' })
 
-    saveAs(blob, filename)
+    this._saveAs(blob, filename)
   }
 
   removeIdentity (identity) {
@@ -174,6 +176,10 @@ class Commands {
     feed.identityId = identity.id
 
     return feed
+  }
+
+  reload () {
+    window.location.href = '/'
   }
 }
 
