@@ -10,7 +10,7 @@
             margin-top: -$content-padding;
             margin-left: -$content-padding;
             margin-right: -$content-padding;
-            margin-bottom: $content-padding;
+            margin-bottom: $content-padding / 2;
         }
 
         .aspect-ratio-box {
@@ -18,7 +18,7 @@
         }
 
         .audio-embed {
-            margin-bottom: $content-padding;
+            margin-bottom: $content-padding / 2;
 
             audio {
                 width: 100%;

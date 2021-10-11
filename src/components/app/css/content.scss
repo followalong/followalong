@@ -48,23 +48,13 @@
 
   .title-wrapper {
     position: relative;
-    margin-top: -$content-padding;
-    margin-left: -$content-padding;
-    margin-right: -$content-padding;
-    padding-bottom: $content-padding;
+    // padding-bottom: $content-padding;
+    padding-bottom: $content-padding / 2;
+    margin-bottom: $content-padding / 2;
+    border-bottom: 1px solid var(--border-color);
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    padding: $content-padding / 2;
-
-    &:after {
-      display: block;
-      content: ' ';
-      border-bottom: 1px solid var(--border-color);
-      margin-top: $content-padding / 2;
-      margin-left: $content-padding / 2;
-      margin-right: $content-padding / 2;
-      height: 0;
-    }
+    // padding: $content-padding;
 
     a {
       &:hover .i, &.i:hover {
@@ -151,6 +141,7 @@
 
   .items {
     margin: 0;
+    margin-top: -$content-padding / 2;
 
     & > li {
       width: 100%;
