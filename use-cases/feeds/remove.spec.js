@@ -7,10 +7,10 @@ describe('Feeds: Remove a feed', () => {
 
     await app.click('[aria-label="Feeds"]')
 
-    expect(app.findAll('[aria-label^="Unsubscribe"]').length).toEqual(8)
+    const initialFeeds = app.findAll('[aria-label^="Unsubscribe"]').length
 
     await app.click('[aria-label^="Unsubscribe"]')
 
-    expect(app.findAll('[aria-label^="Unsubscribe"]').length).toEqual(7)
+    expect(app.findAll('[aria-label^="Unsubscribe"]').length).toEqual(initialFeeds - 1)
   })
 })
