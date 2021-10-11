@@ -214,7 +214,7 @@
             margin-bottom: 0;
             border-radius: 4px;
             background: var(--secondary-color);
-            padding: 1em;
+            padding: 40px;
             margin-top: 1em;
             max-height: 70vh;
             overflow: hidden;
@@ -491,7 +491,25 @@
 }
 
 .description {
-  font-family: Palatino, Times, Serif;
+  font-family: var(--serif);
+
+  h1 {
+    font-size: 1.75rem;
+    color: var(--link-color);
+    font-family: var(--sans-serif);
+    font-weight: 500;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    color: var(--link-color);
+    font-family: var(--sans-serif);
+    font-weight: 500;
+  }
+
+  h3, h4, h5, h6 {
+    font-size: 1.25rem;
+  }
 
   textarea, blockquote {
     display: block;
@@ -505,8 +523,12 @@
     }
   }
 
-  video, img, embed, iframe, li, textarea, blockquote, table, figure {
+  video, img, embed, iframe, textarea, blockquote, table, figure {
     margin-bottom: 1em;
+  }
+
+  iframe {
+    width: 100%;
   }
 
   ul, ol {
@@ -527,6 +549,7 @@
 
   b, strong {
     font-weight: bold;
+    color: var(--light-text);
   }
 
   i, em {

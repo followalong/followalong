@@ -82,10 +82,9 @@
 
     &.info-section {
       background: var(--secondary-color-emphasis);
-      margin: 20px;
-      padding: 10px;
+      margin: 20px 20px -10px 0;
+      padding: 20px;
       border-radius: 8px;
-      margin-bottom: -10px;
 
       h3 {
         color: var(--link-color);
