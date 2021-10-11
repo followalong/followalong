@@ -4,8 +4,9 @@
     class="audio-embed"
   >
     <audio
+      ref="audio"
       controls
-      :autoplay="true"
+      autoplay
     >
       <source :src="src">
     </audio>
@@ -20,6 +21,12 @@ export default {
   computed: {
     src () {
       return utils.getAudioSrc(this.item, true)
+    }
+  },
+  watch: {
+    src () {
+      this.$refs.audio.currentTime = 0
+      this.$refs.audio.play()
     }
   }
 }
