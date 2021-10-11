@@ -22,17 +22,17 @@
         .select-service {
             display: block;
             padding: 15px 15px 30px;
-            border: 1px solid $medium-gray;
+            border: 1px solid var(--bg-emphasis);
             border-radius: 7px;
 
             &[href]:hover {
-                background: $light-gray;
+                background: var(--border-color);
                 border-color: #ccc;
             }
 
             &.custom-service h3 {
                 &:after {
-                    color: $blue;
+                    color: var(--primary-color);
                     content: '*';
                     opacity: 0.5;
                 }
@@ -40,8 +40,8 @@
         }
 
         &.single .select-service {
-            background: $light-gray;
-            border-color: $blue;
+            background: var(--border-color);
+            border-color: var(--primary-color);
         }
 
         h3 {
@@ -71,13 +71,13 @@
         .reset, .post-meta a {
             display: inline-block;
             padding: 5px 10px;
-            color: #fff;
+            color: var(--bg-color);
             text-transform: uppercase;
             margin-left: 3px;
         }
 
         .reset {
-            background: $blue;
+            background: var(--primary-color);
             border-top-right-radius: 7px;
             top: 0;
             right: 0;

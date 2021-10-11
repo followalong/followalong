@@ -13,9 +13,9 @@
         position: fixed;
         bottom: -1px;
         right: -1px;
-        border: 1px solid $medium-gray;
+        border: 1px solid var(--bg-emphasis);
         z-index: 99999;
-        background: #fff;
+        background: var(--bg-color);
 
         .player-wrapper {
             width: 500px;
@@ -75,7 +75,7 @@
             font-size: 90%;
             line-height: 1;
             color: #aaa;
-            background: $medium-gray;
+            background: var(--bg-emphasis);
             display: block;
 
             &:hover {

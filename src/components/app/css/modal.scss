@@ -27,7 +27,7 @@
     h4 {
         font-size: 110%;
         margin-top: -11px;
-        color: $blue;
+        color: var(--primary-color);
         font-style: oblique;
     }
 
@@ -46,15 +46,15 @@
             margin: 10% auto;
             max-width: 500px;
             width: 100%;
-            border: 1px solid $light-gray;
-            background: #fff;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
             border-radius: 9px;
             padding: 20px;
         }
     }
 
     .notice {
-        color: $green;
+        color: var(--success);
         margin-top: -20px;
         margin-bottom: 20px;
         text-align: center;

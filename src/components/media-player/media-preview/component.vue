@@ -2,12 +2,10 @@
   <div
     v-if="item.image && item.image.url"
   >
-    <div class="aspect-ratio-box">
-      <img
-        class="aspect-ratio-box-inside"
-        :style="'background-image:url(' + item.image.url + ')'"
-      >
-    </div>
+    <img
+      :src="item.image.url"
+      class="img-preview"
+    >
   </div>
   <span
     v-else

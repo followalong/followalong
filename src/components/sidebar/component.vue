@@ -14,14 +14,14 @@
       </h3>
       <p>
         A place where you can connect <em>directly</em> to things you care about.
-        <router-link
-          aria-label="About FollowAlong"
-          to="/about"
-          class="primary"
-        >
-          Read more &raquo;
-        </router-link>
       </p>
+      <router-link
+        aria-label="About FollowAlong"
+        to="/about"
+        class="primary"
+      >
+        Read more &raquo;
+      </router-link>
     </div>
 
     <ul>

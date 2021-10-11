@@ -1,9 +1,13 @@
+html {
+  background: var(--secondary-color);
+  color: var(--text-color);
+}
+
 #app {
   font-family: 'Avenir', Helvetica Neue, Helvetica, Arial, sans-serif;
   // font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: $gray;
   font-size: 16px;
   line-height: 1.6;
   font-weight: 300;
@@ -15,11 +19,6 @@
   @media (max-width: 640px) {
     font-size: 14px;
   }
-
-  &.dark {
-    background: #000;
-    color: #fff;
-  }
 }
 
 .primary,
@@ -30,10 +29,10 @@
 .check:hover,
 .explanation,
 .stars {
-    color: $blue;
+  color: var(--link-color);
 }
 
 .content button,
 .content .button {
-    background: $blue;
+  background: var(--link-color);
 }

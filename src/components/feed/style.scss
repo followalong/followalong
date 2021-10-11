@@ -1,92 +1,90 @@
 .aspect-ratio-box {
-    height: 0;
-    overflow: hidden;
-    padding-top: 9px / 16px * 100%;
-    background: white;
-    position: relative;
+  height: 0;
+  overflow: hidden;
+  padding-top: 9px / 16px * 100%;
+  position: relative;
 
-    .aspect-ratio-box-inside {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-size: cover;
-        background-position: center;
-    }
+  .aspect-ratio-box-inside {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+  }
 }
 
 .single-item {
-    .embed {
-        margin-bottom: 1em;
-    }
+  .embed {
+    margin-bottom: 1em;
+  }
 
-    .feed > h1 {
-        // margin-bottom: 0;
-    }
+  .feed > h1 {
+    // margin-bottom: 0;
+  }
 
-    .feed > h3 {
-        margin-bottom: 2em;
+  .feed > h3 {
+    margin-bottom: 2em;
 
-        a:hover {
-            text-decoration: underline;
-        }
+    a:hover {
+      text-decoration: underline;
     }
+  }
 }
 
 .feed {
-    float: left;
-    width: 62%;
+  float: left;
+  // width: 62%;
 
-    &.wide-feed {
-        float: none;
-        width: 100%;
-        max-width: $content-width;
-    }
+  &.wide-feed {
+    float: none;
+    width: 100%;
+  }
 
-    @media (max-width: 880px) {
-        float: none;
-        width: 100%;
-        max-width: auto;
-    }
+  @media (max-width: 880px) {
+    float: none;
+    width: 100%;
+    max-width: auto;
+  }
 }
 
 .feeds {
-    li {
-        padding: 20px 0;
-        border-bottom: 1px solid $medium-gray;
+  li {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border-color);
 
-        h2, p {
-            margin: 0;
-            padding: 0;
-        }
-
-        .remove {
-            display: inline-block;
-            font-size: 70%;
-            margin-left: 1em;
-            font-weight: normal;
-        }
-
-        button {
-            float: right;
-
-            &:nth-child(n + 1) {
-                margin-left: 10px;
-            }
-
-            &.paused {
-                background: red;
-            }
-
-            .right-icon {
-                display: inline-block;
-                margin-left: 5px;
-            }
-        }
+    h2, p {
+      margin: 0;
+      padding: 0;
     }
 
-    .hint {
-        display: inline-block
+    .remove {
+      display: inline-block;
+      font-size: 70%;
+      margin-left: 1em;
+      font-weight: normal;
     }
+
+    button {
+      float: right;
+
+      &:nth-child(n + 1) {
+        margin-left: 10px;
+      }
+
+      &.paused {
+        background: red;
+      }
+
+      .right-icon {
+        display: inline-block;
+        margin-left: 5px;
+      }
+    }
+  }
+
+  .hint {
+    display: inline-block
+  }
 }
