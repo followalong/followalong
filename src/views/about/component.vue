@@ -11,19 +11,6 @@
   </p>
 
   <Info />
-
-  <p><br></p>
-
-  <div class="faded-content first-loading">
-    <router-link
-      to="/"
-      class="button button-large"
-      :disabled="app.identity.isLoading"
-    >
-      <span v-if="app.identity.isLoading">Loading Feeds...</span>
-      <span v-else>Continue to FollowAlong! &nbsp; &raquo;</span>
-    </router-link>
-  </div>
 </template>
 
 <script>
