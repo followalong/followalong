@@ -15,7 +15,6 @@
   color: var(--text-color);
   background: var(--bg-color);
   border-radius: 20px;
-  min-height: 100vh;
   // max-width: 56rem;
 
   @media (max-width: 880px) {
@@ -201,12 +200,13 @@
             background: var(--secondary-color);
             padding: 40px;
             margin-top: 1em;
-            max-height: 70vh;
             overflow: hidden;
+            max-height: 50vh;
 
             &.expanded {
               overflow: scroll;
               -webkit-overflow-scrolling: touch;
+              max-height: 70vh;
             }
 
             @media (max-width: 640px) {
@@ -575,6 +575,10 @@
       border: 1px solid var(--border-color);
       padding: 5px;
     }
+  }
+
+  p {
+    text-indent: 2rem;
   }
 }
 

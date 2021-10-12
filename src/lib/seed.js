@@ -14,10 +14,6 @@ export default {
       url: 'https://www.theatlantic.com/feed/channel/ideas/'
     },
     {
-      name: 'John Stossel',
-      url: 'https://reason.com/tag/john-stossel/feed/'
-    },
-    {
       name: 'Dude Perfect',
       url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCRijo3ddMTht_IHyNSNXpNQ'
     },
@@ -30,12 +26,12 @@ export default {
       url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCpVm7bg6pXKo1Pr6k5kxG9A'
     },
     {
-      name: 'Earthling Ed',
-      url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCVRrGAcUc7cblUzOhI1KfFg'
-    },
-    {
       name: 'Human Events Daily with Jack Posobiec',
       url: 'https://feeds.buzzsprout.com/1850247.rss'
+    },
+    {
+      name: 'E&T News',
+      url: 'https://eandt.theiet.org/rss/'
     }
   ]
 }
