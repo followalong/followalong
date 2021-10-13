@@ -12,7 +12,7 @@
 - Change encryption
 - Save to local
 - Specs should save to local
-- Scatter fetch all
+- Continuous fetch all
 - 3 Core Services
 - Specs should save to remote
 - Remove unused stuff

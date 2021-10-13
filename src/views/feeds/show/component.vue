@@ -89,7 +89,7 @@
               &nbsp; Loading...
             </p>
           </li>
-          <li>
+          <li v-else>
             <h3>You're all caught up on {{ feed.name }}!</h3>
           </li>
         </template>
