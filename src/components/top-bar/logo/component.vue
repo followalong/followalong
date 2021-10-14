@@ -10,10 +10,15 @@
       spin
       class="loader"
     />
-    <span v-else>
-      <img :src="logo">
-      <img :src="mobileLogo">
-    </span>
+    <img
+      v-else
+      :src="icon"
+      class="icon"
+    >
+    <img
+      :src="word"
+      class="word desktop-only"
+    >
   </a>
 </template>
 
@@ -22,8 +27,8 @@ export default {
   props: ['app'],
   data () {
     return {
-      logo: '/img/logo-white.svg',
-      mobileLogo: '/img/favicon-white.svg',
+      word: '/img/logo-word.svg',
+      icon: '/img/logo-icon.svg',
       isLoading: false
     }
   },
