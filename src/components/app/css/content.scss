@@ -17,10 +17,6 @@
   border-radius: 8px;
   // max-width: 56rem;
 
-  @media (max-width: 880px) {
-    padding: $tablet-content-padding;
-  }
-
   @media (max-width: 640px) {
     padding: 10px;
     margin-left: 0;

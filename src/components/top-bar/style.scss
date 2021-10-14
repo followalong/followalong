@@ -51,7 +51,6 @@
 
       a {
         width: $sidebar-width;
-        text-align: center;
 
         @media (max-width: 640px) {
           width: 70px;
@@ -85,14 +84,6 @@
 
     .search {
       width: 100%;
-      // max-width: $content-width;
-      // padding-right: $content-padding;
-      // padding-left: $content-padding;
-
-      @media (max-width: 880px) {
-        padding-left: $tablet-content-padding;
-        padding-right: $tablet-content-padding;
-      }
 
       @media (max-width: 640px) {
         padding-left: 10px;
