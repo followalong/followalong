@@ -7,7 +7,7 @@
             <a
               href="javascript:;"
               :aria-label="`Catch up on ${feed.name}`"
-              @click="app.commands.catchMeUp(items)"
+              @click="app.commands.catchMeUp(app.identity, items)"
             >
               Catch Me Up!
             </a>
@@ -16,7 +16,7 @@
             <a
               href="javascript:;"
               :aria-label="`Fetch ${feed.name}`"
-              @click="app.commands.fetchFeed(feed, app.identity)"
+              @click="app.commands.fetchFeed(app.identity, feed)"
             >
               <span v-if="app.queries.isFetching(feed)">Fetching...</span>
               <span v-else>Fetch Now</span>
@@ -26,7 +26,7 @@
             <a
               href="javascript:;"
               :aria-label="`Pause ${feed.name}`"
-              @click="app.commands.togglePause(feed)"
+              @click="app.commands.togglePause(app.identity, feed)"
             >
               <span v-if="app.queries.isPaused(feed)">Unpause</span>
               <span v-else>Pause</span>
@@ -68,7 +68,7 @@
             v-else-if="app.queries.identityForFeed(feed)"
             href="javascript:;"
             class="i"
-            @click="app.commands.togglePause(feed)"
+            @click="app.commands.togglePause(app.identity, feed)"
           >
             <span v-if="app.queries.isPaused(feed)">&#10074;&#10074;</span>
             <span v-else>&#9658;</span>
@@ -133,12 +133,12 @@ export default {
   },
   mounted () {
     if (this.feed) {
-      return this.app.commands.fetchFeed(this.feed, this.app.identity)
+      return this.app.commands.fetchFeed(this.app.identity, this.feed)
     }
   },
   methods: {
     unsubscribe () {
-      return this.app.commands.unsubscribe(this.feed)
+      return this.app.commands.unsubscribe(this.app.identity, this.feed)
         .then(() => this.$router.push('/feeds'))
     }
   }

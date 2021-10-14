@@ -150,8 +150,8 @@
           </div>
           <div class="half-column">
             <p>
-              Remote: <strong>{{ profileSize(app.identity, 'Remote') }}</strong><br>
-              Local: <strong>{{ profileSize(app.identity, 'Local') }}</strong>
+              Remote: <strong>{{ app.commands.profileSize(app.identity, 'Remote') }}</strong><br>
+              Local: <strong>{{ app.commands.profileSize(app.identity, 'Local') }}</strong>
             </p>
           </div>
         </div>
@@ -173,29 +173,12 @@ export default {
       changeEncryption
     }
   },
+  computed: {
+  },
   mounted () {
     this.strategy = this.app.queries.serviceForIdentity(this.app.identity, 'local').strategy
   },
   methods: {
-    profileSize (identity, type) {
-      if (!identity || !identity.items) return 'N/A'
-
-      const content = this.app.identity[`to${type}`]()
-
-      let unit = 'b'
-      let size = JSON.stringify(content).length
-
-      if (size > 1000000) {
-        size = size / 1000000
-        unit = 'mb'
-      } else if (size > 1000) {
-        size = size / 1000
-        unit = 'kb'
-      }
-
-      return '~' + (Math.round(size * 10) / 10) + ' ' + unit
-    },
-
     revert () {
       return () => {
         this.strategy = this.app.identity.services.local.strategy

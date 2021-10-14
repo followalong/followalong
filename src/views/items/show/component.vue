@@ -19,7 +19,7 @@
             <a
               href="javascript:;"
               :aria-label="`${app.queries.isSaved(item) ? 'Unsave' : 'Save'} ${item.title}`"
-              @click="app.commands.toggleSave(item)"
+              @click="app.commands.toggleSave(app.identity, item)"
             >
               Save<span v-if="app.queries.isSaved(item)">d</span>
             </a>
@@ -29,7 +29,7 @@
             <a
               href="javascript:;"
               :aria-label="`${app.queries.isRead(item) ? 'Unread' : 'Read'} ${item.title}`"
-              @click="app.commands.toggleRead(item)"
+              @click="app.commands.toggleRead(app.identity, item)"
             >
               Mark As <span v-if="app.queries.isRead(item)">Unread</span><span v-else>Read</span>
             </a>
@@ -109,9 +109,9 @@ export default {
   methods: {
     start () {
       if (this.item) {
-        this.app.commands.toggleRead(this.item, true)
+        this.app.commands.toggleRead(this.app.identity, this.item, true)
       } else if (this.feed) {
-        this.app.commands.fetchFeed(this.feed, this.app.identity)
+        this.app.commands.fetchFeed(this.app.identity, this.feed)
       }
 
       if (this.app.queries.hasMedia(this.item)) {

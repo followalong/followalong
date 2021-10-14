@@ -6,7 +6,7 @@
       href="javascript:;"
       class="check"
       :aria-label="`${app.queries.isRead(item) ? 'Unread' : 'Read'} ${item.title}`"
-      @click="app.commands.toggleRead(item)"
+      @click="app.commands.toggleRead(app.identity, item)"
     >&check;</a>
 
     <h3>
@@ -79,7 +79,7 @@
         <a
           href="javascript:;"
           :aria-label="`${app.queries.isSaved(item) ? 'Unsave' : 'Save'} ${item.title}`"
-          @click="app.commands.toggleSave(item)"
+          @click="app.commands.toggleSave(app.identity, item)"
         >
           <font-awesome-icon
             icon="save"
@@ -91,7 +91,7 @@
           :href="item.link"
           target="_blank"
           :aria-label="`Visit source ${item.title}`"
-          @click="app.commands.toggleRead(item, true)"
+          @click="app.commands.toggleRead(app.identity, item, true)"
         >
           <font-awesome-icon icon="link" />
         </a>

@@ -5,7 +5,7 @@
         v-if="hasUnreadItems"
         class="button-gray button-small float-right"
         aria-label="Catch up on all"
-        @click="catchMeUp()"
+        @click="app.commands.catchMeUp(app.identity, items)"
       >
         Catch Me Up!
       </button>
@@ -117,10 +117,6 @@ export default {
     window.onscroll = function () {}
   },
   methods: {
-    catchMeUp () {
-      return this.app.commands.catchMeUp(this.items)
-    },
-
     capitalize (str) {
       return str[0].toUpperCase() + str.slice(1, str.length)
     }

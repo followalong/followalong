@@ -3,7 +3,7 @@
     <button
       :class="app.queries.isFetching(feed) ? 'loading' : ''"
       :aria-label="`Fetch ${feed.name}`"
-      @click="app.commands.fetchFeed(feed, app.identity)"
+      @click="app.commands.fetchFeed(app.identity, feed)"
     >
       <span v-if="app.queries.isFetching(feed)">Loading...</span>
       <span v-else>Fetch Now</span>
@@ -11,7 +11,7 @@
     <button
       :class="app.queries.isPaused(feed) ? 'button-gray' : ''"
       :aria-label="`Pause ${feed.name}`"
-      @click="app.commands.togglePause(feed)"
+      @click="app.commands.togglePause(app.identity, feed)"
     >
       <span v-if="app.queries.isPaused(feed)">&#10074;&#10074;</span>
       <span v-else>&#9658;</span>
@@ -27,7 +27,7 @@
         href="javascript:;"
         class="hint remove"
         :aria-label="`Unsubscribe ${feed.name}`"
-        @click="app.commands.unsubscribe(feed)"
+        @click="app.commands.unsubscribe(app.identity, feed)"
       >
         Unsubscribe
       </a>
