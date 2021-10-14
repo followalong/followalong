@@ -1,4 +1,4 @@
-import { mountApp, flushPromises } from '../helper.js'
+import { mountApp, flushPromisesAndTimers } from '../helper.js'
 
 describe('App: See latest items', () => {
   it('see ', async () => {

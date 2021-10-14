@@ -4,6 +4,15 @@ import { Base64 } from 'js-base64'
 import copyToClipboard from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
 
+const debounce = (func, timeout = 300) => {
+  let timer
+
+  return (...args) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => { func.apply(this, args) }, timeout)
+  }
+}
+
 class Commands {
   constructor (state, queries, localStore) {
     this.state = state
@@ -158,9 +167,12 @@ class Commands {
   }
 
   saveLocal (identity) {
-    const data = this.presenters.identityToLocal(identity)
-
-    return this.localStore.setItem(identity.id, data)
+    //     debounce(() => {
+    //
+    //     })
+    //     const data = this.presenters.identityToLocal(identity)
+    //
+    //     return this.localStore.setItem(identity.id, data)
   }
 
   removeLocal (identity) {

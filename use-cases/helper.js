@@ -179,6 +179,13 @@ const rawRSS = (item) => {
   `
 }
 
+jest.useFakeTimers()
+
+const flushPromisesAndTimers = () => {
+  jest.runAllTimers()
+  return flushPromises()
+}
+
 // const buildIdentityWithFeedAndItems = (items, feed, identity) => {
 //   identity = identity || {}
 //   feed = feed || {}
@@ -197,7 +204,7 @@ const rawRSS = (item) => {
 // }
 
 export {
-  flushPromises,
+  flushPromisesAndTimers,
   mountApp,
   buildServiceToRespondWith,
   rawRSSResponse

@@ -1,4 +1,4 @@
-import { mountApp, flushPromises, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, flushPromisesAndTimers, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Feeds: Fetch', () => {
   describe('from the feeds page', () => {
@@ -9,6 +9,7 @@ describe('Feeds: Fetch', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label^="Fetch"]')
+      await flushPromisesAndTimers()
       await app.click('[aria-label^="Visit"]')
 
       expect(app.text()).toContain(item.title)
@@ -25,6 +26,7 @@ describe('Feeds: Fetch', () => {
       await app.click('[aria-label^="Visit"]')
       await app.click('[aria-label="Toggle Menu"]')
       await app.click('[aria-label^="Fetch"]')
+      await flushPromisesAndTimers()
 
       expect(app.text()).toContain(item.title)
     })

@@ -1,4 +1,4 @@
-import { mountApp, flushPromises, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, flushPromisesAndTimers, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Feeds: Pause a feed', () => {
   it('does not fetch a paused feed', async () => {
@@ -10,7 +10,7 @@ describe('Feeds: Pause a feed', () => {
     await app.click('[aria-label="Feeds"]')
     await app.click('[aria-label^="Pause"]')
     await app.click('[aria-label="FollowAlong"]')
-    await flushPromises()
+    await flushPromisesAndTimers()
 
     expect(app.vm.queries.serviceForIdentity).toHaveBeenCalledTimes(feedsLength - 1)
   })

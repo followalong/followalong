@@ -1,4 +1,4 @@
-import { mountApp, flushPromises, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, flushPromisesAndTimers, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Items: Save for later', () => {
   describe('from the home page', () => {
@@ -9,6 +9,7 @@ describe('Items: Save for later', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
+      await flushPromisesAndTimers()
       expect(app.findAll(`[aria-label="Unsave ${item.title}"]`).length).not.toEqual(1)
 
       await app.click(`[aria-label="Save ${item.title}"]`)
@@ -27,6 +28,7 @@ describe('Items: Save for later', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
+      await flushPromisesAndTimers()
       await app.click('[aria-label^="Visit"]')
       expect(app.findAll(`[aria-label="Unsave ${item.title}"]`).length).not.toEqual(1)
 

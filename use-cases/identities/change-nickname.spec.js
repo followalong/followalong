@@ -1,4 +1,4 @@
-import { mountApp, flushPromises, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, flushPromisesAndTimers, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Identities: Change nickname', () => {
   it('updates the nickname', async () => {

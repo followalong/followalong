@@ -1,4 +1,4 @@
-import { mountApp, flushPromises, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, flushPromisesAndTimers, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Items: Listen to content', () => {
   describe('from the item page', () => {
@@ -10,7 +10,7 @@ describe('Items: Listen to content', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await flushPromises()
+      await flushPromisesAndTimers()
       await app.click('[aria-label^="Visit item"]')
 
       expect(app.find('audio source').element.getAttribute('src')).toEqual(item.audioUrl)

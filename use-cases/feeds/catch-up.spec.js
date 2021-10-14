@@ -1,4 +1,4 @@
-import { mountApp, flushPromises, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, flushPromisesAndTimers, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Feeds: Catch up', () => {
   describe('from the feed page', () => {
@@ -11,6 +11,7 @@ describe('Feeds: Catch up', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label^="Visit"]')
+      await flushPromisesAndTimers()
       await app.click('[aria-label="Toggle Menu"]')
       await app.click('[aria-label^="Catch up on"]')
 
