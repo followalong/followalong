@@ -154,6 +154,10 @@ class Queries {
   findFeedByUrl (url) {
     return this.state.find('feeds', (f) => f.url === url)
   }
+
+  allIdentities () {
+    return this.state.findAll('identities')
+  }
 }
 
 export default Queries

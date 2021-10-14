@@ -5,15 +5,16 @@ import copyToClipboard from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
 
 class Commands {
-  constructor (state, queries) {
+  constructor (state, queries, localStore) {
     this.state = state
     this.queries = queries
+    this.localStore = localStore
     this.presenters = new Presenters(queries)
     this._copyToClipboard = copyToClipboard
     this._saveAs = saveAs
   }
 
-  unsubscribe (identity, feed) {
+  unsubscribeFeed (identity, feed) {
     if (!window.confirm('Are you sure you want to remove this feed?')) {
       return
     }
@@ -152,8 +153,14 @@ class Commands {
     return feed
   }
 
-  saveLocal (identity) {
+  restoreLocal (identity) {
 
+  }
+
+  saveLocal (identity) {
+    const data = this.presenters.identityToLocal(identity)
+
+    return this.localStore.setItem(identity.id, data)
   }
 
   removeLocal (identity) {

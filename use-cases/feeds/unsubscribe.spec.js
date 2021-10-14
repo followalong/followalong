@@ -1,6 +1,6 @@
 import { mountApp, flushPromises, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
 
-describe('Feeds: Remove a feed', () => {
+describe('Feeds: Unsubscribe from a feed', () => {
   it('is removed from the identity', async () => {
     const app = await mountApp()
     window.confirm = jest.fn(() => true)

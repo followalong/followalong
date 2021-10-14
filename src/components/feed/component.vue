@@ -27,7 +27,7 @@
         href="javascript:;"
         class="hint remove"
         :aria-label="`Unsubscribe ${feed.name}`"
-        @click="app.commands.unsubscribe(app.identity, feed)"
+        @click="app.commands.unsubscribeFeed(app.identity, feed)"
       >
         Unsubscribe
       </a>

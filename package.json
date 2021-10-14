@@ -23,7 +23,7 @@
     "file-saver": "^2.0.1",
     "js-base64": "^2.5.1",
     "load-external": "^1.0.2",
-    "localforage": "^1.7.3",
+    "localforage": "^1.10.0",
     "no-async": "^1.1.6",
     "request": "^2.88.0",
     "rss-parser": "^3.7.0",

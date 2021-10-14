@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import localForage from 'localforage'
 import utils from '@/lib/utils/index.js'
 import MediaPlayer from '@/components/media-player/component.vue'
 import Sidebar from '@/components/sidebar/component.vue'
@@ -42,9 +43,12 @@ export default {
   data: function () {
     window.followAlong = this
 
+    const localStore = localForage.createInstance({
+      name: 'followalong-v1'
+    })
     const state = new State({ identities: [], feeds: [], items: [] })
     const queries = new Queries(state)
-    const commands = new Commands(state, queries)
+    const commands = new Commands(state, queries, localStore)
 
     return {
       app: this,

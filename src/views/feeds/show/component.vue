@@ -138,7 +138,7 @@ export default {
   },
   methods: {
     unsubscribe () {
-      return this.app.commands.unsubscribe(this.app.identity, this.feed)
+      return this.app.commands.unsubscribeFeed(this.app.identity, this.feed)
         .then(() => this.$router.push('/feeds'))
     }
   }

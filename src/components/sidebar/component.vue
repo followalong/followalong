@@ -128,7 +128,7 @@
       <li class="divider mobile-only" />
 
       <li
-        v-for="i in app.nonIdentities"
+        v-for="i in nonIdentities"
         :key="i.id"
         class="mobile-only"
       >
@@ -191,6 +191,9 @@ export default {
     },
     feeds () {
       return this.app.queries.feedsForIdentity(this.app.identity)
+    },
+    nonIdentities () {
+      return this.app.queries.allIdentities().filter((i) => i.id === this.app.identity.id)
     }
   },
   watch: {
