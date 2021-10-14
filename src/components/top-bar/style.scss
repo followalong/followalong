@@ -34,15 +34,6 @@
       display: block;
       padding: 20px;
       outline: none;
-
-      @media (max-width: 640px) {
-        padding: 5px;
-      }
-
-      // &.router-link-exact-active,
-      // &:hover {
-      //   background: rgba(255, 255, 255, 0.1);
-      // }
     }
 
     .table-cell {
@@ -60,12 +51,10 @@
 
       a {
         width: $sidebar-width;
-        padding: 6px 18px;
         text-align: center;
 
         @media (max-width: 640px) {
-          width: 60px;
-          padding: 20px;
+          width: 70px;
         }
 
         &:hover {
