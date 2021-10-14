@@ -483,11 +483,14 @@
     font-size: 1.5rem;
     color: var(--link-color);
     font-family: var(--sans-serif);
-    font-weight: 500;
+    font-weight: 700;
   }
 
   h3, h4, h5, h6 {
     font-size: 1.25rem;
+    color: var(--text-color);
+    font-family: var(--sans-serif);
+    font-weight: 700;
   }
 
   textarea, blockquote {

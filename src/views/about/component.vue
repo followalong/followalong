@@ -5,11 +5,6 @@
     </h1>
   </div>
 
-  <p class="highlight">
-    <span v-if="app.identity.isLoading">FollowAlong is preparing "What's New?" &mdash; just for you!</span>
-    <span v-else>All feeds are up-to-date!</span>
-  </p>
-
   <Info />
 </template>
 
