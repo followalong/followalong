@@ -9,7 +9,6 @@ describe('Items: Visit source', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await app.wait()
 
       expect(app.find('[aria-label^="Visit source"]').element.getAttribute('href')).toEqual(item.link)
     })

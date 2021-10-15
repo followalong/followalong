@@ -9,7 +9,6 @@ describe('Items: Watch content', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await app.wait()
       await app.click('[aria-label^="Visit item"]')
 
       expect(app.find('iframe').element.getAttribute('src')).toEqual(item.videoUrl)

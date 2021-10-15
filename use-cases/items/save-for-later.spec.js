@@ -9,7 +9,6 @@ describe('Items: Save for later', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await app.wait()
       expect(app.findAll(`[aria-label="Unsave ${item.title}"]`).length).not.toEqual(1)
 
       await app.click(`[aria-label="Save ${item.title}"]`)
@@ -28,7 +27,6 @@ describe('Items: Save for later', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await app.wait()
       await app.click('[aria-label^="Visit"]')
       expect(app.findAll(`[aria-label="Unsave ${item.title}"]`).length).not.toEqual(1)
 

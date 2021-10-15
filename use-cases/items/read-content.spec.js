@@ -9,7 +9,6 @@ describe('Items: Read content', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await app.wait()
       await app.click('[aria-label^="Visit item"]')
 
       expect(app.text()).toContain(item.title)

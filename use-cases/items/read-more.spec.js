@@ -10,7 +10,6 @@ describe('Items: Read more', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await app.wait()
       await app.click(`[aria-label="Read more ${item.title}"]`)
 
       expect(app.text()).toContain(item.content)
@@ -24,7 +23,6 @@ describe('Items: Read more', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await app.wait()
       await app.click(`[aria-label="Read more ${item.title}"]`)
 
       expect(window.scroll).toHaveBeenCalled()

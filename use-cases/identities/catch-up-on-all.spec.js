@@ -8,9 +8,7 @@ describe('Identities: Catch up on all', () => {
     await app.click('[aria-label="FollowAlong"]')
     expect(app.findAll('.read').length).toEqual(0)
 
-    await app.wait()
     await app.click('[aria-label="Catch up on all"]')
-
     expect(app.findAll('.read').length).toBeGreaterThan(0)
   })
 })

@@ -5,13 +5,12 @@ describe('Identities: Forget', () => {
     window.confirm = () => true
 
     const app = await mountApp()
-    const id = app.vm.identity.id
     app.vm.commands.reload = jest.fn()
 
     await app.click('[aria-label="Settings"]')
     await app.click('[aria-label="Forget identity"]')
 
     expect(app.vm.commands.reload).toHaveBeenCalled()
-    expect(app.vm.commands.localStore.getItem(id)).resolves.toEqual(null)
+    expect(app.vm.commands.localStore.getItem(app.initialIdentityId)).resolves.toEqual(null)
   })
 })

@@ -10,7 +10,6 @@ describe('Feeds: Pause a feed', () => {
     await app.click('[aria-label="Feeds"]')
     await app.click('[aria-label^="Pause"]')
     await app.click('[aria-label="FollowAlong"]')
-    await app.wait()
 
     expect(app.vm.queries.serviceForIdentity).toHaveBeenCalledTimes(feedsLength - 1)
   })

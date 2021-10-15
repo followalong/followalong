@@ -10,7 +10,6 @@ describe('Items: Listen to content', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await app.wait()
       await app.click('[aria-label^="Visit item"]')
 
       expect(app.find('audio source').element.getAttribute('src')).toEqual(item.audioUrl)

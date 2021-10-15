@@ -83,7 +83,7 @@ const mountApp = () => {
         throw new Error(`Could not find element: ${el} in ${app.text()}`)
       }
       await $el.trigger('click')
-      await flushPromises()
+      await app.wait()
     }
 
     app.submit = async (el) => {
@@ -92,14 +92,17 @@ const mountApp = () => {
         throw new Error(`Could not find element: ${el} in ${app.text()}`)
       }
       await $el.trigger('submit')
-      await flushPromises()
+      await app.wait()
     }
 
     app.wait = async () => {
       await flushPromisesAndTimers()
+      await flushPromisesAndTimers()
     }
 
-    await flushPromises()
+    await app.wait()
+
+    app.initialIdentityId = app.vm.identity.id
 
     resolve(app)
   })

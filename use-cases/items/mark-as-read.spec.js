@@ -9,7 +9,6 @@ describe('Items: Mark as read', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await app.wait()
       expect(app.findAll(`[aria-label="Unread ${item.title}"]`).length).not.toEqual(1)
 
       await app.click(`[aria-label="Read ${item.title}"]`)
@@ -28,7 +27,6 @@ describe('Items: Mark as read', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await app.wait()
       await app.click('[aria-label^="Visit"]')
       expect(app.findAll(`[aria-label="Unread ${item.title}"]`).length).not.toEqual(1)
 

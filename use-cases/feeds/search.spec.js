@@ -5,10 +5,8 @@ describe('Feeds: Search', () => {
     it('shows a listing of feeds', async () => {
       const app = await mountApp()
       app.vm.queries.serviceForIdentity = buildServiceToRespondWith([{ name: 'Feed #1' }, { name: 'Feed #2' }])
-      const $form = app.find('[aria-label="Search form"]')
 
-      await $form.trigger('submit')
-      await app.wait()
+      await app.submit('[aria-label="Search form"]')
 
       expect(app.text()).toContain('Feed #1')
       expect(app.text()).toContain('Feed #2')

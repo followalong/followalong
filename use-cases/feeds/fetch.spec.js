@@ -9,7 +9,6 @@ describe('Feeds: Fetch', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label^="Fetch"]')
-      await app.wait()
       await app.click('[aria-label^="Visit"]')
 
       expect(app.text()).toContain(item.title)
@@ -26,7 +25,6 @@ describe('Feeds: Fetch', () => {
       await app.click('[aria-label^="Visit"]')
       await app.click('[aria-label="Toggle Menu"]')
       await app.click('[aria-label^="Fetch"]')
-      await app.wait()
 
       expect(app.text()).toContain(item.title)
     })
