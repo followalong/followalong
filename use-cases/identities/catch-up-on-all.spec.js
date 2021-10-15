@@ -1,4 +1,4 @@
-import { mountApp, flushPromisesAndTimers, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Identities: Catch up on all', () => {
   it('marks all items as read', async () => {
@@ -8,7 +8,7 @@ describe('Identities: Catch up on all', () => {
     await app.click('[aria-label="FollowAlong"]')
     expect(app.findAll('.read').length).toEqual(0)
 
-    await flushPromisesAndTimers()
+    await app.wait()
     await app.click('[aria-label="Catch up on all"]')
 
     expect(app.findAll('.read').length).toBeGreaterThan(0)

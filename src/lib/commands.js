@@ -4,13 +4,16 @@ import { Base64 } from 'js-base64'
 import copyToClipboard from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
 
-const debounce = (func, timeout = 300) => {
+const debouncedPromise = (func, timeout = 1000) => {
   let timer
 
-  return (...args) => {
-    clearTimeout(timer)
-    timer = setTimeout(() => { func.apply(this, args) }, timeout)
-  }
+  clearTimeout(timer)
+
+  return new Promise((resolve, reject) => {
+    timer = setTimeout(() => {
+      func.call(this).then(resolve).catch(reject)
+    }, timeout)
+  })
 }
 
 class Commands {
@@ -167,16 +170,16 @@ class Commands {
   }
 
   saveLocal (identity) {
-    //     debounce(() => {
-    //
-    //     })
-    //     const data = this.presenters.identityToLocal(identity)
-    //
-    //     return this.localStore.setItem(identity.id, data)
+    return debouncedPromise(() => {
+      return this.localStore.setItem(
+        identity.id,
+        this.presenters.identityToLocal(identity)
+      )
+    }, 300)
   }
 
   removeLocal (identity) {
-
+    return this.localStore.removeItem(identity.id)
   }
 
   reload () {

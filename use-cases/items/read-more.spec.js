@@ -1,4 +1,4 @@
-import { mountApp, flushPromisesAndTimers, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Items: Read more', () => {
   describe('from the home page', () => {
@@ -10,7 +10,7 @@ describe('Items: Read more', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await flushPromisesAndTimers()
+      await app.wait()
       await app.click(`[aria-label="Read more ${item.title}"]`)
 
       expect(app.text()).toContain(item.content)
@@ -24,7 +24,7 @@ describe('Items: Read more', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await flushPromisesAndTimers()
+      await app.wait()
       await app.click(`[aria-label="Read more ${item.title}"]`)
 
       expect(window.scroll).toHaveBeenCalled()

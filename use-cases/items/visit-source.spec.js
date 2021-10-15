@@ -1,4 +1,4 @@
-import { mountApp, flushPromisesAndTimers, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Items: Visit source', () => {
   describe('from the item page', () => {
@@ -9,7 +9,7 @@ describe('Items: Visit source', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await flushPromisesAndTimers()
+      await app.wait()
 
       expect(app.find('[aria-label^="Visit source"]').element.getAttribute('href')).toEqual(item.link)
     })

@@ -1,4 +1,4 @@
-import { mountApp, flushPromisesAndTimers, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Items: Mark as read', () => {
   describe('from the home page', () => {
@@ -9,7 +9,7 @@ describe('Items: Mark as read', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await flushPromisesAndTimers()
+      await app.wait()
       expect(app.findAll(`[aria-label="Unread ${item.title}"]`).length).not.toEqual(1)
 
       await app.click(`[aria-label="Read ${item.title}"]`)
@@ -28,7 +28,7 @@ describe('Items: Mark as read', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await flushPromisesAndTimers()
+      await app.wait()
       await app.click('[aria-label^="Visit"]')
       expect(app.findAll(`[aria-label="Unread ${item.title}"]`).length).not.toEqual(1)
 

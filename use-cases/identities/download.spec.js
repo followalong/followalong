@@ -1,4 +1,4 @@
-import { mountApp, flushPromisesAndTimers, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Identities: Download configuration', () => {
   it('downloads the configuration', async () => {

@@ -1,4 +1,4 @@
-import { mountApp, flushPromisesAndTimers, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Items: Read content', () => {
   describe('from the item page', () => {
@@ -9,7 +9,7 @@ describe('Items: Read content', () => {
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
-      await flushPromisesAndTimers()
+      await app.wait()
       await app.click('[aria-label^="Visit item"]')
 
       expect(app.text()).toContain(item.title)

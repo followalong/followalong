@@ -95,6 +95,10 @@ const mountApp = () => {
       await flushPromises()
     }
 
+    app.wait = async () => {
+      await flushPromisesAndTimers()
+    }
+
     await flushPromises()
 
     resolve(app)
@@ -204,7 +208,6 @@ const flushPromisesAndTimers = () => {
 // }
 
 export {
-  flushPromisesAndTimers,
   mountApp,
   buildServiceToRespondWith,
   rawRSSResponse

@@ -1,4 +1,4 @@
-import { mountApp, flushPromisesAndTimers, buildServiceToRespondWith } from '../helper.js'
+import { mountApp, buildServiceToRespondWith } from '../helper.js'
 
 describe('Feeds: Search', () => {
   describe('if multiple results', () => {
@@ -8,7 +8,7 @@ describe('Feeds: Search', () => {
       const $form = app.find('[aria-label="Search form"]')
 
       await $form.trigger('submit')
-      await flushPromisesAndTimers()
+      await app.wait()
 
       expect(app.text()).toContain('Feed #1')
       expect(app.text()).toContain('Feed #2')

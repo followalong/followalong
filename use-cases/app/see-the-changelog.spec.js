@@ -1,4 +1,4 @@
-import { mountApp, flushPromisesAndTimers } from '../helper.js'
+import { mountApp } from '../helper.js'
 
 describe('App: See the changelog', () => {
   it('unveils the story', async () => {

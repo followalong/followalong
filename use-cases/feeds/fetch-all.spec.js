@@ -1,4 +1,4 @@
-import { mountApp, flushPromisesAndTimers, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Feeds: Fetch all feeds', () => {
   describe('from the logo', () => {
@@ -9,7 +9,7 @@ describe('Feeds: Fetch all feeds', () => {
       app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
 
       await app.click('[aria-label="FollowAlong"]')
-      await flushPromisesAndTimers()
+      await app.wait()
 
       await app.click('[aria-label="What\'s new?"]')
       expect(app.vm.queries.serviceForIdentity).toHaveBeenCalledTimes(expectedFeedsLength)
@@ -28,7 +28,7 @@ describe('Feeds: Fetch all feeds', () => {
       await app.click('[aria-label="Fetch all feeds"]')
       expect(app.vm.queries.serviceForIdentity).toHaveBeenCalledTimes(expectedFeedsLength)
 
-      await flushPromisesAndTimers()
+      await app.wait()
       await app.click('[aria-label="What\'s new?"]')
       expect(app.text()).toContain(item.title)
     })
