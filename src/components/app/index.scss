@@ -44,7 +44,7 @@
   --secondary-color-emphasis: var(--primary-color);
   --secondary-color-opposite: var(--light-text);
 
-  --link-color: #b7a263;
+  --link-color: #b28f4d;
   --button-text: var(--text-color);
   --bold-text: #fff;
 
@@ -53,7 +53,7 @@
   --info: #28415d;
   --error: #842115;
   --overlay: rgba(0, 0, 0, 0.95);
-  --highlight: #51482e;
+  --highlight: var(--link-color);
   --highlight-text: var(--text-color);
   }
 }
