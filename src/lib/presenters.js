@@ -56,11 +56,11 @@ class Presenters {
       author: item.author,
       feedUrl: item.feedUrl,
       guid: item.guid,
-      image: item.image,
+      image: this._buildObj(item.image),
       readAt: item.readAt,
       savedAt: item.savedAt,
       link: item.link,
-      enclosure: item.enclosure,
+      enclosure: this._buildObj(item.enclosure),
       pubDate: item.pubDate,
       title: item.title,
       content: item.content,
@@ -73,16 +73,30 @@ class Presenters {
       author: item.author,
       feedUrl: item.feedUrl,
       guid: item.guid,
-      image: item.image,
+      image: this._buildObj(item.image),
       readAt: item.readAt,
       savedAt: item.savedAt,
       link: item.link,
-      enclosure: item.enclosure,
+      enclosure: this._buildObj(item.enclosure),
       pubDate: item.pubDate,
       title: item.title,
       content: item.content,
       updatedAt: item.updatedAt
     }
+  }
+
+  _buildObj (obj) {
+    if (!obj) {
+      return undefined
+    }
+
+    const data = {}
+
+    for (const key in obj) {
+      data[key] = obj[key]
+    }
+
+    return data
   }
 }
 
