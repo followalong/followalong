@@ -2,9 +2,12 @@ import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.j
 
 describe('Items: Save for later', () => {
   describe('from the home page', () => {
-    it('can be toggled', async () => {
-      const app = await mountApp()
-      const item = { title: 'Foo bar' }
+    let app
+    let item
+
+    beforeEach(async () => {
+      app = await mountApp()
+      item = { title: 'Foo bar' }
       app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
@@ -13,16 +16,26 @@ describe('Items: Save for later', () => {
 
       await app.click(`[aria-label="Save ${item.title}"]`)
       expect(app.findAll(`[aria-label="Unsave ${item.title}"]`).length).toEqual(1)
+    })
 
-      await app.click(`[aria-label="Unsave ${item.title}"]`)
+    it('can be toggled', async () => {
       expect(app.findAll(`[aria-label="Save ${item.title}"]`).length).not.toEqual(1)
+    })
+
+    it('saves to local storage', async () => {
+      await app.vm.commands.localStore.getItem(app.initialIdentityId).then((data) => {
+        expect(data.items[0].savedAt).toBeGreaterThan(0)
+      })
     })
   })
 
   describe('from the item page', () => {
-    it('can be toggled', async () => {
-      const app = await mountApp()
-      const item = { title: 'Foo bar' }
+    let app
+    let item
+
+    beforeEach(async () => {
+      app = await mountApp()
+      item = { title: 'Foo bar' }
       app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
@@ -33,10 +46,19 @@ describe('Items: Save for later', () => {
       await app.click('[aria-label="Toggle Menu"]')
       await app.click(`[aria-label="Save ${item.title}"]`)
       await app.click('[aria-label="Toggle Menu"]')
+    })
+
+    it('can be toggled', async () => {
       expect(app.findAll(`[aria-label="Unsave ${item.title}"]`).length).toEqual(1)
 
       await app.click(`[aria-label="Unsave ${item.title}"]`)
       expect(app.findAll(`[aria-label="Save ${item.title}"]`).length).not.toEqual(1)
+    })
+
+    it('saves to local storage', async () => {
+      await app.vm.commands.localStore.getItem(app.initialIdentityId).then((data) => {
+        expect(data.items[data.items.length - 1].savedAt).toBeGreaterThan(0)
+      })
     })
   })
 })

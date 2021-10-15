@@ -2,31 +2,53 @@ import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.j
 
 describe('Feeds: Fetch', () => {
   describe('from the feeds page', () => {
-    it('fetches new items', async () => {
-      const app = await mountApp()
-      const item = { title: 'Foo Bar' }
+    let app
+    let item
+
+    beforeEach(async () => {
+      app = await mountApp()
+      item = { title: 'Foo Bar' }
       app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label^="Fetch"]')
       await app.click('[aria-label^="Visit"]')
+    })
 
+    it('fetches new items', async () => {
       expect(app.text()).toContain(item.title)
+    })
+
+    it('saves to local storage', async () => {
+      await app.vm.commands.localStore.getItem(app.initialIdentityId).then((data) => {
+        expect(data.items.length).toBeGreaterThan(0)
+      })
     })
   })
 
   describe('from the feed page', () => {
-    it('fetches new items', async () => {
-      const app = await mountApp()
-      const item = { title: 'Foo Bar' }
+    let app
+    let item
+
+    beforeEach(async () => {
+      app = await mountApp()
+      item = { title: 'Foo Bar' }
       app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label^="Visit"]')
       await app.click('[aria-label="Toggle Menu"]')
       await app.click('[aria-label^="Fetch"]')
+    })
 
+    it('fetches new items', async () => {
       expect(app.text()).toContain(item.title)
+    })
+
+    it('saves to local storage', async () => {
+      await app.vm.commands.localStore.getItem(app.initialIdentityId).then((data) => {
+        expect(data.items.length).toBeGreaterThan(0)
+      })
     })
   })
 })

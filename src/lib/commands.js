@@ -119,9 +119,18 @@ class Commands {
         .catch(reject)
         .finally(() => {
           delete feed.fetchingAt
+          this.saveLocal(identity)
           resolve()
         })
     })
+  }
+
+  addFeedToIdentity (identity, feed) {
+    feed.identityId = identity.id
+
+    this.saveLocal(identity)
+
+    return feed
   }
 
   addItemToFeed (feed, item) {
@@ -155,14 +164,6 @@ class Commands {
 
     this.state.add('feeds', feeds || [], (f) => this.addFeedToIdentity(identity, f))
     this.saveLocal(identity)
-  }
-
-  addFeedToIdentity (identity, feed) {
-    feed.identityId = identity.id
-
-    this.saveLocal(identity)
-
-    return feed
   }
 
   restoreLocal (identity) {
