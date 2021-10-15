@@ -20,7 +20,7 @@ describe('Feeds: Pause a feed', () => {
   })
 
   it('saves the identity in local storage', async () => {
-    await app.vm.commands.localStore.getItem(app.initialIdentityId).then((data) => {
+    await app.getLocalDefaultIdentity().then((data) => {
       expect(data.feeds[0].pausedAt).toBeGreaterThan(0)
     })
   })

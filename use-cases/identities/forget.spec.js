@@ -18,6 +18,6 @@ describe('Identities: Forget', () => {
   })
 
   it('removes the identity from the local storage', async () => {
-    expect(app.vm.commands.localStore.getItem(app.initialIdentityId)).resolves.toEqual(null)
+    expect(app.getLocalDefaultIdentity()).resolves.toEqual(null)
   })
 })

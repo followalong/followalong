@@ -22,7 +22,7 @@ describe('Feeds: Catch up', () => {
     })
 
     it('saves the identity in local storage', async () => {
-      await app.vm.commands.localStore.getItem(app.initialIdentityId).then((data) => {
+      await app.getLocalDefaultIdentity().then((data) => {
         expect(data.items[0].readAt).toBeGreaterThan(0)
       })
     })

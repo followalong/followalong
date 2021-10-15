@@ -23,7 +23,7 @@ describe('Feeds: Search', () => {
       await app.click('[aria-label="Feeds"]')
 
       expect(app.text()).toContain(expectedFeed.name)
-      await app.vm.commands.localStore.getItem(app.initialIdentityId).then((data) => {
+      await app.getLocalDefaultIdentity().then((data) => {
         expect(data.feeds.length).toEqual(initialFeedsLength + 1)
       })
     })
@@ -55,7 +55,7 @@ describe('Feeds: Search', () => {
       await app.click('[aria-label="Feeds"]')
 
       expect(app.text()).toContain(expectedFeed.url)
-      await app.vm.commands.localStore.getItem(app.initialIdentityId).then((data) => {
+      await app.getLocalDefaultIdentity().then((data) => {
         expect(data.feeds.length).toEqual(initialFeedsLength + 1)
       })
     })

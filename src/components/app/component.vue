@@ -23,13 +23,12 @@
 </template>
 
 <script>
-import localForage from 'localforage'
 import utils from '@/lib/utils/index.js'
+import localStore from '@/lib/local-store.js'
 import MediaPlayer from '@/components/media-player/component.vue'
 import Sidebar from '@/components/sidebar/component.vue'
 import TopBar from '@/components/top-bar/component.vue'
 import keychain from '@/lib/keychain'
-import seedIdentity from '@/lib/seed'
 import Commands from '@/lib/commands.js'
 import State from '@/lib/state.js'
 import Queries from '@/lib/queries.js'
@@ -40,12 +39,8 @@ export default {
     Sidebar,
     TopBar
   },
-  data: function () {
+  data () {
     window.followAlong = this
-
-    const localStore = localForage.createInstance({
-      name: 'followalong-v1'
-    })
     const state = new State({ identities: [], feeds: [], items: [] })
     const queries = new Queries(state)
     const commands = new Commands(state, queries, localStore)
@@ -74,18 +69,8 @@ export default {
   },
   methods: {
     restoreIdentities () {
-      return new Promise((resolve, reject) => {
-        this.keychain.buildIdentities().then((identities) => {
-          identities.forEach((i) => this.commands.addIdentity(i))
-
-          if (!identities.length) {
-            this.commands.addIdentity({ name: seedIdentity.name }, seedIdentity.feeds)
-          }
-
-          this.setIdentity(this.queries.findDefaultIdentity())
-
-          resolve()
-        }).catch(reject)
+      return this.app.commands.restoreLocal().then((identities) => {
+        this.setIdentity(this.queries.findDefaultIdentity())
       })
     },
 

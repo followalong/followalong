@@ -136,8 +136,7 @@
           href="javascript:;"
           @click="app.setIdentity(app, i);"
         >
-          <span v-if="i._decrypted">{{ i.name }}</span>
-          <span v-else>{{ i.id.slice(0, 8) }} <span class="encrypted">(not yet decrypted)</span></span>
+          <span>{{ i.name }}</span>
         </a>
       </li>
 

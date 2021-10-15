@@ -1,3 +1,4 @@
+import seedIdentity from '@/lib/seed'
 import Presenters from '@/lib/presenters.js'
 import { getFeed } from '@/lib/fetcher'
 import { Base64 } from 'js-base64'
@@ -162,15 +163,35 @@ class Commands {
     this.removeLocal(identity)
   }
 
-  addIdentity (data, feeds) {
+  addIdentity (data, feeds, items) {
     const identity = this.state.add('identities', [data])[0]
 
     this.state.add('feeds', feeds || [], (f) => this.addFeedToIdentity(identity, f))
+    this.state.add('items', items || [])
     this.saveLocal(identity)
   }
 
-  restoreLocal (identity) {
+  getLocalIdentity (id) {
+    return this.localStore.getItem(id)
+  }
 
+  restoreLocal (identity) {
+    return new Promise((resolve) => {
+      this.localStore.keys().then((ids) => {
+        const promises = ids.map((id) => {
+          return this.getLocalIdentity(id)
+            .then((data) => this.addIdentity(data, data.feeds, data.items))
+        })
+
+        Promise.all(promises).finally(() => {
+          if (!this.queries.allIdentities().length) {
+            this.addIdentity({ name: seedIdentity.name }, seedIdentity.feeds)
+          }
+
+          resolve()
+        })
+      })
+    })
   }
 
   saveLocal (identity) {
@@ -178,10 +199,7 @@ class Commands {
       return this.localStore.setItem(
         identity.id,
         this.presenters.identityToLocal(identity)
-      ).catch((err) => {
-        console.log(err)
-        console.log(this.presenters.identityToLocal(identity))
-      })
+      )
     }, 300, this)
   }
 

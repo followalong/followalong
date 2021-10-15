@@ -25,7 +25,7 @@ describe('Items: Mark as read', () => {
     })
 
     it('saves to local storage', async () => {
-      await app.vm.commands.localStore.getItem(app.initialIdentityId).then((data) => {
+      await app.getLocalDefaultIdentity().then((data) => {
         expect(data.items[data.items.length - 1].readAt).toBeGreaterThan(0)
       })
     })
@@ -58,7 +58,7 @@ describe('Items: Mark as read', () => {
     })
 
     it('saves to local storage', async () => {
-      await app.vm.commands.localStore.getItem(app.initialIdentityId).then((data) => {
+      await app.getLocalDefaultIdentity().then((data) => {
         expect(data.items[data.items.length - 1].readAt).toBeGreaterThan(0)
       })
     })

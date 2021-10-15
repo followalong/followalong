@@ -23,9 +23,8 @@ describe('Items: Save for later', () => {
     })
 
     it('saves to local storage', async () => {
-      await app.vm.commands.localStore.getItem(app.initialIdentityId).then((data) => {
-        expect(data.items[0].savedAt).toBeGreaterThan(0)
-      })
+      const localData = await app.getLocalDefaultIdentity()
+      expect(localData.items[0].savedAt).toBeGreaterThan(0)
     })
   })
 
@@ -41,24 +40,20 @@ describe('Items: Save for later', () => {
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
       await app.click('[aria-label^="Visit"]')
-      expect(app.findAll(`[aria-label="Unsave ${item.title}"]`).length).not.toEqual(1)
+      await app.click('[aria-label="Toggle Menu"]')
+      expect(app.findAll(`[aria-label="Unsave ${item.title}"]`).length).not.toBeGreaterThan(1)
 
-      await app.click('[aria-label="Toggle Menu"]')
       await app.click(`[aria-label="Save ${item.title}"]`)
-      await app.click('[aria-label="Toggle Menu"]')
     })
 
     it('can be toggled', async () => {
+      await app.click('[aria-label="Toggle Menu"]')
       expect(app.findAll(`[aria-label="Unsave ${item.title}"]`).length).toEqual(1)
-
-      await app.click(`[aria-label="Unsave ${item.title}"]`)
-      expect(app.findAll(`[aria-label="Save ${item.title}"]`).length).not.toEqual(1)
     })
 
     it('saves to local storage', async () => {
-      await app.vm.commands.localStore.getItem(app.initialIdentityId).then((data) => {
-        expect(data.items[data.items.length - 1].savedAt).toBeGreaterThan(0)
-      })
+      const localData = await app.getLocalDefaultIdentity()
+      expect(localData.items[localData.items.length - 1].savedAt).toBeGreaterThan(0)
     })
   })
 })

@@ -7,6 +7,7 @@ import { routes } from '@/router'
 import App from '@/components/app/component.vue'
 // import store from '@/lib/store'
 import addIcons from '@/add-icons.js'
+import localStore from '@/lib/local-store.js'
 // import keychain from '@/lib/keychain'
 
 // const storeIdentity = (keychain, identity, id, key) => {
@@ -70,6 +71,7 @@ const mountApp = () => {
     router.push('/')
 
     await router.isReady()
+    await localStore.clear()
 
     const app = await mount(App, {
       global: {
@@ -100,9 +102,19 @@ const mountApp = () => {
       await flushPromisesAndTimers()
     }
 
-    await app.wait()
+    app.getLocalDefaultIdentity = async () => {
+      const ids = await app.vm.commands.localStore.keys()
 
-    app.initialIdentityId = app.vm.identity.id
+      if (!ids.length) {
+        return null
+      }
+
+      const identity = await app.vm.commands.getLocalIdentity(ids[0])
+
+      return identity
+    }
+
+    await app.wait()
 
     resolve(app)
   })
