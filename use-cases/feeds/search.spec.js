@@ -15,7 +15,7 @@ describe('Feeds: Search', () => {
     it('can subscribe to a feed', async () => {
       const expectedFeed = { name: 'Feed #1' }
       const app = await mountApp()
-      const initialFeedsLength = app.vm.state.findAll('feeds').length
+      const initialFeedsLength = app.vm.queries.allFeeds().length
       app.vm.queries.serviceForIdentity = buildServiceToRespondWith([expectedFeed, { name: 'Feed #2' }])
 
       await app.submit('[aria-label="Search form"]')
@@ -45,7 +45,7 @@ describe('Feeds: Search', () => {
     it('can subscribe to a feed', async () => {
       const expectedFeed = { name: 'Feed #1', url: 'https://example.com/feed' }
       const app = await mountApp()
-      const initialFeedsLength = app.vm.state.findAll('feeds').length
+      const initialFeedsLength = app.vm.queries.allFeeds().length
       app.vm.commands.fetchFeed = jest.fn()
       app.vm.queries.serviceForIdentity = buildServiceToRespondWith([expectedFeed])
 

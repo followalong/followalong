@@ -158,6 +158,10 @@ class Queries {
   allIdentities () {
     return this.state.findAll('identities')
   }
+
+  allFeeds () {
+    return this.state.findAll('feeds')
+  }
 }
 
 export default Queries

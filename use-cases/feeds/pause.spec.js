@@ -6,7 +6,7 @@ describe('Feeds: Pause a feed', () => {
 
   beforeEach(async () => {
     app = await mountApp()
-    feedsLength = app.vm.state.findAll('feeds').length
+    feedsLength = app.vm.queries.allFeeds().length
     const item = { title: 'Foo Bar' }
     app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
 

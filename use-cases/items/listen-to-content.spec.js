@@ -5,7 +5,7 @@ describe('Items: Listen to content', () => {
     it('can see a audio player', async () => {
       const app = await mountApp()
       const item = { audioUrl: 'https://example.com/audio.mp3' }
-      const feedsLength = app.vm.state.findAll('feeds').length
+      const feedsLength = app.vm.queries.allFeeds().length
       app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')

@@ -49,7 +49,7 @@ export default {
   props: ['app'],
   computed: {
     otherIdentities () {
-      return this.app.state.findAll('identities', (i) => i.id !== this.app.identity.id)
+      return this.app.queries.allIdentities().filter((i) => i.id !== this.app.identity.id)
     }
   }
 }

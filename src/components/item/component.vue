@@ -124,7 +124,7 @@ export default {
       return this.item ? (this.item.content || '').trim().length : false
     },
     feed () {
-      return this.app.state.find('feeds', (f) => f.url === this.item.feedUrl)
+      return this.app.queries.findFeedByUrl(this.item.feedUrl)
     },
     words () {
       return this.item.content.split(/\s+/)

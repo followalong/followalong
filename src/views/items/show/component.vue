@@ -89,7 +89,7 @@ export default {
       return this.app.queries.itemsForFeed(this.feed).find((item) => item.guid + '' === this.$route.params.guid + '')
     },
     feed () {
-      let feed = this.app.state.find('feeds', (f) => f.url === this.$route.params.feed_url)
+      let feed = this.app.queries.findFeedByUrl(this.$route.params.feed_url)
 
       if (!feed) {
         feed = this.app.commands.addFeed({ url: this.$route.params.feed_url })

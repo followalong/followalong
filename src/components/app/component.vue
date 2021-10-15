@@ -52,7 +52,6 @@ export default {
 
     return {
       app: this,
-      state,
       queries,
       commands,
       keychain,
