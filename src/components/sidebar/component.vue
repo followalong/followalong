@@ -67,7 +67,10 @@
       </li>
 
       <li v-if="saved.length">
-        <router-link to="/saved">
+        <router-link
+          to="/saved"
+          aria-label="Saved"
+        >
           <font-awesome-icon icon="save" />
           Saved
           <span class="hint counter">

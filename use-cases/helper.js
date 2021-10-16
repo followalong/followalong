@@ -61,7 +61,7 @@ import localStore from '@/lib/local-store.js'
 //   })
 // }
 
-const mountApp = () => {
+const mountApp = (localStoreData) => {
   return new Promise(async (resolve) => {
     const router = createRouter({
       history: createMemoryHistory(),
@@ -72,6 +72,10 @@ const mountApp = () => {
 
     await router.isReady()
     await localStore.clear()
+
+    for (const key in localStoreData) {
+      await localStore.setItem(key, localStoreData[key])
+    }
 
     const app = await mount(App, {
       global: {
