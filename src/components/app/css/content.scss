@@ -117,8 +117,9 @@
   }
 
   .highlight {
-    background: var(--highlight);
+    background: var(--highlight-bg);
     color: var(--highlight-text);
+    border-bottom: var(--highlight-border-bottom);
     padding: 20px;
     border-radius: 4px;
   }

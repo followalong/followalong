@@ -12,13 +12,6 @@
       <h1>{{ mediaVerb ? capitalize(mediaVerb) : 'What\'s New?' }}</h1>
     </div>
 
-    <p
-      v-if="itemsWithLimit.length && !hasUnreadItems"
-      class="highlight"
-    >
-      You're all caught up!
-    </p>
-
     <ul
       v-if="itemsWithLimit.length"
       class="items"

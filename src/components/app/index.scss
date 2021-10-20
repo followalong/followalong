@@ -26,7 +26,7 @@
   --info: #F2F2F2;
   --error: #CC3F06;
   --overlay: rgba(0, 0, 0, 0.3);
-  --highlight: #F9FF77;
+  --highlight-bg: #F9FF77;
 
   @media (prefers-color-scheme: dark) {
   --bg-color: var(--primary-color);
@@ -53,8 +53,8 @@
   --info: #28415d;
   --error: #842115;
   --overlay: rgba(0, 0, 0, 0.95);
-  --highlight: var(--link-color);
-  --highlight-text: var(--text-color);
+  --highlight-bg: '';
+  --highlight-border-bottom: 3px solid var(--link-color);
   }
 }
 
