@@ -152,7 +152,8 @@
       }
 
       .img-preview {
-        max-width: 100%;
+        width: 100%;
+        margin-top: 1rem;
       }
 
       &.warning {
@@ -178,66 +179,56 @@
         margin-left: -1.5em;
       }
 
-      & > div {
-        & > .media-link {
-          display: block;
-          margin-top: 1em;
+      .item-content {
+        @include clearfix();
+      }
 
-          img {
-            margin-bottom: -0.5em;
-            border-radius: 4px;
-          }
-        }
-
-        & > .hint {
+      .item-meta {
+        & > .quick-links {
           display: inline-block;
-          margin-top: 0.5em;
-        }
-
-        & > div > {
-          .description {
-            margin-bottom: 0;
-            border-radius: 4px;
-            background: var(--secondary-color);
-            padding: 40px;
-            margin-top: 1em;
-            overflow: hidden;
-            max-height: 50vh;
-
-            &.expanded {
-              overflow: scroll;
-              -webkit-overflow-scrolling: touch;
-              max-height: 70vh;
-            }
-
-            @media (max-width: 640px) {
-              margin-left: -2.75em;
-              margin-right: -0.5em;
-            }
-          }
-        }
-
-        & > .float-right {
-          font-size: 1.15rem;
-          line-height: 1;
-          margin-top: 10px;
-          opacity: 1.0;
+          float: right;
+          font-size: 1.1rem;
 
           a {
-            margin: 0 9px;
+            margin: 0 0.75rem;
             color: #aaa;
 
             &:hover {
               color: #777;
             }
-
-            .selected {
-              color: var(--success);
-            }
           }
+        }
+
+        .hint {
+          display: inline-block;
+        }
+      }
+
+      .description {
+        margin-bottom: 0;
+        border-radius: 4px;
+        background: var(--secondary-color);
+        padding: 40px;
+        margin-top: 1em;
+        overflow: hidden;
+        max-height: 50vh;
+
+        &.expanded {
+          overflow: scroll;
+          -webkit-overflow-scrolling: touch;
+          max-height: 70vh;
+        }
+
+        @media (max-width: 640px) {
+          margin-left: -2.75em;
+          margin-right: -0.5em;
         }
       }
     }
+  }
+
+  .is-saved {
+    color: var(--success);
   }
 
   .field {

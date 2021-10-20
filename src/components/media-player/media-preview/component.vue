@@ -1,20 +1,33 @@
 <template>
-  <div
-    v-if="item.image && item.image.url"
+  <router-link
+    v-if="app.queries.hasMedia(item)"
+    :to="{ name: 'item', params: { feed_url: feed.url, guid: item.guid } }"
   >
     <img
-      :src="item.image.url"
+      v-if="src"
+      :src="src"
       class="img-preview"
     >
-  </div>
-  <span
-    v-else
-    href="javascript:;"
-  >&#9658;</span>
+    <span
+      v-else
+      href="javascript:;"
+    >&#9658;</span>
+  </router-link>
 </template>
 
 <script>
+import utils from '@/lib/utils/index.js'
+
 export default {
-  props: ['item']
+  props: ['app', 'item'],
+  computed: {
+    src () {
+      return utils.getImageSrc(this.item)
+    },
+
+    feed () {
+      return this.app.queries.feedForItem(this.item)
+    }
+  }
 }
 </script>

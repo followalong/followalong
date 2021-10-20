@@ -34,5 +34,6 @@ export default {
   setIdentityDefaults,
 
   getAudioSrc: getSrc.audio,
-  getVideoSrc: getSrc.video
+  getVideoSrc: getSrc.video,
+  getImageSrc: getSrc.image
 }

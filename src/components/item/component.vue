@@ -41,16 +41,16 @@
     <div
       v-if="showContent"
       ref="content"
+      class="item-content"
     >
-      <router-link
+      <MediaPreview
         v-if="app.queries.hasMedia(item)"
-        :to="{ name: 'item', params: { feed_url: feed.url, guid: item.guid } }"
-      >
-        <MediaPreview :item="item" />
-      </router-link>
+        :app="app"
+        :item="item"
+      />
 
       <div
-        v-if="hasContent"
+        v-else-if="hasContent"
       >
         <div
           v-if="isExpanded || !isTruncated"
@@ -75,31 +75,33 @@
         </div>
       </div>
 
-      <p class="hint float-right">
-        <a
-          href="javascript:;"
-          :aria-label="`${app.queries.isSaved(item) ? 'Unsave' : 'Save'} ${item.title}`"
-          @click="app.commands.toggleSave(app.identity, item)"
-        >
-          <font-awesome-icon
-            icon="save"
-            :class="app.queries.isSaved(item) ? 'selected' : ''"
-          />
-        </a>
+      <div class="item-meta">
+        <p class="quick-links">
+          <a
+            href="javascript:;"
+            :aria-label="`${app.queries.isSaved(item) ? 'Unsave' : 'Save'} ${item.title}`"
+            @click="app.commands.toggleSave(app.identity, item)"
+          >
+            <font-awesome-icon
+              icon="save"
+              :class="app.queries.isSaved(item) ? 'is-saved' : ''"
+            />
+          </a>
 
-        <a
-          :href="item.link"
-          target="_blank"
-          :aria-label="`Visit source ${item.title}`"
-          @click="app.commands.toggleRead(app.identity, item, true)"
-        >
-          <font-awesome-icon icon="link" />
-        </a>
-      </p>
+          <a
+            :href="item.link"
+            target="_blank"
+            :aria-label="`Visit source ${item.title}`"
+            @click="app.commands.toggleRead(app.identity, item, true)"
+          >
+            <font-awesome-icon icon="link" />
+          </a>
+        </p>
 
-      <p class="hint">
-        Comments are closed.
-      </p>
+        <p class="hint">
+          Comments are closed.
+        </p>
+      </div>
     </div>
   </li>
 </template>

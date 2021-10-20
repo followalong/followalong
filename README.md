@@ -55,3 +55,20 @@ Another, more complicated option would be to add it at the `Feed` level:
   <AdProvider url="https://example.com/my-feed">
 </Feed>
 ```
+
+## RSS Sources
+
+From: https://12bytes.org/articles/tech/how-to-access-rss-feeds/
+
+- Odysee: https://lbryfeed.melroy.org/channel/<channel_name>
+- Bitchute: https://www.bitchute.com/feeds/rss/channel/<channel_name>
+- YouTube: https://www.youtube.com/feeds/videos.xml?channel_id=<channel_id>
+- Vimeo: https://vimeo.com/<channel_name>/videos/rss
+- Steemit: http://www.hiverss.com/@<channel_name>/feed
+- Tumblr: https://example.tumblr.com/rss
+- Generic: /feed
+- Generic: /rss
+- Generic: /atom
+- Generic: /feed/atom
+- Generic: /?feed=rss
+- Generic: /?feed=atom

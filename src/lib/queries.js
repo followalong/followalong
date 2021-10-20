@@ -100,7 +100,11 @@ class Queries {
   }
 
   hasMedia (item) {
-    return utils.getVideoSrc(item) || utils.getAudioSrc(item)
+    return utils.getVideoSrc(item) || utils.getAudioSrc(item) || utils.getImageSrc(item)
+  }
+
+  hasImage (item) {
+    return utils.getImageSrc(item)
   }
 
   serviceForIdentity (identity, type) {
