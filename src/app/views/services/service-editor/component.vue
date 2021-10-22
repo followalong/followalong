@@ -273,7 +273,7 @@
 
 <script>
 import { saveAs } from 'file-saver'
-import copy from 'copy-to-clipboard'
+// import copy from 'copy-to-clipboard'
 import SERVICES from '@/commands/services.js'
 import CreditCard from '@/app/components/credit-card/component.vue'
 
@@ -322,7 +322,7 @@ export default {
       if (override || (!s.template && s.fields)) {
         s = JSON.parse(JSON.stringify(s))
         s.template = s.template || s.id
-        s.id = utils.generateId()
+        // s.id = utils.generateId()
         s.data.name = s.data.name || (s.name + ' (Custom)')
 
         _.app.identity.services.custom.push(s)
@@ -343,11 +343,11 @@ export default {
       var _ = this
       var paste = _.paste.trim()
 
-      if (utils.isBase64(paste)) {
-        try {
-          paste = Base64.decode(paste)
-        } catch (e) { }
-      }
+      // if (utils.isBase64(paste)) {
+      //   try {
+      //     paste = Base64.decode(paste)
+      //   } catch (e) { }
+      // }
 
       _.selectService(JSON.parse(paste), true)
 
@@ -412,7 +412,7 @@ export default {
 
       service.template = service.template || service.id
 
-      copy(Base64.encode(JSON.stringify(service)))
+      // copy(Base64.encode(JSON.stringify(service)))
 
       alert('Copied service to clipboard.')
     },

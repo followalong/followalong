@@ -24,7 +24,7 @@ const decryptIdentity = function (keychain, store, identity) {
         }
       }
 
-      utils.copyAttrs(state, identity, ['name', 'services', 'hints'])
+      // utils.copyAttrs(state, identity, ['name', 'services', 'hints'])
 
       if (state.feeds) {
         state.feeds.forEach((feed) => {
@@ -51,7 +51,7 @@ const saveToInStoreKeychain = (keychain, store, identity, key) => {
 
 const saveKey = (keychain, store, identity, key, ignoreSave) => {
   if (identity.services.local.strategy === 'store' && !key) {
-    key = utils.generateId()
+    // key = utils.generateId()
   }
 
   saveToInMemoryKeychain(keychain, identity, key)

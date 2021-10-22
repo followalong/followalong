@@ -84,7 +84,7 @@ function s3Sync (identity, data) {
       Key: key
     }, function (err, oldData) {
       try {
-        utils.mergeData(identity, JSON.parse(oldData.Body.toString()))
+        // utils.mergeData(identity, JSON.parse(oldData.Body.toString()))
       } catch (e) { }
 
       s3.putObject({

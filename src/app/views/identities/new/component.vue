@@ -91,11 +91,11 @@ export default {
       var _ = this
       var paste = _.paste.trim()
 
-      if (utils.isBase64(paste)) {
-        try {
-          paste = Base64.decode(paste)
-        } catch (e) { }
-      }
+      // if (utils.isBase64(paste)) {
+      //   try {
+      //     paste = Base64.decode(paste)
+      //   } catch (e) { }
+      // }
 
       try {
         var feed, newIdentity, existingIdentity, existingFeed, key, i

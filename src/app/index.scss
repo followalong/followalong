@@ -80,12 +80,12 @@ $max-width: 1280px;
 
 @import "./css/reset.css";
 @import "./css/content.scss";
-@import "@/components/top-bar/style.scss";
 @import "./css/app.scss";
-@import "@/components/sidebar/style.scss";
-@import "@/components/feed/style.scss";
 @import "./css/columns.scss";
-@import "@/views/services/service-editor/style.scss";
 @import "./css/modal.scss";
-@import "../../components/credit-card/style.scss";
-@import "../../components/media-player/style.scss";
+@import "./components/top-bar/style.scss";
+@import "./components/sidebar/style.scss";
+@import "./components/feed/style.scss";
+@import "./views/services/service-editor/style.scss";
+@import "./components/credit-card/style.scss";
+@import "./components/media-player/style.scss";
