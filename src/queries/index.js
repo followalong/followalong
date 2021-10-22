@@ -1,5 +1,6 @@
 import SERVICES from '@/commands/services.js'
 import sortByReadAndDate from './sorters/sort-by-read-and-date.js'
+import sortByName from './sorters/sort-by-name.js'
 import { getAudioSrc, getVideoSrc, getImageSrc } from './get-src.js'
 
 class Queries {
@@ -134,7 +135,7 @@ class Queries {
   }
 
   feedsForIdentity (identity) {
-    return this.state.findAll('feeds', (f) => f.identityId === identity.id).sort(sortByReadAndDate)
+    return this.state.findAll('feeds', (f) => f.identityId === identity.id).sort(sortByName)
   }
 
   itemsForIdentity (identity) {
