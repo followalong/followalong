@@ -44,17 +44,20 @@ export default {
     localCacheAdapter: {
       type: Object,
       default: () => new LocalCacheAdapter()
+    },
+    state: {
+      type: Object,
+      default: () => new State({ identities: [], feeds: [], items: [] })
     }
   },
   data () {
     window.followAlong = this
-    const state = new State({ identities: [], feeds: [], items: [] })
     const queries = new Queries({
-      state,
+      state: this.state,
       localCacheAdapter: this.localCacheAdapter
     })
     const commands = new Commands({
-      state,
+      state: this.state,
       queries,
       localCacheAdapter: this.localCacheAdapter,
       copyToClipboard,
