@@ -20,8 +20,8 @@ describe('Feeds: Unsubscribe from a feed', () => {
   })
 
   it('saves the identity in local storage', async () => {
-    await app.getLocalDefaultIdentity().then((data) => {
-      expect(data.feeds.length).toEqual(initialFeedsLength - 1)
-    })
+    const localData = await app.getLocalDefaultIdentity()
+
+    expect(localData.feeds.length).toEqual(initialFeedsLength - 1)
   })
 })

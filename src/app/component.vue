@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import localStore from '@/adapters/local-store.js'
+import LocalCacheAdapter from '@/adapters/local-cache.js'
 import MediaPlayer from '@/app/components/media-player/component.vue'
 import Sidebar from '@/app/components/sidebar/component.vue'
 import TopBar from '@/app/components/top-bar/component.vue'
@@ -33,6 +33,8 @@ import State from '@/state/index.js'
 import Queries from '@/queries/index.js'
 import timeAgo from '@/queries/time-ago.js'
 import stripScriptsAndStyles from '@/queries/strip-scripts-and-styles.js'
+import copyToClipboard from 'copy-to-clipboard'
+import { saveAs } from 'file-saver'
 
 export default {
   components: {
@@ -40,11 +42,26 @@ export default {
     Sidebar,
     TopBar
   },
+  props: {
+    localCacheAdapter: {
+      type: Object,
+      default: () => new LocalCacheAdapter()
+    }
+  },
   data () {
     window.followAlong = this
     const state = new State({ identities: [], feeds: [], items: [] })
-    const queries = new Queries(state)
-    const commands = new Commands(state, queries, localStore)
+    const queries = new Queries({
+      localCacheAdapter: this.localCacheAdapter,
+      state
+    })
+    const commands = new Commands({
+      localCacheAdapter: this.localCacheAdapter,
+      state,
+      queries,
+      copyToClipboard,
+      saveAs
+    })
 
     return {
       app: this,
@@ -70,7 +87,7 @@ export default {
   },
   methods: {
     restoreIdentities () {
-      return this.app.commands.restoreLocal().then((identities) => {
+      return this.app.commands.restoreLocal().then(() => {
         this.setIdentity(this.queries.findDefaultIdentity())
       })
     },

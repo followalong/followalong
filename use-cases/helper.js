@@ -3,10 +3,16 @@ import { createRouter, createMemoryHistory } from 'vue-router'
 import { routes } from '@/app/router/index.js'
 import App from '@/app/component.vue'
 import addIcons from '@/add-icons.js'
-import localStore from '@/adapters/local-store.js'
+import LocalCacheAdapter from '@/adapters/local-cache.js'
 
-const mountApp = (localStoreData) => {
+const mountApp = (options) => {
   return new Promise(async (resolve) => {
+    options = options || {}
+
+    const localCacheAdapter = new LocalCacheAdapter()
+
+    await localCacheAdapter.reset()
+
     const router = createRouter({
       history: createMemoryHistory(),
       routes: routes
@@ -15,15 +21,19 @@ const mountApp = (localStoreData) => {
     router.push('/')
 
     await router.isReady()
-    await localStore.clear()
 
-    for (const key in localStoreData) {
-      await localStore.setItem(key, localStoreData[key])
+    if (options.localCacheAdapterData) {
+      for (var i = 0; i < options.localCacheAdapterData.length; i++) {
+        await localCacheAdapter.saveIdentity(options.localCacheAdapterData[i])
+      }
     }
 
     const app = await mount(App, {
       global: {
         plugins: [router, addIcons]
+      },
+      propsData: {
+        localCacheAdapter
       }
     })
 
@@ -51,7 +61,7 @@ const mountApp = (localStoreData) => {
     }
 
     app.getLocalDefaultIdentity = async () => {
-      const ids = await app.vm.commands.localStore.keys()
+      const ids = await app.vm.commands.localCacheAdapter.getIdentityIds()
 
       if (!ids.length) {
         return null

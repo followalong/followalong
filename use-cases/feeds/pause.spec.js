@@ -20,8 +20,8 @@ describe('Feeds: Pause a feed', () => {
   })
 
   it('saves the identity in local storage', async () => {
-    await app.getLocalDefaultIdentity().then((data) => {
-      expect(data.feeds[0].pausedAt).toBeGreaterThan(0)
-    })
+    const localData = await app.getLocalDefaultIdentity()
+
+    expect(localData.feeds[0].pausedAt).toBeGreaterThan(0)
   })
 })

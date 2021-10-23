@@ -4,8 +4,10 @@ import sortByName from './sorters/sort-by-name.js'
 import { getAudioSrc, getVideoSrc, getImageSrc } from './get-src.js'
 
 class Queries {
-  constructor (state) {
-    this.state = state
+  constructor (options) {
+    for (const key in options) {
+      this[key] = options[key]
+    }
   }
 
   feedForItem (item) {
@@ -166,6 +168,25 @@ class Queries {
 
   allFeeds () {
     return this.state.findAll('feeds')
+  }
+
+  identityToLocal (identity) {
+    return {
+      id: identity.id,
+      name: identity.name,
+      hints: identity.hints,
+      feeds: this.feedsForIdentity(identity),
+      items: this.itemsForIdentity(identity),
+      services: identity.services
+    }
+  }
+
+  localSize (identity) {
+    return this.localCacheAdapter.getSize(this.identityToLocal(identity))
+  }
+
+  remoteSize () {
+    return '0 kb'
   }
 }
 

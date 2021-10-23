@@ -149,8 +149,8 @@
           </div>
           <div class="half-column">
             <p>
-              Remote: <strong>{{ app.commands.profileSize(app.identity, 'Remote') }}</strong><br>
-              Local: <strong>{{ app.commands.profileSize(app.identity, 'Local') }}</strong>
+              Remote: <strong>{{ app.queries.remoteSize(app.identity) }}</strong><br>
+              Local: <strong>{{ app.queries.localSize(app.identity) }}</strong>
             </p>
           </div>
         </div>

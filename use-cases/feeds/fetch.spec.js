@@ -20,9 +20,9 @@ describe('Feeds: Fetch', () => {
     })
 
     it('saves to local storage', async () => {
-      await app.getLocalDefaultIdentity().then((data) => {
-        expect(data.items.length).toBeGreaterThan(0)
-      })
+      const localData = await app.getLocalDefaultIdentity()
+
+      expect(localData.items.length).toBeGreaterThan(0)
     })
   })
 
@@ -46,9 +46,9 @@ describe('Feeds: Fetch', () => {
     })
 
     it('saves to local storage', async () => {
-      await app.getLocalDefaultIdentity().then((data) => {
-        expect(data.items.length).toBeGreaterThan(0)
-      })
+      const localData = await app.getLocalDefaultIdentity()
+
+      expect(localData.items.length).toBeGreaterThan(0)
     })
   })
 })

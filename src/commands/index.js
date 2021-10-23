@@ -1,14 +1,11 @@
 import seedIdentity from './seed.js'
-import Presenters from './presenters.js'
 import { getFeed } from './fetcher'
 import { Base64 } from 'js-base64'
-import copyToClipboard from 'copy-to-clipboard'
-import { saveAs } from 'file-saver'
 
 let timer = null
 let resolves = []
 
-function debouncedPromise (func, timeout = 0, thisArg) {
+const debouncedPromise = (func, timeout = 0, thisArg) => {
   clearTimeout(timer)
 
   timer = setTimeout(() => {
@@ -21,13 +18,10 @@ function debouncedPromise (func, timeout = 0, thisArg) {
 }
 
 class Commands {
-  constructor (state, queries, localStore) {
-    this.state = state
-    this.queries = queries
-    this.localStore = localStore
-    this.presenters = new Presenters(queries)
-    this._copyToClipboard = copyToClipboard
-    this._saveAs = saveAs
+  constructor (options) {
+    for (const key in options) {
+      this[key] = options[key]
+    }
   }
 
   unsubscribeFeed (identity, feed) {
@@ -142,18 +136,18 @@ class Commands {
   }
 
   copyConfig (identity) {
-    const data = this.presenters.identityToRemote(identity)
-    this._copyToClipboard(Base64.encode(JSON.stringify(data)))
+    const data = 'this.presenters.identityToRemote(identity)'
+    this.copyToClipboard(Base64.encode(JSON.stringify(data)))
     alert('Copied configuration to clipboard.')
   }
 
   downloadIdentity (identity) {
-    const data = this.presenters.identityToRemote(identity)
+    const data = 'this.presenters.identityToRemote(identity)'
     const filename = window.location.host.replace(':', '.') + '.' + identity.id + '.json'
     const str = JSON.stringify(data)
     const blob = new Blob([str], { type: 'application/json;charset=utf-8' })
 
-    this._saveAs(blob, filename)
+    this.saveAs(blob, filename)
   }
 
   removeIdentity (identity) {
@@ -172,12 +166,12 @@ class Commands {
   }
 
   getLocalIdentity (id) {
-    return this.localStore.getItem(id)
+    return this.localCacheAdapter.getIdentity(id)
   }
 
   restoreLocal (identity) {
     return new Promise((resolve) => {
-      this.localStore.keys().then((ids) => {
+      this.localCacheAdapter.getIdentityIds().then((ids) => {
         const promises = ids.map((id) => {
           return this.getLocalIdentity(id)
             .then((data) => this.addIdentity(data, data.feeds, data.items))
@@ -194,17 +188,14 @@ class Commands {
     })
   }
 
-  saveLocal (identity) {
+  saveLocal (identity, data) {
     return debouncedPromise(() => {
-      return this.localStore.setItem(
-        identity.id,
-        this.presenters.identityToLocal(identity)
-      )
+      return this.localCacheAdapter.saveIdentity(this.queries.identityToLocal(identity))
     }, 300, this)
   }
 
   removeLocal (identity) {
-    return this.localStore.removeItem(identity.id)
+    return this.localCacheAdapter.removeIdentity(identity.id)
   }
 
   reload () {
@@ -213,23 +204,6 @@ class Commands {
 
   addFeed (feed) {
     return this.state.add('feeds', [feed])[0]
-  }
-
-  profileSize (identity, type) {
-    const content = this.presenters[`identityTo${type}`](identity)
-
-    let unit = 'b'
-    let size = JSON.stringify(content).length
-
-    if (size > 1000000) {
-      size = size / 1000000
-      unit = 'mb'
-    } else if (size > 1000) {
-      size = size / 1000
-      unit = 'kb'
-    }
-
-    return '~' + (Math.round(size * 10) / 10) + ' ' + unit
   }
 
   _addItemsForFeed (feed, items) {

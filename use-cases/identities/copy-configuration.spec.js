@@ -5,11 +5,11 @@ describe('Identities: Copy configuration', () => {
     window.alert = () => {}
 
     const app = await mountApp()
-    app.vm.commands._copyToClipboard = jest.fn()
+    app.vm.commands.copyToClipboard = jest.fn()
 
     await app.click('[aria-label="Settings"]')
     await app.click('[aria-label="Copy configuration"]')
 
-    expect(app.vm.commands._copyToClipboard).toHaveBeenCalled()
+    expect(app.vm.commands.copyToClipboard).toHaveBeenCalled()
   })
 })

@@ -22,9 +22,9 @@ describe('Feeds: Catch up', () => {
     })
 
     it('saves the identity in local storage', async () => {
-      await app.getLocalDefaultIdentity().then((data) => {
-        expect(data.items[0].readAt).toBeGreaterThan(0)
-      })
+      const localData = await app.getLocalDefaultIdentity()
+
+      expect(localData.items[0].readAt).toBeGreaterThan(0)
     })
   })
 })

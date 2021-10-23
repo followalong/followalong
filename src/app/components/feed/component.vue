@@ -10,7 +10,7 @@
     </button>
     <button
       :class="app.queries.isPaused(feed) ? 'button-gray' : ''"
-      :aria-label="`Pause ${feed.name}`"
+      :aria-label="`${app.queries.isPaused(feed) ? 'Unpause' : 'Pause'}  ${feed.name}`"
       @click="app.commands.togglePause(app.identity, feed)"
     >
       <span v-if="app.queries.isPaused(feed)">&#10074;&#10074;</span>
