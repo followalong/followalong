@@ -31,4 +31,9 @@ describe('Feeds: Fetch all feeds', () => {
       expect(app.text()).toContain(item.title)
     })
   })
+
+  describe('upon initial page load', () => {
+    it.todo('fetches every feed every 15 minutes')
+    it.todo('scatters the fetches')
+  })
 })
