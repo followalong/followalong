@@ -120,11 +120,11 @@ class Queries {
   // TODO: Are these presenters?
 
   itemContent (item) {
-    return prepareContent(item.content)
+    return prepareContent(item.content || '')
   }
 
   itemShortContent (item) {
-    const words = item.content.split(/\s+/)
+    const words = (item.content || '').split(/\s+/)
     const content = `${words.slice(0, WORD_LIMIT).join(' ').trim()}...`
 
     return `${prepareContent(content)}...`
