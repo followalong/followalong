@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { getAudioSrc } from '@/queries/get-src.js'
+import { getAudioSrc } from '@/queries/helpers/get-src.js'
 
 export default {
   props: ['item'],

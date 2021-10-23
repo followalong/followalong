@@ -25,4 +25,6 @@ export default (s) => {
   }
 
   return div.innerHTML
+    .replace(/target=['"]?[^"']+['"\s>]?/g, '')
+    .replace(/<a([^>]+)>?/g, '<a$1 target="_blank">')
 }

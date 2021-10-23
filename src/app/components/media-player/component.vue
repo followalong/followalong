@@ -51,7 +51,7 @@
 import AudioPlayer from '@/app/components/media-player/audio-player/component.vue'
 import MediaPreview from '@/app/components/media-player/media-preview/component.vue'
 import VideoPlayer from '@/app/components/media-player/video-player/component.vue'
-import { getAudioSrc, getVideoSrc } from '@/queries/get-src.js'
+import { getAudioSrc, getVideoSrc } from '@/queries/helpers/get-src.js'
 
 export default {
   components: {

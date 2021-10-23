@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { getVideoSrc } from '@/queries/get-src.js'
+import { getVideoSrc } from '@/queries/helpers/get-src.js'
 
 export default {
   props: ['item'],

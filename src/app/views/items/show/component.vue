@@ -57,14 +57,14 @@
             v-if="item.pubDate"
             :title="item.pubDate"
             class="feed-name"
-          >&nbsp; &mdash; &nbsp;{{ app.prettyDate(item.pubDate) }}</span>
+          >&nbsp; &mdash; &nbsp;{{ app.queries.prettyPublishedDate(item) }}</span>
         </h3>
       </div>
 
       <div
-        v-if="item.content && item.content.length"
+        v-if="content"
         class="description"
-        v-html="app.blankifyLinks(item.content)"
+        v-html="content"
       />
     </div>
   </div>
@@ -96,6 +96,9 @@ export default {
       }
 
       return feed
+    },
+    content () {
+      return this.app.queries.itemContent(this.item)
     }
   },
   watch: {

@@ -35,7 +35,7 @@
         v-if="item.pubDate"
         :title="item.pubDate"
         class="feed-name"
-      >{{ app.prettyDate(item.pubDate) }}</span>
+      >{{ app.queries.prettyPublishedDate(item) }}</span>
     </div>
 
     <div
@@ -55,14 +55,14 @@
         <div
           v-if="isExpanded || !isTruncated"
           class="description expanded"
-          v-html="app.blankifyLinks(item.content)"
+          v-html="app.queries.itemContent(item)"
         />
 
         <div
           v-else-if="shortContent"
           class="description relativizer"
         >
-          <div v-html="app.blankifyLinks(shortContent)" />
+          <div v-html="app.queries.itemShortContent(item)" />
           <div class="faded-content">
             <button
               class="button-gray button-large"
@@ -109,8 +109,6 @@
 <script>
 import MediaPreview from '@/app/components/media-player/media-preview/component.vue'
 
-const WORD_LIMIT = 125
-
 export default {
   components: {
     MediaPreview
@@ -128,14 +126,14 @@ export default {
     feed () {
       return this.app.queries.findFeedByUrl(this.item.feedUrl)
     },
-    words () {
-      return this.item.content.split(/\s+/)
-    },
     isTruncated () {
-      return this.words.length > WORD_LIMIT
+      return this.shortContent.length < this.content.length
+    },
+    content () {
+      return this.app.queries.itemContent(this.item)
     },
     shortContent () {
-      return `${this.words.slice(0, WORD_LIMIT).join(' ').trim()}...`
+      return this.app.queries.itemShortContent(this.item)
     }
   },
   methods: {

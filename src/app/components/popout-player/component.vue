@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import MediaPlayer from '@/components/media-player/component.vue'
+import MediaPlayer from '@/app/components/media-player/component.vue'
 
 export default {
   components: {

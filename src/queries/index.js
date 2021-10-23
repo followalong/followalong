@@ -1,7 +1,11 @@
 import SERVICES from '@/commands/services.js'
 import sortByReadAndDate from './sorters/sort-by-read-and-date.js'
 import sortByName from './sorters/sort-by-name.js'
-import { getAudioSrc, getVideoSrc, getImageSrc } from './get-src.js'
+import { getAudioSrc, getVideoSrc, getImageSrc } from './helpers/get-src.js'
+import prepareContent from './helpers/prepare-content.js'
+import timeAgo from './helpers/time-ago.js'
+
+const WORD_LIMIT = 125
 
 class Queries {
   constructor (options) {
@@ -32,82 +36,6 @@ class Queries {
     }
 
     return this.state.find('identities', (i) => i.id === feed.identityId)
-  }
-
-  isPaused (feed) {
-    if (!feed) {
-      return false
-    }
-
-    return !!feed.pausedAt
-  }
-
-  isNotPaused (feed) {
-    if (!feed) {
-      return false
-    }
-
-    return !feed.pausedAt
-  }
-
-  isFetching (feed) {
-    if (!feed) {
-      return false
-    }
-
-    return !!feed.fetchingAt
-  }
-
-  isSaved (item) {
-    if (!item) {
-      return false
-    }
-
-    return !!item.savedAt
-  }
-
-  isRead (item) {
-    if (!item) {
-      return false
-    }
-
-    return !!item.readAt
-  }
-
-  isNotRead (item) {
-    if (!item) {
-      return false
-    }
-
-    return !item.readAt
-  }
-
-  isUnread (item) {
-    if (!item) {
-      return false
-    }
-
-    return !item.readAt
-  }
-
-  isListenable (item) {
-    return getAudioSrc(item)
-  }
-
-  isWatchable (item) {
-    return getVideoSrc(item)
-  }
-
-  isReadable (item) {
-    return !getVideoSrc(item) && !getAudioSrc(item)
-  }
-
-  hasMedia (item) {
-    return getVideoSrc(item) || getAudioSrc(item) || getImageSrc(item)
-  }
-
-  hasImage (item) {
-    return getImageSrc(item)
   }
 
   serviceForIdentity (identity, type) {
@@ -187,6 +115,100 @@ class Queries {
 
   remoteSize () {
     return '0 kb'
+  }
+
+  // TODO: Are these presenters?
+
+  itemContent (item) {
+    return prepareContent(item.content)
+  }
+
+  itemShortContent (item) {
+    const words = item.content.split(/\s+/)
+    const isTruncated = words.length > WORD_LIMIT
+    const content = `${words.slice(0, WORD_LIMIT).join(' ').trim()}...`
+
+    return prepareContent(content)
+  }
+
+  prettyPublishedDate (item) {
+    return timeAgo(new Date(item.pubDate), new Date())
+  }
+
+  isPaused (feed) {
+    if (!feed) {
+      return false
+    }
+
+    return !!feed.pausedAt
+  }
+
+  isNotPaused (feed) {
+    if (!feed) {
+      return false
+    }
+
+    return !feed.pausedAt
+  }
+
+  isFetching (feed) {
+    if (!feed) {
+      return false
+    }
+
+    return !!feed.fetchingAt
+  }
+
+  isSaved (item) {
+    if (!item) {
+      return false
+    }
+
+    return !!item.savedAt
+  }
+
+  isRead (item) {
+    if (!item) {
+      return false
+    }
+
+    return !!item.readAt
+  }
+
+  isNotRead (item) {
+    if (!item) {
+      return false
+    }
+
+    return !item.readAt
+  }
+
+  isUnread (item) {
+    if (!item) {
+      return false
+    }
+
+    return !item.readAt
+  }
+
+  isListenable (item) {
+    return getAudioSrc(item)
+  }
+
+  isWatchable (item) {
+    return getVideoSrc(item)
+  }
+
+  isReadable (item) {
+    return !getVideoSrc(item) && !getAudioSrc(item)
+  }
+
+  hasMedia (item) {
+    return getVideoSrc(item) || getAudioSrc(item) || getImageSrc(item)
+  }
+
+  hasImage (item) {
+    return getImageSrc(item)
   }
 }
 

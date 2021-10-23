@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { getImageSrc } from '@/queries/get-src.js'
+import { getImageSrc } from '@/queries/helpers/get-src.js'
 
 export default {
   props: ['app', 'item'],

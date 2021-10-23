@@ -31,8 +31,6 @@ import keychain from '@/adapters/keychain.js'
 import Commands from '@/commands/index.js'
 import State from '@/state/index.js'
 import Queries from '@/queries/index.js'
-import timeAgo from '@/queries/time-ago.js'
-import stripScriptsAndStyles from '@/queries/strip-scripts-and-styles.js'
 import copyToClipboard from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
 
@@ -52,13 +50,13 @@ export default {
     window.followAlong = this
     const state = new State({ identities: [], feeds: [], items: [] })
     const queries = new Queries({
-      localCacheAdapter: this.localCacheAdapter,
-      state
+      state,
+      localCacheAdapter: this.localCacheAdapter
     })
     const commands = new Commands({
-      localCacheAdapter: this.localCacheAdapter,
       state,
       queries,
+      localCacheAdapter: this.localCacheAdapter,
       copyToClipboard,
       saveAs
     })
@@ -107,18 +105,6 @@ export default {
         _.app.sidebarClass = 'show'
         document.body.style.overflow = 'hidden'
       }
-    },
-
-    blankifyLinks (str) {
-      return stripScriptsAndStyles(
-        (str || '')
-          .replace(/target=['"]?[^"']+['"\s>]?/g, '')
-          .replace(/<a([^>]+)>?/g, '<a$1 target="_blank">')
-      )
-    },
-
-    prettyDate (date) {
-      return timeAgo(new Date(date), new Date())
     },
 
     play (item) {
