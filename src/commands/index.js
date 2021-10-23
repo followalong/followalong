@@ -208,11 +208,12 @@ class Commands {
 
   fetchNextFeedPerpetually (identity) {
     const DELAY_BETWEEN_FETCHES = 30000
-    const feed = this.queries.findMostOutdatedFeed(identity)
+    const feed = this.queries.findMostOutdatedNonPausedFeed(identity)
+    const done = () => setTimeout(() => this.fetchNextFeedPerpetually(identity), DELAY_BETWEEN_FETCHES)
 
-    return this.fetchFeed(identity, feed).then(() => {
-      setTimeout(() => this.fetchNextFeedPerpetually(identity), DELAY_BETWEEN_FETCHES)
-    })
+    if (!feed) return done()
+
+    return this.fetchFeed(identity, feed).then(done)
   }
 
   _addItemsForFeed (feed, items) {

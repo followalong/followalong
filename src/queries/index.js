@@ -99,8 +99,10 @@ class Queries {
     return this.state.findAll('feeds')
   }
 
-  findMostOutdatedFeed (identity) {
-    return this.feedsForIdentity(identity).sort(sortByLastUpdated)[0]
+  findMostOutdatedNonPausedFeed (identity) {
+    return this.feedsForIdentity(identity)
+      .filter(this.isNotPaused)
+      .sort(sortByLastUpdated)[0]
   }
 
   identityToLocal (identity) {
