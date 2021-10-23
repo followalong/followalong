@@ -128,7 +128,7 @@ class Queries {
     const isTruncated = words.length > WORD_LIMIT
     const content = `${words.slice(0, WORD_LIMIT).join(' ').trim()}...`
 
-    return prepareContent(content)
+    return `${prepareContent(content)}...`
   }
 
   prettyPublishedDate (item) {
