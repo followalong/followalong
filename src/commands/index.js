@@ -207,7 +207,7 @@ class Commands {
   }
 
   fetchNextFeedPerpetually (identity) {
-    const DELAY_BETWEEN_FETCHES = 60 * 1000
+    const DELAY_BETWEEN_FETCHES = 30000
     const feed = this.queries.findMostOutdatedFeed(identity)
 
     return this.fetchFeed(identity, feed).then(() => {
