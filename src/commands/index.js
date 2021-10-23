@@ -206,6 +206,15 @@ class Commands {
     return this.state.add('feeds', [feed])[0]
   }
 
+  fetchNextFeedPerpetually (identity) {
+    const DELAY_BETWEEN_FETCHES = 60 * 1000
+    const feed = this.queries.findMostOutdatedFeed(identity)
+
+    return this.fetchFeed(identity, feed).then(() => {
+      setTimeout(() => this.fetchNextFeedPerpetually(identity), DELAY_BETWEEN_FETCHES)
+    })
+  }
+
   _addItemsForFeed (feed, items) {
     const feedItems = this.queries.itemsForFeed(feed)
     const newItems = items.filter((item) => {

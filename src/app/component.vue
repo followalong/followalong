@@ -95,7 +95,7 @@ export default {
 
     setIdentity (identity) {
       this.identity = identity
-      // this.commands.fetchAllFeeds(identity)
+      this.app.commands.fetchNextFeedPerpetually(identity)
     },
 
     toggleSidebar (forceHide) {

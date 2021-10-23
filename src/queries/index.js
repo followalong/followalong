@@ -1,6 +1,7 @@
 import SERVICES from '@/commands/services.js'
 import sortByReadAndDate from './sorters/sort-by-read-and-date.js'
 import sortByName from './sorters/sort-by-name.js'
+import sortByLastUpdated from './sorters/sort-by-last-updated.js'
 import { getAudioSrc, getVideoSrc, getImageSrc } from './helpers/get-src.js'
 import prepareContent from './helpers/prepare-content.js'
 import timeAgo from './helpers/time-ago.js'
@@ -96,6 +97,10 @@ class Queries {
 
   allFeeds () {
     return this.state.findAll('feeds')
+  }
+
+  findMostOutdatedFeed (identity) {
+    return this.feedsForIdentity(identity).sort(sortByLastUpdated)[0]
   }
 
   identityToLocal (identity) {

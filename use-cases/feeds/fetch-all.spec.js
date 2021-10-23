@@ -33,7 +33,7 @@ describe('Feeds: Fetch all feeds', () => {
   })
 
   describe('upon initial page load', () => {
-    it.todo('fetches every feed every 15 minutes')
+    it.todo('fetches feeds in the background')
     it.todo('scatters the fetches')
   })
 })
