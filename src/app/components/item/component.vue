@@ -50,19 +50,19 @@
       />
 
       <div
-        v-else-if="hasContent"
+        v-if="hasContent"
       >
         <div
           v-if="isExpanded || !isTruncated"
           class="description expanded"
-          v-html="app.queries.itemContent(item)"
+          v-html="content"
         />
 
         <div
           v-else-if="shortContent"
           class="description relativizer"
         >
-          <div v-html="app.queries.itemShortContent(item)" />
+          <div v-html="shortContent" />
           <div class="faded-content">
             <button
               class="button-gray button-large"
@@ -109,6 +109,8 @@
 <script>
 import MediaPreview from '@/app/components/media-player/media-preview/component.vue'
 
+const CONTENT_LEEWAY = 10
+
 export default {
   components: {
     MediaPreview
@@ -121,13 +123,13 @@ export default {
   },
   computed: {
     hasContent () {
-      return this.item ? (this.item.content || '').trim().length : false
+      return !!this.content.length
     },
     feed () {
       return this.app.queries.findFeedByUrl(this.item.feedUrl)
     },
     isTruncated () {
-      return this.shortContent.length < this.content.length
+      return this.shortContent.length + CONTENT_LEEWAY < this.content.length
     },
     content () {
       return this.app.queries.itemContent(this.item)
