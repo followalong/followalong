@@ -53,14 +53,14 @@
           id="secretStrategy"
           v-model="encryptionStrategy"
           aria-label="Encryption strategy"
-          @change.prevent="app.commands.changeLocalEncryptionStrategy(app.identity, encryptionStrategy)"
+          @change="changeEncryption"
         >
           <option value="ask">
             Ask Every Page Load (best, most secure, slightly annoying)
           </option>
-          <option value="rotate">
+          <!-- <option value="rotate">
             Rotate Keys (recommended if using one device and you trust it)
-          </option>
+          </option>-->
           <option value="store">
             Store Key Locally (recommended if you trust your device)
           </option>
@@ -70,7 +70,7 @@
         </select>
 
         <a
-          v-if="localService.encryptionStrategy === 'ask'"
+          v-if="app.queries.hasChangeablePassword(localService)"
           href="javascript:;"
           class="hint"
           aria-label="Change password"
@@ -78,78 +78,60 @@
         >
           Reset Secret Key
         </a>
+      </div>
 
-        <!-- <div v-if="localService.encryptionStrategy === 'store'">
-          <label for="secretKey">
-            Secret Key
-          </label>
-          <input
-            id="secretKey"
-            v-model="secretKey"
-            type="password"
-            aria-label="Change password"
-            @blur="app.commands.updateLocalKey()"
-          >
-          <span
-            v-if="!app.keychain.keys[app.identity.id] || !app.keychain.keys[app.identity.id].length"
-            class="notice red"
-          >Your local data is NOT encrypted because you have not supplied a secret key!</span>
-        </div>
-      </div> -->
+      <div class="field">
+        <div class="columns">
+          <div class="half-column">
+            <label>Download My Data</label>
+            <span class="hint">
+              Download a full copy of your data.
+            </span>
+            <button
+              class="button-gray"
+              aria-label="Download identity"
+              @click="app.commands.downloadIdentity(app.identity)"
+            >
+              Download Identity
+            </button>
+          </div>
 
-        <div class="field">
-          <div class="columns">
-            <div class="half-column">
-              <label>Download My Data</label>
-              <span class="hint">
-                Download a full copy of your data.
-              </span>
-              <button
-                class="button-gray"
-                aria-label="Download identity"
-                @click="app.commands.downloadIdentity(app.identity)"
-              >
-                Download Identity
-              </button>
-            </div>
-
-            <div class="half-column">
-              <label>Copy My Configuration</label>
-              <span class="hint">
-                Copy your identity to your clipboard.
-              </span>
-              <button
-                class="button-gray"
-                aria-label="Copy configuration"
-                @click="app.commands.copyConfig(app.identity)"
-              >
-                Copy Configuration
-              </button>
-            </div>
+          <div class="half-column">
+            <label>Copy My Configuration</label>
+            <span class="hint">
+              Copy your identity to your clipboard.
+            </span>
+            <button
+              class="button-gray"
+              aria-label="Copy configuration"
+              @click="app.commands.copyConfig(app.identity)"
+            >
+              Copy Configuration
+            </button>
           </div>
         </div>
+      </div>
 
-        <div class="field">
-          <div class="columns">
-            <div class="half-column">
-              <label>Forget My Data</label>
-              <span class="hint">
-                Wipe your data from this browser.
-              </span>
-              <button
-                class="button-red"
-                aria-label="Forget identity"
-                @click="reset(app.identity)"
-              >
-                Forget This Identity
-              </button>
-            </div>
-            <div class="half-column">
-              <p>
-                Remote: <strong>{{ app.queries.remoteSize(app.identity) }}</strong><br>
-                Local: <strong>{{ localSize }}</strong>
-              </p>
-            </div>
+      <div class="field">
+        <div class="columns">
+          <div class="half-column">
+            <label>Forget My Data</label>
+            <span class="hint">
+              Wipe your data from this browser.
+            </span>
+            <button
+              class="button-red"
+              aria-label="Forget identity"
+              @click="reset(app.identity)"
+            >
+              Forget This Identity
+            </button>
+          </div>
+          <div class="half-column">
+            <p>
+              Remote: <strong>{{ app.queries.remoteSize(app.identity) }}</strong><br>
+              Local: <strong>{{ localSize }}</strong>
+            </p>
           </div>
         </div>
       </div>
@@ -163,7 +145,7 @@ export default {
   data () {
     return {
       secretKey: '',
-      encryptionStrategy: undefined,
+      encryptionStrategy: '',
       localSize: '0 kb',
       hasStorageSupport: window.indexedDB
     }
@@ -175,12 +157,11 @@ export default {
   },
   watch: {
     'localService.encryptionStrategy' () {
-      this.checkSizes()
+      this.init()
     }
   },
   mounted () {
-    this.encryptionStrategy = this.localService.encryptionStrategy
-    this.checkSizes()
+    this.init()
   },
   methods: {
     reset (identity) {
@@ -189,10 +170,17 @@ export default {
         this.app.commands.reload()
       }
     },
-    checkSizes () {
+    init () {
       this.app.queries.localSize(this.app.identity).then((localSize) => {
         this.localSize = localSize
       })
+      this.encryptionStrategy = this.localService.encryptionStrategy
+    },
+    changeEncryption ($event) {
+      $event.stopImmediatePropagation()
+
+      return this.app.commands.changeLocalEncryptionStrategy(this.app.identity, $event.target.value)
+        .catch(() => this.init())
     }
   }
 }

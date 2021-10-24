@@ -15,6 +15,8 @@ const mountApp = (options) => {
       prompt: jest.fn(() => 'abc-123')
     })
 
+    await keychainAdapter.reset()
+
     if (options.keychainAdapterData) {
       for (const key in options.keychainAdapterData) {
         keychainAdapter[key] = options.keychainAdapterData[key]

@@ -32,6 +32,10 @@ class Queries {
     return this.state.findAll('items', (i) => i.feedUrl === feed.url).sort(sortByReadAndDate())
   }
 
+  findIdentity (id) {
+    return this.state.find('identities', id)
+  }
+
   identityForFeed (feed) {
     if (!feed) {
       return
@@ -44,9 +48,8 @@ class Queries {
     identity.services = identity.services || {}
 
     if (type === 'local') {
-      identity.services.local = identity.services.local || {
-        encryptionStrategy: 'none'
-      }
+      identity.services.local = identity.services.local || {}
+      identity.services.local.encryptionStrategy = identity.services.local.encryptionStrategy || 'none'
 
       return identity.services.local
     }
@@ -146,13 +149,8 @@ class Queries {
   getLocalEncryptionKey (id) {
     return new Promise((resolve, reject) => {
       this.keychainAdapter.getKey(id)
-        .then((key) => {
-          if (key) {
-            resolve(key)
-          } else {
-            resolve()
-          }
-        }).catch(reject)
+        .then(resolve)
+        .catch(reject)
     })
   }
 
@@ -267,6 +265,10 @@ class Queries {
 
   hasImage (item) {
     return getImageSrc(item)
+  }
+
+  hasChangeablePassword (service) {
+    return service.encryptionStrategy === 'ask' || service.encryptionStrategy === 'store'
   }
 }
 

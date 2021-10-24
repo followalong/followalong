@@ -34,12 +34,27 @@ class KeychainAdapter {
     })
   }
 
+  addStore (id) {
+    return new Promise((resolve, reject) => {
+      this._askForKey().then((key) => {
+        this._saveKeyInStore(id, key)
+          .then(() => {
+            this._saveKeyInMemory(id, key)
+            resolve()
+          })
+          .catch(reject)
+      }).catch(reject)
+    })
+  }
+
   addNone (id) {
     return new Promise((resolve, reject) => {
-      this._removeKeyInStore(id).then(() => {
-        this._removeKeyInMemory(id)
-        resolve()
-      }).catch(reject)
+      this._saveKeyInStore(id, 'none')
+        .then(() => {
+          this._saveKeyInMemory(id, '')
+          resolve()
+        })
+        .catch(reject)
     })
   }
 
@@ -63,22 +78,26 @@ class KeychainAdapter {
 
   getKey (id) {
     return new Promise((resolve, reject) => {
+      if (typeof this.keys[id] !== 'undefined') {
+        return resolve(this.keys[id])
+      }
+
       this.db.getItem(id)
         .then((key) => {
-          if (key === 'ask') {
-            if (this.keys[id]) {
-              return resolve(this.keys[id])
-            }
-
-            this._askForKey().then((key) => {
+          if (key === 'none') {
+            this._saveKeyInMemory(id, '')
+            return resolve(this.keys[id])
+          } else if (key === 'ask') {
+            return this._askForKey().then((key) => {
               this._saveKeyInMemory(id, key)
               resolve(key)
             }).catch(reject)
-          } else if (this.keys[id] || key) {
-            resolve(this.keys[id] || key)
-          } else {
-            resolve()
+          } else if (typeof key !== 'undefined') {
+            this._saveKeyInMemory(id, key)
+            return resolve(key)
           }
+
+          reject(new Error('No key.'))
         })
         .catch(reject)
     })
@@ -100,7 +119,7 @@ class KeychainAdapter {
     delete this.keys[id]
   }
 
-  clear () {
+  reset () {
     this.keys = {}
     return this.db.clear()
   }
