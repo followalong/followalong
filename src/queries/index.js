@@ -5,6 +5,7 @@ import sortByLastUpdated from './sorters/sort-by-last-updated.js'
 import { getAudioSrc, getVideoSrc, getImageSrc } from './helpers/get-src.js'
 import prepareContent from './helpers/prepare-content.js'
 import timeAgo from './helpers/time-ago.js'
+import { encrypt, passThrough } from './helpers/crypt.js'
 
 const WORD_LIMIT = 125
 
@@ -44,8 +45,10 @@ class Queries {
 
     if (type === 'local') {
       identity.services.local = identity.services.local || {
-        strategy: 'none'
+        encryptionStrategy: 'none'
       }
+
+      return identity.services.local
     }
 
     const services = identity.services || {}
@@ -121,6 +124,16 @@ class Queries {
       feeds: this.feedsForIdentity(identity),
       items: this.itemsForIdentity(identity),
       services: identity.services
+    }
+  }
+
+  getLocalEncryptionFunction (identity) {
+    const service = this.serviceForIdentity(identity, 'local')
+
+    if (service.encryptionStrategy === 'ask') {
+      return encrypt('service.key')
+    } else {
+      return passThrough()
     }
   }
 

@@ -1,61 +1,57 @@
 import localForage from 'localforage'
 
-class Keychain {
-  constructor (name) {
-    this.old = localForage.createInstance({ name: 'commmunity' })
-    this.db = localForage.createInstance({ name })
+class KeychainAdapter {
+  constructor (options) {
+    this.db = localForage.createInstance({ name: 'keychain' })
     this.keys = {}
+
+    for (const key in options) {
+      this[key] = options[key]
+    }
   }
 
-  restoreOld () {
-    return this.old.iterate(async (value, id) => {
-      if (id.slice(0, 4) === 'key-') {
-        await this.old.removeItem(id)
-        await this.saveKeyInStore(id.slice(4), value)
+  add (encryptionStrategy, id) {
+    const functions = {
+      ask: 'addAsk',
+      none: 'addNone',
+      rotate: 'addRotate',
+      store: 'addStore'
+    }
+
+    return this[functions[encryptionStrategy]](id)
+  }
+
+  addAsk (id) {
+    return new Promise((resolve, reject) => {
+      const key = this.prompt('What is the password?')
+
+      if (key === null) {
+        return reject(new Error('No key supplied.'))
       }
+
+      this.saveKeyInMemory(id, key)
+
+      resolve()
     })
   }
 
-  restoreToMemory () {
+  addNone (id) {
     return new Promise((resolve, reject) => {
-      this.restoreOld()
-        .then(() => {
-          this.db
-            .iterate(async (value, id) => {
-              await this.saveKeyInMemory(id, value)
-            })
-            .then(() => resolve(this.keys))
-            .catch(reject)
-        })
-        .catch(reject)
-    })
-  }
-
-  buildIdentities () {
-    return new Promise((resolve, reject) => {
-      this.restoreToMemory().then((keys) => {
-        const identities = []
-
-        for (const id in keys) {
-          identities.push({ id: id })
-        }
-
-        resolve(identities)
+      this.removeKeyInStore(id).then(() => {
+        this.removeKeyInMemory(id)
+        resolve()
       }).catch(reject)
+    })
+  }
+
+  addRotate (id) {
+    return new Promise((resolve, reject) => {
+      resolve()
     })
   }
 
   getKey (id) {
     return this.keys[id]
-  }
-
-  getKeyInStore (id) {
-    return this.db.getItem(id)
-  }
-
-  saveKey (id, value) {
-    this.saveKeyInMemory(id, value)
-    return this.saveKeyInStore(id, value)
   }
 
   saveKeyInMemory (id, value) {
@@ -66,8 +62,7 @@ class Keychain {
     return this.db.setItem(id, value)
   }
 
-  removeKey (id) {
-    this.removeKeyInMemory(id)
+  removeKeyInStore (id) {
     return this.db.removeItem(id)
   }
 
@@ -81,4 +76,4 @@ class Keychain {
   }
 }
 
-export default new Keychain('followalong-keychain')
+export default KeychainAdapter

@@ -21,13 +21,13 @@
           aria-label="Identity name"
         >
       </div>
-      <p
+      <!-- <p
         v-if="!hasStorageSupport"
         class="highlight"
       >
         This browser does not support any storage options.
         You can still use FollowAlong, but your data will be gone when you leave the page.
-      </p>
+      </p> -->
 
       <div
         class="field"
@@ -37,11 +37,11 @@
           <span class="hint">Unread and Saved items are always kept.</span>
           <input
             id="max-read-count"
-            v-model="app.identity.services.local.maxReadCount"
+            v-model="localService.maxReadCount"
             type="number"
             min="1"
             placeholder="100"
-            @blur="app.identity.services.local.maxReadCount < 1 ? app.identity.services.local.maxReadCount = 1 : 1; app.identity.save()"
+            @blur="localService.maxReadCount < 1 ? localService.maxReadCount = 1 : 1; app.identity.save()"
           >
         </div> -->
 
@@ -51,9 +51,9 @@
 
         <select
           id="secretStrategy"
-          v-model="strategy"
+          v-model="encryptionStrategy"
           aria-label="Encryption strategy"
-          @change="app.commands.changeLocalEncryptionStrategy(app.identity, strategy)"
+          @change="app.commands.changeLocalEncryptionStrategy(app.identity, encryptionStrategy)"
         >
           <option value="ask">
             Ask Every Page Load (best, most secure, slightly annoying)
@@ -69,85 +69,87 @@
           </option>
         </select>
 
-        <!-- <a
-          v-if="app.identity.services.local.strategy === 'ask'"
+        <a
+          v-if="localService.encryptionStrategy === 'ask'"
           href="javascript:;"
           class="hint"
-          aria-label="Reset secret key"
-          @click="changeEncryption(app, app.keychain, app.store, app.identity, 'ask', revert())"
+          aria-label="Change password"
+          @click="app.commands.changeLocalEncryptionStrategy(app.identity, encryptionStrategy)"
         >
           Reset Secret Key
         </a>
 
-        <div v-if="app.identity.services.local.strategy === 'store'">
+        <!-- <div v-if="localService.encryptionStrategy === 'store'">
           <label for="secretKey">
             Secret Key
           </label>
           <input
             id="secretKey"
-            v-model="app.keychain.keys[app.identity.id]"
+            v-model="secretKey"
             type="password"
-            @blur="app.saveKey(app.keychain, app.store, app.identity, app.keychain.keys[app.identity.id])"
+            aria-label="Change password"
+            @blur="app.commands.updateLocalKey()"
           >
           <span
             v-if="!app.keychain.keys[app.identity.id] || !app.keychain.keys[app.identity.id].length"
             class="notice red"
           >Your local data is NOT encrypted because you have not supplied a secret key!</span>
-        </div> -->
-      </div>
+        </div>
+      </div> -->
 
-      <div class="field">
-        <div class="columns">
-          <div class="half-column">
-            <label>Download My Data</label>
-            <span class="hint">
-              Download a full copy of your data.
-            </span>
-            <button
-              class="button-gray"
-              aria-label="Download identity"
-              @click="app.commands.downloadIdentity(app.identity)"
-            >
-              Download Identity
-            </button>
-          </div>
+        <div class="field">
+          <div class="columns">
+            <div class="half-column">
+              <label>Download My Data</label>
+              <span class="hint">
+                Download a full copy of your data.
+              </span>
+              <button
+                class="button-gray"
+                aria-label="Download identity"
+                @click="app.commands.downloadIdentity(app.identity)"
+              >
+                Download Identity
+              </button>
+            </div>
 
-          <div class="half-column">
-            <label>Copy My Configuration</label>
-            <span class="hint">
-              Copy your identity to your clipboard.
-            </span>
-            <button
-              class="button-gray"
-              aria-label="Copy configuration"
-              @click="app.commands.copyConfig(app.identity)"
-            >
-              Copy Configuration
-            </button>
+            <div class="half-column">
+              <label>Copy My Configuration</label>
+              <span class="hint">
+                Copy your identity to your clipboard.
+              </span>
+              <button
+                class="button-gray"
+                aria-label="Copy configuration"
+                @click="app.commands.copyConfig(app.identity)"
+              >
+                Copy Configuration
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="field">
-        <div class="columns">
-          <div class="half-column">
-            <label>Forget My Data</label>
-            <span class="hint">
-              Wipe your data from this browser.
-            </span>
-            <button
-              class="button-red"
-              aria-label="Forget identity"
-              @click="reset(app.identity)"
-            >
-              Forget This Identity
-            </button>
-          </div>
-          <div class="half-column">
-            <p>
-              Remote: <strong>{{ app.queries.remoteSize(app.identity) }}</strong><br>
-              Local: <strong>{{ app.queries.localSize(app.identity) }}</strong>
-            </p>
+        <div class="field">
+          <div class="columns">
+            <div class="half-column">
+              <label>Forget My Data</label>
+              <span class="hint">
+                Wipe your data from this browser.
+              </span>
+              <button
+                class="button-red"
+                aria-label="Forget identity"
+                @click="reset(app.identity)"
+              >
+                Forget This Identity
+              </button>
+            </div>
+            <div class="half-column">
+              <p>
+                Remote: <strong>{{ app.queries.remoteSize(app.identity) }}</strong><br>
+                Local: <strong>{{ app.queries.localSize(app.identity) }}</strong>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -160,8 +162,8 @@ export default {
   props: ['app'],
   data () {
     return {
-      secretKey: undefined,
-      strategy: undefined,
+      secretKey: '',
+      encryptionStrategy: undefined,
       hasStorageSupport: window.indexedDB
     }
   },
@@ -171,7 +173,7 @@ export default {
     }
   },
   mounted () {
-    this.strategy = this.localService.strategy
+    this.encryptionStrategy = this.localService.encryptionStrategy
   },
   methods: {
     reset (identity) {

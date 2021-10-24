@@ -4,14 +4,23 @@ import { routes } from '@/app/router/index.js'
 import App from '@/app/component.vue'
 import addIcons from '@/add-icons.js'
 import LocalCacheAdapter from '@/adapters/local-cache.js'
+import KeychainAdapter from '@/adapters/keychain.js'
+import { passThrough } from '@/queries/helpers/crypt.js'
 
 const mountApp = (options) => {
   return new Promise(async (resolve) => {
     options = options || {}
 
+    const keychainAdapter = new KeychainAdapter({ prompt: jest.fn(() => 'abc-123') })
     const localCacheAdapter = new LocalCacheAdapter()
 
     await localCacheAdapter.reset()
+
+    if (options.localCacheAdapterData) {
+      for (var i = 0; i < options.localCacheAdapterData.length; i++) {
+        await localCacheAdapter.saveIdentity(options.localCacheAdapterData[i], passThrough())
+      }
+    }
 
     const router = createRouter({
       history: createMemoryHistory(),
@@ -22,18 +31,13 @@ const mountApp = (options) => {
 
     await router.isReady()
 
-    if (options.localCacheAdapterData) {
-      for (var i = 0; i < options.localCacheAdapterData.length; i++) {
-        await localCacheAdapter.saveIdentity(options.localCacheAdapterData[i])
-      }
-    }
-
     const app = await mount(App, {
       global: {
         plugins: [router, addIcons]
       },
       propsData: {
-        localCacheAdapter
+        localCacheAdapter,
+        keychainAdapter
       }
     })
 
@@ -88,6 +92,7 @@ const rawRSSResponse = (item) => {
 const buildServiceToRespondWith = (result) => {
   return jest.fn(() => {
     return {
+      encryptionStrategy: 'none',
       request: () => Promise.resolve(result)
     }
   })

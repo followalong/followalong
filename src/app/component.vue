@@ -24,10 +24,10 @@
 
 <script>
 import LocalCacheAdapter from '@/adapters/local-cache.js'
+import KeychainAdapter from '@/adapters/keychain.js'
 import MediaPlayer from '@/app/components/media-player/component.vue'
 import Sidebar from '@/app/components/sidebar/component.vue'
 import TopBar from '@/app/components/top-bar/component.vue'
-import keychain from '@/adapters/keychain.js'
 import Commands from '@/commands/index.js'
 import State from '@/state/index.js'
 import Queries from '@/queries/index.js'
@@ -45,6 +45,10 @@ export default {
       type: Object,
       default: () => new LocalCacheAdapter()
     },
+    keychainAdapter: {
+      type: Object,
+      default: () => new KeychainAdapter({ prompt: window.prompt })
+    },
     state: {
       type: Object,
       default: () => new State({ identities: [], feeds: [], items: [] })
@@ -60,6 +64,7 @@ export default {
       state: this.state,
       queries,
       localCacheAdapter: this.localCacheAdapter,
+      keychainAdapter: this.keychainAdapter,
       copyToClipboard,
       saveAs
     })
@@ -68,7 +73,6 @@ export default {
       app: this,
       queries,
       commands,
-      keychain,
       identity: null,
       sidebarClass: '',
       now: new Date(),

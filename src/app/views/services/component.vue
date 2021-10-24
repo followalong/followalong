@@ -17,23 +17,23 @@
       <p v-html="serviceType.description" />
     </div>
 
-    <ServiceEditor
+    <!-- <ServiceEditor
       :app="app"
       :server-type="serviceType"
       :server-type-key="key"
-    />
+    /> -->
 
     <hr>
   </div>
 </template>
 
 <script>
-import ServiceEditor from '@/app/views/services/service-editor/component.vue'
+// import ServiceEditor from '@/app/views/services/service-editor/component.vue'
 import SERVICE_TYPES from './types.js'
 
 export default {
   components: {
-    ServiceEditor
+    // ServiceEditor
   },
   props: ['app'],
   data () {

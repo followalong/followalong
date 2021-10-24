@@ -7,8 +7,11 @@ class LocalCacheAdapter {
     })
   }
 
-  saveIdentity (identityData) {
-    return this.db.setItem(identityData.id, this._identityFormat(identityData))
+  saveIdentity (identityData, encrypt) {
+    return this.db.setItem(
+      identityData.id,
+      encrypt(this._identityFormat(identityData))
+    )
   }
 
   getIdentity (id) {
@@ -43,6 +46,8 @@ class LocalCacheAdapter {
   }
 
   _identityFormat (identityData) {
+    const services = identityData.services || {}
+
     return {
       id: identityData.id,
       name: identityData.name,
@@ -71,7 +76,9 @@ class LocalCacheAdapter {
           updatedAt: item.updatedAt
         }
       }),
-      services: identityData.services
+      services: {
+        local: this._buildObj(services.local || {})
+      }
     }
   }
 

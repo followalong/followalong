@@ -2113,10 +2113,10 @@ addressparser@^1.0.1:
   resolved "https://registry.yarnpkg.com/addressparser/-/addressparser-1.0.1.tgz#47afbe1a2a9262191db6838e4fd1d39b40821746"
   integrity sha1-R6++GiqSYhkdtoOOT9HTm0CCF0Y=
 
-aes256@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/aes256/-/aes256-1.0.4.tgz#7cd4666535216cae28eecece0d46fdb4c469c557"
-  integrity sha512-yuaKOdoKebChkP+uRsQovWsJYm6qf58cQTvXBu6MM0BMnrXZ9SXEiXREBuU513ZRr+Uo2qX/Ci6EODLUu/qiHA==
+aes256@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/aes256/-/aes256-1.1.0.tgz#4666b229dc1fdaef0a5d0ac09a5a315d895f7450"
+  integrity sha512-JfjTA5HEpvnn4lX9lsfgPMiV6HYqefRmvUj5MScIUeaRCbWEIT8URNpKA9ddY9iWl+Ye9oUHrdusO1cDmS/tEQ==
 
 aggregate-error@^3.0.0:
   version "3.1.0"

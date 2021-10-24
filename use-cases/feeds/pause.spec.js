@@ -16,7 +16,8 @@ describe('Feeds: Pause a feed', () => {
   })
 
   it('does not fetch a paused feed', async () => {
-    expect(app.vm.queries.serviceForIdentity).toHaveBeenCalledTimes(feedsLength - 1)
+    const ONE_FOR_LOCAL_SAVE = 1
+    expect(app.vm.queries.serviceForIdentity).toHaveBeenCalledTimes(feedsLength - 1 + ONE_FOR_LOCAL_SAVE)
   })
 
   it('saves the identity in local storage', async () => {

@@ -170,7 +170,7 @@ class Commands {
   }
 
   restoreLocal (identity) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this.localCacheAdapter.getIdentityIds().then((ids) => {
         const promises = ids.map((id) => {
           return this.getLocalIdentity(id)
@@ -184,13 +184,16 @@ class Commands {
 
           resolve()
         })
-      })
+      }).catch(reject)
     })
   }
 
   saveLocal (identity, data) {
     return debouncedPromise(() => {
-      return this.localCacheAdapter.saveIdentity(this.queries.identityToLocal(identity))
+      return this.localCacheAdapter.saveIdentity(
+        this.queries.identityToLocal(identity),
+        this.queries.getLocalEncryptionFunction(identity)
+      )
     }, 300, this)
   }
 
@@ -216,9 +219,16 @@ class Commands {
     return this.fetchFeed(identity, feed).then(done)
   }
 
-  changeLocalEncryptionStrategy (identity, strategy) {
-    this.queries.serviceForIdentity(identity, 'local').strategy = strategy
-    this.saveLocal(identity)
+  changeLocalEncryptionStrategy (identity, encryptionStrategy) {
+    return new Promise((resolve, reject) => {
+      const service = this.queries.serviceForIdentity(identity, 'local')
+
+      return this.keychainAdapter.add(encryptionStrategy, identity.id).then(() => {
+        service.encryptionStrategy = encryptionStrategy
+        this.saveLocal(identity)
+        resolve()
+      }).catch(reject)
+    })
   }
 
   _addItemsForFeed (feed, items) {
