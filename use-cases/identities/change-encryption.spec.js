@@ -35,7 +35,7 @@ describe('Identities: Change encryption', () => {
       expect(app.vm.keychainAdapter.getKey(identity.id)).resolves.toEqual(expectedPassword)
     })
 
-    it('saves the profile as encrypted', async () => {
+    it('saves the identity as encrypted', async () => {
       const app = await mountApp()
       app.vm.keychainAdapter.prompt = jest.fn(() => 'abc-123')
 
@@ -65,7 +65,7 @@ describe('Identities: Change encryption', () => {
         expect(app.vm.keychainAdapter.getKey(identity.id)).resolves.toEqual(expectedPassword)
       })
 
-      it('saves the profile as encrypted', async () => {
+      it('saves the identity as encrypted', async () => {
         const expectedPassword = 'zyx-987'
         const app = await mountApp()
         app.vm.keychainAdapter.prompt = jest.fn(() => 'abc-123')
@@ -83,14 +83,14 @@ describe('Identities: Change encryption', () => {
       })
     })
 
-    it('restores the encrypted profile', async () => {
+    it('restores the encrypted identity', async () => {
       const expectedPassword = 'zyx-987'
       const app = await mountApp({
         localCacheAdapterData: {
           abc: {
             id: 'abc',
             name: 'My Account',
-            items: [{ title: 'Foo Bar', savedAt: Date.now() }],
+            items: [{ title: 'Foo Bar' }],
             feeds: [{ name: 'Foo Baz' }],
             encrypt: encrypt(expectedPassword)
           }
@@ -107,5 +107,46 @@ describe('Identities: Change encryption', () => {
 
   it.todo('rotate')
   it.todo('store')
-  it.todo('none')
+
+  describe('none (default)', () => {
+    it('saves the identity as unencrypted', async () => {
+      const app = await mountApp()
+
+      await app.click('[aria-label="Settings"]')
+      await app.find('[aria-label="Encryption strategy"]').setValue('none')
+      await app.wait()
+
+      const identity = app.vm.queries.findDefaultIdentity()
+      const data = await app.vm.localCacheAdapter.db.getItem(identity.id)
+      expect(typeof data).toEqual('object')
+    })
+
+    it('removes the all passwords from memory', async () => {
+      const expectedPassword = 'zyx-987'
+      const app = await mountApp()
+      const identity = app.vm.queries.findDefaultIdentity()
+      app.vm.keychainAdapter._saveKeyInMemory(identity.id, expectedPassword)
+      app.vm.keychainAdapter._saveKeyInStore(identity.id, expectedPassword)
+
+      await app.click('[aria-label="Settings"]')
+      await app.find('[aria-label="Encryption strategy"]').setValue('none')
+
+      expect(app.vm.keychainAdapter.getKey(identity.id)).resolves.toEqual(undefined)
+    })
+
+    it('restores the unencrypted identity', async () => {
+      const app = await mountApp({
+        localCacheAdapterData: {
+          abc: {
+            id: 'abc',
+            name: 'My Account',
+            items: [{ title: 'Foo Bar' }],
+            feeds: [{ name: 'Foo Baz' }]
+          }
+        }
+      })
+
+      expect(app.text()).toContain('Foo Bar')
+    })
+  })
 })
