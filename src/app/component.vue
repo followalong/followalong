@@ -58,7 +58,8 @@ export default {
     window.followAlong = this
     const queries = new Queries({
       state: this.state,
-      localCacheAdapter: this.localCacheAdapter
+      localCacheAdapter: this.localCacheAdapter,
+      keychainAdapter: this.keychainAdapter
     })
     const commands = new Commands({
       state: this.state,

@@ -2,7 +2,7 @@ import localForage from 'localforage'
 
 class KeychainAdapter {
   constructor (options) {
-    this.db = localForage.createInstance({ name: 'keychain' })
+    this.db = localForage.createInstance({ name: 'followalong-keychain-v1' })
     this.keys = {}
 
     for (const key in options) {
@@ -23,22 +23,21 @@ class KeychainAdapter {
 
   addAsk (id) {
     return new Promise((resolve, reject) => {
-      const key = this.prompt('What is the password?')
-
-      if (key === null) {
-        return reject(new Error('No key supplied.'))
-      }
-
-      this.saveKeyInMemory(id, key)
-
-      resolve()
+      this._askForKey().then((key) => {
+        this._saveKeyInStore(id, 'ask')
+          .then(() => {
+            this._saveKeyInMemory(id, key)
+            resolve()
+          })
+          .catch(reject)
+      }).catch(reject)
     })
   }
 
   addNone (id) {
     return new Promise((resolve, reject) => {
-      this.removeKeyInStore(id).then(() => {
-        this.removeKeyInMemory(id)
+      this._removeKeyInStore(id).then(() => {
+        this._removeKeyInMemory(id)
         resolve()
       }).catch(reject)
     })
@@ -50,23 +49,54 @@ class KeychainAdapter {
     })
   }
 
-  getKey (id) {
-    return this.keys[id]
+  _askForKey () {
+    return new Promise((resolve, reject) => {
+      const key = this.prompt.apply(window, ['What is the password?'])
+
+      if (key === null) {
+        return reject(new Error('No key supplied.'))
+      }
+
+      resolve(key)
+    })
   }
 
-  saveKeyInMemory (id, value) {
+  getKey (id) {
+    return new Promise((resolve, reject) => {
+      this.db.getItem(id)
+        .then((key) => {
+          if (key === 'ask') {
+            if (this.keys[id]) {
+              return resolve(this.keys[id])
+            }
+
+            this._askForKey().then((key) => {
+              this._saveKeyInMemory(id, key)
+              resolve(key)
+            }).catch(reject)
+          } else if (this.keys[id] || key) {
+            resolve(this.keys[id] || key)
+          } else {
+            resolve()
+          }
+        })
+        .catch(reject)
+    })
+  }
+
+  _saveKeyInMemory (id, value) {
     this.keys[id] = value
   }
 
-  saveKeyInStore (id, value) {
+  _saveKeyInStore (id, value) {
     return this.db.setItem(id, value)
   }
 
-  removeKeyInStore (id) {
+  _removeKeyInStore (id) {
     return this.db.removeItem(id)
   }
 
-  removeKeyInMemory (id) {
+  _removeKeyInMemory (id) {
     delete this.keys[id]
   }
 

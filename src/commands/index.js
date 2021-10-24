@@ -166,7 +166,13 @@ class Commands {
   }
 
   getLocalIdentity (id) {
-    return this.localCacheAdapter.getIdentity(id)
+    return new Promise((resolve, reject) => {
+      this.queries.getLocalDecryptionFunction(id).then((func) => {
+        this.localCacheAdapter.getIdentity(id, func)
+          .then(resolve)
+          .catch(reject)
+      }).catch(reject)
+    })
   }
 
   restoreLocal (identity) {
@@ -174,7 +180,14 @@ class Commands {
       this.localCacheAdapter.getIdentityIds().then((ids) => {
         const promises = ids.map((id) => {
           return this.getLocalIdentity(id)
-            .then((data) => this.addIdentity(data, data.feeds, data.items))
+            .then((data) => {
+              this.addIdentity(data, data.feeds, data.items)
+            })
+            .catch(() => {
+              if (confirm('Something went wrong. Try again?')) {
+                this.reload()
+              }
+            })
         })
 
         Promise.all(promises).finally(() => {
@@ -190,10 +203,13 @@ class Commands {
 
   saveLocal (identity, data) {
     return debouncedPromise(() => {
-      return this.localCacheAdapter.saveIdentity(
-        this.queries.identityToLocal(identity),
-        this.queries.getLocalEncryptionFunction(identity)
-      )
+      this.queries.getLocalEncryptionFunction(identity.id)
+        .then((func) => {
+          this.localCacheAdapter.saveIdentity(
+            this.queries.identityToLocal(identity),
+            func
+          )
+        })
     }, 300, this)
   }
 

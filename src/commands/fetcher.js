@@ -8,10 +8,6 @@ var parser = new Parser({
 
 function getContent (identity, service, url) {
   return new Promise((resolve, reject) => {
-    if (!service) {
-      return resolve()
-    }
-
     service.request(identity, {
       action: 'rss',
       url: url

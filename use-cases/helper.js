@@ -11,14 +11,26 @@ const mountApp = (options) => {
   return new Promise(async (resolve) => {
     options = options || {}
 
-    const keychainAdapter = new KeychainAdapter({ prompt: jest.fn(() => 'abc-123') })
+    const keychainAdapter = new KeychainAdapter({
+      prompt: jest.fn(() => 'abc-123')
+    })
+
+    if (options.keychainAdapterData) {
+      for (const key in options.keychainAdapterData) {
+        keychainAdapter[key] = options.keychainAdapterData[key]
+      }
+    }
+
     const localCacheAdapter = new LocalCacheAdapter()
 
     await localCacheAdapter.reset()
 
     if (options.localCacheAdapterData) {
-      for (var i = 0; i < options.localCacheAdapterData.length; i++) {
-        await localCacheAdapter.saveIdentity(options.localCacheAdapterData[i], passThrough())
+      for (const key in options.localCacheAdapterData) {
+        await localCacheAdapter.saveIdentity(
+          options.localCacheAdapterData[key],
+          options.localCacheAdapterData[key].encrypt || passThrough()
+        )
       }
     }
 
@@ -92,7 +104,6 @@ const rawRSSResponse = (item) => {
 const buildServiceToRespondWith = (result) => {
   return jest.fn(() => {
     return {
-      encryptionStrategy: 'none',
       request: () => Promise.resolve(result)
     }
   })

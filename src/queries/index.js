@@ -5,7 +5,7 @@ import sortByLastUpdated from './sorters/sort-by-last-updated.js'
 import { getAudioSrc, getVideoSrc, getImageSrc } from './helpers/get-src.js'
 import prepareContent from './helpers/prepare-content.js'
 import timeAgo from './helpers/time-ago.js'
-import { encrypt, passThrough } from './helpers/crypt.js'
+import { encrypt, decrypt } from './helpers/crypt.js'
 
 const WORD_LIMIT = 125
 
@@ -127,14 +127,33 @@ class Queries {
     }
   }
 
-  getLocalEncryptionFunction (identity) {
-    const service = this.serviceForIdentity(identity, 'local')
+  getLocalDecryptionFunction (id) {
+    return new Promise((resolve, reject) => {
+      return this.getLocalEncryptionKey(id)
+        .then((key) => resolve(decrypt(key)))
+        .catch(reject)
+    })
+  }
 
-    if (service.encryptionStrategy === 'ask') {
-      return encrypt('service.key')
-    } else {
-      return passThrough()
-    }
+  getLocalEncryptionFunction (id) {
+    return new Promise((resolve, reject) => {
+      return this.getLocalEncryptionKey(id)
+        .then((key) => resolve(encrypt(key)))
+        .catch(reject)
+    })
+  }
+
+  getLocalEncryptionKey (id) {
+    return new Promise((resolve, reject) => {
+      this.keychainAdapter.getKey(id)
+        .then((key) => {
+          if (key) {
+            resolve(key)
+          } else {
+            resolve()
+          }
+        }).catch(reject)
+    })
   }
 
   localSize (identity) {

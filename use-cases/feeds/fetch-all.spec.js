@@ -3,7 +3,6 @@ import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.j
 describe('Feeds: Fetch all feeds', () => {
   describe('from the logo', () => {
     it('fetches all feeds', async () => {
-      const ONE_FOR_LOCAL_SAVE = 1
       const app = await mountApp()
       const item = { title: 'Foo Bar' }
       const expectedFeedsLength = app.vm.queries.allFeeds().length
@@ -12,7 +11,7 @@ describe('Feeds: Fetch all feeds', () => {
       await app.click('[aria-label="FollowAlong"]')
       await app.click('[aria-label="What\'s new?"]')
 
-      expect(app.vm.queries.serviceForIdentity).toHaveBeenCalledTimes(expectedFeedsLength + ONE_FOR_LOCAL_SAVE)
+      expect(app.vm.queries.serviceForIdentity).toHaveBeenCalledTimes(expectedFeedsLength)
       expect(app.text()).toContain(item.title)
     })
   })
