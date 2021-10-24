@@ -34,8 +34,8 @@ class LocalCacheAdapter {
     return this.db.clear()
   }
 
-  getSize (identityData) {
-    let size = JSON.stringify(this._identityFormat(identityData)).length
+  getSize (data) {
+    let size = data.length
     let unit = 'b'
 
     if (size > 1000000) {

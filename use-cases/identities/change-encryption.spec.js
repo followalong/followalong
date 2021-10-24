@@ -123,10 +123,22 @@ describe('Identities: Change encryption', () => {
 
     it('removes the all passwords from memory', async () => {
       const expectedPassword = 'zyx-987'
-      const app = await mountApp()
+      const app = await mountApp({
+        localCacheAdapterData: {
+          abc: {
+            id: 'abc',
+            name: 'My Account',
+            items: [{ title: 'Foo Bar' }],
+            feeds: [{ name: 'Foo Baz' }],
+            encrypt: encrypt(expectedPassword)
+          }
+        },
+        keychainAdapterData: {
+          keys: { abc: expectedPassword },
+          prompt: () => expectedPassword
+        }
+      })
       const identity = app.vm.queries.findDefaultIdentity()
-      app.vm.keychainAdapter._saveKeyInMemory(identity.id, expectedPassword)
-      app.vm.keychainAdapter._saveKeyInStore(identity.id, expectedPassword)
 
       await app.click('[aria-label="Settings"]')
       await app.find('[aria-label="Encryption strategy"]').setValue('none')

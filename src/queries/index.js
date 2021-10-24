@@ -157,7 +157,19 @@ class Queries {
   }
 
   localSize (identity) {
-    return this.localCacheAdapter.getSize(this.identityToLocal(identity))
+    return new Promise((resolve, reject) => {
+      this.getLocalEncryptionFunction(identity.id)
+        .then((func) => {
+          let data = func(this.identityToLocal(identity))
+
+          if (typeof data === 'object') {
+            data = JSON.stringify(data)
+          }
+
+          resolve(this.localCacheAdapter.getSize(data))
+        })
+        .catch(reject)
+    })
   }
 
   remoteSize () {

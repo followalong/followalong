@@ -193,6 +193,7 @@ class Commands {
         Promise.all(promises).finally(() => {
           if (!this.queries.allIdentities().length) {
             this.addIdentity({ name: seedIdentity.name }, [].concat(seedIdentity.feeds))
+            this.fetchAllFeeds(this.queries.findDefaultIdentity())
           }
 
           resolve()

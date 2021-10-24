@@ -53,7 +53,7 @@
           id="secretStrategy"
           v-model="encryptionStrategy"
           aria-label="Encryption strategy"
-          @change="app.commands.changeLocalEncryptionStrategy(app.identity, encryptionStrategy)"
+          @change.prevent="app.commands.changeLocalEncryptionStrategy(app.identity, encryptionStrategy)"
         >
           <option value="ask">
             Ask Every Page Load (best, most secure, slightly annoying)
@@ -147,7 +147,7 @@
             <div class="half-column">
               <p>
                 Remote: <strong>{{ app.queries.remoteSize(app.identity) }}</strong><br>
-                Local: <strong>{{ app.queries.localSize(app.identity) }}</strong>
+                Local: <strong>{{ localSize }}</strong>
               </p>
             </div>
           </div>
@@ -164,6 +164,7 @@ export default {
     return {
       secretKey: '',
       encryptionStrategy: undefined,
+      localSize: '0 kb',
       hasStorageSupport: window.indexedDB
     }
   },
@@ -172,8 +173,14 @@ export default {
       return this.app.queries.serviceForIdentity(this.app.identity, 'local')
     }
   },
+  watch: {
+    'localService.encryptionStrategy' () {
+      this.checkSizes()
+    }
+  },
   mounted () {
     this.encryptionStrategy = this.localService.encryptionStrategy
+    this.checkSizes()
   },
   methods: {
     reset (identity) {
@@ -181,6 +188,11 @@ export default {
         this.app.commands.removeIdentity(identity)
         this.app.commands.reload()
       }
+    },
+    checkSizes () {
+      this.app.queries.localSize(this.app.identity).then((localSize) => {
+        this.localSize = localSize
+      })
     }
   }
 }
