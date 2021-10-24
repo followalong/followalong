@@ -216,6 +216,11 @@ class Commands {
     return this.fetchFeed(identity, feed).then(done)
   }
 
+  changeLocalEncryptionStrategy (identity, strategy) {
+    this.queries.serviceForIdentity(identity, 'local').strategy = strategy
+    this.saveLocal(identity)
+  }
+
   _addItemsForFeed (feed, items) {
     const feedItems = this.queries.itemsForFeed(feed)
     const newItems = items.filter((item) => {

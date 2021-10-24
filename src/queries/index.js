@@ -40,6 +40,14 @@ class Queries {
   }
 
   serviceForIdentity (identity, type) {
+    identity.services = identity.services || {}
+
+    if (type === 'local') {
+      identity.services.local = identity.services.local || {
+        strategy: 'none'
+      }
+    }
+
     const services = identity.services || {}
 
     let service = services[type] || { symlink: 'followalong-free' }

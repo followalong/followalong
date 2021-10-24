@@ -30,10 +30,9 @@
       </p>
 
       <div
-        v-if="app.identity.services"
         class="field"
       >
-        <div class="field">
+        <!-- <div class="field">
           <label for="max-read-count">Maximum Number of "Read" Items to Keep</label>
           <span class="hint">Unread and Saved items are always kept.</span>
           <input
@@ -44,20 +43,17 @@
             placeholder="100"
             @blur="app.identity.services.local.maxReadCount < 1 ? app.identity.services.local.maxReadCount = 1 : 1; app.identity.save()"
           >
-        </div>
+        </div> -->
 
         <label for="secretStrategy">
-          Data Encryption
+          Local Data Encryption
         </label>
-
-        <span class="hint">
-          There is no perfect strategy: it depends how you use FollowAlong, how much you trust your device, care about convenience, or if you use multiple devices. Flip through the options to see more details.
-        </span>
 
         <select
           id="secretStrategy"
           v-model="strategy"
-          aria-label="Select data encryption strategy"
+          aria-label="Encryption strategy"
+          @change="app.commands.changeLocalEncryptionStrategy(app.identity, strategy)"
         >
           <option value="ask">
             Ask Every Page Load (best, most secure, slightly annoying)
@@ -73,7 +69,7 @@
           </option>
         </select>
 
-        <a
+        <!-- <a
           v-if="app.identity.services.local.strategy === 'ask'"
           href="javascript:;"
           class="hint"
@@ -97,7 +93,7 @@
             v-if="!app.keychain.keys[app.identity.id] || !app.keychain.keys[app.identity.id].length"
             class="notice red"
           >Your local data is NOT encrypted because you have not supplied a secret key!</span>
-        </div>
+        </div> -->
       </div>
 
       <div class="field">
@@ -170,17 +166,14 @@ export default {
     }
   },
   computed: {
+    localService () {
+      return this.app.queries.serviceForIdentity(this.app.identity, 'local')
+    }
   },
   mounted () {
-    this.strategy = this.app.queries.serviceForIdentity(this.app.identity, 'local').strategy
+    this.strategy = this.localService.strategy
   },
   methods: {
-    revert () {
-      return () => {
-        this.strategy = this.app.identity.services.local.strategy
-      }
-    },
-
     reset (identity) {
       if (confirm('Are you sure you want to forget this identity?')) {
         this.app.commands.removeIdentity(identity)
