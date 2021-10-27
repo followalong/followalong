@@ -237,7 +237,7 @@ class Queries {
   }
 
   hasMedia (item) {
-    return getVideoSrc(item) || getAudioSrc(item) || getImageSrc(item)
+    return getVideoSrc(item) || getAudioSrc(item)
   }
 
   hasImage (item) {

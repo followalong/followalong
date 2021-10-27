@@ -44,7 +44,7 @@
       class="item-content"
     >
       <MediaPreview
-        v-if="app.queries.hasMedia(item)"
+        v-if="app.queries.hasImage(item)"
         :app="app"
         :item="item"
       />

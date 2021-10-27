@@ -11,6 +11,7 @@
           <span class="highlight">Your data stays only on <em>this device</em>, optionally encrypted and backed up to a service of your choice.</span>
         </p>
       </div>
+
       <div class="field">
         <label for="name">Identity Name</label>
         <input
@@ -21,13 +22,14 @@
           aria-label="Identity name"
         >
       </div>
-      <!-- <p
+
+      <p
         v-if="!hasStorageSupport"
         class="highlight"
       >
         This browser does not support any storage options.
         You can still use FollowAlong, but your data will be gone when you leave the page.
-      </p> -->
+      </p>
 
       <div
         class="field"
