@@ -141,7 +141,7 @@ class Queries {
             data = JSON.stringify(data)
           }
 
-          resolve(this.localCacheAdapter.getSize(data))
+          resolve(this._getSize(data))
         })
         .catch(reject)
     })
@@ -246,6 +246,21 @@ class Queries {
 
   hasChangeablePassword (service) {
     return service.encryptionStrategy === 'ask' || service.encryptionStrategy === 'store'
+  }
+
+  _getSize (data) {
+    let size = data.length
+    let unit = 'b'
+
+    if (size > 1000000) {
+      size = size / 1000000
+      unit = 'mb'
+    } else if (size > 1000) {
+      size = size / 1000
+      unit = 'kb'
+    }
+
+    return '~' + (Math.round(size * 10) / 10) + ' ' + unit
   }
 }
 

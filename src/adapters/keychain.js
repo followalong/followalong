@@ -118,11 +118,6 @@ class KeychainAdapter {
   _removeKeyInMemory (id) {
     delete this.keys[id]
   }
-
-  reset () {
-    this.keys = {}
-    return this.db.clear()
-  }
 }
 
 export default KeychainAdapter

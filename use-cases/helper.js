@@ -35,7 +35,7 @@ const mountApp = (options) => {
       prompt: jest.fn(() => 'abc-123')
     })
 
-    await keychainAdapter.reset()
+    await keychainAdapter.db.clear()
 
     if (options.keychainAdapterData) {
       for (const key in options.keychainAdapterData) {
@@ -51,7 +51,7 @@ const mountApp = (options) => {
 
     const localCacheAdapter = new LocalCacheAdapter()
 
-    await localCacheAdapter.reset()
+    await localCacheAdapter.db.clear()
 
     if (options.localCacheAdapterData) {
       for (const key in options.localCacheAdapterData) {

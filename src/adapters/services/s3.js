@@ -3,6 +3,10 @@ import ServiceAdapter from '../service.js'
 const STRIP_SLASHES = /^\/|\/$/g
 
 class S3ServiceAdapter extends ServiceAdapter {
+  get () {
+    return Promise.reject('`S3ServiceAdapter.get` not yet implemented.')
+  }
+
   save (data) {
     var key = this.data.key.replace(STRIP_SLASHES, '')
     var s3 = new AWS.S3({
@@ -38,6 +42,10 @@ class S3ServiceAdapter extends ServiceAdapter {
         })
       })
     })
+  }
+
+  remove () {
+    return Promise.reject('`S3ServiceAdapter.remove` not yet implemented.')
   }
 }
 

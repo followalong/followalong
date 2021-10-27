@@ -26,25 +26,6 @@ class LocalCacheAdapter {
     return this.db.removeItem(id)
   }
 
-  reset () {
-    return this.db.clear()
-  }
-
-  getSize (data) {
-    let size = data.length
-    let unit = 'b'
-
-    if (size > 1000000) {
-      size = size / 1000000
-      unit = 'mb'
-    } else if (size > 1000) {
-      size = size / 1000
-      unit = 'kb'
-    }
-
-    return '~' + (Math.round(size * 10) / 10) + ' ' + unit
-  }
-
   _identityFormat (identityData) {
     const services = identityData.services || {}
 
