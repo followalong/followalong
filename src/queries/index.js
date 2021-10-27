@@ -7,6 +7,7 @@ import { getAudioSrc, getVideoSrc, getImageSrc } from './helpers/get-src.js'
 import prepareContent from './helpers/prepare-content.js'
 import timeAgo from './helpers/time-ago.js'
 import { encrypt, decrypt } from './helpers/crypt.js'
+import localforage from 'localforage'
 
 const WORD_LIMIT = 125
 
@@ -246,6 +247,10 @@ class Queries {
 
   hasChangeablePassword (service) {
     return service.data.encryptionStrategy === 'ask' || service.data.encryptionStrategy === 'store'
+  }
+
+  hasStorageSupport () {
+    return localforage.supports(localforage.INDEXEDDB) || localforage.supports(localforage.WEBSQL) || localforage.supports(localforage.LOCALSTORAGE)
   }
 
   _getSize (data) {

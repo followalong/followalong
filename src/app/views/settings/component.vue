@@ -147,8 +147,8 @@ export default {
       secretKey: '',
       encryptionStrategy: '',
       localSize: '0 kb',
-      hasStorageSupport: window.indexedDB,
-      maxReadLimit: 0
+      maxReadLimit: 0,
+      hasStorageSupport: this.app.queries.hasStorageSupport()
     }
   },
   computed: {
