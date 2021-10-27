@@ -280,6 +280,4 @@ describe('Identities: Change encryption', () => {
       expect(app.text()).toContain('Foo Bar')
     })
   })
-
-  it.todo('when the strategy is rotate')
 })

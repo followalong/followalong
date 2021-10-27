@@ -1,4 +1,7 @@
 import localForage from 'localforage'
+import uniqId from 'uniq-id'
+
+const generateId = uniqId.generateUUID('xxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxy', 32)
 
 class KeychainAdapter {
   constructor (options) {
@@ -14,7 +17,6 @@ class KeychainAdapter {
     const functions = {
       ask: 'addAsk',
       none: 'addNone',
-      rotate: 'addRotate',
       store: 'addStore'
     }
 
@@ -55,12 +57,6 @@ class KeychainAdapter {
           resolve()
         })
         .catch(reject)
-    })
-  }
-
-  addRotate (id) {
-    return new Promise((resolve, reject) => {
-      resolve()
     })
   }
 

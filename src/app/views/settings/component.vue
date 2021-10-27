@@ -56,13 +56,10 @@
           @change="changeEncryption"
         >
           <option value="ask">
-            Ask Every Page Load (best, most secure, slightly annoying)
+            Never store the key (best, most secure, slightly annoying)
           </option>
-          <!-- <option value="rotate">
-            Rotate Keys (recommended if using one device and you trust it)
-          </option>-->
           <option value="store">
-            Store Key Locally (recommended if you trust your device)
+            Store the key on this device (recommended if you trust your device)
           </option>
           <option value="none">
             Unencrypted (for testing or development)
