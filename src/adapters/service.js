@@ -1,9 +1,9 @@
 class ServiceAdapter {
-  constructor (options, data) {
-    this.data = data
+  constructor (adapterOptions, serviceData) {
+    this.data = serviceData
 
-    for (const key in options) {
-      this[key] = options[key]
+    for (const key in adapterOptions) {
+      this[key] = adapterOptions[key]
     }
   }
 
@@ -17,16 +17,16 @@ class ServiceAdapter {
 }
 
 class LocalServiceAdapter extends ServiceAdapter {
-  constructor (options, data) {
-    super(options, data)
+  constructor (adapterOptions, serviceData) {
+    super(adapterOptions, serviceData)
 
     this.data.encryptionStrategy = this.data.encryptionStrategy || 'none'
   }
 }
 
 class FollowAlongFreeServiceAdapter extends ServiceAdapter {
-  constructor (options, data) {
-    super(options, data)
+  constructor (adapterOptions, serviceData) {
+    super(adapterOptions, serviceData)
 
     this.AWS_CONFIG = {
       endpoint: 'lambda.us-east-1.amazonaws.com',
@@ -78,14 +78,14 @@ class FollowAlongFreeServiceAdapter extends ServiceAdapter {
   }
 }
 
-ServiceAdapter.build = (type, options, identity) => {
+ServiceAdapter.build = (type, adapterOptions, identity) => {
   identity.services = identity.services || {}
   identity.services[type] = identity.services[type] || {}
 
   if (type === 'local') {
-    return new LocalServiceAdapter(options, identity.services[type])
+    return new LocalServiceAdapter(adapterOptions, identity.services[type])
   } else {
-    return new FollowAlongFreeServiceAdapter(options, identity.services[type])
+    return new FollowAlongFreeServiceAdapter(adapterOptions, identity.services[type])
   }
 }
 
