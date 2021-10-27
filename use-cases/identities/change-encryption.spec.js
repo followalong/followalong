@@ -61,6 +61,9 @@ describe('Identities: Change encryption', () => {
             items: [{ title: 'Foo Bar' }],
             feeds: [{ name: 'Foo Baz' }]
           }
+        },
+        keychainAdapterData: {
+          storedKeys: { abc: 'none' }
         }
       })
 
@@ -166,7 +169,7 @@ describe('Identities: Change encryption', () => {
           }
         },
         keychainAdapterData: {
-          keys: { abc: expectedPassword },
+          storedKeys: { abc: expectedPassword },
           prompt: () => expectedPassword
         }
       })
@@ -273,7 +276,7 @@ describe('Identities: Change encryption', () => {
           }
         },
         keychainAdapterData: {
-          keys: { abc: expectedPassword }
+          storedKeys: { abc: expectedPassword }
         }
       })
 

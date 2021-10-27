@@ -22,11 +22,7 @@ class LocalCacheAdapter {
     })
   }
 
-  getIdentityIds () {
-    return this.db.keys()
-  }
-
-  removeIdentity (id) {
+  remove (id) {
     return this.db.removeItem(id)
   }
 

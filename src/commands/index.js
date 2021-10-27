@@ -180,7 +180,7 @@ class Commands {
 
   restoreLocal (identity) {
     return new Promise((resolve, reject) => {
-      this.localCacheAdapter.getIdentityIds().then((ids) => {
+      this.keychainAdapter.getKeys().then((ids) => {
         const promises = ids.map((id) => {
           return this.getLocalIdentity(id)
             .then((data) => {
@@ -220,7 +220,7 @@ class Commands {
   }
 
   removeLocal (identity) {
-    return this.localCacheAdapter.removeIdentity(identity.id)
+    return this.localCacheAdapter.remove(identity.id)
   }
 
   reload () {

@@ -39,7 +39,13 @@ const mountApp = (options) => {
 
     if (options.keychainAdapterData) {
       for (const key in options.keychainAdapterData) {
-        keychainAdapter[key] = options.keychainAdapterData[key]
+        if (key === 'storedKeys') {
+          for (const a in options.keychainAdapterData[key]) {
+            await keychainAdapter.db.setItem(a, options.keychainAdapterData[key][a])
+          }
+        } else {
+          keychainAdapter[key] = options.keychainAdapterData[key]
+        }
       }
     }
 
@@ -101,7 +107,7 @@ const mountApp = (options) => {
     }
 
     app.getLocalDefaultIdentity = async () => {
-      const ids = await app.vm.commands.localCacheAdapter.getIdentityIds()
+      const ids = await app.vm.commands.keychainAdapter.getKeys()
 
       if (!ids.length) {
         return null

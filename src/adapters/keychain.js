@@ -72,6 +72,10 @@ class KeychainAdapter {
     })
   }
 
+  getKeys () {
+    return this.db.keys()
+  }
+
   getKey (id) {
     return new Promise((resolve, reject) => {
       if (typeof this.keys[id] !== 'undefined') {
