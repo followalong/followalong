@@ -7,14 +7,14 @@ class LocalCacheAdapter {
     })
   }
 
-  saveIdentity (identityData, encrypt) {
+  save (identityData, encrypt) {
     return this.db.setItem(
       identityData.id,
       encrypt(this._identityFormat(identityData))
     )
   }
 
-  getIdentity (id, decrypt) {
+  get (id, decrypt) {
     return new Promise((resolve, reject) => {
       this.db.getItem(id)
         .then((identityData) => resolve(decrypt(identityData)))

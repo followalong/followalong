@@ -1,4 +1,5 @@
-import ServiceAdapter from '@/adapters/service.js'
+import LocalServiceAdapter from '@/adapters/services/local.js'
+import FollowAlongFreeServiceAdapter from '@/adapters/services/followalong-free.js'
 import sortByReadAndDate from './sorters/sort-by-read-and-date.js'
 import sortByName from './sorters/sort-by-name.js'
 import sortByLastUpdated from './sorters/sort-by-last-updated.js'
@@ -45,7 +46,14 @@ class Queries {
   }
 
   serviceForIdentity (identity, type) {
-    return ServiceAdapter.build(type, this.serviceAdapterOptions, identity)
+    identity.services = identity.services || {}
+    identity.services[type] = identity.services[type] || {}
+
+    if (type === 'local') {
+      return new LocalServiceAdapter(this.serviceAdapterOptions, identity.services[type])
+    } else {
+      return new FollowAlongFreeServiceAdapter(this.serviceAdapterOptions, identity.services[type])
+    }
   }
 
   feedsForIdentity (identity) {

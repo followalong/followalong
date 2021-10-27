@@ -49,7 +49,7 @@ const mountApp = (options) => {
 
     if (options.localCacheAdapterData) {
       for (const key in options.localCacheAdapterData) {
-        await localCacheAdapter.saveIdentity(
+        await localCacheAdapter.save(
           options.localCacheAdapterData[key],
           options.localCacheAdapterData[key].encrypt || passThrough()
         )

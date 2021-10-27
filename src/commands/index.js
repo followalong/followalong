@@ -171,7 +171,7 @@ class Commands {
   getLocalIdentity (id) {
     return new Promise((resolve, reject) => {
       this.queries.getLocalDecryptionFunction(id).then((func) => {
-        this.localCacheAdapter.getIdentity(id, func)
+        this.localCacheAdapter.get(id, func)
           .then(resolve)
           .catch(reject)
       }).catch(reject)
@@ -211,7 +211,7 @@ class Commands {
     return debouncedPromise(() => {
       this.queries.getLocalEncryptionFunction(identity.id)
         .then((func) => {
-          this.localCacheAdapter.saveIdentity(
+          this.localCacheAdapter.save(
             this.queries.identityToLocal(identity),
             func
           )
