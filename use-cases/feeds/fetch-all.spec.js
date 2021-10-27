@@ -11,7 +11,7 @@ describe('Feeds: Fetch all feeds', () => {
       await app.click('[aria-label="FollowAlong"]')
       await app.click('[aria-label="What\'s new?"]')
 
-      expect(app.vm.queries.serviceForIdentity).toHaveBeenCalledTimes(expectedFeedsLength)
+      expect(app.vm.queries.serviceForIdentity().rss).toHaveBeenCalledTimes(expectedFeedsLength)
       expect(app.text()).toContain(item.title)
     })
   })

@@ -23,6 +23,11 @@ class KeychainAdapter {
     return this[functions[encryptionStrategy]](id)
   }
 
+  remove (id) {
+    return this._removeKeyInStore(id)
+      .then(() => this._removeKeyInMemory(id))
+  }
+
   addAsk (id) {
     return new Promise((resolve, reject) => {
       this._askForKey().then((key) => {

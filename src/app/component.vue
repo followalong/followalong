@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import LocalCacheAdapter from '@/adapters/local-cache.js'
 import KeychainAdapter from '@/adapters/keychain.js'
 import MediaPlayer from '@/app/components/media-player/component.vue'
 import Sidebar from '@/app/components/sidebar/component.vue'
@@ -42,10 +41,6 @@ export default {
     TopBar
   },
   props: {
-    localCacheAdapter: {
-      type: Object,
-      default: () => new LocalCacheAdapter()
-    },
     keychainAdapter: {
       type: Object,
       default: () => new KeychainAdapter({ prompt: window.prompt })
@@ -71,13 +66,11 @@ export default {
     window.followAlong = this
     const queries = new Queries({
       state: this.state,
-      localCacheAdapter: this.localCacheAdapter,
       keychainAdapter: this.keychainAdapter,
       serviceAdapterOptions: this.serviceAdapterOptions
     })
     const commands = new Commands({
       state: this.state,
-      localCacheAdapter: this.localCacheAdapter,
       keychainAdapter: this.keychainAdapter,
       noAutomaticFetches: this.noAutomaticFetches,
       queries,

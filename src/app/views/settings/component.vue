@@ -167,7 +167,7 @@ export default {
     reset (identity) {
       if (confirm('Are you sure you want to forget this identity?')) {
         this.app.commands.removeIdentity(identity)
-        this.app.commands.reload()
+          .then(() => this.app.commands.reload())
       }
     },
     init () {

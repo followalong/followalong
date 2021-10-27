@@ -157,7 +157,8 @@ class Commands {
     this.state.removeAll('identities', [identity])
     this.state.removeAll('feeds', this.queries.feedsForIdentity(identity))
     this.state.removeAll('items', this.queries.itemsForIdentity(identity))
-    this.removeLocal(identity)
+
+    return this.removeLocal(identity)
   }
 
   addIdentity (data, feeds, items) {
@@ -171,7 +172,9 @@ class Commands {
   getLocalIdentity (id) {
     return new Promise((resolve, reject) => {
       this.queries.getLocalDecryptionFunction(id).then((func) => {
-        this.localCacheAdapter.get(id, func)
+        const service = this.queries.serviceForIdentity({ id }, 'local')
+
+        service.get(id, func)
           .then(resolve)
           .catch(reject)
       }).catch(reject)
@@ -211,7 +214,9 @@ class Commands {
     return debouncedPromise(() => {
       this.queries.getLocalEncryptionFunction(identity.id)
         .then((func) => {
-          this.localCacheAdapter.save(
+          const service = this.queries.serviceForIdentity(identity, 'local')
+
+          service.save(
             this.queries.identityToLocal(identity),
             func
           )
@@ -220,7 +225,17 @@ class Commands {
   }
 
   removeLocal (identity) {
-    return this.localCacheAdapter.remove(identity.id)
+    const service = this.queries.serviceForIdentity(identity, 'local')
+
+    return new Promise((resolve, reject) => {
+      this.keychainAdapter.remove(identity.id)
+        .then(() => {
+          service.remove(identity.id)
+            .then(resolve)
+            .catch(reject)
+        })
+        .catch(reject)
+    })
   }
 
   reload () {

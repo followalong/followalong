@@ -22,14 +22,15 @@ describe('Identities: Change encryption', () => {
       await app.wait()
 
       const identity = app.vm.queries.findDefaultIdentity()
-      const data = await app.vm.localCacheAdapter.db.getItem(identity.id)
+      const data = await app.vm.queries.serviceForIdentity(identity, 'local').db.getItem(identity.id)
+
       expect(typeof data).toEqual('object')
     })
 
     it('removes the all passwords from memory', async () => {
       const expectedPassword = 'zyx-987'
       const app = await mountApp({
-        localCacheAdapterData: {
+        localServiceAdapterData: {
           abc: {
             id: 'abc',
             name: 'My Account',
@@ -54,7 +55,7 @@ describe('Identities: Change encryption', () => {
 
     it('restores the unencrypted identity', async () => {
       const app = await mountApp({
-        localCacheAdapterData: {
+        localServiceAdapterData: {
           abc: {
             id: 'abc',
             name: 'My Account',
@@ -114,7 +115,7 @@ describe('Identities: Change encryption', () => {
       await app.wait()
 
       const identity = app.vm.queries.findDefaultIdentity()
-      const data = await app.vm.localCacheAdapter.db.getItem(identity.id)
+      const data = await app.vm.queries.serviceForIdentity(identity, 'local').db.getItem(identity.id)
       expect(typeof data).toEqual('string')
     })
 
@@ -148,7 +149,7 @@ describe('Identities: Change encryption', () => {
         await app.click('[aria-label="Change password"]')
 
         const identity = app.vm.queries.findDefaultIdentity()
-        const data = await app.vm.localCacheAdapter.db.getItem(identity.id)
+        const data = await app.vm.queries.serviceForIdentity(identity, 'local').db.getItem(identity.id)
         expect(typeof data).toEqual('string')
       })
     })
@@ -156,7 +157,7 @@ describe('Identities: Change encryption', () => {
     it('restores the encrypted identity', async () => {
       const expectedPassword = 'zyx-987'
       const app = await mountApp({
-        localCacheAdapterData: {
+        localServiceAdapterData: {
           abc: {
             id: 'abc',
             name: 'My Account',
@@ -221,7 +222,7 @@ describe('Identities: Change encryption', () => {
       await app.wait()
 
       const identity = app.vm.queries.findDefaultIdentity()
-      const data = await app.vm.localCacheAdapter.db.getItem(identity.id)
+      const data = await app.vm.queries.serviceForIdentity(identity, 'local').db.getItem(identity.id)
       expect(typeof data).toEqual('string')
     })
 
@@ -255,7 +256,7 @@ describe('Identities: Change encryption', () => {
         await app.click('[aria-label="Change password"]')
 
         const identity = app.vm.queries.findDefaultIdentity()
-        const data = await app.vm.localCacheAdapter.db.getItem(identity.id)
+        const data = await app.vm.queries.serviceForIdentity(identity, 'local').db.getItem(identity.id)
         expect(typeof data).toEqual('string')
       })
     })
@@ -263,7 +264,7 @@ describe('Identities: Change encryption', () => {
     it('restores the encrypted identity', async () => {
       const expectedPassword = 'zyx-987'
       const app = await mountApp({
-        localCacheAdapterData: {
+        localServiceAdapterData: {
           abc: {
             id: 'abc',
             name: 'My Account',

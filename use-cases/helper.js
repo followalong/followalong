@@ -3,9 +3,8 @@ import { createRouter, createMemoryHistory } from 'vue-router'
 import { routes } from '@/app/router/index.js'
 import App from '@/app/component.vue'
 import addIcons from '@/add-icons.js'
-import LocalCacheAdapter from '@/adapters/local-cache.js'
 import KeychainAdapter from '@/adapters/keychain.js'
-import ServiceAdapter from '@/adapters/service.js'
+import LocalServiceAdapter from '@/adapters/services/local.js'
 import { passThrough } from '@/queries/helpers/crypt.js'
 
 class AWSEndpoint {
@@ -49,15 +48,15 @@ const mountApp = (options) => {
       }
     }
 
-    const localCacheAdapter = new LocalCacheAdapter()
+    const localServiceAdapter = new LocalServiceAdapter({})
 
-    await localCacheAdapter.db.clear()
+    await localServiceAdapter.db.clear()
 
-    if (options.localCacheAdapterData) {
-      for (const key in options.localCacheAdapterData) {
-        await localCacheAdapter.save(
-          options.localCacheAdapterData[key],
-          options.localCacheAdapterData[key].encrypt || passThrough()
+    if (options.localServiceAdapterData) {
+      for (const key in options.localServiceAdapterData) {
+        await localServiceAdapter.save(
+          options.localServiceAdapterData[key],
+          options.localServiceAdapterData[key].encrypt || passThrough()
         )
       }
     }
@@ -76,7 +75,6 @@ const mountApp = (options) => {
         plugins: [router, addIcons]
       },
       propsData: {
-        localCacheAdapter,
         keychainAdapter,
         serviceAdapterOptions,
         noAutomaticFetches: true
@@ -132,7 +130,7 @@ const rawRSSResponse = (item) => {
 }
 
 const buildServiceToRespondWith = (type, result) => {
-  const service = new ServiceAdapter()
+  const service = new LocalServiceAdapter()
 
   service[type] = jest.fn(() => Promise.resolve(result))
 
