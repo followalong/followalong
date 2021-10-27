@@ -32,6 +32,7 @@ import Commands from '@/commands/index.js'
 import State from '@/state/index.js'
 import Queries from '@/queries/index.js'
 import copyToClipboard from 'copy-to-clipboard'
+import AWS from 'aws-sdk'
 import { saveAs } from 'file-saver'
 
 export default {
@@ -52,6 +53,18 @@ export default {
     state: {
       type: Object,
       default: () => new State({ identities: [], feeds: [], items: [] })
+    },
+    serviceAdapterOptions: {
+      type: Object,
+      default: () => {
+        return {
+          AWS
+        }
+      }
+    },
+    noAutomaticFetches: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -59,13 +72,15 @@ export default {
     const queries = new Queries({
       state: this.state,
       localCacheAdapter: this.localCacheAdapter,
-      keychainAdapter: this.keychainAdapter
+      keychainAdapter: this.keychainAdapter,
+      serviceAdapterOptions: this.serviceAdapterOptions
     })
     const commands = new Commands({
       state: this.state,
-      queries,
       localCacheAdapter: this.localCacheAdapter,
       keychainAdapter: this.keychainAdapter,
+      noAutomaticFetches: this.noAutomaticFetches,
+      queries,
       copyToClipboard,
       saveAs
     })

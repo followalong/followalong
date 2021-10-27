@@ -47,8 +47,9 @@ describe('Identities: Change encryption', () => {
 
       await app.click('[aria-label="Settings"]')
       await app.find('[aria-label="Encryption strategy"]').setValue('none')
+      await app.wait()
 
-      expect(app.vm.keychainAdapter.getKey(identity.id)).resolves.toEqual(undefined)
+      expect(app.vm.keychainAdapter.getKey(identity.id)).resolves.toEqual('')
     })
 
     it('restores the unencrypted identity', async () => {
@@ -95,6 +96,7 @@ describe('Identities: Change encryption', () => {
 
       await app.click('[aria-label="Settings"]')
       await app.find('[aria-label="Encryption strategy"]').setValue('ask')
+      await app.wait()
 
       const identity = app.vm.queries.findDefaultIdentity()
       expect(app.vm.keychainAdapter.getKey(identity.id)).resolves.toEqual(expectedPassword)
@@ -201,6 +203,7 @@ describe('Identities: Change encryption', () => {
 
       await app.click('[aria-label="Settings"]')
       await app.find('[aria-label="Encryption strategy"]').setValue('store')
+      await app.wait()
 
       const identity = app.vm.queries.findDefaultIdentity()
       expect(app.vm.keychainAdapter.getKey(identity.id)).resolves.toEqual(expectedPassword)

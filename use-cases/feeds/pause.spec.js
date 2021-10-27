@@ -8,7 +8,7 @@ describe('Feeds: Pause a feed', () => {
     app = await mountApp()
     feedsLength = app.vm.queries.allFeeds().length
     const item = { title: 'Foo Bar' }
-    app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
+    app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
 
     await app.click('[aria-label="Feeds"]')
     await app.click('[aria-label^="Pause"]')

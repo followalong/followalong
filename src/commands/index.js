@@ -88,7 +88,11 @@ class Commands {
     this.saveLocal(identity)
   }
 
-  fetchAllFeeds (identity) {
+  fetchAllFeeds (identity, auto) {
+    if (this.noAutomaticFetches && auto) {
+      return Promise.resolve()
+    }
+
     const promises = this.queries
       .feedsForIdentity(identity)
       .filter(this.queries.isNotPaused)
@@ -114,7 +118,6 @@ class Commands {
 
           this._addItemsForFeed(feed, items)
         })
-        .catch(reject)
         .finally(() => {
           delete feed.fetchingAt
           this.saveLocal(identity)
@@ -194,7 +197,7 @@ class Commands {
           if (!this.queries.allIdentities().length) {
             this.addIdentity({ name: seedIdentity.name }, [].concat(seedIdentity.feeds))
             const identity = this.queries.findDefaultIdentity()
-            this.fetchAllFeeds(identity)
+            this.fetchAllFeeds(identity, true)
             this.keychainAdapter.addNone(identity.id)
           }
 
@@ -229,6 +232,10 @@ class Commands {
   }
 
   fetchNextFeedPerpetually (identity) {
+    if (this.noAutomaticFetches) {
+      return
+    }
+
     const DELAY_BETWEEN_FETCHES = 30000
     const feed = this.queries.findMostOutdatedNonPausedFeed(identity)
     const done = () => setTimeout(() => this.fetchNextFeedPerpetually(identity), DELAY_BETWEEN_FETCHES)
@@ -243,7 +250,7 @@ class Commands {
       const service = this.queries.serviceForIdentity(identity, 'local')
 
       return this.keychainAdapter.add(encryptionStrategy, identity.id).then(() => {
-        service.encryptionStrategy = encryptionStrategy
+        service.data.encryptionStrategy = encryptionStrategy
         this.saveLocal(identity)
         resolve()
       }).catch(reject)

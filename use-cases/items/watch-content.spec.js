@@ -5,7 +5,7 @@ describe('Items: Watch content', () => {
     it('can see a video player', async () => {
       const app = await mountApp()
       const item = { videoUrl: 'https://example.com/video.mp4' }
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')

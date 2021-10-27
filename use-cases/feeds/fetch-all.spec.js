@@ -6,7 +6,7 @@ describe('Feeds: Fetch all feeds', () => {
       const app = await mountApp()
       const item = { title: 'Foo Bar' }
       const expectedFeedsLength = app.vm.queries.allFeeds().length
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="FollowAlong"]')
       await app.click('[aria-label="What\'s new?"]')
@@ -21,7 +21,7 @@ describe('Feeds: Fetch all feeds', () => {
       const app = await mountApp()
       const item = { title: 'Foo Bar' }
       const expectedFeedsLength = app.vm.queries.allFeeds().length
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="Fetch all feeds"]')

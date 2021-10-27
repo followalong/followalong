@@ -8,7 +8,7 @@ describe('Items: Mark as read', () => {
     beforeEach(async () => {
       app = await mountApp()
       item = { title: 'Foo bar' }
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
@@ -38,7 +38,7 @@ describe('Items: Mark as read', () => {
     beforeEach(async () => {
       app = await mountApp()
       item = { title: 'Foo bar' }
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')

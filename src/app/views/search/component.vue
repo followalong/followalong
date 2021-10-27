@@ -90,10 +90,7 @@ export default {
         return
       }
 
-      service.request(this.app.identity, {
-        action: 'search',
-        q: this.q
-      }).then((feeds) => {
+      service.search(this.q).then((feeds) => {
         if (!feeds) {
           this.error = 'Could not search. Perhaps it\'s a problem with your Search Service?'
           return

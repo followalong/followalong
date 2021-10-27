@@ -8,10 +8,7 @@ var parser = new Parser({
 
 function getContent (identity, service, url) {
   return new Promise((resolve, reject) => {
-    service.request(identity, {
-      action: 'rss',
-      url: url
-    })
+    service.rss(url)
       .then((data) => {
         if (data && parseInt(data.status) < 300) {
           return resolve(data.body)
@@ -50,9 +47,9 @@ function getFeed (identity, service, feed, updatedAt) {
 
         parseItems(identity, feed, data, [], updatedAt)
           .then(resolve)
-          .catch((err) => reject(err || new Error('Could not parse items')))
+          .catch((err) => reject(err))
       })
-      .catch((err) => reject(err || new Error('Feed has no data')))
+      .catch((err) => reject(err))
   })
 }
 

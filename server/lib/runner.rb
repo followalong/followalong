@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require_relative 'actions/rss'
 require_relative 'actions/search'
 require_relative 'actions/subscribe'
 
 module FollowAlong
   class Runner
-    ALLOWED_METHODS = %w(rss search subscribe).freeze # sync publish media
+    ALLOWED_METHODS = %w[rss search subscribe].freeze # sync publish media
 
     def run(action, data = {}, _context = {})
       if ALLOWED_METHODS.include? action

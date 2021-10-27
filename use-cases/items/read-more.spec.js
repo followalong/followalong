@@ -6,7 +6,7 @@ describe('Items: Read more', () => {
       window.scroll = () => {}
       const app = await mountApp()
       const item = { title: 'Foo bar', content: 'word '.repeat(1000) }
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
@@ -19,7 +19,7 @@ describe('Items: Read more', () => {
       window.scroll = jest.fn()
       const app = await mountApp()
       const item = { title: 'Foo bar', content: 'word '.repeat(1000) }
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')

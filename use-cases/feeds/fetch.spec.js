@@ -8,7 +8,7 @@ describe('Feeds: Fetch', () => {
     beforeEach(async () => {
       app = await mountApp()
       item = { title: 'Foo Bar' }
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label^="Fetch"]')
@@ -33,7 +33,7 @@ describe('Feeds: Fetch', () => {
     beforeEach(async () => {
       app = await mountApp()
       item = { title: 'Foo Bar' }
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label^="Visit"]')

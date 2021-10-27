@@ -5,11 +5,31 @@ import App from '@/app/component.vue'
 import addIcons from '@/add-icons.js'
 import LocalCacheAdapter from '@/adapters/local-cache.js'
 import KeychainAdapter from '@/adapters/keychain.js'
+import ServiceAdapter from '@/adapters/service.js'
 import { passThrough } from '@/queries/helpers/crypt.js'
+
+class AWSEndpoint {
+  constructor (url) {
+    this.url = url
+  }
+}
+
+class AWSLambda {
+  invoke (data, done) {
+    done(new Error('Request is not stubbed'))
+  }
+}
 
 const mountApp = (options) => {
   return new Promise(async (resolve) => {
     options = options || {}
+
+    const serviceAdapterOptions = options.serviceAdapterOptions || {
+      AWS: {
+        Lambda: AWSLambda,
+        Endpoint: AWSEndpoint
+      }
+    }
 
     const keychainAdapter = new KeychainAdapter({
       prompt: jest.fn(() => 'abc-123')
@@ -51,7 +71,9 @@ const mountApp = (options) => {
       },
       propsData: {
         localCacheAdapter,
-        keychainAdapter
+        keychainAdapter,
+        serviceAdapterOptions,
+        noAutomaticFetches: true
       }
     })
 
@@ -103,12 +125,12 @@ const rawRSSResponse = (item) => {
   }
 }
 
-const buildServiceToRespondWith = (result) => {
-  return jest.fn(() => {
-    return {
-      request: () => Promise.resolve(result)
-    }
-  })
+const buildServiceToRespondWith = (type, result) => {
+  const service = new ServiceAdapter()
+
+  service[type] = jest.fn(() => Promise.resolve(result))
+
+  return jest.fn(() => service)
 }
 
 const rawRSS = (item) => {

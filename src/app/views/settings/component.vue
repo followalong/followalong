@@ -152,7 +152,10 @@ export default {
   },
   computed: {
     localService () {
-      return this.app.queries.serviceForIdentity(this.app.identity, 'local')
+      this.app.identity.services = this.app.identity.services || {}
+      this.app.identity.services.local = this.app.identity.services.local || {}
+
+      return this.app.identity.services.local
     }
   },
   watch: {

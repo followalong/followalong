@@ -5,9 +5,9 @@ describe('Feeds: Catch up', () => {
     let app
 
     beforeEach(async () => {
-      app = await mountApp()
+      app = await mountApp({ overrideCommands: {} })
       const item = { title: 'Foo Bar' }
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith(rawRSSResponse(item))
+      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
 
       expect(app.findAll('.read').length).toEqual(0)
 

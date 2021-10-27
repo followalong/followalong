@@ -55,7 +55,7 @@ class LocalCacheAdapter {
     return {
       id: identityData.id,
       name: identityData.name,
-      hints: identityData.hints,
+      hints: Object.assign([], identityData.hints || []),
       feeds: identityData.feeds.map((feed) => {
         return {
           updatedAt: feed.updatedAt,
@@ -81,7 +81,9 @@ class LocalCacheAdapter {
         }
       }),
       services: {
-        local: this._buildObj(services.local || {})
+        local: this._buildObj(services.local || {}),
+        rss: this._buildObj(services.rss || {}),
+        search: this._buildObj(services.search || {})
       }
     }
   }

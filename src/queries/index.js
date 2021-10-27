@@ -1,4 +1,4 @@
-import SERVICES from '@/commands/services.js'
+import ServiceAdapter from '@/adapters/service.js'
 import sortByReadAndDate from './sorters/sort-by-read-and-date.js'
 import sortByName from './sorters/sort-by-name.js'
 import sortByLastUpdated from './sorters/sort-by-last-updated.js'
@@ -45,38 +45,7 @@ class Queries {
   }
 
   serviceForIdentity (identity, type) {
-    identity.services = identity.services || {}
-
-    if (type === 'local') {
-      identity.services.local = identity.services.local || {}
-      identity.services.local.encryptionStrategy = identity.services.local.encryptionStrategy || 'none'
-
-      return identity.services.local
-    }
-
-    const services = identity.services || {}
-
-    let service = services[type] || { symlink: 'followalong-free' }
-
-    if (service.symlink) {
-      service = SERVICES.concat(services.custom).find((s) => {
-        return s.id === service.symlink
-      })
-    }
-
-    const template = SERVICES.find((s) => {
-      return s.id === service.template
-    })
-
-    if (template) {
-      const items = ['fields', 'pricing', 'description', 'request']
-
-      for (let i = items.length - 1; i >= 0; i--) {
-        service[items[i]] = service[items[i]] || template[items[i]]
-      }
-    }
-
-    return service
+    return ServiceAdapter.build(type, this.serviceAdapterOptions, identity)
   }
 
   feedsForIdentity (identity) {
