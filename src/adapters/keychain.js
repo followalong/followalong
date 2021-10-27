@@ -1,7 +1,4 @@
 import localForage from 'localforage'
-import uniqId from 'uniq-id'
-
-const generateId = uniqId.generateUUID('xxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxyxxxxy', 32)
 
 class KeychainAdapter {
   constructor (options) {

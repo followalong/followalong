@@ -56,7 +56,7 @@
           @change="changeEncryption"
         >
           <option value="ask">
-            Never store the key (best, most secure, slightly annoying)
+            Enter the key upon every visit (best, most secure, slightly annoying)
           </option>
           <option value="store">
             Store the key on this device (recommended if you trust your device)
