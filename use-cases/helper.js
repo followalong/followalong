@@ -82,19 +82,31 @@ const mountApp = (options) => {
     })
 
     app.click = async (el) => {
-      const $el = await app.find(el)
-      if (!Object.keys($el).length) {
+      let $el = null
+
+      try {
+        $el = await app.find(el)
+      } catch (e) { }
+
+      if (!$el) {
         throw new Error(`Could not find element: ${el} in ${app.text()}`)
       }
+
       await $el.trigger('click')
       await app.wait()
     }
 
     app.submit = async (el) => {
-      const $el = await app.find(el)
-      if (!Object.keys($el).length) {
+      let $el = null
+
+      try {
+        $el = await app.find(el)
+      } catch (e) { }
+
+      if (!$el) {
         throw new Error(`Could not find element: ${el} in ${app.text()}`)
       }
+
       await $el.trigger('submit')
       await app.wait()
     }

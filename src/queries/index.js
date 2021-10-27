@@ -245,7 +245,7 @@ class Queries {
   }
 
   hasChangeablePassword (service) {
-    return service.encryptionStrategy === 'ask' || service.encryptionStrategy === 'store'
+    return service.data.encryptionStrategy === 'ask' || service.data.encryptionStrategy === 'store'
   }
 
   _getSize (data) {
