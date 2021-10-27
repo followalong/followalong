@@ -51,4 +51,24 @@ describe('Feeds: Fetch', () => {
       expect(localData.items.length).toBeGreaterThan(0)
     })
   })
+
+  it('newly-fetched old items are marked as read', async () => {
+    const app = await mountApp()
+    const feed = app.vm.state.findAll('feeds')[0]
+    const item = { guid: 123, title: 'Foo Bar', pubDate: new Date() }
+    app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
+
+    await app.click('[aria-label="Feeds"]')
+    await app.click('[aria-label^="Visit"]')
+    await app.click('[aria-label="Toggle Menu"]')
+    await app.click('[aria-label^="Fetch"]')
+    await app.click(`[aria-label="Read ${item.title}"]`)
+
+    const oldItem = { guid: 456, title: 'Baz Bar', pubDate: new Date(0) }
+    app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(oldItem))
+    await app.click('[aria-label="Toggle Menu"]')
+    await app.click('[aria-label^="Fetch"]')
+
+    expect(app.findAll(`[aria-label="Unread ${oldItem.title}"]`).length).toEqual(1)
+  })
 })
