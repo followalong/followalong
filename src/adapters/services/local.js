@@ -32,6 +32,7 @@ class LocalServiceAdapter extends ServiceAdapter {
     })
 
     this.data.encryptionStrategy = this.data.encryptionStrategy || 'none'
+    this.data.maxReadLimit = this.data.maxReadLimit || 150
   }
 
   save (identityData, encrypt) {
@@ -58,7 +59,7 @@ class LocalServiceAdapter extends ServiceAdapter {
 
     identityData.items = identityData.items
       .sort(sortByReadAndDate())
-      .filter(LIMIT_ITEMS(100))
+      .filter(LIMIT_ITEMS(this.data.maxReadLimit))
 
     return identityData
   }

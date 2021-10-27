@@ -32,18 +32,19 @@
       <div
         class="field"
       >
-        <!-- <div class="field">
+        <div class="field">
           <label for="max-read-count">Maximum Number of "Read" Items to Keep</label>
           <span class="hint">Unread and Saved items are always kept.</span>
           <input
             id="max-read-count"
-            v-model="localService.maxReadCount"
+            v-model="maxReadLimit"
             type="number"
             min="1"
-            placeholder="100"
-            @blur="localService.maxReadCount < 1 ? localService.maxReadCount = 1 : 1; app.identity.save()"
+            :placeholder="localService.data.maxReadLimit"
+            aria-label="Max read limit"
+            @blur="app.commands.changeMaxReadLimit(app.identity, maxReadLimit)"
           >
-        </div> -->
+        </div>
 
         <label for="secretStrategy">
           Local Data Encryption
@@ -144,19 +145,17 @@ export default {
       secretKey: '',
       encryptionStrategy: '',
       localSize: '0 kb',
-      hasStorageSupport: window.indexedDB
+      hasStorageSupport: window.indexedDB,
+      maxReadLimit: 0
     }
   },
   computed: {
     localService () {
-      this.app.identity.services = this.app.identity.services || {}
-      this.app.identity.services.local = this.app.identity.services.local || {}
-
-      return this.app.identity.services.local
+      return this.app.queries.serviceForIdentity(this.app.identity, 'local')
     }
   },
   watch: {
-    'localService.encryptionStrategy' () {
+    'localService.data.encryptionStrategy' () {
       this.init()
     }
   },
@@ -174,7 +173,9 @@ export default {
       this.app.queries.localSize(this.app.identity).then((localSize) => {
         this.localSize = localSize
       })
-      this.encryptionStrategy = this.localService.encryptionStrategy
+
+      this.encryptionStrategy = this.localService.data.encryptionStrategy
+      this.maxReadLimit = this.localService.data.maxReadLimit
     },
     changeEncryption ($event) {
       $event.stopImmediatePropagation()

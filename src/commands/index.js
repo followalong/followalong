@@ -281,6 +281,18 @@ class Commands {
     })
   }
 
+  changeMaxReadLimit (identity, maxReadLimit) {
+    return new Promise((resolve, reject) => {
+      const service = this.queries.serviceForIdentity(identity, 'local')
+
+      service.data.maxReadLimit = Math.max(0, parseInt(maxReadLimit || 150))
+
+      this.debouncedSaveLocal(identity)
+
+      resolve()
+    })
+  }
+
   _addItemsForFeed (feed, items) {
     const feedItems = this.queries.itemsForFeed(feed)
     const newItems = items.filter((item) => {
@@ -294,6 +306,7 @@ class Commands {
         return !existingItem
       }
 
+      // return new Date(item.pubDate) > new Date(feed.updatedAt)
       return true
     })
 
