@@ -306,7 +306,7 @@ class Commands {
         return !existingItem
       }
 
-      return new Date(item.pubDate) > new Date(feed.updatedAt)
+      return true
     })
 
     this.state.add('items', newItems, (item) => this.addItemToFeed(feed, item))
