@@ -38,6 +38,7 @@ class ServiceAdapter {
         return {
           updatedAt: feed.updatedAt,
           pausedAt: feed.pausedAt,
+          latestInteractionAt: feed.latestInteractionAt,
           name: feed.name,
           url: feed.url
         }

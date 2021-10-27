@@ -71,9 +71,10 @@ class Commands {
       item.readAt = Date.now()
 
       const feed = this.queries.feedForItem(item)
+      const pubDate = new Date(item.pubDate).getTime()
 
-      if (feed) {
-        feed.lastReadAt = item.readAt
+      if (feed && pubDate > (feed.latestInteractionAt || 0)) {
+        feed.latestInteractionAt = pubDate
       }
     } else {
       delete item.readAt
@@ -301,7 +302,7 @@ class Commands {
 
   _addItemsForFeed (feed, items) {
     const feedItems = this.queries.itemsForFeed(feed)
-    const feedLastReadAt = new Date(feed.lastReadAt)
+    const latestInteractionAt = new Date(feed.latestInteractionAt).getTime()
     const newItems = items.filter((item) => {
       const existingItem = feedItems.find((existingItem) => existingItem.guid === item.guid || existingItem.guid === item.id)
 
@@ -311,8 +312,8 @@ class Commands {
         }
 
         return !existingItem
-      } else if (new Date(item.pubDate) < feedLastReadAt) {
-        item.readAt = feedLastReadAt.getTime()
+      } else if (new Date(item.pubDate).getTime() < latestInteractionAt) {
+        item.readAt = latestInteractionAt
       }
 
       return true
