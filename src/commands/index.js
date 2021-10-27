@@ -312,7 +312,7 @@ class Commands {
         }
 
         return !existingItem
-      } else if (new Date(item.pubDate).getTime() < latestInteractionAt) {
+      } else if (new Date(item.pubDate).getTime() <= latestInteractionAt) {
         item.readAt = latestInteractionAt
       }
 
