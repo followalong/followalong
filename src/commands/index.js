@@ -31,7 +31,7 @@ class Commands {
 
     this.state.removeAll('items', this.queries.itemsForFeed(feed))
     this.state.removeAll('feeds', [feed])
-    this.saveLocal(identity)
+    this.debouncedSaveLocal(identity)
   }
 
   catchMeUp (identity, items) {
@@ -39,7 +39,7 @@ class Commands {
       .filter((item) => this.queries.isUnread(item))
       .forEach((item) => this.toggleRead(identity, item, true))
 
-    this.saveLocal(identity)
+    this.debouncedSaveLocal(identity)
   }
 
   hideHint (identity, hint) {
@@ -49,7 +49,7 @@ class Commands {
       identity.hints.push(hint)
     }
 
-    this.saveLocal(identity)
+    this.debouncedSaveLocal(identity)
   }
 
   togglePause (identity, feed, defaultValue) {
@@ -61,7 +61,7 @@ class Commands {
       delete feed.pausedAt
     }
 
-    this.saveLocal(identity)
+    this.debouncedSaveLocal(identity)
   }
 
   toggleRead (identity, item, defaultValue) {
@@ -73,7 +73,7 @@ class Commands {
       delete item.readAt
     }
 
-    this.saveLocal(identity)
+    this.debouncedSaveLocal(identity)
   }
 
   toggleSave (identity, item, defaultValue) {
@@ -85,7 +85,7 @@ class Commands {
       delete item.savedAt
     }
 
-    this.saveLocal(identity)
+    this.debouncedSaveLocal(identity)
   }
 
   fetchAllFeeds (identity, auto) {
@@ -120,7 +120,7 @@ class Commands {
         })
         .finally(() => {
           delete feed.fetchingAt
-          this.saveLocal(identity)
+          this.debouncedSaveLocal(identity)
           resolve()
         })
     })
@@ -129,7 +129,7 @@ class Commands {
   addFeedToIdentity (identity, feed) {
     feed.identityId = identity.id
 
-    this.saveLocal(identity)
+    this.debouncedSaveLocal(identity)
 
     return feed
   }
@@ -166,7 +166,7 @@ class Commands {
 
     this.state.add('feeds', feeds || [], (f) => this.addFeedToIdentity(identity, f))
     this.state.add('items', items || [])
-    this.saveLocal(identity)
+    this.debouncedSaveLocal(identity)
   }
 
   getLocalIdentity (id) {
@@ -210,8 +210,8 @@ class Commands {
     })
   }
 
-  saveLocal (identity, data) {
-    return debouncedPromise(() => {
+  saveLocal (identity) {
+    return new Promise((resolve, reject) => {
       this.queries.getLocalEncryptionFunction(identity.id)
         .then((func) => {
           const service = this.queries.serviceForIdentity(identity, 'local')
@@ -220,7 +220,16 @@ class Commands {
             this.queries.identityToLocal(identity),
             func
           )
+            .then(resolve)
+            .catch(reject)
         })
+        .catch(reject)
+    })
+  }
+
+  debouncedSaveLocal (identity, data) {
+    return debouncedPromise(() => {
+      this.saveLocal(identity, data)
     }, 300, this)
   }
 
@@ -266,7 +275,7 @@ class Commands {
 
       return this.keychainAdapter.add(encryptionStrategy, identity.id).then(() => {
         service.data.encryptionStrategy = encryptionStrategy
-        this.saveLocal(identity)
+        this.debouncedSaveLocal(identity)
         resolve()
       }).catch(reject)
     })

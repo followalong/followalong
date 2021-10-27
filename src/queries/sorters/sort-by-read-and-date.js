@@ -1,4 +1,4 @@
-export default (date, feed) => {
+export default (date) => {
   if (!date) {
     date = 'pubDate'
   }
