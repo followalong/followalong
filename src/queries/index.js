@@ -94,7 +94,8 @@ class Queries {
   findMostOutdatedNonPausedFeed (identity) {
     return this.feedsForIdentity(identity)
       .filter(this.isNotPaused)
-      .sort(sortByLastUpdated)[0]
+      .sort(sortByLastUpdated)
+      .reverse()[0]
   }
 
   identityToLocal (identity) {
