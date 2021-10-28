@@ -2,7 +2,7 @@ import LocalServiceAdapter from '@/adapters/services/local.js'
 import FollowAlongFreeServiceAdapter from '@/adapters/services/followalong-free.js'
 import sortByReadAndDate from './sorters/sort-by-read-and-date.js'
 import sortByName from './sorters/sort-by-name.js'
-import sortByLastUpdated from './sorters/sort-by-last-updated.js'
+import sortByNeedToUpdate from './sorters/sort-by-need-to-update.js'
 import { getAudioSrc, getVideoSrc, getImageSrc } from './helpers/get-src.js'
 import prepareContent from './helpers/prepare-content.js'
 import timeAgo from './helpers/time-ago.js'
@@ -94,8 +94,7 @@ class Queries {
   findMostOutdatedNonPausedFeed (identity) {
     return this.feedsForIdentity(identity)
       .filter(this.isNotPaused)
-      .sort(sortByLastUpdated)
-      .reverse()[0]
+      .sort(sortByNeedToUpdate)[0]
   }
 
   identityToLocal (identity) {
