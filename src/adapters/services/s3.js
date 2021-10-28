@@ -49,4 +49,55 @@ class S3ServiceAdapter extends ServiceAdapter {
   }
 }
 
+// {
+//   id: 's3',
+//   name: 'S3',
+//   description: 'Store data directly to an S3-compatible server.',
+//   supports: 'sync',
+//   data: {
+//     endpoint: 's3.amazonaws.com',
+//     key: '/identities/' + generateId() + '.json'
+//     // accessKeyId: AWS_CONFIG.accessKeyId,
+//     // secretAccessKey: AWS_CONFIG.secretAccessKey
+//   },
+//   fields: {
+//     name: {
+//       type: 'text',
+//       label: 'Service Name',
+//       required: true
+//     },
+//     endpoint: {
+//       type: 'text',
+//       label: 'Endpoint',
+//       required: true
+//     },
+//     region: {
+//       type: 'text',
+//       label: 'Region',
+//       required: true
+//     },
+//     key: {
+//       type: 'text',
+//       label: 'Key',
+//       required: true
+//     },
+//     accessKeyId: {
+//       type: 'text',
+//       label: 'Access Key ID',
+//       required: true
+//     },
+//     secretAccessKey: {
+//       type: 'password',
+//       label: 'Secret Access Key',
+//       required: true
+//     },
+//     bucket: {
+//       type: 'text',
+//       label: 'Bucket',
+//       required: true
+//     }
+//   },
+//   request: s3Sync
+// },
+
 export default S3ServiceAdapter
