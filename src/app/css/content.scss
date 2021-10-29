@@ -674,6 +674,32 @@ hr {
   }
 }
 
+.addon {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: var(--block-bg);
+  border-radius: 8px;
+
+  h2 {
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  h3 {
+    // font-weight: bold;
+    background: var(--bg-color);
+    padding: 1rem;
+    font-size: 1.25rem;
+    border-radius: 8px;
+  }
+
+  .button {
+    float: right;
+    font-weight: normal;
+  }
+}
+
 .align-center {
   text-align: center;
 }

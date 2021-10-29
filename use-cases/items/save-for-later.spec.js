@@ -1,4 +1,4 @@
-import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildAddonToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Items: Save for later', () => {
   describe('from the home page', () => {
@@ -8,7 +8,7 @@ describe('Items: Save for later', () => {
     beforeEach(async () => {
       app = await mountApp()
       item = { title: 'Foo bar' }
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
+      app.vm.queries.addonForIdentity = buildAddonToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
@@ -35,7 +35,7 @@ describe('Items: Save for later', () => {
     beforeEach(async () => {
       app = await mountApp()
       item = { title: 'Foo bar' }
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
+      app.vm.queries.addonForIdentity = buildAddonToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')

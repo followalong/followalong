@@ -1,6 +1,6 @@
-class ServiceAdapter {
-  constructor (adapterOptions, serviceData) {
-    this.data = serviceData || {}
+class AddonAdapter {
+  constructor (adapterOptions, addonData) {
+    this.data = addonData || {}
 
     for (const key in adapterOptions) {
       this[key] = adapterOptions[key]
@@ -8,27 +8,27 @@ class ServiceAdapter {
   }
 
   get () {
-    return Promise.reject(new Error('`Get` is not supported by this service.'))
+    return Promise.reject(new Error('`Get` is not supported by this addon.'))
   }
 
   save () {
-    return Promise.reject(new Error('`Save` is not supported by this service.'))
+    return Promise.reject(new Error('`Save` is not supported by this addon.'))
   }
 
   destroy () {
-    return Promise.reject(new Error('`Destroy` is not supported by this service.'))
+    return Promise.reject(new Error('`Destroy` is not supported by this addon.'))
   }
 
   rss () {
-    return Promise.reject(new Error('`RSS` is not supported by this service.'))
+    return Promise.reject(new Error('`RSS` is not supported by this addon.'))
   }
 
   search () {
-    return Promise.reject(new Error('`Search` is not supported by this service.'))
+    return Promise.reject(new Error('`Search` is not supported by this addon.'))
   }
 
   format (identityData) {
-    const services = identityData.services || {}
+    const addons = identityData.addons || {}
 
     return {
       id: identityData.id,
@@ -59,10 +59,10 @@ class ServiceAdapter {
           updatedAt: item.updatedAt
         }
       }),
-      services: {
-        local: this._buildObj(services.local || {}),
-        rss: this._buildObj(services.rss || {}),
-        search: this._buildObj(services.search || {})
+      addons: {
+        local: this._buildObj(addons.local || {}),
+        rss: this._buildObj(addons.rss || {}),
+        search: this._buildObj(addons.search || {})
       }
     }
   }
@@ -82,4 +82,4 @@ class ServiceAdapter {
   }
 }
 
-export default ServiceAdapter
+export default AddonAdapter

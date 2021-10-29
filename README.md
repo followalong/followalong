@@ -9,14 +9,8 @@
 ## TODO
 
 - Specs
-- Change encryption
-- Save to local
-- Specs should save to local
-- Continuous fetch all
-- 3 Core Services
+- 3 Core Addons
 - Specs should save to remote
-- Remove unused stuff
-- Limit read items
 - Documentation
   - Spinning up your own frontend
   - Spinning up your own backend

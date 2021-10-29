@@ -4,7 +4,7 @@ import { routes } from '@/app/router/index.js'
 import App from '@/app/component.vue'
 import addIcons from '@/add-icons.js'
 import KeychainAdapter from '@/adapters/keychain.js'
-import LocalServiceAdapter from '@/adapters/services/local.js'
+import LocalAddonAdapter from '@/adapters/addons/local.js'
 import { passThrough } from '@/queries/helpers/crypt.js'
 
 class AWSEndpoint {
@@ -23,12 +23,12 @@ const mountApp = (options) => {
   return new Promise(async (resolve) => {
     options = options || {}
 
-    const serviceAdapterOptions = options.serviceAdapterOptions || {
-      AWS: {
-        Lambda: AWSLambda,
-        Endpoint: AWSEndpoint
-      }
+    const addonAdapterOptions = options.addonAdapterOptions || {}
+    addonAdapterOptions.AWS = addonAdapterOptions.AWS || {
+      Lambda: AWSLambda,
+      Endpoint: AWSEndpoint
     }
+    addonAdapterOptions.fetch = jest.fn(() => Promise.resolve())
 
     const keychainAdapter = new KeychainAdapter({
       prompt: jest.fn(() => 'abc-123')
@@ -48,15 +48,15 @@ const mountApp = (options) => {
       }
     }
 
-    const localServiceAdapter = new LocalServiceAdapter({})
+    const localAddonAdapter = new LocalAddonAdapter({})
 
-    await localServiceAdapter.db.clear()
+    await localAddonAdapter.db.clear()
 
-    if (options.localServiceAdapterData) {
-      for (const key in options.localServiceAdapterData) {
-        await localServiceAdapter.save(
-          options.localServiceAdapterData[key],
-          options.localServiceAdapterData[key].encrypt || passThrough()
+    if (options.localAddonAdapterData) {
+      for (const key in options.localAddonAdapterData) {
+        await localAddonAdapter.save(
+          options.localAddonAdapterData[key],
+          options.localAddonAdapterData[key].encrypt || passThrough()
         )
       }
     }
@@ -76,7 +76,7 @@ const mountApp = (options) => {
       },
       propsData: {
         keychainAdapter,
-        serviceAdapterOptions,
+        addonAdapterOptions,
         noAutomaticFetches: true
       }
     })
@@ -141,12 +141,12 @@ const rawRSSResponse = (item) => {
   }
 }
 
-const buildServiceToRespondWith = (type, result) => {
-  const service = new LocalServiceAdapter()
+const buildAddonToRespondWith = (type, result) => {
+  const addon = new LocalAddonAdapter()
 
-  service[type] = jest.fn(() => Promise.resolve(result))
+  addon[type] = jest.fn(() => Promise.resolve(result))
 
-  return jest.fn(() => service)
+  return jest.fn(() => addon)
 }
 
 const rawRSS = (item) => {
@@ -201,7 +201,7 @@ const rawRSS = (item) => {
       <pubDate>${item.pubDate || 'Tue, 09 Feb 3000 18:04:30 +0000'}</pubDate>
       <category><![CDATA[Uncategorized]]></category>
       <guid isPermaLink="false">${item.guid || 'https://m.signalvnoise.com/?p=13077'}</guid>
-      <description><![CDATA[Chairman Klein and members of the Senate Industry, Business and Labor Committee- My name is David Heinemeier Hansson, and I’m the CTO and co-founder of Basecamp, a small internet company from Chicago that sells project-management software and email services. I first testified on the topic of big tech monopolies at the House Antitrust Subcommittee&#8217;s field&#8230; <a class="read-more" href="https://m.signalvnoise.com/testimony-before-the-north-dakota-senate-industry-business-and-labor-committee/">keep reading</a>]]></description>
+      <description><![CDATA[Chairman Klein and members of the Senate Industry, Business and Labor Committee- My name is David Heinemeier Hansson, and I’m the CTO and co-founder of Basecamp, a small internet company from Chicago that sells project-management software and email addons. I first testified on the topic of big tech monopolies at the House Antitrust Subcommittee&#8217;s field&#8230; <a class="read-more" href="https://m.signalvnoise.com/testimony-before-the-north-dakota-senate-industry-business-and-labor-committee/">keep reading</a>]]></description>
       <content:encoded><![CDATA[${item.content}]]></content:encoded>
       <slash:comments>11</slash:comments>
       <post-id xmlns="com-wordpress:feed-additions:1">12956</post-id>
@@ -221,6 +221,6 @@ const flushPromisesAndTimers = () => {
 
 export {
   mountApp,
-  buildServiceToRespondWith,
+  buildAddonToRespondWith,
   rawRSSResponse
 }

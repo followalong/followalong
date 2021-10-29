@@ -27,12 +27,12 @@
 // {
 //   id: 'cors-anywhere',
 //   name: 'CORS Anywhere',
-//   description: 'Use the "CORS Anywhere" demo server! Please don\'t abuse this service, as you can <a href="https://github.com/Rob--W/cors-anywhere" target="_blank" class="link" onclick="event.stopImmediatePropagation();">quickly deploy your own version</a> to Heroku (or elsewhere).',
+//   description: 'Use the "CORS Anywhere" demo server! Please don\'t abuse this addon, as you can <a href="https://github.com/Rob--W/cors-anywhere" target="_blank" class="link" onclick="event.stopImmediatePropagation();">quickly deploy your own version</a> to Heroku (or elsewhere).',
 //   supports: 'rss',
 //   fields: {
 //     name: {
 //       type: 'text',
-//       label: 'Service Name',
+//       label: 'Addon Name',
 //       required: true
 //     },
 //     url: {

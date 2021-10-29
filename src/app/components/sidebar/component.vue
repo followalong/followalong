@@ -102,9 +102,12 @@
       <li class="divider" />
 
       <li>
-        <router-link to="/services">
+        <router-link
+          to="/addons"
+          aria-label="Addons"
+        >
           <font-awesome-icon icon="sitemap" />
-          Services
+          Addons
         </router-link>
       </li>
 

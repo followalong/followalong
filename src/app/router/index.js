@@ -10,7 +10,7 @@ import IdentitiesShow from '@/app/views/identities/show/component.vue'
 import ItemsShow from '@/app/views/items/show/component.vue'
 import Saved from '@/app/views/saved/component.vue'
 import Search from '@/app/views/search/component.vue'
-import Services from '@/app/views/services/component.vue'
+import Addons from '@/app/views/addons/component.vue'
 import Settings from '@/app/views/settings/component.vue'
 import Welcome from '@/app/views/welcome/component.vue'
 
@@ -88,9 +88,9 @@ const routes = [
     props: true
   },
   {
-    path: '/services',
-    name: 'services',
-    component: Services,
+    path: '/addons',
+    name: 'addons',
+    component: Addons,
     props: true
   },
   {

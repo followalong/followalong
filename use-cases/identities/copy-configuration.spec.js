@@ -1,4 +1,4 @@
-import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildAddonToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Identities: Copy configuration', () => {
   it('copies the configuration', async () => {

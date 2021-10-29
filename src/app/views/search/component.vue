@@ -81,18 +81,18 @@ export default {
       this.isLoading = true
       this.error = ''
 
-      const service = this.app.queries.serviceForIdentity(this.app.identity, 'search')
+      const addon = this.app.queries.addonForIdentity(this.app.identity, 'search')
 
-      if (!service) {
+      if (!addon) {
         this.isLoading = false
-        this.error = 'You don\'t have a Search Service configured.'
+        this.error = 'You don\'t have a Search Addon configured.'
         this.feeds = []
         return
       }
 
-      service.search(this.q).then((feeds) => {
+      addon.search(this.q).then((feeds) => {
         if (!feeds) {
-          this.error = 'Could not search. Perhaps it\'s a problem with your Search Service?'
+          this.error = 'Could not search. Perhaps it\'s a problem with your Search Addon?'
           return
         }
 

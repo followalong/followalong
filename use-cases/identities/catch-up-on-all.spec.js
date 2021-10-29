@@ -1,9 +1,9 @@
-import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildAddonToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Identities: Catch up on all', () => {
   it('marks all items as read', async () => {
     const app = await mountApp()
-    app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse({ title: 'Foo Bar' }))
+    app.vm.queries.addonForIdentity = buildAddonToRespondWith('rss', rawRSSResponse({ title: 'Foo Bar' }))
 
     await app.click('[aria-label="FollowAlong"]')
     expect(app.findAll('.read').length).toEqual(0)

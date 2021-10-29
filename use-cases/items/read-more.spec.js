@@ -1,4 +1,4 @@
-import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildAddonToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Items: Read more', () => {
   describe('from the home page', () => {
@@ -6,7 +6,7 @@ describe('Items: Read more', () => {
       window.scroll = () => {}
       const app = await mountApp()
       const item = { title: 'Foo bar', content: 'word '.repeat(1000) }
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
+      app.vm.queries.addonForIdentity = buildAddonToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
@@ -19,7 +19,7 @@ describe('Items: Read more', () => {
       window.scroll = jest.fn()
       const app = await mountApp()
       const item = { title: 'Foo bar', content: 'word '.repeat(1000) }
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
+      app.vm.queries.addonForIdentity = buildAddonToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')

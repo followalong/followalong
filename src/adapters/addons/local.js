@@ -1,5 +1,5 @@
 import localForage from 'localforage'
-import ServiceAdapter from '../service.js'
+import AddonAdapter from '../addon.js'
 import sortByReadAndDate from '@/queries/sorters/sort-by-read-and-date.js'
 
 const LIMIT_ITEMS = (n) => {
@@ -23,9 +23,9 @@ const LIMIT_ITEMS = (n) => {
   }
 }
 
-class LocalServiceAdapter extends ServiceAdapter {
-  constructor (adapterOptions, serviceData) {
-    super(adapterOptions, serviceData)
+class LocalAddonAdapter extends AddonAdapter {
+  constructor (adapterOptions, addonData) {
+    super(adapterOptions, addonData)
 
     this.db = localForage.createInstance({
       name: 'followalong-v1'
@@ -65,4 +65,4 @@ class LocalServiceAdapter extends ServiceAdapter {
   }
 }
 
-export default LocalServiceAdapter
+export default LocalAddonAdapter

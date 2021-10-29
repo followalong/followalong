@@ -1,4 +1,4 @@
-import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildAddonToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Feeds: Pause a feed', () => {
   let app
@@ -8,7 +8,7 @@ describe('Feeds: Pause a feed', () => {
     app = await mountApp()
     feedsLength = app.vm.queries.allFeeds().length
     const item = { title: 'Foo Bar' }
-    app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
+    app.vm.queries.addonForIdentity = buildAddonToRespondWith('rss', rawRSSResponse(item))
 
     await app.click('[aria-label="Feeds"]')
     await app.click('[aria-label^="Pause"]')
@@ -16,7 +16,7 @@ describe('Feeds: Pause a feed', () => {
   })
 
   it('does not fetch a paused feed', async () => {
-    expect(app.vm.queries.serviceForIdentity().rss).toHaveBeenCalledTimes(feedsLength - 1)
+    expect(app.vm.queries.addonForIdentity().rss).toHaveBeenCalledTimes(feedsLength - 1)
   })
 
   it('saves the identity in local storage', async () => {

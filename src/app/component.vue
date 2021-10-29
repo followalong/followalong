@@ -49,7 +49,7 @@ export default {
       type: Object,
       default: () => new State({ identities: [], feeds: [], items: [] })
     },
-    serviceAdapterOptions: {
+    addonAdapterOptions: {
       type: Object,
       default: () => {
         return {
@@ -67,7 +67,7 @@ export default {
     const queries = new Queries({
       state: this.state,
       keychainAdapter: this.keychainAdapter,
-      serviceAdapterOptions: this.serviceAdapterOptions
+      addonAdapterOptions: this.addonAdapterOptions
     })
     const commands = new Commands({
       state: this.state,

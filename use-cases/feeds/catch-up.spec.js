@@ -1,4 +1,4 @@
-import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildAddonToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Feeds: Catch up', () => {
   describe('from the feed page', () => {
@@ -7,7 +7,7 @@ describe('Feeds: Catch up', () => {
     beforeEach(async () => {
       app = await mountApp({ overrideCommands: {} })
       const item = { title: 'Foo Bar' }
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
+      app.vm.queries.addonForIdentity = buildAddonToRespondWith('rss', rawRSSResponse(item))
 
       expect(app.findAll('.read').length).toEqual(0)
 

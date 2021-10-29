@@ -6,15 +6,17 @@ var parser = new Parser({
   }
 })
 
-function getContent (identity, service, url) {
+function getContent (identity, addon, url) {
   return new Promise((resolve, reject) => {
-    service.rss(url)
+    addon.rss(url)
       .then((data) => {
         if (data && parseInt(data.status) < 300) {
           return resolve(data.body)
         }
 
-        reject(new Error(typeof data === 'object' ? data.body : 'Could not fetch feed. If you\'re not already, Try using a CORS proxy service (in Setup).'))
+        console.log(data)
+
+        reject(new Error(typeof data === 'object' ? data.body : 'Could not fetch feed. If you\'re not already, Try using a CORS proxy addon (in Setup).'))
       })
       .catch(reject)
   })
@@ -35,13 +37,13 @@ function parseItems (identity, feed, data, items, updatedAt) {
   })
 }
 
-function getFeed (identity, service, feed, updatedAt) {
+function getFeed (identity, addon, feed, updatedAt) {
   return new Promise((resolve, reject) => {
-    if (!identity || !service || !feed || !updatedAt) {
+    if (!identity || !addon || !feed || !updatedAt) {
       return reject(new Error('Missing data'))
     }
 
-    getContent(identity, service, feed.url)
+    getContent(identity, addon, feed.url)
       .then((data) => {
         delete feed.error
 

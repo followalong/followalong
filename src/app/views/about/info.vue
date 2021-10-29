@@ -31,7 +31,7 @@
     </p>
 
     <p>
-      As an added bonus, we have "Services". They can do things like provide a VPN-proxy for every request to your feeds, store your data in an S3 file, and much more coming soon.
+      As an added bonus, we have "Addons". They can do things like provide a VPN-proxy for every request to your feeds, store your data in an S3 file, and much more coming soon.
     </p>
 
     <!-- If you choose, you can sync it (encrypted end-to-end) to other devices. -->

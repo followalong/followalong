@@ -1,8 +1,8 @@
-import ServiceAdapter from '../service.js'
+import AddonAdapter from '../addon.js'
 
-class FollowAlongFreeServiceAdapter extends ServiceAdapter {
-  constructor (adapterOptions, serviceData) {
-    super(adapterOptions, serviceData)
+class FollowAlongFreeAddonAdapter extends AddonAdapter {
+  constructor (adapterOptions, addonData) {
+    super(adapterOptions, addonData)
 
     this.AWS_CONFIG = {
       endpoint: 'lambda.us-east-1.amazonaws.com',
@@ -54,4 +54,4 @@ class FollowAlongFreeServiceAdapter extends ServiceAdapter {
   }
 }
 
-export default FollowAlongFreeServiceAdapter
+export default FollowAlongFreeAddonAdapter

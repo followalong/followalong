@@ -1,6 +1,6 @@
-import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildAddonToRespondWith, rawRSSResponse } from '../helper.js'
 
-describe('Services: Change local read limit', () => {
+describe('Addons: Change local read limit', () => {
   let app
   let identity
 
@@ -22,7 +22,7 @@ describe('Services: Change local read limit', () => {
   })
 
   it('truncates to read items to the default limit', async () => {
-    const data = await app.vm.queries.serviceForIdentity(identity, 'local').db.getItem(identity.id)
+    const data = await app.vm.queries.addonForIdentity(identity, 'local').db.getItem(identity.id)
     expect(data.items.length).toEqual(150)
   })
 
@@ -34,7 +34,7 @@ describe('Services: Change local read limit', () => {
     await app.find('[aria-label="Max read limit"]').trigger('blur')
     await app.wait()
 
-    const data = await app.vm.queries.serviceForIdentity(identity, 'local').db.getItem(identity.id)
+    const data = await app.vm.queries.addonForIdentity(identity, 'local').db.getItem(identity.id)
     expect(data.items.length).toEqual(expectedLimit)
   })
 
@@ -44,7 +44,7 @@ describe('Services: Change local read limit', () => {
     await app.find('[aria-label="Max read limit"]').trigger('blur')
     await app.wait()
 
-    const data = await app.vm.queries.serviceForIdentity(identity, 'local').db.getItem(identity.id)
+    const data = await app.vm.queries.addonForIdentity(identity, 'local').db.getItem(identity.id)
     expect(data.items.map((i) => i.title)).not.toContain('Item #1')
   })
 })

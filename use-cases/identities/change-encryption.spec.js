@@ -1,4 +1,4 @@
-import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildAddonToRespondWith, rawRSSResponse } from '../helper.js'
 import { encrypt } from '@/queries/helpers/crypt.js'
 
 describe('Identities: Change encryption', () => {
@@ -22,7 +22,7 @@ describe('Identities: Change encryption', () => {
       await app.wait()
 
       const identity = app.vm.queries.findDefaultIdentity()
-      const data = await app.vm.queries.serviceForIdentity(identity, 'local').db.getItem(identity.id)
+      const data = await app.vm.queries.addonForIdentity(identity, 'local').db.getItem(identity.id)
 
       expect(typeof data).toEqual('object')
     })
@@ -30,7 +30,7 @@ describe('Identities: Change encryption', () => {
     it('removes the all passwords from memory', async () => {
       const expectedPassword = 'zyx-987'
       const app = await mountApp({
-        localServiceAdapterData: {
+        localAddonAdapterData: {
           abc: {
             id: 'abc',
             name: 'My Account',
@@ -55,7 +55,7 @@ describe('Identities: Change encryption', () => {
 
     it('restores the unencrypted identity', async () => {
       const app = await mountApp({
-        localServiceAdapterData: {
+        localAddonAdapterData: {
           abc: {
             id: 'abc',
             name: 'My Account',
@@ -115,7 +115,7 @@ describe('Identities: Change encryption', () => {
       await app.wait()
 
       const identity = app.vm.queries.findDefaultIdentity()
-      const data = await app.vm.queries.serviceForIdentity(identity, 'local').db.getItem(identity.id)
+      const data = await app.vm.queries.addonForIdentity(identity, 'local').db.getItem(identity.id)
       expect(typeof data).toEqual('string')
     })
 
@@ -149,7 +149,7 @@ describe('Identities: Change encryption', () => {
         await app.click('[aria-label="Change password"]')
 
         const identity = app.vm.queries.findDefaultIdentity()
-        const data = await app.vm.queries.serviceForIdentity(identity, 'local').db.getItem(identity.id)
+        const data = await app.vm.queries.addonForIdentity(identity, 'local').db.getItem(identity.id)
         expect(typeof data).toEqual('string')
       })
     })
@@ -157,13 +157,13 @@ describe('Identities: Change encryption', () => {
     it('restores the encrypted identity', async () => {
       const expectedPassword = 'zyx-987'
       const app = await mountApp({
-        localServiceAdapterData: {
+        localAddonAdapterData: {
           abc: {
             id: 'abc',
             name: 'My Account',
             items: [{ title: 'Foo Bar' }],
             feeds: [{ name: 'Foo Baz' }],
-            services: {
+            addons: {
               local: { encryptionStrategy: 'ask' }
             },
             encrypt: encrypt(expectedPassword)
@@ -222,7 +222,7 @@ describe('Identities: Change encryption', () => {
       await app.wait()
 
       const identity = app.vm.queries.findDefaultIdentity()
-      const data = await app.vm.queries.serviceForIdentity(identity, 'local').db.getItem(identity.id)
+      const data = await app.vm.queries.addonForIdentity(identity, 'local').db.getItem(identity.id)
       expect(typeof data).toEqual('string')
     })
 
@@ -256,7 +256,7 @@ describe('Identities: Change encryption', () => {
         await app.click('[aria-label="Change password"]')
 
         const identity = app.vm.queries.findDefaultIdentity()
-        const data = await app.vm.queries.serviceForIdentity(identity, 'local').db.getItem(identity.id)
+        const data = await app.vm.queries.addonForIdentity(identity, 'local').db.getItem(identity.id)
         expect(typeof data).toEqual('string')
       })
     })
@@ -264,13 +264,13 @@ describe('Identities: Change encryption', () => {
     it('restores the encrypted identity', async () => {
       const expectedPassword = 'zyx-987'
       const app = await mountApp({
-        localServiceAdapterData: {
+        localAddonAdapterData: {
           abc: {
             id: 'abc',
             name: 'My Account',
             items: [{ title: 'Foo Bar' }],
             feeds: [{ name: 'Foo Baz' }],
-            services: {
+            addons: {
               local: { encryptionStrategy: 'store' }
             },
             encrypt: encrypt(expectedPassword)

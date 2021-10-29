@@ -109,13 +109,13 @@ class Commands {
   }
 
   fetchFeed (identity, feed) {
-    const service = this.queries.serviceForIdentity(identity, 'rss')
+    const addon = this.queries.addonForIdentity(identity, 'rss')
     const updatedAt = Date.now()
 
     feed.fetchingAt = updatedAt
 
     return new Promise((resolve, reject) => {
-      getFeed(identity, service, feed, updatedAt)
+      getFeed(identity, addon, feed, updatedAt)
         .then((data) => {
           feed.name = data.title || data.name || feed.name
           feed.description = feed.description || data.description
@@ -179,9 +179,9 @@ class Commands {
   getLocalIdentity (id) {
     return new Promise((resolve, reject) => {
       this.queries.getLocalDecryptionFunction(id).then((func) => {
-        const service = this.queries.serviceForIdentity({ id }, 'local')
+        const addon = this.queries.addonForIdentity({ id }, 'local')
 
-        service.get(id, func)
+        addon.get(id, func)
           .then(resolve)
           .catch(reject)
       }).catch(reject)
@@ -221,9 +221,9 @@ class Commands {
     return new Promise((resolve, reject) => {
       this.queries.getLocalEncryptionFunction(identity.id)
         .then((func) => {
-          const service = this.queries.serviceForIdentity(identity, 'local')
+          const addon = this.queries.addonForIdentity(identity, 'local')
 
-          service.save(
+          addon.save(
             this.queries.identityToLocal(identity),
             func
           )
@@ -241,12 +241,12 @@ class Commands {
   }
 
   removeLocal (identity) {
-    const service = this.queries.serviceForIdentity(identity, 'local')
+    const addon = this.queries.addonForIdentity(identity, 'local')
 
     return new Promise((resolve, reject) => {
       this.keychainAdapter.remove(identity.id)
         .then(() => {
-          service.remove(identity.id)
+          addon.remove(identity.id)
             .then(resolve)
             .catch(reject)
         })
@@ -278,10 +278,10 @@ class Commands {
 
   changeLocalEncryptionStrategy (identity, encryptionStrategy) {
     return new Promise((resolve, reject) => {
-      const service = this.queries.serviceForIdentity(identity, 'local')
+      const addon = this.queries.addonForIdentity(identity, 'local')
 
       return this.keychainAdapter.add(encryptionStrategy, identity.id).then(() => {
-        service.data.encryptionStrategy = encryptionStrategy
+        addon.data.encryptionStrategy = encryptionStrategy
         this.debouncedSaveLocal(identity)
         resolve()
       }).catch(reject)
@@ -290,9 +290,9 @@ class Commands {
 
   changeMaxReadLimit (identity, maxReadLimit) {
     return new Promise((resolve, reject) => {
-      const service = this.queries.serviceForIdentity(identity, 'local')
+      const addon = this.queries.addonForIdentity(identity, 'local')
 
-      service.data.maxReadLimit = Math.max(0, parseInt(maxReadLimit || 150))
+      addon.data.maxReadLimit = Math.max(0, parseInt(maxReadLimit || 150))
 
       this.debouncedSaveLocal(identity)
 

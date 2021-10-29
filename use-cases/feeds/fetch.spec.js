@@ -1,4 +1,4 @@
-import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildAddonToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Feeds: Fetch', () => {
   describe('from the feeds page', () => {
@@ -8,7 +8,7 @@ describe('Feeds: Fetch', () => {
     beforeEach(async () => {
       app = await mountApp()
       item = { title: 'Foo Bar' }
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
+      app.vm.queries.addonForIdentity = buildAddonToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label^="Fetch"]')
@@ -33,7 +33,7 @@ describe('Feeds: Fetch', () => {
     beforeEach(async () => {
       app = await mountApp()
       item = { title: 'Foo Bar' }
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
+      app.vm.queries.addonForIdentity = buildAddonToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label^="Visit"]')
@@ -56,7 +56,7 @@ describe('Feeds: Fetch', () => {
     const app = await mountApp()
     const feed = app.vm.state.findAll('feeds')[0]
     const item = { guid: 123, title: 'Foo Bar', pubDate: new Date() }
-    app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
+    app.vm.queries.addonForIdentity = buildAddonToRespondWith('rss', rawRSSResponse(item))
 
     await app.click('[aria-label="Feeds"]')
     await app.click('[aria-label^="Visit"]')
@@ -65,7 +65,7 @@ describe('Feeds: Fetch', () => {
     await app.click(`[aria-label="Read ${item.title}"]`)
 
     const oldItem = { guid: 456, title: 'Baz Bar', pubDate: new Date(0) }
-    app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(oldItem))
+    app.vm.queries.addonForIdentity = buildAddonToRespondWith('rss', rawRSSResponse(oldItem))
     await app.click('[aria-label="Toggle Menu"]')
     await app.click('[aria-label^="Fetch"]')
 

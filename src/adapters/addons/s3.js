@@ -1,10 +1,10 @@
-import ServiceAdapter from '../service.js'
+import AddonAdapter from '../addon.js'
 
 const STRIP_SLASHES = /^\/|\/$/g
 
-class S3ServiceAdapter extends ServiceAdapter {
+class S3AddonAdapter extends AddonAdapter {
   get () {
-    return Promise.reject('`S3ServiceAdapter.get` not yet implemented.')
+    return Promise.reject('`S3AddonAdapter.get` not yet implemented.')
   }
 
   save (data) {
@@ -45,7 +45,7 @@ class S3ServiceAdapter extends ServiceAdapter {
   }
 
   remove () {
-    return Promise.reject('`S3ServiceAdapter.remove` not yet implemented.')
+    return Promise.reject('`S3AddonAdapter.remove` not yet implemented.')
   }
 }
 
@@ -63,7 +63,7 @@ class S3ServiceAdapter extends ServiceAdapter {
 //   fields: {
 //     name: {
 //       type: 'text',
-//       label: 'Service Name',
+//       label: 'Addon Name',
 //       required: true
 //     },
 //     endpoint: {
@@ -100,4 +100,4 @@ class S3ServiceAdapter extends ServiceAdapter {
 //   request: s3Sync
 // },
 
-export default S3ServiceAdapter
+export default S3AddonAdapter

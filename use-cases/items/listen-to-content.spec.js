@@ -1,4 +1,4 @@
-import { mountApp, buildServiceToRespondWith, rawRSSResponse } from '../helper.js'
+import { mountApp, buildAddonToRespondWith, rawRSSResponse } from '../helper.js'
 
 describe('Items: Listen to content', () => {
   describe('from the item page', () => {
@@ -6,7 +6,7 @@ describe('Items: Listen to content', () => {
       const app = await mountApp()
       const item = { audioUrl: 'https://example.com/audio.mp3' }
       const feedsLength = app.vm.queries.allFeeds().length
-      app.vm.queries.serviceForIdentity = buildServiceToRespondWith('rss', rawRSSResponse(item))
+      app.vm.queries.addonForIdentity = buildAddonToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')

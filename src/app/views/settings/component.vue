@@ -8,7 +8,7 @@
       <div class="field">
         <p>
           Thanks for using FollowAlong.
-          <span class="highlight">Your data stays only on <em>this device</em>, optionally encrypted and backed up to a service of your choice.</span>
+          <span class="highlight">Your data stays only on <em>this device</em>, optionally encrypted and backed up to an addon of your choice.</span>
         </p>
       </div>
 
@@ -42,7 +42,7 @@
             v-model="maxReadLimit"
             type="number"
             min="1"
-            :placeholder="localService.data.maxReadLimit"
+            :placeholder="localAddon.data.maxReadLimit"
             aria-label="Max read limit"
             @blur="app.commands.changeMaxReadLimit(app.identity, maxReadLimit)"
           >
@@ -70,7 +70,7 @@
         </select>
 
         <a
-          v-if="app.queries.hasChangeablePassword(localService)"
+          v-if="app.queries.hasChangeablePassword(localAddon)"
           href="javascript:;"
           class="hint"
           aria-label="Change password"
@@ -152,12 +152,12 @@ export default {
     }
   },
   computed: {
-    localService () {
-      return this.app.queries.serviceForIdentity(this.app.identity, 'local')
+    localAddon () {
+      return this.app.queries.addonForIdentity(this.app.identity, 'local')
     }
   },
   watch: {
-    'localService.data.encryptionStrategy' () {
+    'localAddon.data.encryptionStrategy' () {
       this.init()
     }
   },
@@ -176,8 +176,8 @@ export default {
         this.localSize = localSize
       })
 
-      this.encryptionStrategy = this.localService.data.encryptionStrategy
-      this.maxReadLimit = this.localService.data.maxReadLimit
+      this.encryptionStrategy = this.localAddon.data.encryptionStrategy
+      this.maxReadLimit = this.localAddon.data.maxReadLimit
     },
     changeEncryption ($event) {
       $event.stopImmediatePropagation()

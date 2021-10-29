@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import SERVICES from '@/commands/services.js'
+// import SERVICES from '@/commands/addons.js'
 
 var stripe; /* var elements; */ var card
 
@@ -59,40 +59,40 @@ export default {
     //
     //       card.mount(_.$refs.card)
     //     })
-  },
-  methods: {
-    purchase () {
-      var _ = this
-
-      _.handler.error(undefined)
-      _.handler.isLoading = true
-
-      stripe.createToken(card).then(function (result) {
-        if (result.error) {
-          _.handler.error(result.error.message)
-        } else {
-          SERVICES[0].request({}, {}, {
-            action: 'subscribe',
-            token: result.token.id
-          }, function (err, response) {
-            if (err) {
-              _.handler.error(err.message)
-            } else if (response.body) {
-              if (response.status === 200) {
-                _.submit(response.body)
-              } else {
-                _.handler.error(response.body)
-              }
-            } else {
-              console.error(response)
-              _.handler.error('Something went wrong.')
-            }
-          })
-        }
-      }).catch(function (err) {
-        _.handler.error(err.message)
-      })
-    }
   }
+//   methods: {
+//     purchase () {
+//       var _ = this
+//
+//       _.handler.error(undefined)
+//       _.handler.isLoading = true
+//
+//       stripe.createToken(card).then(function (result) {
+//         if (result.error) {
+//           _.handler.error(result.error.message)
+//         } else {
+//           SERVICES[0].request({}, {}, {
+//             action: 'subscribe',
+//             token: result.token.id
+//           }, function (err, response) {
+//             if (err) {
+//               _.handler.error(err.message)
+//             } else if (response.body) {
+//               if (response.status === 200) {
+//                 _.submit(response.body)
+//               } else {
+//                 _.handler.error(response.body)
+//               }
+//             } else {
+//               console.error(response)
+//               _.handler.error('Something went wrong.')
+//             }
+//           })
+//         }
+//       }).catch(function (err) {
+//         _.handler.error(err.message)
+//       })
+//     }
+//   }
 }
 </script>

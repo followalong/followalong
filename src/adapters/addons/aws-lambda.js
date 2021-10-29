@@ -39,7 +39,7 @@
 // //   fields: {
 // //     name: {
 // //       type: 'text',
-// //       label: 'Service Name',
+// //       label: 'Addon Name',
 // //       required: true
 // //     },
 // //     endpoint: {

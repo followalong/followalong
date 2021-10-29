@@ -1,5 +1,5 @@
-import LocalServiceAdapter from '@/adapters/services/local.js'
-import FollowAlongFreeServiceAdapter from '@/adapters/services/followalong-free.js'
+import LocalAddonAdapter from '@/adapters/addons/local.js'
+import FollowAlongFreeAddonAdapter from '@/adapters/addons/followalong-free.js'
 import sortByReadAndDate from './sorters/sort-by-read-and-date.js'
 import sortByName from './sorters/sort-by-name.js'
 import sortByNeedToUpdate from './sorters/sort-by-need-to-update.js'
@@ -46,14 +46,14 @@ class Queries {
     return this.state.find('identities', (i) => i.id === feed.identityId)
   }
 
-  serviceForIdentity (identity, type) {
-    identity.services = identity.services || {}
-    identity.services[type] = identity.services[type] || {}
+  addonForIdentity (identity, type) {
+    identity.addons = identity.addons || {}
+    identity.addons[type] = identity.addons[type] || {}
 
     if (type === 'local') {
-      return new LocalServiceAdapter(this.serviceAdapterOptions, identity.services[type])
+      return new LocalAddonAdapter(this.addonAdapterOptions, identity.addons[type])
     } else {
-      return new FollowAlongFreeServiceAdapter(this.serviceAdapterOptions, identity.services[type])
+      return new FollowAlongFreeAddonAdapter(this.addonAdapterOptions, identity.addons[type])
     }
   }
 
@@ -104,7 +104,7 @@ class Queries {
       hints: identity.hints,
       feeds: this.feedsForIdentity(identity),
       items: this.itemsForIdentity(identity),
-      services: identity.services
+      addons: identity.addons
     }
   }
 
@@ -245,8 +245,8 @@ class Queries {
     return getImageSrc(item)
   }
 
-  hasChangeablePassword (service) {
-    return service.data.encryptionStrategy === 'ask' || service.data.encryptionStrategy === 'store'
+  hasChangeablePassword (addon) {
+    return addon.data.encryptionStrategy === 'ask' || addon.data.encryptionStrategy === 'store'
   }
 
   hasStorageSupport () {
