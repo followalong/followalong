@@ -4,12 +4,12 @@
   </div>
 
   <p>
-    External addons are not required, but they can improve load times, search results, cache images, allow for syncing and publishing, and much more.
+    External add-ons are not required, but they can improve your experience (eg. better load times, search results, cache images, allow for syncing and publishing, and much more).
   </p>
 
   <div
-    v-for="(addonType, key) in addonTypes"
-    :key="key"
+    v-for="(addonType, type) in addonTypes"
+    :key="`addon-${type}`"
     :title="addonType.shortName"
     class="addon"
   >
@@ -19,23 +19,54 @@
       <button
         class="button button-small"
         :aria-label="`Change ${addonType.shortName} addon`"
+        @click="edit(addonType)"
       >
         Change
       </button>
-      FollowAlong Free
+      <span
+        :aria-label="`${addonType.shortName} provider`"
+      >
+        {{ app.queries.addonForIdentity(app.identity, type).name }}
+      </span>
+      {{ app.queries.addonForIdentity(app.identity, type).data }}
     </h3>
   </div>
+
+  <Editor
+    :app="app"
+    :type="editType"
+    :close="close"
+    :save="save"
+  />
 </template>
 
 <script>
-import SERVICE_TYPES from './types.js'
+import ADDON_TYPES from './types.js'
+import Editor from './editor.vue'
 
 export default {
+  components: {
+    Editor
+  },
   props: ['app'],
   data () {
     return {
-      selectedAddonType: SERVICE_TYPES.rss,
-      addonTypes: SERVICE_TYPES
+      editType: null,
+      addonTypes: ADDON_TYPES
+    }
+  },
+  methods: {
+    serviceFor (type) {
+
+    },
+    edit (type) {
+      this.editType = type
+    },
+    close () {
+      this.editType = null
+    },
+    save (addonData) {
+      this.editType = null
     }
   }
 }

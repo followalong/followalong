@@ -202,9 +202,9 @@
           }
         }
 
-        .hint {
-          display: inline-block;
-        }
+        // .hint {
+        //   display: inline-block;
+        // }
       }
 
       .description {
@@ -249,6 +249,15 @@
       }
     }
 
+    .hint {
+      font-size: 0.85rem;
+      margin-top: 1rem;
+      line-height: 1.4 !important;
+
+      a {
+        color: var(--link-color);
+      }
+    }
   }
 
   input[type="email"], input[type="text"], input[type="date"], input[type="password"], input[type="number"], select, textarea {
@@ -321,20 +330,20 @@
   }
 }
 
-.hint {
-  display: block;
-  opacity: 0.5;
-  margin-bottom: 5px;
+// .hint {
+//   display: block;
+//   opacity: 0.5;
+//   margin-bottom: 5px;
 
-  &.hint-after {
-    margin-top: 5px;
-    margin-bottom: 0;
-  }
+//   &.hint-after {
+//     margin-top: 5px;
+//     margin-bottom: 0;
+//   }
 
-  a {
-    text-decoration: underline;
-  }
-}
+//   a {
+//     text-decoration: underline;
+//   }
+// }
 
 .secure-note {
   @include clearfix();
@@ -690,7 +699,6 @@ hr {
     // font-weight: bold;
     background: var(--bg-color);
     padding: 1rem;
-    font-size: 1.25rem;
     border-radius: 8px;
   }
 

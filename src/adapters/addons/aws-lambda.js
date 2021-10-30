@@ -1,3 +1,13 @@
+import AddonAdapter from '../addon.js'
+
+class AWSAddonAdapter extends AddonAdapter {
+  constructor (adapterOptions, addonData) {
+    super(adapterOptions, addonData)
+    this.name = this.data.name || 'AWS Lambda'
+    this.supports = []
+  }
+}
+
 // function lambdaPassthrough (override) {
 //   override = override || {}
 //
@@ -74,3 +84,5 @@
 // //   },
 // //   request: lambdaPassthrough()
 // // }
+
+export default AWSAddonAdapter

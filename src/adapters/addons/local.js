@@ -26,6 +26,8 @@ const LIMIT_ITEMS = (n) => {
 class LocalAddonAdapter extends AddonAdapter {
   constructor (adapterOptions, addonData) {
     super(adapterOptions, addonData)
+    this.name = this.data.name || 'Local'
+    this.supports = ['local']
 
     this.db = localForage.createInstance({
       name: 'followalong-v1'

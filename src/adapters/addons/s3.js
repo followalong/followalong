@@ -1,53 +1,62 @@
+// const STRIP_SLASHES = /^\/|\/$/g
+
 import AddonAdapter from '../addon.js'
 
-const STRIP_SLASHES = /^\/|\/$/g
-
 class S3AddonAdapter extends AddonAdapter {
-  get () {
-    return Promise.reject('`S3AddonAdapter.get` not yet implemented.')
-  }
-
-  save (data) {
-    var key = this.data.key.replace(STRIP_SLASHES, '')
-    var s3 = new AWS.S3({
-      endpoint: new AWS.Endpoint(this.data.endpoint),
-      accessKeyId: this.data.accessKeyId,
-      secretAccessKey: this.data.secretAccessKey,
-      region: this.data.region,
-      apiVersion: 'latest',
-      maxRetries: 1
-    })
-
-    return new Promise((resolve, reject) => {
-      s3.getObject({
-        Bucket: this.data.bucket,
-        Key: key
-      }, function (err, oldData) {
-        try {
-          // utils.mergeData(identity, JSON.parse(oldData.Body.toString()))
-        } catch (e) { }
-
-        s3.putObject({
-          Body: JSON.stringify(data.identity),
-          Bucket: this.data.bucket,
-          Key: key
-        }, function (err) {
-          identity.saveLocal().then(() => {
-            if (err) {
-              return reject(err)
-            }
-
-            resolve(data.identity)
-          })
-        })
-      })
-    })
-  }
-
-  remove () {
-    return Promise.reject('`S3AddonAdapter.remove` not yet implemented.')
+  constructor (adapterOptions, addonData) {
+    super(adapterOptions, addonData)
+    this.name = this.data.name || 'S3'
+    this.supports = []
   }
 }
+
+export default S3AddonAdapter
+
+// get () {
+//   return Promise.reject(new Error('`S3AddonAdapter.get` not yet implemented.'))
+// }
+
+//   save (data) {
+//     var key = this.data.key.replace(STRIP_SLASHES, '')
+//     var s3 = new this.AWS.S3({
+//       endpoint: new this.AWS.Endpoint(this.data.endpoint),
+//       accessKeyId: this.data.accessKeyId,
+//       secretAccessKey: this.data.secretAccessKey,
+//       region: this.data.region,
+//       apiVersion: 'latest',
+//       maxRetries: 1
+//     })
+//
+//     return new Promise((resolve, reject) => {
+//       s3.getObject({
+//         Bucket: this.data.bucket,
+//         Key: key
+//       }, function (err, oldData) {
+//         try {
+//           // utils.mergeData(identity, JSON.parse(oldData.Body.toString()))
+//         } catch (e) { }
+//
+//         s3.putObject({
+//           Body: JSON.stringify(data.identity),
+//           Bucket: this.data.bucket,
+//           Key: key
+//         }, function (err) {
+//           data.identity.saveLocal().then(() => {
+//             if (err) {
+//               return reject(err)
+//             }
+//
+//             resolve(data.identity)
+//           })
+//         })
+//       })
+//     })
+//   }
+//
+//   remove () {
+//     return Promise.reject(new Error('`S3AddonAdapter.remove` not yet implemented.'))
+//   }
+// }
 
 // {
 //   id: 's3',
@@ -99,5 +108,3 @@ class S3AddonAdapter extends AddonAdapter {
 //   },
 //   request: s3Sync
 // },
-
-export default S3AddonAdapter

@@ -107,7 +107,7 @@
           aria-label="Addons"
         >
           <font-awesome-icon icon="sitemap" />
-          Addons
+          Add-ons
         </router-link>
       </li>
 

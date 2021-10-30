@@ -52,7 +52,9 @@ class Queries {
 
     if (type === 'local') {
       return new LocalAddonAdapter(this.addonAdapterOptions, identity.addons[type])
-    } else {
+    } else if (type === 'rss') {
+      return new FollowAlongFreeAddonAdapter(this.addonAdapterOptions, identity.addons[type])
+    } else if (type === 'search') {
       return new FollowAlongFreeAddonAdapter(this.addonAdapterOptions, identity.addons[type])
     }
   }

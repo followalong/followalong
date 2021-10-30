@@ -1,3 +1,21 @@
+import AddonAdapter from '../addon.js'
+
+class FollowAlongUnlimitedAddonAdapter extends AddonAdapter {
+  constructor (adapterOptions, addonData) {
+    super(adapterOptions, addonData)
+    this.name = this.data.name || 'FollowAlong Unlimited'
+    this.supports = []
+    this.fields = {
+      card: {
+        type: 'text',
+        label: 'Credit Card'
+      }
+    }
+  }
+}
+
+export default FollowAlongUnlimitedAddonAdapter
+
 // {
 //   id: 'followalong-unlimited',
 //   name: 'FollowAlong Unlimited',

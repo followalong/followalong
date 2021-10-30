@@ -1,6 +1,7 @@
 class AddonAdapter {
   constructor (adapterOptions, addonData) {
     this.data = addonData || {}
+    this.fields = []
 
     for (const key in adapterOptions) {
       this[key] = adapterOptions[key]
