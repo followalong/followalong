@@ -49,9 +49,8 @@ class Queries {
     identity.addons = identity.addons || {}
     identity.addons[type] = identity.addons[type] || {}
 
-    type = type === 'local' ? 'local' : identity.addons[type].adapter
-
-    const Addon = getAddonAdapterByType(type)
+    const addonAdapter = type === 'local' ? 'local' : identity.addons[type].adapter
+    const Addon = getAddonAdapterByType(addonAdapter)
 
     return new Addon(this.addonAdapterOptions, identity.addons[type])
   }

@@ -6,7 +6,7 @@ class CORSAnywhere extends AddonAdapter {
 
     this.adapter = 'cors-anywhere'
     this.name = this.data.name || 'CORS Anywhere'
-    this.description = this.data.description || 'Use the "CORS Anywhere" demo server! Please don\'t abuse this addon, as you can <a href="https://github.com/Rob--W/cors-anywhere" target="_blank" class="link" onclick="event.stopImmediatePropagation();">quickly deploy your own version</a> to Heroku (or elsewhere).'
+    this.description = this.data.description || 'Use the "CORS Anywhere" demo server! Please don\'t abuse this addon, as you can <a href="https://github.com/Lewiscowles1986/cors-anywhere" target="_blank" class="link" onclick="event.stopImmediatePropagation();">quickly deploy your own version</a> to Heroku (or elsewhere).'
     this.data.url = this.data.url || 'https://cors-anywhere.herokuapp.com/'
     this.supports = ['rss']
     this.fields = {
@@ -20,10 +20,10 @@ class CORSAnywhere extends AddonAdapter {
   }
 
   rss (url) {
-    const x = new XMLHttpRequest()
-
     return new Promise((resolve, reject) => {
       if (!url) return reject(new Error('No URL supplied.'))
+
+      const x = new XMLHttpRequest()
 
       x.open('GET', (this.data.url || '') + url)
 

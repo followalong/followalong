@@ -14,8 +14,6 @@ function getContent (identity, addon, url) {
           return resolve(data.body)
         }
 
-        console.log(data)
-
         reject(new Error(typeof data === 'object' ? data.body : 'Could not fetch feed. If you\'re not already, Try using a CORS proxy addon (in Setup).'))
       })
       .catch(reject)
