@@ -23,22 +23,18 @@ class CORSAnywhere extends AddonAdapter {
     return new Promise((resolve, reject) => {
       if (!url) return reject(new Error('No URL supplied.'))
 
-      const x = new XMLHttpRequest()
-
-      x.open('GET', (this.data.url || '') + url)
-
-      x.onload = x.onerror = () => {
-        if (x.status === 200) {
-          resolve({
-            status: x.status,
-            body: x.responseText
-          })
-        } else {
-          reject(new Error(x.responseText))
-        }
-      }
-
-      x.send()
+      this.fetch((this.data.url || '') + url)
+        .then((response) => {
+          if (response.ok) {
+            resolve({
+              status: response.status,
+              body: response.text()
+            })
+          } else {
+            reject(new Error(response.text()))
+          }
+        })
+        .catch(reject)
     })
   }
 }

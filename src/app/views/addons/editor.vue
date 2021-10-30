@@ -15,8 +15,10 @@
         >&times;</a>
         <h3>{{ addonType.name }}</h3>
         <p>{{ addonType.description }}</p>
+        {{ addons[1].adapter }} : {{ selectedAddonAdapter }}
         <form
           v-if="selectedAddon"
+          :aria-label="`Save ${addonType.shortName} addon`"
           @submit.prevent="save"
         >
           <div
@@ -53,6 +55,7 @@
               :type="field.type"
               :required="field.required"
               :placeholder="field.placeholder"
+              :aria-label="`${addonType.shortName} addon ${key}`"
             >
             <p
               class="hint"
@@ -61,7 +64,6 @@
           </div>
           <div class="actions">
             <button
-              :aria-label="`Save ${addonType.shortName} addon`"
               type="submit"
             >
               Save

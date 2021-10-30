@@ -28,7 +28,7 @@ const mountApp = (options) => {
       Lambda: AWSLambda,
       Endpoint: AWSEndpoint
     }
-    addonAdapterOptions.fetch = jest.fn(() => Promise.resolve())
+    addonAdapterOptions.fetch = addonAdapterOptions.fetch || jest.fn(() => Promise.resolve())
 
     const keychainAdapter = new KeychainAdapter({
       prompt: jest.fn(() => 'abc-123')
@@ -222,5 +222,6 @@ const flushPromisesAndTimers = () => {
 export {
   mountApp,
   buildAddonToRespondWith,
-  rawRSSResponse
+  rawRSSResponse,
+  rawRSS
 }
