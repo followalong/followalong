@@ -4,6 +4,7 @@ class CORSAnywhere extends AddonAdapter {
   constructor (adapterOptions, addonData) {
     super(adapterOptions, addonData)
 
+    this.adapter = 'cors-anywhere'
     this.name = this.data.name || 'CORS Anywhere'
     this.description = this.data.description || 'Use the "CORS Anywhere" demo server! Please don\'t abuse this addon, as you can <a href="https://github.com/Rob--W/cors-anywhere" target="_blank" class="link" onclick="event.stopImmediatePropagation();">quickly deploy your own version</a> to Heroku (or elsewhere).'
     this.data.url = this.data.url || 'https://cors-anywhere.herokuapp.com/'

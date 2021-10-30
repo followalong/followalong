@@ -4,6 +4,7 @@
       <button
         :class="'float-right ' + (app.identity.isLoading ? 'loading' : '')"
         aria-label="Fetch all feeds"
+        class="button-gray button-small float-right"
         @click="app.commands.fetchAllFeeds(app.identity)"
       >
         <span v-if="app.identity.isLoading">Loading...</span>

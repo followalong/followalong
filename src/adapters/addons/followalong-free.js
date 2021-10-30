@@ -3,6 +3,8 @@ import AddonAdapter from '../addon.js'
 class FollowAlongFreeAddonAdapter extends AddonAdapter {
   constructor (adapterOptions, addonData) {
     super(adapterOptions, addonData)
+
+    this.adapter = 'followalong-free'
     this.name = this.data.name || 'FollowAlong Free'
     this.supports = ['rss', 'search']
 

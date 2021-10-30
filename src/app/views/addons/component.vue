@@ -28,15 +28,24 @@
       >
         {{ app.queries.addonForIdentity(app.identity, type).name }}
       </span>
-      {{ app.queries.addonForIdentity(app.identity, type).data }}
     </h3>
   </div>
 
+  <p>
+    If you're a developer and are interested in expanding our Add-ons,
+    <router-link
+      to="/help"
+      class="link"
+    >
+      get in touch.
+    </router-link>
+  </p>
+
   <Editor
+    v-if="editDetails"
     :app="app"
-    :type="editType"
+    :existing="editDetails"
     :close="close"
-    :save="save"
   />
 </template>
 
@@ -51,22 +60,19 @@ export default {
   props: ['app'],
   data () {
     return {
-      editType: null,
+      editDetails: null,
       addonTypes: ADDON_TYPES
     }
   },
   methods: {
-    serviceFor (type) {
-
-    },
-    edit (type) {
-      this.editType = type
+    edit (addonType) {
+      this.editDetails = {
+        addonType,
+        addon: this.app.queries.addonForIdentity(this.app.identity, addonType.key)
+      }
     },
     close () {
-      this.editType = null
-    },
-    save (addonData) {
-      this.editType = null
+      this.editDetails = null
     }
   }
 }

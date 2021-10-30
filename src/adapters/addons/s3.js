@@ -5,6 +5,8 @@ import AddonAdapter from '../addon.js'
 class S3AddonAdapter extends AddonAdapter {
   constructor (adapterOptions, addonData) {
     super(adapterOptions, addonData)
+
+    this.adapter = 's3'
     this.name = this.data.name || 'S3'
     this.supports = []
   }

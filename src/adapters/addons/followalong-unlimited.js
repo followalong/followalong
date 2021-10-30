@@ -3,6 +3,8 @@ import AddonAdapter from '../addon.js'
 class FollowAlongUnlimitedAddonAdapter extends AddonAdapter {
   constructor (adapterOptions, addonData) {
     super(adapterOptions, addonData)
+
+    this.adapter = 'followalong-unlimited'
     this.name = this.data.name || 'FollowAlong Unlimited'
     this.supports = []
     this.fields = {

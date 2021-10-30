@@ -1,34 +1,37 @@
 <template>
   <div
-    v-if="type"
+    v-if="addonType"
     class="modal"
   >
-    <div class="content-wrapper">
+    <div class="modal-content-wrapper">
       <div
         class="overlay"
         @click="close"
       />
-      <div class="content">
+      <div class="modal-content">
         <a
           class="close"
           @click="close"
         >&times;</a>
-        <h3>{{ type.name }}</h3>
-        <p>{{ type.description }}</p>
-        <form @submit="save">
+        <h3>{{ addonType.name }}</h3>
+        <p>{{ addonType.description }}</p>
+        <form
+          v-if="selectedAddon"
+          @submit.prevent="save"
+        >
           <div
             class="field"
           >
             <label for="service-name">Which service would you like to use?</label>
             <select
               id="service-name"
-              v-model="selectedAddon"
-              :aria-label="`${type.shortName} addon name`"
+              v-model="selectedAddonAdapter"
+              :aria-label="`${addonType.shortName} addon name`"
             >
               <option
                 v-for="addon in addons"
-                :key="addon.key"
-                :value="addon"
+                :key="addon.adapter"
+                :value="addon.adapter"
               >
                 {{ addon.name }}
               </option>
@@ -46,7 +49,7 @@
             <label :for="`field-${key}`">{{ field.label }}</label>
             <input
               :id="`field-${key}`"
-              v-model="data[key]"
+              v-model="selectedAddon.data[key]"
               :type="field.type"
               :required="field.required"
               :placeholder="field.placeholder"
@@ -58,7 +61,7 @@
           </div>
           <div class="actions">
             <button
-              :aria-label="`Save ${type.shortName} addon`"
+              :aria-label="`Save ${addonType.shortName} addon`"
               type="submit"
             >
               Save
@@ -71,34 +74,40 @@
 </template>
 
 <script>
-import ADDONS from '@/adapters/addons/index.js'
+import { ADDONS } from '@/adapters/addons/index.js'
 
 export default {
-  props: ['app', 'type', 'close', 'save'],
+  props: ['app', 'existing', 'close'],
   data () {
     return {
-      selectedAddon: null,
-      data: {}
+      selectedAddonAdapter: this.existing.addon.adapter,
+      existingAddon: this.existing.addon,
+      addonType: this.existing.addonType
     }
   },
   computed: {
     addons () {
-      return ADDONS.map((Addon) => {
-        return new Addon()
-      }).filter((addon) => addon.supports.indexOf(this.type.key) !== -1)
+      return ADDONS
+        .map((Addon) => new Addon({}, Object.assign({}, this.existing.addon.data)))
+        .filter((addon) => addon.supports.indexOf(this.addonType.key) !== -1)
+    },
+    selectedAddon () {
+      return this.addons.find((a) => a.adapter === this.selectedAddonAdapter)
     }
   },
-  watch: {
-    selectedAddon () {
-      this.data = Object.assign({}, this.selectedAddon.data)
-    },
-    type (val) {
-      if (val) {
-        document.body.style.overflow = 'hidden'
-        this.selectedAddon = this.app.queries.addonForIdentity(this.app.identity, this.type.key)
-      } else {
-        document.body.style.overflow = ''
-      }
+  mounted () {
+    document.body.style.overflow = 'hidden'
+  },
+  unmounted () {
+    document.body.style.overflow = ''
+  },
+  methods: {
+    save () {
+      this.app.identity.addons = this.app.identity.addons || {}
+      this.app.identity.addons[this.addonType.key] = this.selectedAddon.data || {}
+      this.app.identity.addons[this.addonType.key].adapter = this.selectedAddonAdapter
+      this.app.commands.saveLocal(this.app.identity)
+      this.close()
     }
   }
 }

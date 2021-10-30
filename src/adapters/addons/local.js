@@ -26,15 +26,16 @@ const LIMIT_ITEMS = (n) => {
 class LocalAddonAdapter extends AddonAdapter {
   constructor (adapterOptions, addonData) {
     super(adapterOptions, addonData)
+
+    this.adapter = 'local'
     this.name = this.data.name || 'Local'
     this.supports = ['local']
+    this.data.encryptionStrategy = this.data.encryptionStrategy || 'none'
+    this.data.maxReadLimit = this.data.maxReadLimit || 150
 
     this.db = localForage.createInstance({
       name: 'followalong-v1'
     })
-
-    this.data.encryptionStrategy = this.data.encryptionStrategy || 'none'
-    this.data.maxReadLimit = this.data.maxReadLimit || 150
   }
 
   save (identityData, encrypt) {

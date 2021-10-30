@@ -237,7 +237,7 @@ class Commands {
   debouncedSaveLocal (identity, data) {
     return debouncedPromise(() => {
       this.saveLocal(identity, data)
-    }, 300, this)
+    }, 750, this)
   }
 
   removeLocal (identity) {

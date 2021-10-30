@@ -6,7 +6,7 @@ import Local from './local.js'
 import None from './none.js'
 import S3 from './s3.js'
 
-export default [
+const ADDONS = [
   None,
   Local,
   FollowAlongFree,
@@ -15,3 +15,15 @@ export default [
   AWSLambda,
   S3
 ]
+
+const getAddonAdapterByType = (adapter) => {
+  for (let i = 0; i < ADDONS.length; i++) {
+    if (new ADDONS[i]().adapter === adapter) {
+      return ADDONS[i]
+    }
+  }
+
+  return FollowAlongFree
+}
+
+export { ADDONS, getAddonAdapterByType }

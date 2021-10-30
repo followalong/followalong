@@ -44,11 +44,12 @@
     >
       {{ feed.error }}
     </p>
-    <p>
-      <a
+    <p class="hint">
+      Source: <a
+        target="_blank"
         :href="feed.url"
-        class="hint"
-      >Source: {{ feed.url }}</a>
+        class="link"
+      >{{ feed.url }}</a>
     </p>
   </li>
 </template>

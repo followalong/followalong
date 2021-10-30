@@ -3,6 +3,8 @@ import AddonAdapter from '../addon.js'
 class AWSAddonAdapter extends AddonAdapter {
   constructor (adapterOptions, addonData) {
     super(adapterOptions, addonData)
+
+    this.adapter = 'aws-lambda'
     this.name = this.data.name || 'AWS Lambda'
     this.supports = []
   }

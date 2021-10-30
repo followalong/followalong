@@ -4,13 +4,14 @@
   </div>
 
   <p>
-    Need some help?
-    Email <a
+    Email us at <a
       href="mailto:followalong@protonmail.com"
       target="_blank"
       class="link"
     >followalong@protonmail.com</a>.
-    We respond to mail once a day.
+  </p>
+  <p>
+    We typically respond to mail once a week.
   </p>
 </template>
 

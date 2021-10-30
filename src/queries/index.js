@@ -1,5 +1,4 @@
-import LocalAddonAdapter from '@/adapters/addons/local.js'
-import FollowAlongFreeAddonAdapter from '@/adapters/addons/followalong-free.js'
+import { getAddonAdapterByType } from '@/adapters/addons/index.js'
 import sortByReadAndDate from './sorters/sort-by-read-and-date.js'
 import sortByName from './sorters/sort-by-name.js'
 import sortByNeedToUpdate from './sorters/sort-by-need-to-update.js'
@@ -50,13 +49,11 @@ class Queries {
     identity.addons = identity.addons || {}
     identity.addons[type] = identity.addons[type] || {}
 
-    if (type === 'local') {
-      return new LocalAddonAdapter(this.addonAdapterOptions, identity.addons[type])
-    } else if (type === 'rss') {
-      return new FollowAlongFreeAddonAdapter(this.addonAdapterOptions, identity.addons[type])
-    } else if (type === 'search') {
-      return new FollowAlongFreeAddonAdapter(this.addonAdapterOptions, identity.addons[type])
-    }
+    type = type === 'local' ? 'local' : identity.addons[type].adapter
+
+    const Addon = getAddonAdapterByType(type)
+
+    return new Addon(this.addonAdapterOptions, identity.addons[type])
   }
 
   feedsForIdentity (identity) {
