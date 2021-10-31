@@ -1,12 +1,4 @@
 export default {
-  // local: {
-  //   shortName: 'Local',
-  //   key: 'local',
-  //   name: 'Local Storage',
-  //   description: `
-  //     Change the settings for this device.
-  //   `
-  // },
   rss: {
     shortName: 'RSS',
     key: 'rss',
@@ -37,7 +29,7 @@ export default {
     description: `
       Provide a smarter, faster search.
     `
-  }
+  },
   // media: {
   //   shortName: 'Media',
   //   key: 'media',
@@ -50,4 +42,12 @@ export default {
   //   name: 'Ads Proxy',
   //   description: 'Opt-in to receive ads which compensate the feeds you follow.',
   // }
+  local: {
+    shortName: 'Local',
+    key: 'local',
+    name: 'Local Storage',
+    description: `
+      Change the settings for this device.
+    `
+  }
 }

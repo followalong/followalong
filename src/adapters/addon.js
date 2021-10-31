@@ -68,6 +68,10 @@ class AddonAdapter {
     }
   }
 
+  preview () {
+    return this.data.name || this.name
+  }
+
   _buildObj (obj) {
     if (!obj) {
       return undefined

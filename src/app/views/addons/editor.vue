@@ -15,13 +15,13 @@
         >&times;</a>
         <h3>{{ addonType.name }}</h3>
         <p>{{ addonType.description }}</p>
-        {{ addons[1].adapter }} : {{ selectedAddonAdapter }}
         <form
           v-if="selectedAddon"
           :aria-label="`Save ${addonType.shortName} addon`"
           @submit.prevent="save"
         >
           <div
+            v-if="addons.length > 1"
             class="field"
           >
             <label for="service-name">Which service would you like to use?</label>

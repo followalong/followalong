@@ -28,10 +28,19 @@ class LocalAddonAdapter extends AddonAdapter {
     super(adapterOptions, addonData)
 
     this.adapter = 'local'
-    this.name = this.data.name || 'Local'
+    this.name = this.data.name || 'Local Storage'
     this.supports = ['local']
     this.data.encryptionStrategy = this.data.encryptionStrategy || 'none'
     this.data.maxReadLimit = this.data.maxReadLimit || 150
+    this.fields = {
+      maxReadLimit: {
+        type: 'number',
+        label: 'Maximum number of "read" items to keep',
+        hint: 'Unread and Saved items are always kept.',
+        required: true,
+        placeholder: 150
+      }
+    }
 
     this.db = localForage.createInstance({
       name: 'followalong-v1'
@@ -65,6 +74,10 @@ class LocalAddonAdapter extends AddonAdapter {
       .filter(LIMIT_ITEMS(this.data.maxReadLimit))
 
     return identityData
+  }
+
+  preview () {
+    return `${this.data.name || this.name} (${this.data.maxReadLimit} max read limit)`
   }
 }
 

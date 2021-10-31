@@ -12,126 +12,120 @@
         </p>
       </div>
 
-      <div class="field">
-        <label for="name">Identity Name</label>
-        <input
-          id="name"
-          v-model="app.identity.name"
-          type="text"
-          placeholder="Your Name"
-          aria-label="Identity name"
-        >
-      </div>
-
-      <p
-        v-if="!hasStorageSupport"
-        class="highlight"
-      >
-        This browser does not support any storage options.
-        You can still use FollowAlong, but your data will be gone when you leave the page.
-      </p>
-
-      <div
-        class="field"
-      >
+      <div class="addon">
+        <h2>Your Profile</h2>
+        <p />
         <div class="field">
-          <label for="max-read-count">Maximum Number of "Read" Items to Keep</label>
-          <span class="hint">Unread and Saved items are always kept.</span>
+          <label for="name">Identity Name</label>
           <input
-            id="max-read-count"
-            v-model="maxReadLimit"
-            type="number"
-            min="1"
-            :placeholder="localAddon.data.maxReadLimit"
-            aria-label="Max read limit"
-            @blur="app.commands.changeMaxReadLimit(app.identity, maxReadLimit)"
+            id="name"
+            v-model="app.identity.name"
+            type="text"
+            placeholder="Your Name"
+            aria-label="Identity name"
           >
         </div>
 
-        <label for="secretStrategy">
-          Local Data Encryption
-        </label>
-
-        <select
-          id="secretStrategy"
-          v-model="encryptionStrategy"
-          aria-label="Encryption strategy"
-          @change="changeEncryption"
+        <p
+          v-if="!hasStorageSupport"
+          class="highlight"
         >
-          <option value="ask">
-            Enter the key upon every visit (best, most secure, slightly annoying)
-          </option>
-          <option value="store">
-            Store the key on this device (recommended if you trust your device)
-          </option>
-          <option value="none">
-            Unencrypted (for testing or development)
-          </option>
-        </select>
+          This browser does not support any storage options.
+          You can still use FollowAlong, but your data will be gone when you leave the page.
+        </p>
 
-        <a
-          v-if="app.queries.hasChangeablePassword(localAddon)"
-          href="javascript:;"
-          class="hint"
-          aria-label="Change password"
-          @click="app.commands.changeLocalEncryptionStrategy(app.identity, encryptionStrategy)"
+        <div
+          class="field"
         >
-          Reset Secret Key
-        </a>
-      </div>
+          <label for="secretStrategy">
+            Local Data Encryption
+          </label>
 
-      <div class="field">
-        <div class="columns">
-          <div class="half-column">
-            <label>Download My Data</label>
-            <span class="hint">
-              Download a full copy of your data.
-            </span>
-            <button
-              class="button-gray"
-              aria-label="Download identity"
-              @click="app.commands.downloadIdentity(app.identity)"
-            >
-              Download Identity
-            </button>
-          </div>
+          <select
+            id="secretStrategy"
+            v-model="encryptionStrategy"
+            aria-label="Encryption strategy"
+            @change="changeEncryption"
+          >
+            <option value="ask">
+              Enter the key upon every visit (best, most secure, slightly annoying)
+            </option>
+            <option value="store">
+              Store the key on this device (recommended if you trust your device)
+            </option>
+            <option value="none">
+              Unencrypted (for testing or development)
+            </option>
+          </select>
 
-          <div class="half-column">
-            <label>Copy My Configuration</label>
-            <span class="hint">
-              Copy your identity to your clipboard.
-            </span>
-            <button
-              class="button-gray"
-              aria-label="Copy configuration"
-              @click="app.commands.copyConfig(app.identity)"
-            >
-              Copy Configuration
-            </button>
-          </div>
+          <a
+            v-if="app.queries.hasChangeablePassword(localAddon)"
+            href="javascript:;"
+            class="hint"
+            aria-label="Change password"
+            @click="app.commands.changeLocalEncryptionStrategy(app.identity, encryptionStrategy)"
+          >
+            Reset Secret Key
+          </a>
         </div>
       </div>
 
-      <div class="field">
-        <div class="columns">
-          <div class="half-column">
-            <label>Forget My Data</label>
-            <span class="hint">
-              Wipe your data from this browser.
-            </span>
-            <button
-              class="button-red"
-              aria-label="Forget identity"
-              @click="reset(app.identity)"
-            >
-              Forget This Identity
-            </button>
+      <div class="addon">
+        <h2>Your Data</h2>
+        <p />
+        <div class="field">
+          <div class="columns">
+            <div class="half-column">
+              <label>Download My Data</label>
+              <span class="hint">
+                Download a full copy of your data.
+              </span>
+              <button
+                class="button-gray"
+                aria-label="Download identity"
+                @click="app.commands.downloadIdentity(app.identity)"
+              >
+                Download Identity
+              </button>
+            </div>
+
+            <div class="half-column">
+              <label>Copy My Configuration</label>
+              <span class="hint">
+                Copy your identity to your clipboard.
+              </span>
+              <button
+                class="button-gray"
+                aria-label="Copy configuration"
+                @click="app.commands.copyConfig(app.identity)"
+              >
+                Copy Configuration
+              </button>
+            </div>
           </div>
-          <div class="half-column">
-            <p>
-              Remote: <strong>{{ app.queries.remoteSize(app.identity) }}</strong><br>
-              Local: <strong>{{ localSize }}</strong>
-            </p>
+        </div>
+
+        <div class="field">
+          <div class="columns">
+            <div class="half-column">
+              <label>Forget My Data</label>
+              <span class="hint">
+                Wipe your data from this browser.
+              </span>
+              <button
+                class="button-red"
+                aria-label="Forget identity"
+                @click="reset(app.identity)"
+              >
+                Forget This Identity
+              </button>
+            </div>
+            <div class="half-column">
+              <p>
+                Remote: <strong>{{ app.queries.remoteSize(app.identity) }}</strong><br>
+                Local: <strong>{{ localSize }}</strong>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -147,7 +141,6 @@ export default {
       secretKey: '',
       encryptionStrategy: '',
       localSize: '0 kb',
-      maxReadLimit: 0,
       hasStorageSupport: this.app.queries.hasStorageSupport()
     }
   },
@@ -177,7 +170,6 @@ export default {
       })
 
       this.encryptionStrategy = this.localAddon.data.encryptionStrategy
-      this.maxReadLimit = this.localAddon.data.maxReadLimit
     },
     changeEncryption ($event) {
       $event.stopImmediatePropagation()

@@ -21,7 +21,7 @@ describe('Addons: Update a addon', () => {
     await app.find('[aria-label="RSS addon name"]').setValue('cors-anywhere')
     await app.submit('[aria-label="Save RSS addon"]')
 
-    expect(app.find('[aria-label="RSS provider"]').text()).toEqual('CORS Anywhere')
+    expect(app.find('[aria-label="RSS provider"]').text()).toEqual('CORS Anywhere (https://followalong-cors-anywhere.herokuapp.com/)')
 
     await app.click('[aria-label="Feeds"]')
     await app.click('[aria-label^="Fetch"]')
@@ -50,7 +50,7 @@ describe('Addons: Update a addon', () => {
     await app.find('[aria-label="RSS addon url"]').setValue(expectedCorsURL)
     await app.submit('[aria-label="Save RSS addon"]')
 
-    expect(app.find('[aria-label="RSS provider"]').text()).toEqual('CORS Anywhere')
+    expect(app.find('[aria-label="RSS provider"]').text()).toEqual('CORS Anywhere (https://example.com)')
 
     await app.click('[aria-label="Feeds"]')
     await app.click('[aria-label^="Fetch"]')

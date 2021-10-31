@@ -29,20 +29,20 @@ describe('Addons: Change local read limit', () => {
   it('truncates to read items to the set limit', async () => {
     const expectedLimit = 100
 
-    await app.click('[aria-label="Settings"]')
-    await app.find('[aria-label="Max read limit"]').setValue(expectedLimit)
-    await app.find('[aria-label="Max read limit"]').trigger('blur')
-    await app.wait()
+    await app.click('[aria-label="Addons"]')
+    await app.click('[aria-label="Change Local addon"]')
+    await app.find('[aria-label="Local addon maxReadLimit"]').setValue(expectedLimit)
+    await app.submit('[aria-label="Save Local addon"]')
 
     const data = await app.vm.queries.addonForIdentity(identity, 'local').db.getItem(identity.id)
     expect(data.items.length).toEqual(expectedLimit)
   })
 
   it('truncates read items from the least recent', async () => {
-    await app.click('[aria-label="Settings"]')
-    await app.find('[aria-label="Max read limit"]').setValue(149)
-    await app.find('[aria-label="Max read limit"]').trigger('blur')
-    await app.wait()
+    await app.click('[aria-label="Addons"]')
+    await app.click('[aria-label="Change Local addon"]')
+    await app.find('[aria-label="Local addon maxReadLimit"]').setValue(149)
+    await app.submit('[aria-label="Save Local addon"]')
 
     const data = await app.vm.queries.addonForIdentity(identity, 'local').db.getItem(identity.id)
     expect(data.items.map((i) => i.title)).not.toContain('Item #1')

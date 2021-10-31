@@ -8,6 +8,10 @@ class AWSAddonAdapter extends AddonAdapter {
     this.name = this.data.name || 'AWS Lambda'
     this.supports = []
   }
+
+  preview () {
+    return this.data.name
+  }
 }
 
 // function lambdaPassthrough (override) {

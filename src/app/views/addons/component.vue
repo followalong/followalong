@@ -26,7 +26,7 @@
       <span
         :aria-label="`${addonType.shortName} provider`"
       >
-        {{ app.queries.addonForIdentity(app.identity, type).name }}
+        {{ app.queries.addonForIdentity(app.identity, type).preview() }}
       </span>
     </h3>
   </div>

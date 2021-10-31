@@ -37,6 +37,10 @@ class CORSAnywhere extends AddonAdapter {
         .catch(reject)
     })
   }
+
+  preview () {
+    return `${this.data.name || this.name} (${this.data.url})`
+  }
 }
 
 export default CORSAnywhere

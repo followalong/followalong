@@ -6,7 +6,7 @@ require 'uri'
 module FollowAlong
   class RSS
     TIMEOUT = 5
-    USER_AGENT = 'Mozilla /5.0 (Compatible MSIE 9.0;Windows NT 6.1;WOW64; Trident/5.0)'
+    USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36'
 
     def perform(data = {})
       perform_request data
