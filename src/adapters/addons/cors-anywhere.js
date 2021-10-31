@@ -23,7 +23,7 @@ class CORSAnywhere extends AddonAdapter {
     return new Promise((resolve, reject) => {
       if (!url) return reject(new Error('No URL supplied.'))
 
-      this.fetch((this.data.url || '') + url)
+      this.fetch.call(window, (this.data.url || '') + url)
         .then((response) => {
           if (response.ok) {
             resolve({
