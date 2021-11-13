@@ -267,13 +267,15 @@ class Commands {
       return
     }
 
-    const DELAY_BETWEEN_FETCHES = 30000
-    const feed = this.queries.findMostOutdatedNonPausedFeed(identity)
+    const DELAY_BETWEEN_FETCHES = 60 * 1000
     const done = () => setTimeout(() => this.fetchNextFeedPerpetually(identity), DELAY_BETWEEN_FETCHES)
+    const feeds = this.queries.findOutdatedFeeds(identity)
 
-    if (!feed) return done()
+    if (!feeds.length) return done()
 
-    return this.fetchFeed(identity, feed).then(done)
+    return Promise.all(
+      feeds.map((feed) => this.fetchFeed(identity, feed))
+    ).then(done)
   }
 
   changeLocalEncryptionStrategy (identity, encryptionStrategy) {

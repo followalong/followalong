@@ -89,10 +89,15 @@ class Queries {
     return this.state.findAll('feeds')
   }
 
-  findMostOutdatedNonPausedFeed (identity) {
+  findOutdatedFeeds (identity) {
+    const OUTDATED_MINUTES = 15 * (60 * 1000)
+    const now = Date.now()
+    const outdatedDate = now - OUTDATED_MINUTES
+
     return this.feedsForIdentity(identity)
       .filter(this.isNotPaused)
-      .sort(sortByNeedToUpdate)[0]
+      .filter((feed) => feed.updatedAt < outdatedDate)
+      .sort(sortByNeedToUpdate)
   }
 
   identityToLocal (identity) {
