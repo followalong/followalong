@@ -91,8 +91,7 @@ class Queries {
 
   findOutdatedFeeds (identity) {
     const OUTDATED_MINUTES = 15 * (60 * 1000)
-    const now = Date.now()
-    const outdatedDate = now - OUTDATED_MINUTES
+    const outdatedDate = Date.now() - OUTDATED_MINUTES
 
     return this.feedsForIdentity(identity)
       .filter(this.isNotPaused)
