@@ -269,7 +269,8 @@ class Commands {
 
     const DELAY_BETWEEN_FETCHES = 60 * 1000
     const done = () => setTimeout(() => this.fetchNextFeedPerpetually(identity), DELAY_BETWEEN_FETCHES)
-    const feeds = this.queries.findOutdatedFeeds(identity)
+    const maxFeedsPerFetch = Math.round(this.queries.feedsForIdentity(identity).length / 5)
+    const feeds = this.queries.findOutdatedFeeds(identity).slice(0, maxFeedsPerFetch)
 
     if (!feeds.length) return done()
 
