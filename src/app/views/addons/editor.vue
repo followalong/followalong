@@ -28,7 +28,7 @@
             <select
               id="service-name"
               v-model="selectedAddonAdapter"
-              :aria-label="`${addonType.shortName} addon name`"
+              :aria-label="`${addonType.shortName} addon type`"
             >
               <option
                 v-for="addon in addons"

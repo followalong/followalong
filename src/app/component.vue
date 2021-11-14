@@ -54,7 +54,12 @@ export default {
       default: () => {
         return {
           fetch: window.fetch,
-          AWS
+          awsEndpoint (url) {
+            return new AWS.Endpoint(url)
+          },
+          awsS3 (options) {
+            return new AWS.S3(options)
+          }
         }
       }
     },

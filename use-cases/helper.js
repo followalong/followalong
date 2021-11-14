@@ -25,10 +25,6 @@ const mountApp = (options) => {
     options = options || {}
 
     const addonAdapterOptions = options.addonAdapterOptions || {}
-    addonAdapterOptions.AWS = addonAdapterOptions.AWS || {
-      Lambda: AWSLambda,
-      Endpoint: AWSEndpoint
-    }
     addonAdapterOptions.fetch = addonAdapterOptions.fetch || jest.fn(() => Promise.resolve())
 
     const keychainAdapter = new KeychainAdapter({

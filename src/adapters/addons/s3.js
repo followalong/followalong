@@ -48,8 +48,8 @@ class S3AddonAdapter extends AddonAdapter {
 
   save (identityData, encrypt) {
     var key = this.data.key.replace(STRIP_BEGINNING_AND_END_SLASHES, '')
-    var s3 = new this.AWS.S3({
-      endpoint: new this.AWS.Endpoint(this.data.endpoint),
+    var s3 = this.awsS3({
+      endpoint: this.awsEndpoint(this.data.endpoint),
       accessKeyId: this.data.accessKeyId,
       secretAccessKey: this.data.secretAccessKey,
       region: this.data.region,
@@ -82,15 +82,6 @@ class S3AddonAdapter extends AddonAdapter {
       })
     })
   }
-
-  //   format (identityData) {
-  //     identityData = super.format(identityData)
-  //
-  //     identityData.items = identityData.items
-  //       .filter((item) => !!item.savedAt)
-  //
-  //     return identityData
-  //   }
 
   preview () {
     return `${this.data.name || this.name} (${this.data.bucket}${this.data.key})`
