@@ -122,7 +122,7 @@
             </div>
             <div class="half-column">
               <p>
-                Remote: <strong>{{ app.queries.remoteSize(app.identity) }}</strong><br>
+                Remote: <strong>{{ remoteSize }}</strong><br>
                 Local: <strong>{{ localSize }}</strong>
               </p>
             </div>
@@ -141,6 +141,7 @@ export default {
       secretKey: '',
       encryptionStrategy: '',
       localSize: '0 kb',
+      remoteSize: '0 kb',
       hasStorageSupport: this.app.queries.hasStorageSupport()
     }
   },
@@ -167,6 +168,10 @@ export default {
     init () {
       this.app.queries.localSize(this.app.identity).then((localSize) => {
         this.localSize = localSize
+      })
+
+      this.app.queries.remoteSize(this.app.identity).then((remoteSize) => {
+        this.remoteSize = remoteSize
       })
 
       this.encryptionStrategy = this.localAddon.data.encryptionStrategy

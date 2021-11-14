@@ -1,4 +1,12 @@
 export default {
+  sync: {
+    shortName: 'Sync',
+    key: 'sync',
+    name: 'Sync & Storage',
+    description: `
+      Store and sync your feeds and saved items across multiple devices.
+    `
+  },
   rss: {
     shortName: 'RSS',
     key: 'rss',
@@ -8,14 +16,6 @@ export default {
       You may use a proxy to get around the CORS issue, as well as bypassing geographically-restricted content.
     `
   },
-  // sync: {
-  //   shortName: 'Sync',
-  //   key: 'sync',
-  //   name: 'Subscription Syncing & Storage',
-  //   description: `
-  //     Store and sync your subscriptions and saved items across multiple devices.
-  //   `
-  // },
   // publish: {
   //   shortName: 'Publish',
   //   key: 'publish',

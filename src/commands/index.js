@@ -31,15 +31,13 @@ class Commands {
 
     this.state.removeAll('items', this.queries.itemsForFeed(feed))
     this.state.removeAll('feeds', [feed])
-    this.debouncedSaveLocal(identity)
+    this.debouncedSave(identity)
   }
 
   catchMeUp (identity, items) {
     items
       .filter((item) => this.queries.isUnread(item))
       .forEach((item) => this.toggleRead(identity, item, true))
-
-    this.debouncedSaveLocal(identity)
   }
 
   hideHint (identity, hint) {
@@ -49,7 +47,7 @@ class Commands {
       identity.hints.push(hint)
     }
 
-    this.debouncedSaveLocal(identity)
+    this.debouncedSave(identity)
   }
 
   togglePause (identity, feed, defaultValue) {
@@ -61,7 +59,7 @@ class Commands {
       delete feed.pausedAt
     }
 
-    this.debouncedSaveLocal(identity)
+    this.debouncedSave(identity)
   }
 
   toggleRead (identity, item, defaultValue) {
@@ -80,7 +78,7 @@ class Commands {
       delete item.readAt
     }
 
-    this.debouncedSaveLocal(identity)
+    this.debouncedSave(identity)
   }
 
   toggleSave (identity, item, defaultValue) {
@@ -92,7 +90,7 @@ class Commands {
       delete item.savedAt
     }
 
-    this.debouncedSaveLocal(identity)
+    this.debouncedSave(identity)
   }
 
   fetchAllFeeds (identity, auto) {
@@ -127,7 +125,7 @@ class Commands {
         })
         .finally(() => {
           delete feed.fetchingAt
-          this.debouncedSaveLocal(identity)
+          this.debouncedSave(identity)
           resolve()
         })
     })
@@ -136,7 +134,7 @@ class Commands {
   addFeedToIdentity (identity, feed) {
     feed.identityId = identity.id
 
-    this.debouncedSaveLocal(identity)
+    this.debouncedSave(identity)
 
     return feed
   }
@@ -173,7 +171,7 @@ class Commands {
 
     this.state.add('feeds', feeds || [], (f) => this.addFeedToIdentity(identity, f))
     this.state.add('items', items || [])
-    this.debouncedSaveLocal(identity)
+    this.debouncedSave(identity)
   }
 
   getLocalIdentity (id) {
@@ -234,10 +232,32 @@ class Commands {
     })
   }
 
-  debouncedSaveLocal (identity, data) {
-    return debouncedPromise(() => {
-      this.saveLocal(identity, data)
-    }, 750, this)
+  debouncedSave (identity) {
+    return debouncedPromise(() => this.save(identity), 750, this)
+  }
+
+  save (identity) {
+    return Promise.all([
+      this.saveLocal(identity),
+      this.saveRemote(identity)
+    ])
+  }
+
+  saveRemote (identity) {
+    return new Promise((resolve, reject) => {
+      this.queries.getLocalEncryptionFunction(identity.id)
+        .then((func) => {
+          const addon = this.queries.addonForIdentity(identity, 'sync')
+
+          addon.save(
+            this.queries.identityToRemote(identity),
+            func
+          )
+            .then(resolve)
+            .catch(reject)
+        })
+        .catch(reject)
+    })
   }
 
   removeLocal (identity) {
@@ -285,7 +305,7 @@ class Commands {
 
       return this.keychainAdapter.add(encryptionStrategy, identity.id).then(() => {
         addon.data.encryptionStrategy = encryptionStrategy
-        this.debouncedSaveLocal(identity)
+        this.debouncedSave(identity)
         resolve()
       }).catch(reject)
     })
@@ -297,7 +317,7 @@ class Commands {
 
       addon.data.maxReadLimit = Math.max(0, parseInt(maxReadLimit || 150))
 
-      this.debouncedSaveLocal(identity)
+      this.debouncedSave(identity)
 
       resolve()
     })

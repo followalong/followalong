@@ -1,6 +1,6 @@
-// const STRIP_SLASHES = /^\/|\/$/g
-
 import AddonAdapter from '../addon.js'
+
+const STRIP_BEGINNING_AND_END_SLASHES = /^\/|\/$/g
 
 class S3AddonAdapter extends AddonAdapter {
   constructor (adapterOptions, addonData) {
@@ -8,105 +8,93 @@ class S3AddonAdapter extends AddonAdapter {
 
     this.adapter = 's3'
     this.name = this.data.name || 'S3'
-    this.supports = []
+    this.description = 'Store data directly to an S3-compatible server.'
+    this.supports = ['sync']
+    this.data.key = this.data.key || '/identities/' + 'generateId()' + '.json'
+    this.data.endpoint = this.data.endpoint || 's3.amazonaws.com'
+    this.fields = {
+      endpoint: {
+        type: 'text',
+        label: 'Endpoint',
+        required: true
+      },
+      region: {
+        type: 'text',
+        label: 'Region',
+        required: true
+      },
+      key: {
+        type: 'text',
+        label: 'Key',
+        required: true
+      },
+      accessKeyId: {
+        type: 'text',
+        label: 'Access Key ID',
+        required: true
+      },
+      secretAccessKey: {
+        type: 'password',
+        label: 'Secret Access Key',
+        required: true
+      },
+      bucket: {
+        type: 'text',
+        label: 'Bucket',
+        required: true
+      }
+    }
+  }
+
+  save (identityData, encrypt) {
+    var key = this.data.key.replace(STRIP_BEGINNING_AND_END_SLASHES, '')
+    var s3 = new this.AWS.S3({
+      endpoint: new this.AWS.Endpoint(this.data.endpoint),
+      accessKeyId: this.data.accessKeyId,
+      secretAccessKey: this.data.secretAccessKey,
+      region: this.data.region,
+      apiVersion: 'latest',
+      maxRetries: 1
+    })
+
+    return new Promise((resolve, reject) => {
+      // s3.getObject({
+      //   Bucket: this.data.bucket,
+      //   Key: key
+      // }, function (err, oldData) {
+      //   try {
+      //     // utils.mergeData(identity, JSON.parse(oldData.Body.toString()))
+      //   } catch (e) { }
+      // })
+
+      const data = encrypt(this.format(identityData))
+
+      s3.putObject({
+        Body: typeof data === 'string' ? data : JSON.stringify(data),
+        Bucket: this.data.bucket,
+        Key: key
+      }, function (err) {
+        if (err) {
+          return reject(err)
+        }
+
+        resolve()
+      })
+    })
+  }
+
+  //   format (identityData) {
+  //     identityData = super.format(identityData)
+  //
+  //     identityData.items = identityData.items
+  //       .filter((item) => !!item.savedAt)
+  //
+  //     return identityData
+  //   }
+
+  preview () {
+    return `${this.data.name || this.name} (${this.data.bucket}${this.data.key})`
   }
 }
 
 export default S3AddonAdapter
-
-// get () {
-//   return Promise.reject(new Error('`S3AddonAdapter.get` not yet implemented.'))
-// }
-
-//   save (data) {
-//     var key = this.data.key.replace(STRIP_SLASHES, '')
-//     var s3 = new this.AWS.S3({
-//       endpoint: new this.AWS.Endpoint(this.data.endpoint),
-//       accessKeyId: this.data.accessKeyId,
-//       secretAccessKey: this.data.secretAccessKey,
-//       region: this.data.region,
-//       apiVersion: 'latest',
-//       maxRetries: 1
-//     })
-//
-//     return new Promise((resolve, reject) => {
-//       s3.getObject({
-//         Bucket: this.data.bucket,
-//         Key: key
-//       }, function (err, oldData) {
-//         try {
-//           // utils.mergeData(identity, JSON.parse(oldData.Body.toString()))
-//         } catch (e) { }
-//
-//         s3.putObject({
-//           Body: JSON.stringify(data.identity),
-//           Bucket: this.data.bucket,
-//           Key: key
-//         }, function (err) {
-//           data.identity.saveLocal().then(() => {
-//             if (err) {
-//               return reject(err)
-//             }
-//
-//             resolve(data.identity)
-//           })
-//         })
-//       })
-//     })
-//   }
-//
-//   remove () {
-//     return Promise.reject(new Error('`S3AddonAdapter.remove` not yet implemented.'))
-//   }
-// }
-
-// {
-//   id: 's3',
-//   name: 'S3',
-//   description: 'Store data directly to an S3-compatible server.',
-//   supports: 'sync',
-//   data: {
-//     endpoint: 's3.amazonaws.com',
-//     key: '/identities/' + generateId() + '.json'
-//     // accessKeyId: AWS_CONFIG.accessKeyId,
-//     // secretAccessKey: AWS_CONFIG.secretAccessKey
-//   },
-//   fields: {
-//     name: {
-//       type: 'text',
-//       label: 'Addon Name',
-//       required: true
-//     },
-//     endpoint: {
-//       type: 'text',
-//       label: 'Endpoint',
-//       required: true
-//     },
-//     region: {
-//       type: 'text',
-//       label: 'Region',
-//       required: true
-//     },
-//     key: {
-//       type: 'text',
-//       label: 'Key',
-//       required: true
-//     },
-//     accessKeyId: {
-//       type: 'text',
-//       label: 'Access Key ID',
-//       required: true
-//     },
-//     secretAccessKey: {
-//       type: 'password',
-//       label: 'Secret Access Key',
-//       required: true
-//     },
-//     bucket: {
-//       type: 'text',
-//       label: 'Bucket',
-//       required: true
-//     }
-//   },
-//   request: s3Sync
-// },

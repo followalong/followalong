@@ -108,7 +108,7 @@ export default {
       this.app.identity.addons = this.app.identity.addons || {}
       this.app.identity.addons[this.addonType.key] = this.selectedAddon.data || {}
       this.app.identity.addons[this.addonType.key].adapter = this.selectedAddonAdapter
-      this.app.commands.saveLocal(this.app.identity)
+      this.app.commands.debouncedSave(this.app.identity)
       this.close()
     }
   }

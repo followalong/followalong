@@ -49,7 +49,7 @@ class Queries {
     identity.addons = identity.addons || {}
     identity.addons[type] = identity.addons[type] || {}
 
-    const addonAdapter = type === 'local' ? 'local' : identity.addons[type].adapter
+    const addonAdapter = type === 'local' ? 'local' : identity.addons[type].adapter || 'none'
     const Addon = getAddonAdapterByType(addonAdapter)
 
     return new Addon(this.addonAdapterOptions, identity.addons[type])
@@ -110,6 +110,17 @@ class Queries {
     }
   }
 
+  identityToRemote (identity) {
+    return {
+      id: identity.id,
+      name: identity.name,
+      hints: identity.hints,
+      feeds: this.feedsForIdentity(identity),
+      items: this.itemsForIdentity(identity),
+      addons: identity.addons
+    }
+  }
+
   getLocalDecryptionFunction (id) {
     return new Promise((resolve, reject) => {
       return this.getLocalEncryptionKey(id)
@@ -150,8 +161,20 @@ class Queries {
     })
   }
 
-  remoteSize () {
-    return '0 kb'
+  remoteSize (identity) {
+    return new Promise((resolve, reject) => {
+      this.getLocalEncryptionFunction(identity.id)
+        .then((func) => {
+          let data = func(this.identityToRemote(identity))
+
+          if (typeof data === 'object') {
+            data = JSON.stringify(data)
+          }
+
+          resolve(this._getSize(data))
+        })
+        .catch(reject)
+    })
   }
 
   // TODO: Are these presenters?

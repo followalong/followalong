@@ -1,13 +1,3 @@
-// {
-//   id: 'followalong-none',
-//   name: 'None',
-//   description: 'No addon will be used.',
-//   supports: 'rss,sync,search',
-//   request () {
-//     return Promise.resolve()
-//   }
-// }
-
 import AddonAdapter from '../addon.js'
 
 class NoneAddonAdapter extends AddonAdapter {
@@ -16,7 +6,28 @@ class NoneAddonAdapter extends AddonAdapter {
 
     this.adapter = 'none'
     this.name = this.data.name || 'None'
-    this.supports = ['rss', 'search']
+    this.description = 'No addon will be used.'
+    this.supports = ['rss', 'search', 'sync']
+  }
+
+  get () {
+    return Promise.resolve()
+  }
+
+  save () {
+    return Promise.resolve()
+  }
+
+  destroy () {
+    return Promise.resolve()
+  }
+
+  rss () {
+    return Promise.resolve()
+  }
+
+  search () {
+    return Promise.resolve()
   }
 }
 

@@ -58,7 +58,6 @@ describe('Addons: Update a addon', () => {
     expect(addonAdapterOptions.fetch).toHaveBeenCalledWith(expectedCorsURL + feed.url)
   })
 
-  it.todo('can supply a nickname')
   it.todo('can choose a custom addon by nickname')
   it.todo('can see password in plain text')
   it.todo('can be copied')

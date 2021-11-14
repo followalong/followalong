@@ -63,7 +63,8 @@ class AddonAdapter {
       addons: {
         local: this._buildObj(addons.local || {}),
         rss: this._buildObj(addons.rss || {}),
-        search: this._buildObj(addons.search || {})
+        search: this._buildObj(addons.search || {}),
+        sync: this._buildObj(addons.sync || {})
       }
     }
   }
