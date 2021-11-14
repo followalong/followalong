@@ -6,6 +6,7 @@ import addIcons from '@/add-icons.js'
 import KeychainAdapter from '@/adapters/keychain.js'
 import LocalAddonAdapter from '@/adapters/addons/local.js'
 import { passThrough } from '@/queries/helpers/crypt.js'
+import Queries from '@/queries/index.js'
 
 class AWSEndpoint {
   constructor (url) {
@@ -128,6 +129,22 @@ const mountApp = (options) => {
       return identity
     }
 
+    app.buildAddonToRespondWith = (buildType, result) => {
+      const fn = jest.fn(() => Promise.resolve(result))
+
+      return jest.fn((identity, type) => {
+        if (type === buildType) {
+          const addon = new LocalAddonAdapter()
+
+          addon[type] = fn
+
+          return addon
+        } else {
+          return new Queries().addonForIdentity(identity, type)
+        }
+      })
+    }
+
     await app.wait()
 
     resolve(app)
@@ -139,14 +156,6 @@ const rawRSSResponse = (item) => {
     status: 200,
     body: rawRSS(item)
   }
-}
-
-const buildAddonToRespondWith = (type, result) => {
-  const addon = new LocalAddonAdapter()
-
-  addon[type] = jest.fn(() => Promise.resolve(result))
-
-  return jest.fn(() => addon)
 }
 
 const rawRSS = (item) => {
@@ -221,7 +230,6 @@ const flushPromisesAndTimers = () => {
 
 export {
   mountApp,
-  buildAddonToRespondWith,
   rawRSSResponse,
   rawRSS
 }

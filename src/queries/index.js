@@ -116,7 +116,7 @@ class Queries {
       name: identity.name,
       hints: identity.hints,
       feeds: this.feedsForIdentity(identity),
-      items: this.itemsForIdentity(identity),
+      items: this.itemsForIdentity(identity).filter(this.isSaved),
       addons: identity.addons
     }
   }

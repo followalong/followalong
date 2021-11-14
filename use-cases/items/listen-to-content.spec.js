@@ -6,7 +6,7 @@ describe('Items: Listen to content', () => {
       const app = await mountApp()
       const item = { audioUrl: 'https://example.com/audio.mp3' }
       const feedsLength = app.vm.queries.allFeeds().length
-      app.vm.queries.addonForIdentity = buildAddonToRespondWith('rss', rawRSSResponse(item))
+      app.vm.queries.addonForIdentity = app.buildAddonToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')

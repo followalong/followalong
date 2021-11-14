@@ -7,7 +7,7 @@ describe('Feeds: Catch up', () => {
     beforeEach(async () => {
       app = await mountApp({ overrideCommands: {} })
       const item = { title: 'Foo Bar' }
-      app.vm.queries.addonForIdentity = buildAddonToRespondWith('rss', rawRSSResponse(item))
+      app.vm.queries.addonForIdentity = app.buildAddonToRespondWith('rss', rawRSSResponse(item))
 
       expect(app.findAll('.read').length).toEqual(0)
 

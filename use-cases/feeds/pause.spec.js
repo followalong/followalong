@@ -8,7 +8,7 @@ describe('Feeds: Pause a feed', () => {
     app = await mountApp()
     feedsLength = app.vm.queries.allFeeds().length
     const item = { title: 'Foo Bar' }
-    app.vm.queries.addonForIdentity = buildAddonToRespondWith('rss', rawRSSResponse(item))
+    app.vm.queries.addonForIdentity = app.buildAddonToRespondWith('rss', rawRSSResponse(item))
 
     await app.click('[aria-label="Feeds"]')
     await app.click('[aria-label^="Pause"]')
@@ -16,7 +16,7 @@ describe('Feeds: Pause a feed', () => {
   })
 
   it('does not fetch a paused feed', async () => {
-    expect(app.vm.queries.addonForIdentity().rss).toHaveBeenCalledTimes(feedsLength - 1)
+    expect(app.vm.queries.addonForIdentity(app.vm.identity, 'rss').rss).toHaveBeenCalledTimes(feedsLength - 1)
   })
 
   it('saves the identity in local storage', async () => {

@@ -4,7 +4,7 @@ describe('Feeds: Search', () => {
   describe('if multiple results', () => {
     it('shows a listing of feeds', async () => {
       const app = await mountApp()
-      app.vm.queries.addonForIdentity = buildAddonToRespondWith('search', [{ name: 'Feed #1' }, { name: 'Feed #2' }])
+      app.vm.queries.addonForIdentity = app.buildAddonToRespondWith('search', [{ name: 'Feed #1' }, { name: 'Feed #2' }])
 
       await app.submit('[aria-label="Search form"]')
 
@@ -16,7 +16,7 @@ describe('Feeds: Search', () => {
       const expectedFeed = { name: 'Feed #1' }
       const app = await mountApp()
       const initialFeedsLength = app.vm.queries.allFeeds().length
-      app.vm.queries.addonForIdentity = buildAddonToRespondWith('search', [expectedFeed, { name: 'Feed #2' }])
+      app.vm.queries.addonForIdentity = app.buildAddonToRespondWith('search', [expectedFeed, { name: 'Feed #2' }])
 
       await app.submit('[aria-label="Search form"]')
       await app.click(`[aria-label="Subscribe to ${expectedFeed.name}"]`)
@@ -35,7 +35,7 @@ describe('Feeds: Search', () => {
       const app = await mountApp()
       app.vm.commands.fetchFeed = jest.fn()
       app.vm.queries.findFeedByUrl = jest.fn(() => expectedFeed)
-      app.vm.queries.addonForIdentity = buildAddonToRespondWith('search', [expectedFeed])
+      app.vm.queries.addonForIdentity = app.buildAddonToRespondWith('search', [expectedFeed])
 
       await app.submit('[aria-label="Search form"]')
 
@@ -47,7 +47,7 @@ describe('Feeds: Search', () => {
       const app = await mountApp()
       const initialFeedsLength = app.vm.queries.allFeeds().length
       app.vm.commands.fetchFeed = jest.fn()
-      app.vm.queries.addonForIdentity = buildAddonToRespondWith('search', [expectedFeed])
+      app.vm.queries.addonForIdentity = app.buildAddonToRespondWith('search', [expectedFeed])
 
       await app.submit('[aria-label="Search form"]')
       await app.click('[aria-label="Toggle Menu"]')

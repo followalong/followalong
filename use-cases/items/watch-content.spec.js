@@ -5,7 +5,7 @@ describe('Items: Watch content', () => {
     it('can see a video player', async () => {
       const app = await mountApp()
       const item = { videoUrl: 'https://example.com/video.mp4' }
-      app.vm.queries.addonForIdentity = buildAddonToRespondWith('rss', rawRSSResponse(item))
+      app.vm.queries.addonForIdentity = app.buildAddonToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label="FollowAlong"]')
