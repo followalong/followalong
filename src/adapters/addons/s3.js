@@ -11,16 +11,11 @@ class S3AddonAdapter extends AddonAdapter {
     this.description = 'Store data directly to an S3-compatible server.'
     this.supports = ['sync']
     this.data.key = this.data.key || '/identities/' + 'generateId()' + '.json'
-    this.data.endpoint = this.data.endpoint || 's3.amazonaws.com'
+    this.data.endpoint = this.data.endpoint || 's3.us-east-1.amazonaws.com'
     this.fields = {
       endpoint: {
         type: 'text',
         label: 'Endpoint',
-        required: true
-      },
-      region: {
-        type: 'text',
-        label: 'Region',
         required: true
       },
       key: {
