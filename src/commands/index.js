@@ -203,7 +203,7 @@ class Commands {
 
         Promise.all(promises).finally(() => {
           if (!this.queries.allIdentities().length) {
-            this.addIdentity({ name: seedIdentity.name }, [].concat(seedIdentity.feeds))
+            this.addIdentity({ name: seedIdentity.name, addons: seedIdentity.addons }, [].concat(seedIdentity.feeds))
             const identity = this.queries.findDefaultIdentity()
             this.fetchAllFeeds(identity, true)
             this.keychainAdapter.addNone(identity.id)

@@ -33,5 +33,19 @@ export default {
       name: 'E&T News',
       url: 'https://eandt.theiet.org/rss/'
     }
-  ]
+  ],
+  addons: {
+    local: {
+      encryptionStrategy: 'none',
+      maxReadLimit: 150
+    },
+    rss: {
+      url: 'https://followalong-cors-anywhere.herokuapp.com/',
+      adapter: 'cors-anywhere'
+    },
+    search: {
+      adapter: 'followalong-free'
+    },
+    sync: {}
+  }
 }
