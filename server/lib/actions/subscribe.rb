@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'stripe'
 require 'aws-sdk-s3'
 require 'securerandom'
@@ -11,7 +13,7 @@ module FollowAlong
 
       metadata = {
         token: SecureRandom.urlsafe_base64(32),
-        expiry: (Date.today + 366).to_s,
+        expiry: (Date.today + 366).to_s
       }
 
       accounts = read_accounts
@@ -29,13 +31,13 @@ module FollowAlong
       {
         status: 200,
         headers: {},
-        body: metadata,
+        body: metadata
       }
-    rescue => e
+    rescue StandardError => e
       {
         status: 401,
         headers: {},
-        body: e.message,
+        body: e.message
       }
     end
 

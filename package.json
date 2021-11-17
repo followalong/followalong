@@ -3,17 +3,17 @@
   "version": "1.2.3",
   "private": true,
   "scripts": {
-    "build": "vue-cli-service build",
     "deploy": "node scripts/deploy.js",
-    "lint": "eslint src --ext .js,.vue",
-    "lint:fix": "eslint src --ext .js,.vue --fix",
-    "serve": "vue-cli-service serve"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.17",
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
     "@fortawesome/vue-fontawesome": "3.0.0-2",
-    "aes256": "^1.0.4",
+    "aes256": "^1.1.0",
     "aws-sdk": "^2.493.0",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "clipboard": "^2.0.4",
@@ -23,7 +23,7 @@
     "file-saver": "^2.0.1",
     "js-base64": "^2.5.1",
     "load-external": "^1.0.2",
-    "localforage": "^1.7.3",
+    "localforage": "^1.10.0",
     "no-async": "^1.1.6",
     "request": "^2.88.0",
     "rss-parser": "^3.7.0",
@@ -36,13 +36,15 @@
     "webpack": "^4.44.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-babel": "^4.5.11",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-pwa": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-unit-jest": "^4.5.11",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/eslint-config-standard": "^5.1.2",
+    "@vue/test-utils": "^2.0.0-0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.2",
@@ -51,7 +53,8 @@
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^7.0.0-0",
     "sass": "^1.26.5",
-    "sass-loader": "^8.0.2"
+    "sass-loader": "^8.0.2",
+    "vue-jest": "^5.0.0-0"
   },
   "browserslist": [
     "> 1%",

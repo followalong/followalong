@@ -1,0 +1,123 @@
+.sidebar {
+  position: fixed;
+  margin-left: -$sidebar-width - $content-padding;
+  width: $sidebar-width;
+  top: $nav-height;
+  bottom: 0;
+  background: var(--secondary-color);
+  padding-top: 20px;
+  text-align: left;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: 999999;
+
+  @media (max-width: $max-width + 20px) {
+    padding-left: 20px;
+  }
+
+  @media (max-width: 640px) {
+    display: none;
+  }
+
+  &.show {
+    display: block;
+    left: 0;
+    width: 100%;
+    border-right: 0;
+    padding-left: 20px;
+    margin-left: 0;
+  }
+
+  ul {
+    margin-bottom: 20px;
+    margin-top: 30px;
+
+    li {
+      margin-bottom: 2px;
+
+      &.divider {
+        background: var(--text-color);
+        opacity: 0.1;
+        margin: 15px 28px;
+        height: 1px;
+      }
+
+      & > a {
+        display: block;
+        padding: 8px 20px;
+        color: var(--secondary-color-opposite);
+
+        &:hover {
+          color: var(--text-color);
+        }
+
+        &.router-link-exact-active {
+          background: var(--primary-color);
+          color: var(--primary-color-opposite);
+          border-radius: 8px 0 0 8px;
+        }
+
+        svg {
+          opacity: 0.3;
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+
+  .counter {
+    position: absolute;
+    display: inline-block;
+    font-weight: 300;
+    vertical-align: middle;
+    margin-left: 8px;
+    margin-top: 2px;
+    font-size: 0.85rem;
+  }
+
+  .section {
+    @include clearfix();
+
+    margin-bottom: 20px;
+    padding: 0 28px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+
+    h3 {
+      margin-bottom: 5px;
+      color: var(--link-color);
+    }
+
+    &.info-section {
+      background: var(--secondary-color-emphasis);
+      margin: 20px 20px -10px 0;
+      padding: 20px;
+      border-radius: 8px;
+
+      h3 {
+        color: var(--link-color);
+
+        .close-hint {
+          opacity: 0.5;
+
+          &:hover {
+            opacity: 1.0;
+          }
+        }
+      }
+
+      p {
+        margin-bottom: 0;
+      }
+
+      a {
+        float: right;
+        margin-top: 5px;
+      }
+    }
+  }
+
+  &:first-child .section.info-section {
+    margin-top: 0;
+  }
+}

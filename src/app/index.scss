@@ -1,0 +1,90 @@
+:root {
+  --sans-serif: 'Avenir', Helvetica Neue, Helvetica, Arial, sans-serif;
+  --serif: Palatino, Times, serif;
+
+  --bg-color: #fff;
+  --bg-color-rgb: 255, 255, 255;
+  --bg-emphasis: var(--bg-color);
+  --text-color: #333;
+  --light-text: #ccc;
+  --border-color: #eee;
+
+  --primary-color: #1b8cd8; // #00a9b6
+  --primary-color-emphasis: var(--text-color);
+  --primary-color-opposite: var(--bg-color);
+
+  --secondary-color: #eee;
+  --secondary-color-emphasis: #fff;
+  --secondary-color-opposite: #666;
+
+  --link-color: var(--primary-color);
+  --button-text: var(--bg-color);
+  --bold-text: #111;
+
+  --block-bg: var(--secondary-color);
+
+  --warn: #D47F1F;
+  --success: #1BCC04;
+  --info: #F2F2F2;
+  --error: #CC3F06;
+  --overlay: rgba(0, 0, 0, 0.3);
+  --highlight-bg: #F9FF77;
+
+  @media (prefers-color-scheme: dark) {
+  --bg-color: var(--primary-color);
+  --bg-color-rgb: 23, 32, 44;
+  --bg-emphasis: var(--bg-color);
+  --text-color: #ddd;
+  --light-text: #7c93a3;
+  --border-color: #213044;
+
+  --primary-color: #0C1219;
+  --primary-color-emphasis: var(--secondary-color);
+  --primary-color-opposite: var(--text-color);
+
+  --secondary-color: #141c27;
+  --secondary-color-emphasis: var(--primary-color);
+  --secondary-color-opposite: var(--light-text);
+
+  --link-color: #b28f4d;
+  --button-text: var(--text-color);
+  --bold-text: #fff;
+
+  --block-bg: var(--primary-color-emphasis);
+
+  --success: #37d769;
+  --warn: #C28E11;
+  --info: #28415d;
+  --error: #842115;
+  --overlay: rgba(0, 0, 0, 0.85);
+  --highlight-bg: '';
+  --highlight-border-bottom: 3px solid var(--link-color);
+  }
+}
+
+$sidebar-width: 280px;
+$content-padding: 80px;
+$nav-height: $content-padding - 9px;
+$tablet-content-padding: 40px;
+$content-width: 46em;
+$media-player-width: 350px;
+$max-width: 1280px;
+
+@mixin clearfix() {
+ &:after {
+   display: block;
+   content: ' ';
+   clear: both;
+ }
+}
+
+@import "./css/reset.css";
+@import "./css/content.scss";
+@import "./css/app.scss";
+@import "./css/columns.scss";
+@import "./css/modal.scss";
+@import "./components/top-bar/style.scss";
+@import "./components/sidebar/style.scss";
+@import "./components/feed/style.scss";
+@import "./components/credit-card/style.scss";
+@import "./components/media-player/style.scss";

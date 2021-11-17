@@ -1,88 +1,68 @@
 # FollowAlong
 
-## Todo
-
-- Tags (media verbs)
-- Better local search
-  + Youtube
-  + DuckDuckGo
-  + RSSSearch
-- Make Services approachable
-- console.error notifier
-
-## Past Todo
-
-- Public
-  - when app.subscribe, prompt login if POSSIBLE
-    - Optional Login
-    - Required Login
-  - Feed page
-    - Actions
-    - Expired notice
-    - See only the items I'm supposed to with Basic Auth
-- Admin
-  - Plans (do not renew, because, who likes that?)
-    - name
-    - duration
-    - amount [custom]
-    - currency
-    - ordinal
-    - details
-      - commentable
-      - require address
-      - require mobile
-  - Memberships
-    - user (update details), plan, amount, expireAt, confirmationToken
-    - refund
-    - CRUD
-  - Users
-    - Add subscribers with/without paying
-    - `Paid Subscriber` scope
-  - Settings
-    - Allowed to register?
-    - Allowed to pay?
-    - Set user level (default `subscriber`)
-
 ## Why Am I still using YouTube / FB / News Sites?
 
 - Play songs (looking for specific content)
 - Discover (looking for new content)
 - Interact in a group (comment / like / share)
 
-## Project setup
+## TODO
 
+- Specs
+- 3 Core Addons
+- Specs should save to remote
+- Documentation
+  - Spinning up your own frontend
+  - Spinning up your own backend
+- Interactions
+- Memberships
+
+## Addons
+
+- RSS Proxy: A way to bypass CORS restrictions
+- Search: A way to find things
+- Sync: A way to backup account data and sync to other devices
+- Discovery: A way to discover new things
+- Media: A way to backup saved media files that may disappear over time
+- Publishing: A way to publish content
+
+## Ads
+
+The power of curation must be in the hands of the Feed. If things go bad, they can just change providers. They can also just supply their own.
+
+An "Ad Provider" is in charge of showing ads.
+
+An "Ad Provider" could be the feed itself OR outsourced – its just a link.
+
+The publisher can define at the `Item` level:
+
+```xml
+<Item>
+  <Ad format="skyscraper" src="https://example.com/my-feed/ad.jpg" href="httsp://example.com">
+</Item>
 ```
-yarn
+
+Another, more complicated option would be to add it at the `Feed` level:
+
+```xml
+<Feed>
+  <AdProvider url="https://example.com/my-feed">
+</Feed>
 ```
 
-### Compiles and hot-reloads for development
+## RSS Sources
 
-```
-yarn serve
-```
+From: https://12bytes.org/articles/tech/how-to-access-rss-feeds/
 
-### Compiles and minifies for production
-
-```
-yarn build
-```
-
-### Run your tests
-
-```
-yarn test:unit
-```
-
-### Lints and fixes files
-
-```
-yarn lint:fix
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-### Findings
-
-- Because we use an iframe to show videos, we can't append them to another `<div>` without the video restarting.
+- Odysee: https://lbryfeed.melroy.org/channel/<channel_name>
+- Bitchute: https://www.bitchute.com/feeds/rss/channel/<channel_name>
+- YouTube: https://www.youtube.com/feeds/videos.xml?channel_id=<channel_id>
+- Vimeo: https://vimeo.com/<channel_name>/videos/rss
+- Steemit: http://www.hiverss.com/@<channel_name>/feed
+- Tumblr: https://example.tumblr.com/rss
+- Generic: /feed
+- Generic: /rss
+- Generic: /atom
+- Generic: /feed/atom
+- Generic: /?feed=rss
+- Generic: /?feed=atom

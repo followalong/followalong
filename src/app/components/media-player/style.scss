@@ -1,0 +1,103 @@
+.relativizer {
+    position: relative;
+}
+
+.embed-media {
+    &.inline-player {
+        position: relative;
+
+        .video-embed {
+            margin-top: -$content-padding;
+            margin-left: -$content-padding;
+            margin-right: -$content-padding;
+            margin-bottom: $content-padding / 2;
+        }
+
+        .aspect-ratio-box {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .audio-embed {
+            margin-bottom: $content-padding / 2;
+
+            audio {
+                width: 100%;
+            }
+        }
+    }
+
+    &.popout-player {
+        position: fixed;
+        bottom: -1px;
+        right: -1px;
+        border-top: 5px solid var(--secondary-color);
+        border-left: 5px solid var(--secondary-color);
+        z-index: 99999;
+        background: var(--bg-color);
+        border-top-left-radius: 20px;
+        width: 500px;
+
+        .player-wrapper {
+            @media (max-width: 640px) {
+                width: $media-player-width;
+            }
+
+            audio {
+                width: calc(100% - 24px);
+                margin: 0 12px 12px;
+            }
+
+            .video-embed {
+                background: #000;
+            }
+        }
+    }
+
+    .player-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .title {
+        padding: 12px;
+
+        h3 {
+            font-weight: bold;
+            margin-bottom: 0;
+            font-size: 100%;
+        }
+
+        h3, p {
+            width: 86%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        p {
+            font-size: 85%;
+            opacity: 0.75;
+            margin-bottom: 0;
+        }
+
+        .close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            text-align: center;
+            margin: 1em;
+            padding: 0.6em 0.8em;
+            border-radius: 7px;
+            font-size: 90%;
+            line-height: 1;
+            color: var(--light-text);
+            background: var(--bg-emphasis);
+            display: block;
+
+            &:hover {
+                background: var(--primary-color-emphasis);
+                color: var(--text-color)
+            }
+        }
+    }
+}

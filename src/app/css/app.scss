@@ -1,0 +1,34 @@
+html {
+  background: var(--secondary-color);
+  color: var(--text-color);
+  font-size: 17px;
+  line-height: 1.7;
+
+  @media (max-width: 640px) {
+    font-size: 15px;
+  }
+}
+
+#app {
+  font-family: var(--sans-serif);
+  // font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 300;
+}
+
+.primary,
+.link,
+.content .items > li > h3,
+.content .description a,
+.vue-tabs .tab.active a,
+.check:hover,
+.explanation,
+.stars {
+  color: var(--link-color);
+}
+
+.content button,
+.content .button {
+  background: var(--link-color);
+}

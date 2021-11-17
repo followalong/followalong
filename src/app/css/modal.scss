@@ -1,0 +1,58 @@
+.modal {
+  .overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(var(--bg-color-rgb), 0.8);
+    z-index: 99;
+  }
+
+  .close {
+    float: right;
+    color: var(--text-color);
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
+  .modal-content-wrapper {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 99999999;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+
+    .modal-content {
+      margin: 10% auto;
+      max-width: 720px;
+      width: 100%;
+      background: var(--bg-color);
+      border-radius: 9px;
+      padding: 2rem;
+      position: relative;
+      z-index: 99999999;
+
+      .actions {
+        text-align: right;
+      }
+    }
+  }
+
+  .notice {
+    color: var(--success);
+    margin-top: -2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+}
