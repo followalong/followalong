@@ -18,8 +18,8 @@ class FollowAlongFreeAddonAdapter extends AddonAdapter {
 
   _request (data) {
     return new Promise((resolve, reject) => {
-      new this.AWS.Lambda({
-        endpoint: new this.AWS.Endpoint(this.AWS_CONFIG.endpoint),
+      this.awsLambda({
+        endpoint: this.awsEndpoint(this.AWS_CONFIG.endpoint),
         accessKeyId: this.AWS_CONFIG.accessKeyId,
         secretAccessKey: this.AWS_CONFIG.secretAccessKey,
         region: this.AWS_CONFIG.region,
@@ -30,6 +30,7 @@ class FollowAlongFreeAddonAdapter extends AddonAdapter {
         LogType: 'None',
         Payload: JSON.stringify(data)
       }, function (err, data) {
+        console.log(err, data)
         if (err) {
           return reject(err)
         }

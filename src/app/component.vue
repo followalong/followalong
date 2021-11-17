@@ -59,6 +59,9 @@ export default {
           },
           awsS3 (options) {
             return new AWS.S3(options)
+          },
+          awsLambda (options) {
+            return new AWS.Lambda(options)
           }
         }
       }

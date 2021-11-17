@@ -26,7 +26,6 @@ describe('Addons: S3', () => {
     await app.click('[aria-label="Change Sync addon"]')
     await app.find('[aria-label="Sync addon type"]').setValue('s3')
     await app.find('[aria-label="Sync addon endpoint"]').setValue('endpoint')
-    await app.find('[aria-label="Sync addon region"]').setValue('region')
     await app.find('[aria-label="Sync addon key"]').setValue('key')
     await app.find('[aria-label="Sync addon accessKeyId"]').setValue('accessKeyId')
     await app.find('[aria-label="Sync addon secretAccessKey"]').setValue('secretAccessKey')
@@ -45,7 +44,6 @@ describe('Addons: S3', () => {
       endpoint: 'endpoint',
       accessKeyId: 'accessKeyId',
       secretAccessKey: 'secretAccessKey',
-      region: 'region',
       apiVersion: 'latest',
       maxRetries: 1
     })
