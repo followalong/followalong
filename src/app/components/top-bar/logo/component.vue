@@ -1,8 +1,7 @@
 <template>
-  <a
-    href="javascript:;"
+  <router-link
+    to="/"
     aria-label="FollowAlong"
-    @click="fetchAll"
   >
     <font-awesome-icon
       v-if="isLoading"
@@ -19,7 +18,7 @@
       :src="word"
       class="word desktop-only"
     >
-  </a>
+  </router-link>
 </template>
 
 <script>

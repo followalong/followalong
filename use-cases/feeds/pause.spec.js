@@ -12,7 +12,7 @@ describe('Feeds: Pause a feed', () => {
 
     await app.click('[aria-label="Feeds"]')
     await app.click('[aria-label^="Pause"]')
-    await app.click('[aria-label="FollowAlong"]')
+    await app.click('[aria-label="Fetch all feeds"]')
   })
 
   it('does not fetch a paused feed', async () => {

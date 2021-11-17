@@ -8,6 +8,7 @@ describe('Items: Read content', () => {
       app.vm.queries.addonForIdentity = app.buildAddonToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
+      await app.click('[aria-label="Fetch all feeds"]')
       await app.click('[aria-label="FollowAlong"]')
       await app.click('[aria-label^="Visit item"]')
 

@@ -8,6 +8,7 @@ describe('Items: Visit source', () => {
       app.vm.queries.addonForIdentity = app.buildAddonToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
+      await app.click('[aria-label="Fetch all feeds"]')
       await app.click('[aria-label="FollowAlong"]')
 
       expect(app.find('[aria-label^="Visit source"]').element.getAttribute('href')).toEqual(item.link)

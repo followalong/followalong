@@ -11,6 +11,7 @@ describe('Items: Save for later', () => {
       app.vm.queries.addonForIdentity = app.buildAddonToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
+      await app.click('[aria-label="Fetch all feeds"]')
       await app.click('[aria-label="FollowAlong"]')
       expect(app.findAll(`[aria-label="Unsave ${item.title}"]`).length).not.toEqual(1)
 
@@ -38,6 +39,7 @@ describe('Items: Save for later', () => {
       app.vm.queries.addonForIdentity = app.buildAddonToRespondWith('rss', rawRSSResponse(item))
 
       await app.click('[aria-label="Feeds"]')
+      await app.click('[aria-label="Fetch all feeds"]')
       await app.click('[aria-label="FollowAlong"]')
       await app.click('[aria-label^="Visit"]')
       await app.click('[aria-label="Toggle Menu"]')

@@ -5,6 +5,8 @@ describe('Identities: Catch up on all', () => {
     const app = await mountApp()
     app.vm.queries.addonForIdentity = app.buildAddonToRespondWith('rss', rawRSSResponse({ title: 'Foo Bar' }))
 
+    await app.click('[aria-label="Feeds"]')
+    await app.click('[aria-label="Fetch all feeds"]')
     await app.click('[aria-label="FollowAlong"]')
     expect(app.findAll('.read').length).toEqual(0)
 
