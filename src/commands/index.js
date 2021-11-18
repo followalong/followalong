@@ -101,7 +101,11 @@ class Commands {
     this.queries
       .feedsForIdentity(identity)
       .filter(this.queries.isNotPaused)
-      .forEach((feed) => this.fetchFeed(identity, feed))
+      .forEach((feed, index) => {
+        setTimeout(() => {
+          this.fetchFeed(identity, feed)
+        }, index * 10)
+      })
   }
 
   fetchFeed (identity, feed) {
