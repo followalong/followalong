@@ -95,15 +95,13 @@ class Commands {
 
   fetchAllFeeds (identity, auto) {
     if (this.noAutomaticFetches && auto) {
-      return Promise.resolve()
+      return
     }
 
-    const promises = this.queries
+    this.queries
       .feedsForIdentity(identity)
       .filter(this.queries.isNotPaused)
-      .map((feed) => this.fetchFeed(identity, feed))
-
-    return Promise.all(promises)
+      .forEach((feed) => this.fetchFeed(identity, feed))
   }
 
   fetchFeed (identity, feed) {
@@ -112,23 +110,20 @@ class Commands {
 
     feed.fetchingAt = updatedAt
 
-    return new Promise((resolve, reject) => {
-      getFeed(identity, addon, feed, updatedAt)
-        .then((data) => {
-          feed.name = data.title || data.name || feed.name
-          feed.description = feed.description || data.description
-          feed.updatedAt = updatedAt
+    getFeed(identity, addon, feed, updatedAt)
+      .then((data) => {
+        feed.name = data.title || data.name || feed.name
+        feed.description = feed.description || data.description
+        feed.updatedAt = updatedAt
 
-          const items = (data.items || []).map(this._parseRawFeedItem)
+        const items = (data.items || []).map(this._parseRawFeedItem)
 
-          this._addItemsForFeed(feed, items)
-        })
-        .finally(() => {
-          delete feed.fetchingAt
-          this.debouncedSave(identity)
-          resolve()
-        })
-    })
+        this._addItemsForFeed(feed, items)
+      })
+      .finally(() => {
+        delete feed.fetchingAt
+        this.debouncedSave(identity)
+      })
   }
 
   addFeedToIdentity (identity, feed) {
@@ -216,48 +211,36 @@ class Commands {
   }
 
   saveLocal (identity) {
-    return new Promise((resolve, reject) => {
-      this.queries.getLocalEncryptionFunction(identity.id)
-        .then((func) => {
-          const addon = this.queries.addonForIdentity(identity, 'local')
+    this.queries.getLocalEncryptionFunction(identity.id)
+      .then((func) => {
+        const addon = this.queries.addonForIdentity(identity, 'local')
 
-          addon.save(
-            this.queries.identityToLocal(identity),
-            func
-          )
-            .then(resolve)
-            .catch(reject)
-        })
-        .catch(reject)
-    })
+        addon.save(
+          this.queries.identityToLocal(identity),
+          func
+        )
+      })
   }
 
   debouncedSave (identity) {
-    return debouncedPromise(() => this.save(identity), 750, this)
+    debouncedPromise(() => this.save(identity), 750, this)
   }
 
   save (identity) {
-    return Promise.all([
-      this.saveLocal(identity),
-      this.saveRemote(identity)
-    ])
+    this.saveLocal(identity)
+    this.saveRemote(identity)
   }
 
   saveRemote (identity) {
-    return new Promise((resolve, reject) => {
-      this.queries.getLocalEncryptionFunction(identity.id)
-        .then((func) => {
-          const addon = this.queries.addonForIdentity(identity, 'sync')
+    this.queries.getLocalEncryptionFunction(identity.id)
+      .then((func) => {
+        const addon = this.queries.addonForIdentity(identity, 'sync')
 
-          addon.save(
-            this.queries.identityToRemote(identity),
-            func
-          )
-            .then(resolve)
-            .catch(reject)
-        })
-        .catch(reject)
-    })
+        addon.save(
+          this.queries.identityToRemote(identity),
+          func
+        )
+      })
   }
 
   removeLocal (identity) {
@@ -294,33 +277,26 @@ class Commands {
 
     if (!feeds.length) return done()
 
-    return Promise.all(
+    Promise.all(
       feeds.map((feed) => this.fetchFeed(identity, feed))
     ).then(done)
   }
 
   changeLocalEncryptionStrategy (identity, encryptionStrategy) {
-    return new Promise((resolve, reject) => {
-      const addon = this.queries.addonForIdentity(identity, 'local')
+    const addon = this.queries.addonForIdentity(identity, 'local')
 
-      return this.keychainAdapter.add(encryptionStrategy, identity.id).then(() => {
-        addon.data.encryptionStrategy = encryptionStrategy
-        this.debouncedSave(identity)
-        resolve()
-      }).catch(reject)
+    return this.keychainAdapter.add(encryptionStrategy, identity.id).then(() => {
+      addon.data.encryptionStrategy = encryptionStrategy
+      this.debouncedSave(identity)
     })
   }
 
   changeMaxReadLimit (identity, maxReadLimit) {
-    return new Promise((resolve, reject) => {
-      const addon = this.queries.addonForIdentity(identity, 'local')
+    const addon = this.queries.addonForIdentity(identity, 'local')
 
-      addon.data.maxReadLimit = Math.max(0, parseInt(maxReadLimit || 150))
+    addon.data.maxReadLimit = Math.max(0, parseInt(maxReadLimit || 150))
 
-      this.debouncedSave(identity)
-
-      resolve()
-    })
+    this.debouncedSave(identity)
   }
 
   _addItemsForFeed (feed, items) {
