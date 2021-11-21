@@ -11,7 +11,7 @@ describe('Addons: S3', () => {
 
     beforeEach(async () => {
       putObject = jest.fn()
-      getObject = jest.fn()
+      getObject = jest.fn((data, done) => done(null, {}))
       awsS3 = jest.fn(() => {
         return { getObject, putObject }
       })
@@ -55,6 +55,7 @@ describe('Addons: S3', () => {
       }, expect.any(Function))
     })
 
+    it.todo('restores before saves')
     it.todo('sends encrypted data')
   })
 
@@ -147,6 +148,7 @@ describe('Addons: S3', () => {
           abc: {
             id: 'abc',
             name: 'Local Name',
+            hints: [],
             items: [],
             feeds: [],
             addons: {
@@ -356,6 +358,7 @@ describe('Addons: S3', () => {
     })
 
     it('does not restore addons', async () => {
+      // If we restore them, it will make it impossible to update them.
       const feedUrl = 'http://example.com'
       const expectedPausedAt = 7
       const putObject = jest.fn()

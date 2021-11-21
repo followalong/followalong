@@ -5,6 +5,10 @@ import { Base64 } from 'js-base64'
 let timer = null
 let resolves = []
 
+const uniq = (value, index, arr) => {
+  return arr.indexOf(value) === index
+}
+
 const debouncedPromise = (func, timeout = 0, thisArg) => {
   clearTimeout(timer)
 
@@ -188,14 +192,18 @@ class Commands {
   }
 
   applyRemoteIdentity (identity) {
-    this.getRemoteIdentity(identity).then((remoteData) => {
-      if (remoteData) {
+    return new Promise((resolve, reject) => {
+      this.getRemoteIdentity(identity).then((remoteData) => {
+        if (!remoteData) {
+          return resolve()
+        }
+
         if (remoteData.name) {
           identity.name = remoteData.name
         }
 
         if (remoteData.hints) {
-          identity.hints = (remoteData.hints || []).concat(identity.hints || [])
+          identity.hints = (identity.hints || []).concat(remoteData.hints || []).filter(uniq)
         }
 
         if (remoteData.feeds) {
@@ -228,7 +236,9 @@ class Commands {
             }
           })
         }
-      }
+
+        resolve()
+      }).catch(reject)
     })
   }
 
@@ -287,7 +297,7 @@ class Commands {
   }
 
   debouncedSave (identity) {
-    debouncedPromise(() => this.save(identity), 750, this)
+    debouncedPromise(() => this.save(identity), 1500, this)
   }
 
   save (identity) {
@@ -300,10 +310,12 @@ class Commands {
       .then((func) => {
         const addon = this.queries.addonForIdentity(identity, 'sync')
 
-        addon.save(
-          this.queries.identityToRemote(identity),
-          func
-        )
+        this.applyRemoteIdentity(identity).then(() => {
+          addon.save(
+            this.queries.identityToRemote(identity),
+            func
+          )
+        })
       })
   }
 
