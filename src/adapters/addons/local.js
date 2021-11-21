@@ -54,9 +54,9 @@ class LocalAddonAdapter extends AddonAdapter {
     )
   }
 
-  get (id, decrypt) {
+  get (identity, decrypt) {
     return new Promise((resolve, reject) => {
-      this.db.getItem(id)
+      this.db.getItem(identity.id)
         .then((identityData) => resolve(decrypt(identityData)))
         .catch(reject)
     })

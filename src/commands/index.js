@@ -143,13 +143,13 @@ class Commands {
   }
 
   copyConfig (identity) {
-    const data = 'this.presenters.identityToRemote(identity)'
+    const data = this.queries.identityToRemote(identity)
     this.copyToClipboard(Base64.encode(JSON.stringify(data)))
     alert('Copied configuration to clipboard.')
   }
 
   downloadIdentity (identity) {
-    const data = 'this.presenters.identityToRemote(identity)'
+    const data = this.queries.identityToRemote(identity)
     const filename = window.location.host.replace(':', '.') + '.' + identity.id + '.json'
     const str = JSON.stringify(data)
     const blob = new Blob([str], { type: 'application/json;charset=utf-8' })
@@ -170,22 +170,87 @@ class Commands {
 
     this.state.add('feeds', feeds || [], (f) => this.addFeedToIdentity(identity, f))
     this.state.add('items', items || [])
+    this.applyRemoteIdentity(identity)
     this.debouncedSave(identity)
   }
 
   getLocalIdentity (id) {
     return new Promise((resolve, reject) => {
       this.queries.getLocalDecryptionFunction(id).then((func) => {
-        const addon = this.queries.addonForIdentity({ id }, 'local')
+        const identity = { id }
+        const addon = this.queries.addonForIdentity(identity, 'local')
 
-        addon.get(id, func)
+        addon.get(identity, func)
           .then(resolve)
           .catch(reject)
       }).catch(reject)
     })
   }
 
-  restoreLocal (identity) {
+  applyRemoteIdentity (identity) {
+    this.getRemoteIdentity(identity).then((remoteData) => {
+      if (remoteData) {
+        if (remoteData.name) {
+          identity.name = remoteData.name
+        }
+
+        if (remoteData.hints) {
+          identity.hints = (remoteData.hints || []).concat(identity.hints || [])
+        }
+
+        if (remoteData.feeds) {
+          (remoteData.feeds || []).forEach((remoteFeed) => {
+            const found = this.queries.findFeedByUrl(remoteFeed.url)
+
+            if (found) {
+              if ((remoteFeed.updatedAt || 0) > (found.updatedAt || 0)) {
+                for (const key in remoteFeed) {
+                  found[key] = remoteFeed[key]
+                }
+              }
+            } else {
+              const newFeed = this.addFeed(remoteFeed)
+              this.addFeedToIdentity(identity, newFeed)
+            }
+          })
+        }
+
+        if (remoteData.items) {
+          (remoteData.items || []).forEach((remoteItem) => {
+            const found = this.queries.findItemById(remoteItem.guid)
+
+            if (found) {
+              for (const key in remoteItem) {
+                found[key] = remoteItem[key]
+              }
+            } else {
+              this.state.add('items', [remoteItem])
+            }
+          })
+        }
+
+        if (remoteData.addons) {
+          delete remoteData.addons.local
+
+          identity.addons = remoteData.addons
+        }
+      }
+    })
+  }
+
+  getRemoteIdentity (identity) {
+    return new Promise((resolve, reject) => {
+      this.queries.getLocalDecryptionFunction(identity.id).then((func) => {
+        const addon = this.queries.addonForIdentity(identity, 'sync')
+
+        addon.get(identity, func)
+          .then(resolve)
+          .catch(reject)
+      }).catch(reject)
+    })
+  }
+
+  restoreLocal () {
     return new Promise((resolve, reject) => {
       this.keychainAdapter.getKeys().then((ids) => {
         const promises = ids.map((id) => {
@@ -194,6 +259,7 @@ class Commands {
               this.addIdentity(data, data.feeds, data.items)
             })
             .catch(() => {
+              // We're here.
               if (confirm('Something went wrong. Try again?')) {
                 this.reload()
               }

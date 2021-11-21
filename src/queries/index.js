@@ -81,6 +81,10 @@ class Queries {
     return this.state.find('feeds', (f) => f.url === url)
   }
 
+  findItemById (guid) {
+    return this.state.find('items', (i) => i.guid === guid)
+  }
+
   allIdentities () {
     return this.state.findAll('identities')
   }
