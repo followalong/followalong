@@ -228,12 +228,6 @@ class Commands {
             }
           })
         }
-
-        if (remoteData.addons) {
-          delete remoteData.addons.local
-
-          identity.addons = remoteData.addons
-        }
       }
     })
   }

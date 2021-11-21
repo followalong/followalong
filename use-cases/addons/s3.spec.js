@@ -355,7 +355,7 @@ describe('Addons: S3', () => {
       expect(await app.findAll('[aria-label^="Unsave"]').length).toEqual(1)
     })
 
-    it('restores addons', async () => {
+    it('does not restore addons', async () => {
       const feedUrl = 'http://example.com'
       const expectedPausedAt = 7
       const putObject = jest.fn()
@@ -398,7 +398,7 @@ describe('Addons: S3', () => {
 
       const localData = await app.getLocalDefaultIdentity()
 
-      expect(localData.addons.sync.changed).toEqual('changed')
+      expect(localData.addons.sync.changed).not.toEqual('changed')
     })
 
     it.todo('loads encrypted data')
