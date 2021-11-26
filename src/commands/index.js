@@ -118,20 +118,23 @@ class Commands {
 
     feed.fetchingAt = updatedAt
 
-    getFeed(identity, addon, feed, updatedAt)
-      .then((data) => {
-        feed.name = data.title || data.name || feed.name
-        feed.description = feed.description || data.description
-        feed.updatedAt = updatedAt
+    return new Promise((resolve, reject) => {
+      getFeed(identity, addon, feed, updatedAt)
+        .then((data) => {
+          feed.name = data.title || data.name || feed.name
+          feed.description = feed.description || data.description
+          feed.updatedAt = updatedAt
 
-        const items = (data.items || []).map(this._parseRawFeedItem)
+          const items = (data.items || []).map(this._parseRawFeedItem)
 
-        this._addItemsForFeed(feed, items)
-      })
-      .finally(() => {
-        delete feed.fetchingAt
-        this.debouncedSave(identity)
-      })
+          this._addItemsForFeed(feed, items)
+        })
+        .finally(() => {
+          delete feed.fetchingAt
+          this.debouncedSave(identity)
+          resolve()
+        })
+    })
   }
 
   addFeedToIdentity (identity, feed) {
@@ -346,12 +349,12 @@ class Commands {
       return
     }
 
-    const DELAY_BETWEEN_FETCHES = 45 * 1000
+    const DELAY_BETWEEN_FETCHES = 7 * 1000
     const done = () => setTimeout(() => this.fetchNextFeedPerpetually(identity), DELAY_BETWEEN_FETCHES)
-    // const maxFeedsPerFetch = Math.round(this.queries.feedsForIdentity(identity).length / 3)
-    const feeds = this.queries.findOutdatedFeeds(identity) // .slice(0, maxFeedsPerFetch)
+    const maxFeedsPerFetch = 1 // Math.round(this.queries.feedsForIdentity(identity).length / 3)
+    const feeds = this.queries.findOutdatedFeeds(identity).slice(0, maxFeedsPerFetch)
 
-    if (!feeds.length) return// done()
+    if (!feeds.length) return done()
 
     Promise.all(
       feeds.map((feed) => this.fetchFeed(identity, feed))
