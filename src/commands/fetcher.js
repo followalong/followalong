@@ -20,7 +20,7 @@ function getContent (identity, addon, url) {
   })
 }
 
-function parseItems (identity, feed, data, items, updatedAt) {
+function parseItems (identity, feed, data, updatedAt) {
   return new Promise((resolve, reject) => {
     parser.parseString(data, function (err, data) {
       if (err) {
@@ -45,7 +45,7 @@ function getFeed (identity, addon, feed, updatedAt) {
       .then((data) => {
         delete feed.error
 
-        parseItems(identity, feed, data, [], updatedAt)
+        parseItems(identity, feed, data, updatedAt)
           .then(resolve)
           .catch((err) => reject(err))
       })
