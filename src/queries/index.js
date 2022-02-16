@@ -94,7 +94,7 @@ class Queries {
   }
 
   findOutdatedFeeds (identity) {
-    const OUTDATED_MINUTES = 15 * (60 * 1000)
+    const OUTDATED_MINUTES = 10 * (60 * 1000)
     const outdatedDate = Date.now() - OUTDATED_MINUTES
 
     return this.feedsForIdentity(identity)

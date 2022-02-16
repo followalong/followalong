@@ -349,17 +349,20 @@ class Commands {
       return
     }
 
-    const DELAY_BETWEEN_FETCHES = 3 * 1000
-    const done = () => setTimeout(() => this.fetchNextFeedPerpetually(identity), DELAY_BETWEEN_FETCHES)
-    // const maxFeedsPerFetch = 1 // Math.round(this.queries.feedsForIdentity(identity).length / 3)
-    // const feeds = this.queries.findOutdatedFeeds(identity).slice(0, maxFeedsPerFetch)
-    const feeds = [this.queries.findOutdatedFeeds(identity)[0]]
+    const DELAY_BETWEEN_FETCHES = 1 * 500
+    const BREATHING_ROOM = 10
+    const MAX_FEEDS_PER_FETCH = 1
+    const feeds = this.queries.findOutdatedFeeds(identity).slice(0, MAX_FEEDS_PER_FETCH)
 
-    if (!feeds.length) return done()
+    if (!feeds.length) {
+      return setTimeout(() => this.fetchNextFeedPerpetually(identity), DELAY_BETWEEN_FETCHES * BREATHING_ROOM)
+    }
 
     Promise.all(
       feeds.map((feed) => this.fetchFeed(identity, feed))
-    ).then(done)
+    ).then(() => {
+      setTimeout(() => this.fetchNextFeedPerpetually(identity), DELAY_BETWEEN_FETCHES)
+    })
   }
 
   changeLocalEncryptionStrategy (identity, encryptionStrategy) {
