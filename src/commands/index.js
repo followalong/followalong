@@ -123,13 +123,13 @@ class Commands {
         .then((data) => {
           feed.name = data.title || data.name || feed.name
           feed.description = feed.description || data.description
-          feed.updatedAt = updatedAt
 
           const items = (data.items || []).map(this._parseRawFeedItem)
 
           this._addItemsForFeed(feed, items)
         })
         .finally(() => {
+          feed.updatedAt = updatedAt
           delete feed.fetchingAt
           this.debouncedSave(identity)
           resolve()
