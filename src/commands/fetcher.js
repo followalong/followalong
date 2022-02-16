@@ -24,10 +24,7 @@ function parseItems (identity, feed, data, updatedAt) {
   return new Promise((resolve, reject) => {
     parser.parseString(data, function (err, data) {
       if (err) {
-        feed.error = 'Could not parse feed. Feed does not seem to be formatted correctly.'
         return reject(err)
-      } else {
-        delete feed.error
       }
 
       resolve(data)
@@ -47,9 +44,17 @@ function getFeed (identity, addon, feed, updatedAt) {
 
         parseItems(identity, feed, data, updatedAt)
           .then(resolve)
-          .catch((err) => reject(err))
+          .catch((err) => {
+            feed.error = err.message
+
+            reject(err)
+          })
       })
-      .catch((err) => reject(err))
+      .catch((err) => {
+        feed.error = err.message
+
+        reject(err)
+      })
   })
 }
 
