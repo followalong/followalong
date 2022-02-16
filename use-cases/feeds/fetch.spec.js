@@ -13,6 +13,7 @@ describe('Feeds: Fetch', () => {
       await app.click('[aria-label="Feeds"]')
       await app.click('[aria-label^="Fetch"]')
       await app.click('[aria-label^="Visit"]')
+      await app.wait()
     })
 
     it('fetches new items', async () => {

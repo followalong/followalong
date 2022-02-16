@@ -16,6 +16,10 @@ describe('Feeds: Pause a feed', () => {
   })
 
   it('does not fetch a paused feed', async () => {
+    for (var i = 0; i <= feedsLength; i++) {
+      await app.wait()
+    }
+
     expect(app.vm.queries.addonForIdentity(app.vm.identity, 'rss').rss).toHaveBeenCalledTimes(feedsLength - 1)
   })
 

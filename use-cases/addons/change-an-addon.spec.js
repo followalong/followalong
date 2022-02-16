@@ -14,7 +14,7 @@ describe('Addons: Update a addon', () => {
       }))
     }
     const app = await mountApp({ addonAdapterOptions })
-    const feed = app.vm.state.findAll('feeds')[0]
+    const lastFeed = app.vm.state.findAll('feeds')[app.vm.state.findAll('feeds').length - 1]
 
     await app.click('[aria-label="Addons"]')
     await app.click('[aria-label="Change RSS addon"]')
@@ -25,9 +25,10 @@ describe('Addons: Update a addon', () => {
 
     await app.click('[aria-label="Feeds"]')
     await app.click('[aria-label^="Fetch"]')
+    await app.wait()
 
     const corsURL = app.vm.queries.addonForIdentity(app.vm.identity, 'rss').data.url
-    expect(addonAdapterOptions.fetch).toHaveBeenCalledWith(corsURL + feed.url)
+    expect(addonAdapterOptions.fetch).toHaveBeenCalledWith(corsURL + lastFeed.url)
   })
 
   it('can supply custom fields', async () => {
@@ -41,8 +42,8 @@ describe('Addons: Update a addon', () => {
       }))
     }
     const app = await mountApp({ addonAdapterOptions })
-    const feed = app.vm.state.findAll('feeds')[0]
-    const expectedCorsURL = 'https://example.com'
+    const lastFeed = app.vm.state.findAll('feeds')[app.vm.state.findAll('feeds').length - 1]
+    const expectedCorsURL = 'https://example.com/'
 
     await app.click('[aria-label="Addons"]')
     await app.click('[aria-label="Change RSS addon"]')
@@ -50,12 +51,13 @@ describe('Addons: Update a addon', () => {
     await app.find('[aria-label="RSS addon url"]').setValue(expectedCorsURL)
     await app.submit('[aria-label="Save RSS addon"]')
 
-    expect(app.find('[aria-label="RSS provider"]').text()).toEqual('CORS Anywhere (https://example.com)')
+    expect(app.find('[aria-label="RSS provider"]').text()).toEqual('CORS Anywhere (https://example.com/)')
 
     await app.click('[aria-label="Feeds"]')
     await app.click('[aria-label^="Fetch"]')
+    await app.wait()
 
-    expect(addonAdapterOptions.fetch).toHaveBeenCalledWith(expectedCorsURL + feed.url)
+    expect(addonAdapterOptions.fetch).toHaveBeenCalledWith(expectedCorsURL + lastFeed.url)
   })
 
   it.todo('can choose a custom addon by nickname')

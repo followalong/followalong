@@ -102,14 +102,11 @@ class Commands {
       return
     }
 
-    this.queries
+    const feeds = this.queries
       .feedsForIdentity(identity)
       .filter(this.queries.isNotPaused)
-      .forEach((feed, index) => {
-        setTimeout(() => {
-          this.fetchFeed(identity, feed)
-        }, index * 10)
-      })
+
+    return this._fetchFeedsInSeries(identity, feeds)
   }
 
   fetchFeed (identity, feed) {
@@ -349,19 +346,11 @@ class Commands {
       return
     }
 
-    const DELAY_BETWEEN_FETCHES = 1 * 500
-    const BREATHING_ROOM = 10
-    const MAX_FEEDS_PER_FETCH = 1
-    const feeds = this.queries.findOutdatedFeeds(identity).slice(0, MAX_FEEDS_PER_FETCH)
+    const POLL = 10000
+    const feeds = this.queries.findOutdatedFeeds(identity)
 
-    if (!feeds.length) {
-      return setTimeout(() => this.fetchNextFeedPerpetually(identity), DELAY_BETWEEN_FETCHES * BREATHING_ROOM)
-    }
-
-    Promise.all(
-      feeds.map((feed) => this.fetchFeed(identity, feed))
-    ).then(() => {
-      setTimeout(() => this.fetchNextFeedPerpetually(identity), DELAY_BETWEEN_FETCHES)
+    this._fetchFeedsInSeries(identity, feeds).then(() => {
+      setTimeout(() => this.fetchNextFeedPerpetually(identity), POLL)
     })
   }
 
@@ -380,6 +369,25 @@ class Commands {
     addon.data.maxReadLimit = Math.max(0, parseInt(maxReadLimit || 150))
 
     this.debouncedSave(identity)
+  }
+
+  _fetchFeedsInSeries (identity, feeds) {
+    let promise = Promise.resolve()
+
+    if (!feeds.length) {
+      return promise
+    }
+
+    feeds.forEach((feed) => {
+      promise = promise.then(() => {
+        return new Promise((resolve) => {
+          this.fetchFeed(identity, feed)
+            .finally(() => setTimeout(resolve, 0))
+        })
+      })
+    })
+
+    return promise
   }
 
   _addItemsForFeed (feed, items) {
