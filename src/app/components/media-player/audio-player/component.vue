@@ -14,7 +14,10 @@
 </template>
 
 <script>
+import NoSleep from 'nosleep.js'
 import { getAudioSrc } from '@/queries/helpers/get-src.js'
+
+const noSleep = new NoSleep()
 
 export default {
   props: ['item'],
@@ -28,6 +31,12 @@ export default {
       this.$refs.audio.currentTime = 0
       this.$refs.audio.play()
     }
+  },
+  mounted () {
+    noSleep.enable()
+  },
+  unmounted () {
+    noSleep.disable()
   }
 }
 </script>
