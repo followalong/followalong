@@ -30,10 +30,8 @@ export default {
     src () {
       this.$refs.audio.currentTime = 0
       this.$refs.audio.play()
+      noSleep.enable()
     }
-  },
-  mounted () {
-    noSleep.enable()
   },
   unmounted () {
     noSleep.disable()
