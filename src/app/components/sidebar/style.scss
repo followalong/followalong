@@ -2,7 +2,7 @@
   position: fixed;
   margin-left: -$sidebar-width - $content-padding;
   width: $sidebar-width;
-  top: $nav-height;
+  top: $nav-height + 1px;
   bottom: 0;
   background: var(--secondary-color);
   padding-top: 20px;

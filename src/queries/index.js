@@ -282,6 +282,16 @@ class Queries {
     return localforage.supports(localforage.INDEXEDDB) || localforage.supports(localforage.WEBSQL) || localforage.supports(localforage.LOCALSTORAGE)
   }
 
+  newItemsCount (identity) {
+    return this.itemsForIdentity(identity)
+      .filter((item) => this.isNew(item))
+      .length
+  }
+
+  isNew (item) {
+    return item.isNew
+  }
+
   _getSize (data) {
     let size = data.length
     let unit = 'b'

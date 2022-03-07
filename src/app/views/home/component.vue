@@ -1,5 +1,17 @@
 <template>
   <div class="feed home-feed wide-feed">
+    <div class="relativizer">
+      <a
+        v-if="newItemsCount"
+        href="javascript:;"
+        aria-label="Show new items"
+        class="new-item-notification"
+        @click="app.commands.showNewItems(app.identity)"
+      >
+        You have {{ newItemsCount }} new {{ newItemsCountWord }}!&nbsp; <u>Show {{ newItemsCountWord }}.</u>
+      </a>
+    </div>
+
     <div class="title-wrapper">
       <button
         v-if="hasUnreadItems"
@@ -79,6 +91,12 @@ export default {
       }
 
       return verb
+    },
+    newItemsCount () {
+      return this.app.identity ? this.app.queries.newItemsCount(this.app.identity) : 0
+    },
+    newItemsCountWord () {
+      return this.newItemsCount === 1 ? 'item' : 'items'
     }
   },
   watch: {

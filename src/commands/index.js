@@ -109,7 +109,7 @@ class Commands {
     return this._fetchFeedsInSeries(identity, feeds)
   }
 
-  fetchFeed (identity, feed) {
+  fetchFeed (identity, feed, isNew = false) {
     const addon = this.queries.addonForIdentity(identity, 'rss')
     const updatedAt = Date.now()
 
@@ -123,7 +123,7 @@ class Commands {
 
           const items = (data.items || []).map(this._parseRawFeedItem)
 
-          this._addItemsForFeed(feed, items)
+          this._addItemsForFeed(feed, items, isNew)
         })
         .finally(() => {
           feed.updatedAt = updatedAt
@@ -349,7 +349,7 @@ class Commands {
     const POLL = 10000
     const feeds = this.queries.findOutdatedFeeds(identity)
 
-    this._fetchFeedsInSeries(identity, feeds).then(() => {
+    this._fetchFeedsInSeries(identity, feeds, true).then(() => {
       setTimeout(() => this.fetchNextFeedPerpetually(identity), POLL)
     })
   }
@@ -371,7 +371,17 @@ class Commands {
     this.debouncedSave(identity)
   }
 
-  _fetchFeedsInSeries (identity, feeds) {
+  showNewItems (identity) {
+    this.queries.itemsForIdentity(identity)
+      .filter((item) => this.queries.isNew(item))
+      .forEach((item) => this._showNewItem(item))
+  }
+
+  _showNewItem (item) {
+    item.isNew = false
+  }
+
+  _fetchFeedsInSeries (identity, feeds, isNew = false) {
     let promise = Promise.resolve()
 
     if (!feeds.length) {
@@ -381,7 +391,7 @@ class Commands {
     feeds.forEach((feed) => {
       promise = promise.then(() => {
         return new Promise((resolve) => {
-          this.fetchFeed(identity, feed)
+          this.fetchFeed(identity, feed, isNew)
             .finally(() => setTimeout(resolve, 0))
         })
       })
@@ -390,7 +400,7 @@ class Commands {
     return promise
   }
 
-  _addItemsForFeed (feed, items) {
+  _addItemsForFeed (feed, items, isNew = false) {
     const feedItems = this.queries.itemsForFeed(feed)
     const latestInteractionAt = new Date(feed.latestInteractionAt).getTime()
     const newItems = items.filter((item) => {
@@ -402,8 +412,14 @@ class Commands {
         }
 
         return !existingItem
-      } else if (new Date(item.pubDate).getTime() <= latestInteractionAt) {
+      }
+
+      if (new Date(item.pubDate).getTime() <= latestInteractionAt) {
         item.readAt = latestInteractionAt
+      }
+
+      if (isNew) {
+        item.isNew = true
       }
 
       return true

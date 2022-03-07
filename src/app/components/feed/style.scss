@@ -27,11 +27,28 @@
 
 .feed {
   float: left;
-  // width: 62%;
 
   &.wide-feed {
     float: none;
     width: 100%;
+  }
+}
+
+.new-item-notification {
+  position: fixed;
+  top: $nav-height - 1px;
+  left: 0;
+  right: 0;
+  z-index: 999999;
+  background: var(--info);
+  color: var(--button-text);
+  padding: 0.5rem;
+  display: block;
+  line-height: 1;
+  text-align: center;
+
+  @media (max-width: 640px) {
+    border-radius: 0;
   }
 }
 

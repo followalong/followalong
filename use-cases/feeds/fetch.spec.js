@@ -72,4 +72,16 @@ describe('Feeds: Fetch', () => {
 
     expect(app.findAll(`[aria-label="Unread ${oldItem.title}"]`).length).toEqual(1)
   })
+
+  it('does not trigger the new items notification', async () => {
+    const app = await mountApp()
+    app.vm.queries.addonForIdentity = app.buildAddonToRespondWith('rss', rawRSSResponse({ title: 'Foo Bar' }))
+
+    await app.click('[aria-label="Feeds"]')
+    await app.click('[aria-label^="Visit"]')
+    await app.click('[aria-label="Toggle Menu"]')
+    await app.click('[aria-label^="Fetch"]')
+
+    expect(app.findAll('[aria-label="Show new items"]').length).toEqual(0)
+  })
 })
