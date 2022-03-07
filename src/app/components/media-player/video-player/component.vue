@@ -8,7 +8,7 @@
         :src="src"
         class="aspect-ratio-box-inside"
         frameborder="0"
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
       />
     </div>
