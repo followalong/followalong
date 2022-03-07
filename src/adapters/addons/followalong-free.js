@@ -30,7 +30,6 @@ class FollowAlongFreeAddonAdapter extends AddonAdapter {
         LogType: 'None',
         Payload: JSON.stringify(data)
       }, function (err, data) {
-        console.log(err, data)
         if (err) {
           return reject(err)
         }
