@@ -51,7 +51,6 @@ import Item from '@/app/components/item/component.vue'
 
 const VERBS = ['watch', 'read', 'listen']
 const DISTANCE_FROM_BOTTOM = 1000
-let LOADING
 
 export default {
   components: {
@@ -60,7 +59,8 @@ export default {
   props: ['app'],
   data () {
     return {
-      limit: 10
+      limit: 10,
+      infiniteScrollListener: this.infiniteScroll()
     }
   },
   computed: {
@@ -105,31 +105,35 @@ export default {
     }
   },
   mounted () {
-    var _ = this
-
-    window.onscroll = function () {
-      if (LOADING) {
-        return
-      }
-
-      var documentHeight = document.body.scrollHeight
-      var windowScrolled = Math.max(window.pageYOffset || 0, document.documentElement.scrollTop)
-
-      if (documentHeight - windowScrolled < DISTANCE_FROM_BOTTOM) {
-        _.limit += 15
-
-        setTimeout(function () {
-          LOADING = false
-        }, 100)
-      }
-    }
+    window.addEventListener('scroll', this.infiniteScrollListener)
   },
   unmounted () {
-    window.onscroll = function () {}
+    window.removeEventListener('scroll', this.infiniteScrollListener)
   },
   methods: {
     capitalize (str) {
       return str[0].toUpperCase() + str.slice(1, str.length)
+    },
+
+    infiniteScroll () {
+      let LOADING
+
+      return () => {
+        if (LOADING) {
+          return
+        }
+
+        var documentHeight = document.body.scrollHeight
+        var windowScrolled = Math.max(window.pageYOffset || 0, document.documentElement.scrollTop)
+
+        if (documentHeight - windowScrolled < DISTANCE_FROM_BOTTOM) {
+          this.limit += 15
+
+          setTimeout(function () {
+            LOADING = false
+          }, 100)
+        }
+      }
     }
   }
 }
