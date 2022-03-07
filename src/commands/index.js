@@ -426,9 +426,7 @@ class Commands {
 
       if (new Date(item.pubDate).getTime() <= latestInteractionAt) {
         item.readAt = latestInteractionAt
-      }
-
-      if (isNew) {
+      } else if (isNew) {
         item.isNew = true
       }
 
