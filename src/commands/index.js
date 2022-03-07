@@ -372,9 +372,19 @@ class Commands {
   }
 
   showNewItems (identity) {
+    this.scrollToTop()
+
     this.queries.itemsForIdentity(identity)
       .filter((item) => this.queries.isNew(item))
       .forEach((item) => this._showNewItem(item))
+  }
+
+  scrollToTop () {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    })
   }
 
   _showNewItem (item) {
