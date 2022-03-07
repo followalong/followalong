@@ -123,7 +123,7 @@ class Commands {
 
           const items = (data.items || []).map(this._parseRawFeedItem)
 
-          this._addItemsForFeed(feed, items, isNew)
+          this.addItemsForFeed(identity, feed, items, isNew)
         })
         .finally(() => {
           feed.updatedAt = updatedAt
@@ -372,6 +372,7 @@ class Commands {
   }
 
   showNewItems (identity) {
+    this.resetNewItemsCount(identity)
     this.scrollToTop()
 
     this.queries.itemsForIdentity(identity)
@@ -389,6 +390,10 @@ class Commands {
 
   _showNewItem (item) {
     item.isNew = false
+  }
+
+  _hideNewItem (item) {
+    item.isNew = true
   }
 
   _fetchFeedsInSeries (identity, feeds, isNew = false) {
@@ -410,7 +415,7 @@ class Commands {
     return promise
   }
 
-  _addItemsForFeed (feed, items, isNew = false) {
+  addItemsForFeed (identity, feed, items, isNew = false) {
     const feedItems = this.queries.itemsForFeed(feed)
     const latestInteractionAt = new Date(feed.latestInteractionAt).getTime()
     const newItems = items.filter((item) => {
@@ -427,13 +432,26 @@ class Commands {
       if (new Date(item.pubDate).getTime() <= latestInteractionAt) {
         item.readAt = latestInteractionAt
       } else if (isNew) {
-        item.isNew = true
+        this._hideNewItem(item)
       }
 
       return true
     })
+    const unreadNewItemsLength = newItems.filter(this.queries.isNew).length
+
+    if (unreadNewItemsLength) {
+      this.incrementNewItemsCount(identity, unreadNewItemsLength)
+    }
 
     this.state.add('items', newItems, (item) => this.addItemToFeed(feed, item))
+  }
+
+  incrementNewItemsCount (identity, newItemsCount) {
+    identity.newItemsCount = (identity.newItemsCount || 0) + newItemsCount
+  }
+
+  resetNewItemsCount (identity) {
+    identity.newItemsCount = 0
   }
 
   _parseRawFeedItem (item) {

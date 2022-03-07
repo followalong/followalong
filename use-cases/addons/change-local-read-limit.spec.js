@@ -17,7 +17,7 @@ describe('Addons: Change local read limit', () => {
       })
     }
     feeds[0].updatedAt = 0
-    app.vm.commands._addItemsForFeed(feeds[0], items)
+    app.vm.commands.addItemsForFeed(identity, feeds[0], items)
     await app.vm.commands.saveLocal(identity)
   })
 

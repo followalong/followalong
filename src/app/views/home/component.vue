@@ -96,7 +96,7 @@ export default {
       return verb
     },
     newItemsCount () {
-      return this.app.identity ? this.app.queries.newItemsCount(this.app.identity) : 0
+      return this.app.queries.newItemsCount(this.app.identity)
     },
     newItemsCountWord () {
       return this.newItemsCount === 1 ? 'item' : 'items'

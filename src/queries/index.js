@@ -283,9 +283,7 @@ class Queries {
   }
 
   newItemsCount (identity) {
-    return this.itemsForIdentity(identity)
-      .filter(this.isNew)
-      .length
+    return identity.newItemsCount
   }
 
   isNew (item) {
