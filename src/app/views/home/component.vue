@@ -124,7 +124,7 @@ export default {
       PullToRefresh.init({
         mainElement: 'body',
         onRefresh: () => {
-          setTimeout(() => this.app.commands.fetchAllFeeds(this.app.identity), 0)
+          setTimeout(() => this.app.commands.fetchAllFeeds(this.app.identity), 1500)
         }
       })
     },
