@@ -19,7 +19,11 @@ describe('Items: Notify new items', () => {
       await app.wait()
     })
 
-    it('shows the new item notification', async () => {
+    it('does not show the item initially', () => {
+      expect(app.text()).not.toContain(item.title)
+    })
+
+    it('shows the new item notification', () => {
       expect(app.find('[aria-label="Show new items"]').text()).toContain('1 new item')
     })
 

@@ -76,6 +76,8 @@ export default {
         items = items.filter(this.app.queries.isReadable)
       }
 
+      items = items.filter(this.app.queries.isNotNew)
+
       return items
     },
     itemsWithLimit () {
