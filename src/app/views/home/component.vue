@@ -48,6 +48,7 @@
 
 <script>
 import Item from '@/app/components/item/component.vue'
+import PullToRefresh from 'pulltorefreshjs'
 
 const VERBS = ['watch', 'read', 'listen']
 const DISTANCE_FROM_BOTTOM = 1000
@@ -106,13 +107,28 @@ export default {
   },
   mounted () {
     window.addEventListener('scroll', this.infiniteScrollListener)
+    this.startPullToRefresh()
   },
   unmounted () {
     window.removeEventListener('scroll', this.infiniteScrollListener)
+    this.endPullToRefresh()
   },
   methods: {
     capitalize (str) {
       return str[0].toUpperCase() + str.slice(1, str.length)
+    },
+
+    startPullToRefresh () {
+      PullToRefresh.init({
+        mainElement: 'body',
+        onRefresh: () => {
+          this.app.commands.fetchAllFeeds(this.app.identity)
+        }
+      })
+    },
+
+    endPullToRefresh () {
+      PullToRefresh.destroyAll()
     },
 
     infiniteScroll () {

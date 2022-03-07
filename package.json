@@ -24,6 +24,7 @@
     "localforage": "^1.10.0",
     "no-async": "^1.1.6",
     "nosleep.js": "^0.12.0",
+    "pulltorefreshjs": "^0.1.22",
     "rss-parser": "^3.7.0",
     "trunc-html": "^1.1.2",
     "uniq-id": "^1.0.0",

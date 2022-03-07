@@ -1,6 +1,12 @@
 <template>
   <div id="app">
     <TopBar :app="app" />
+    <div class="pull-to-refresh-loader">
+      <font-awesome-icon
+        icon="spinner"
+        spin
+      />
+    </div>
 
     <div class="container">
       <div class="content">
