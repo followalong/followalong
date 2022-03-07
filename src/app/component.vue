@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <TopBar :app="app" />
-    <div class="pull-to-refresh-loader">
+
+    <div
+      v-if="isPullable"
+      class="pull-to-refresh-loader"
+    >
       <font-awesome-icon
         icon="spinner"
         spin
@@ -101,6 +105,11 @@ export default {
       sidebarClass: '',
       now: new Date(),
       playing: undefined
+    }
+  },
+  computed: {
+    isPullable () {
+      return this.$route.name === 'home'
     }
   },
   mounted () {
