@@ -59,6 +59,10 @@ export default {
       type: Object,
       default: () => new State({ identities: [], feeds: [], items: [] })
     },
+    window: {
+      type: Object,
+      default: () => window
+    },
     addonAdapterOptions: {
       type: Object,
       default: () => {
@@ -94,7 +98,8 @@ export default {
       noAutomaticFetches: this.noAutomaticFetches,
       queries,
       copyToClipboard,
-      saveAs
+      saveAs,
+      window: this.window
     })
 
     return {

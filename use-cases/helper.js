@@ -74,7 +74,8 @@ const mountApp = (options) => {
       propsData: {
         keychainAdapter,
         addonAdapterOptions,
-        noAutomaticFetches: true
+        noAutomaticFetches: true,
+        window: { scrollTo: () => {} }
       }
     })
 
