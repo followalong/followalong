@@ -19,11 +19,24 @@
       </p>
       <div v-else>
         <div
-          v-if="feeds.length"
+          v-if="results > 0"
           class="list"
         >
           <div
-            v-for="feed in feeds"
+            v-for="feed in existingFeeds"
+            :key="feed.url"
+          >
+            <h2>
+              <router-link :to="{ name: 'feed', params: { feed_url: feed.url } }">
+                {{ feed.name }}
+              </router-link>
+            </h2>
+            <p class="hint">
+              {{ feed.url }} ({{ feed.source }})
+            </p>
+          </div>
+          <div
+            v-for="feed in newFeeds"
             :key="feed.url"
           >
             <button
@@ -61,7 +74,13 @@ export default {
       error: '',
       isLoading: true,
       q: this.$route.query.q || '',
-      feeds: []
+      newFeeds: [],
+      existingFeeds: []
+    }
+  },
+  computed: {
+    results () {
+      return this.newFeeds.length + this.existingFeeds.length
     }
   },
   watch: {
@@ -81,12 +100,14 @@ export default {
       this.isLoading = true
       this.error = ''
 
+      this.existingFeeds = this.app.queries.feedsForIdentityWithQuery(this.app.identity, this.q)
+
       const addon = this.app.queries.addonForIdentity(this.app.identity, 'search')
 
       if (!addon) {
         this.isLoading = false
         this.error = 'You don\'t have a Search Addon configured.'
-        this.feeds = []
+        this.newFeeds = []
         return
       }
 
@@ -96,16 +117,12 @@ export default {
           return
         }
 
-        this.feeds = feeds.map((feed) => {
+        this.newFeeds = feeds.map((feed) => {
           return this.app.commands.addFeed(feed)
         })
-
-        if (feeds.length === 1) {
-          return this.$router.push({ name: 'feed', params: { feed_url: feeds[0].url } })
-        }
       })
         .catch(() => {
-          this.feeds = []
+          this.newFeeds = []
         })
         .finally(() => {
           this.isLoading = false

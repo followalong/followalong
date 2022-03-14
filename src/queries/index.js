@@ -59,6 +59,17 @@ class Queries {
     return this.state.findAll('feeds', (f) => f.identityId === identity.id).sort(sortByName)
   }
 
+  feedsForIdentityWithQuery (identity, q) {
+    q = (q || '').trim().toLowerCase()
+
+    if (!q.length) {
+      return []
+    }
+
+    return this.feedsForIdentity(identity)
+      .filter((feed) => feed.name.toLowerCase().indexOf(q) !== -1)
+  }
+
   itemsForIdentity (identity) {
     return this.feedsForIdentity(identity)
       .reduce((items, f) => items.concat(this.itemsForFeed(f)), [])

@@ -7,6 +7,7 @@
   >
     <input
       v-model="q"
+      aria-label="Search query"
       type="text"
       name="q"
       autocomplete="off"
