@@ -67,13 +67,24 @@ class Queries {
     }
 
     return this.feedsForIdentity(identity)
-      .filter((feed) => feed.name.toLowerCase().indexOf(q) !== -1)
+      .filter((feed) => (feed.name || '').toLowerCase().indexOf(q) !== -1)
   }
 
   itemsForIdentity (identity) {
     return this.feedsForIdentity(identity)
       .reduce((items, f) => items.concat(this.itemsForFeed(f)), [])
       .sort(sortByReadAndDate())
+  }
+
+  itemsForIdentityWithQuery (identity, q) {
+    q = (q || '').trim().toLowerCase()
+
+    if (!q.length) {
+      return []
+    }
+
+    return this.itemsForIdentity(identity)
+      .filter((item) => item.title.toLowerCase().indexOf(q) !== -1)
   }
 
   hintIsShown (identity, hint) {

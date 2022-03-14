@@ -22,6 +22,18 @@
           v-if="results > 0"
           class="list"
         >
+          <ul
+            v-if="existingItems.length"
+            class="items"
+          >
+            <Item
+              v-for="item in existingItems"
+              :key="item.guid"
+              :item="item"
+              :app="app"
+              show-content="true"
+            />
+          </ul>
           <div
             v-for="feed in existingFeeds"
             :key="feed.url"
@@ -67,7 +79,12 @@
 </template>
 
 <script>
+import Item from '@/app/components/item/component.vue'
+
 export default {
+  components: {
+    Item
+  },
   props: ['app'],
   data: function () {
     return {
@@ -75,12 +92,13 @@ export default {
       isLoading: true,
       q: this.$route.query.q || '',
       newFeeds: [],
-      existingFeeds: []
+      existingFeeds: [],
+      existingItems: []
     }
   },
   computed: {
     results () {
-      return this.newFeeds.length + this.existingFeeds.length
+      return this.newFeeds.length + this.existingFeeds.length + this.existingItems.length
     }
   },
   watch: {
@@ -101,6 +119,7 @@ export default {
       this.error = ''
 
       this.existingFeeds = this.app.queries.feedsForIdentityWithQuery(this.app.identity, this.q)
+      this.existingItems = this.app.queries.itemsForIdentityWithQuery(this.app.identity, this.q)
 
       const addon = this.app.queries.addonForIdentity(this.app.identity, 'search')
 

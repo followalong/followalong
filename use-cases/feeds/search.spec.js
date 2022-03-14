@@ -35,7 +35,30 @@ describe('Feeds: Search', () => {
     expect(app.text()).toContain(existingFeedName)
   })
 
-  it.todo('shows a list of items')
+  it('shows a list of existing items', async () => {
+    const existingItemTitle = 'My existing item title'
+    const app = await mountApp({
+      localAddonAdapterData: {
+        abc: {
+          id: 'abc',
+          name: 'Local Name',
+          items: [{ title: existingItemTitle, feedUrl: 'https://example.com' }],
+          feeds: [{ url: 'https://example.com' }]
+        }
+      },
+      keychainAdapterData: {
+        storedKeys: { abc: 'none' }
+      }
+    })
+
+    app.vm.queries.addonForIdentity = app.buildAddonToRespondWith('search', [])
+
+    await app.click('[aria-label="Feeds"]')
+    await app.find('[aria-label="Search query"]').setValue('my existing')
+    await app.submit('[aria-label="Search form"]')
+
+    expect(app.text()).toContain(existingItemTitle)
+  })
 
   it('can subscribe to a feed', async () => {
     const expectedFeed = { name: 'Feed #1' }
