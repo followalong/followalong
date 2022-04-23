@@ -142,7 +142,7 @@
           href="javascript:;"
           @click="app.setIdentity(app, i);"
         >
-          <span>{{ i.name }}</span>
+          <span>{{ i.name || 'My Account' }}</span>
         </a>
       </li>
 
