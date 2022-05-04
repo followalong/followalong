@@ -51,13 +51,6 @@
             v-for="feed in newFeeds"
             :key="feed.url"
           >
-            <!-- <button
-              class="float-right"
-              :aria-label="'Subscribe to ' + feed.name"
-              @click="app.commands.addFeedToIdentity(app.identity, feed)"
-            >
-              Subscribe
-            </button> -->
             <h2>
               <router-link :to="{ name: 'feed', params: { feed_url: feed.url } }">
                 {{ feed.name }}

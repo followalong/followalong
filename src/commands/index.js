@@ -36,6 +36,8 @@ class Commands {
     this.state.removeAll('items', this.queries.itemsForFeed(feed))
     this.state.removeAll('feeds', [feed])
     this.debouncedSave(identity)
+
+    return Promise.resolve()
   }
 
   catchMeUp (identity, items) {

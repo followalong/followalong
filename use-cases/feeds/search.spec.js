@@ -59,20 +59,4 @@ describe('Feeds: Search', () => {
 
     expect(app.text()).toContain(existingItemTitle)
   })
-
-  it('can subscribe to a feed', async () => {
-    const expectedFeed = { name: 'Feed #1' }
-    const app = await mountApp()
-    const initialFeedsLength = app.vm.queries.allFeeds().length
-    app.vm.queries.addonForIdentity = app.buildAddonToRespondWith('search', [expectedFeed, { name: 'Feed #2' }])
-
-    await app.submit('[aria-label="Search form"]')
-    await app.click(`[aria-label="Subscribe to ${expectedFeed.name}"]`)
-    await app.click('[aria-label="Feeds"]')
-
-    expect(app.text()).toContain(expectedFeed.name)
-
-    const localData = await app.getLocalDefaultIdentity()
-    expect(localData.feeds.length).toEqual(initialFeedsLength + 1)
-  })
 })
