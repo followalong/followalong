@@ -51,7 +51,8 @@ import Item from '@/app/components/item/component.vue'
 import PullToRefresh from 'pulltorefreshjs'
 
 const VERBS = ['watch', 'read', 'listen']
-const DISTANCE_FROM_BOTTOM = 1000
+const DISTANCE_FROM_BOTTOM = 500
+const LIMIT = 4
 
 export default {
   components: {
@@ -60,7 +61,7 @@ export default {
   props: ['app'],
   data () {
     return {
-      limit: 10,
+      limit: LIMIT,
       infiniteScrollListener: this.infiniteScroll()
     }
   },
@@ -103,8 +104,8 @@ export default {
     }
   },
   watch: {
-    $route () {
-      this.limit = 10
+    mediaVerb () {
+      this.limit = LIMIT
     }
   },
   mounted () {
@@ -141,11 +142,12 @@ export default {
           return
         }
 
-        var documentHeight = document.body.scrollHeight
-        var windowScrolled = Math.max(window.pageYOffset || 0, document.documentElement.scrollTop)
+        const documentHeight = document.body.scrollHeight
+        const windowHeight = window.innerHeight || document.documentElement.clientHeight
+        const windowScrolled = Math.max(window.pageYOffset || 0, document.documentElement.scrollTop)
 
-        if (documentHeight - windowScrolled < DISTANCE_FROM_BOTTOM) {
-          this.limit += 15
+        if (documentHeight - windowScrolled - windowHeight < DISTANCE_FROM_BOTTOM) {
+          this.limit += LIMIT
 
           setTimeout(function () {
             LOADING = false

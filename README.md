@@ -8,9 +8,6 @@
 
 ## TODO
 
-- Specs
-- 3 Core Addons
-- Specs should save to remote
 - Documentation
   - Spinning up your own frontend
   - Spinning up your own backend
