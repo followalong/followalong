@@ -18,6 +18,11 @@ class S3AddonAdapter extends AddonAdapter {
         label: 'Endpoint',
         required: true
       },
+      region: {
+        type: 'text',
+        label: 'Region',
+        required: true
+      },
       key: {
         type: 'text',
         label: 'Key',
