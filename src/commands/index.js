@@ -479,6 +479,7 @@ class Commands {
       delete configuration.items
 
       this.addIdentity(configuration, feeds, items)
+      this.keychainAdapter.addNone(configuration.id)
 
       const identities = this.queries.allIdentities()
       const identity = identities[identities.length - 1]
