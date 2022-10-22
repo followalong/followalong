@@ -34,7 +34,7 @@ class Queries {
   }
 
   findIdentity (id) {
-    return this.state.find('identities', id)
+    return this.state.find('identities', (identity) => identity.id === id)
   }
 
   identityForFeed (feed) {

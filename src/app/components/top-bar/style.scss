@@ -131,6 +131,7 @@
         border-top: 1px solid var(--primary-color);
         text-align: left;
         background: var(--border-color);
+        z-index: 9999999;
 
           .encrypted {
             font-size: 80%;

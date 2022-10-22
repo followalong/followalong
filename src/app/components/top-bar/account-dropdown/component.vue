@@ -1,14 +1,6 @@
 <template>
   <div v-if="app.identity">
-    <router-link
-      v-if="!otherIdentities.length"
-      to="/settings"
-      class="desktop-only"
-    >
-      Settings
-    </router-link>
     <a
-      v-else
       class="desktop-only"
     >
       <strong>{{ app.identity.name }}</strong>
@@ -22,24 +14,26 @@
       <font-awesome-icon icon="bars" />
     </a>
 
-    <ul v-if="otherIdentities.length">
+    <ul>
       <li
-        v-for="identity in otherIdentities"
+        v-for="identity in identities"
         :key="identity.id"
       >
         <a
           href="javascript:;"
           @click="app.setIdentity(identity);"
         >
-          <span v-if="identity._decrypted">{{ identity.name }}</span>
-          <span v-else>{{ identity.id.slice(0, 8) }} <span class="encrypted">(not yet decrypted)</span></span>
+          {{ identity.name }}
         </a>
       </li>
-      <!-- <li>
-        <router-link to="/identities/new">
+      <li>
+        <router-link
+          to="/identities/new"
+          aria-label="Add identity"
+        >
           + Add Identity
         </router-link>
-      </li> -->
+      </li>
     </ul>
   </div>
 </template>
@@ -48,8 +42,8 @@
 export default {
   props: ['app'],
   computed: {
-    otherIdentities () {
-      return this.app.queries.allIdentities().filter((i) => i.id !== this.app.identity.id)
+    identities () {
+      return this.app.queries.allIdentities()
     }
   }
 }

@@ -8,11 +8,8 @@
 
 ## TODO
 
-- Documentation
-  - Spinning up your own frontend
-  - Spinning up your own backend
-- Interactions
 - Memberships
+- Ads
 
 ## Addons
 

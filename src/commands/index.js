@@ -456,6 +456,37 @@ class Commands {
     identity.newItemsCount = 0
   }
 
+  importConfiguration (configuration) {
+    return new Promise((resolve, reject) => {
+      configuration = configuration.trim()
+
+      try {
+        configuration = JSON.parse(Base64.decode(configuration))
+      } catch (e) {
+        return reject(new Error('Invalid configuration.'))
+      }
+
+      const existingIdentity = this.queries.findIdentity(configuration.id)
+
+      if (existingIdentity) {
+        return reject(new Error('An identity with this ID already exists. Please remove it first.'))
+      }
+
+      const feeds = configuration.feeds || []
+      delete configuration.feeds
+
+      const items = configuration.items || []
+      delete configuration.items
+
+      this.addIdentity(configuration, feeds, items)
+
+      const identities = this.queries.allIdentities()
+      const identity = identities[identities.length - 1]
+
+      resolve(identity)
+    })
+  }
+
   _parseRawFeedItem (item) {
     item.guid = item.guid || item.id
 
