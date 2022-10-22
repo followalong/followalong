@@ -162,7 +162,15 @@ export default {
     reset (identity) {
       if (confirm('Are you sure you want to forget this identity?')) {
         this.app.commands.removeIdentity(identity)
-          .then(() => this.app.commands.reload())
+          .then(() => {
+            const newIdentity = this.app.queries.allIdentities()[0]
+
+            if (newIdentity) {
+              this.app.setIdentity(newIdentity)
+            } else {
+              this.app.commands.reload()
+            }
+          })
       }
     },
     init () {
